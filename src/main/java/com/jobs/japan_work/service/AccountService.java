@@ -21,7 +21,7 @@ public class AccountService {
 		Account account = new Account();
 		
 		account.setEmail(accountForm.getEmail());
-		account.setUserName(accountForm.getUserName());
+		account.setUsername(accountForm.getUserName());
 		account.setProvider(accountForm.getSignInProvider());
 		account.setRole(role);
 		

@@ -10,7 +10,6 @@ import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionKey;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +37,7 @@ public class AccountRepository{
 	
 	public Account findAccountByUserName(String username) {        
         try {
-            String sql = "Select e from " + Account.class.getName() + " e " + " Where e.userName = :username";
+            String sql = "Select e from " + Account.class.getName() + " e " + " Where e.username = :username";
             Query query = entityManager.createQuery(sql, Account.class);
             query.setParameter("username", username);
   
@@ -77,10 +76,6 @@ public class AccountRepository{
     }
 	
 	public Account createAccount(Connection<?> connection) {
-		ConnectionKey key = connection.getKey();
-  
-        System.out.println("key= (" + key.getProviderId() + "," + key.getProviderUserId() + ")");
-  
         UserProfile userProfile = connection.fetchUserProfile();
   
         String email = userProfile.getEmail();
@@ -101,9 +96,8 @@ public class AccountRepository{
         account = new Account();
         account.setEnabled(1);
         account.setPassword(encrytedPassword);
-        account.setUserName(userName);
+        account.setUsername(userName);
         account.setEmail(email);
-        account.setRole("ROLE_USER");
         account.setProvider("provider");
         
         Date date = new Date();

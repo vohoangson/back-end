@@ -1,5 +1,6 @@
 package com.jobs.japan_work.controller;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
@@ -24,10 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jobs.japan_work.model.Account;
 import com.jobs.japan_work.model.ConfirmationToken;
+import com.jobs.japan_work.model.PersistentLogin;
 import com.jobs.japan_work.model.form.AccountForm;
 import com.jobs.japan_work.service.AccountService;
 import com.jobs.japan_work.service.ConfirmationTokenService;
 import com.jobs.japan_work.service.EmailSenderService;
+import com.jobs.japan_work.service.PersistentLoginService;
 import com.jobs.japan_work.utils.SecurityUtil;
 
 @Controller
@@ -46,6 +49,9 @@ public class AccountController {
     
     @Autowired
     private EmailSenderService emailSenderService;
+    
+    @Autowired
+    private PersistentLoginService persistentLoginService;
     
 	@GetMapping("/login")
 	public String login() {
@@ -100,7 +106,7 @@ public class AccountController {
             // (Spring Social API):
             // If user login by social networking.
             // This method saves social networking information to the UserConnection table.
-            providerSignInUtils.doPostSignUp(registered.getUserName(), request);
+            providerSignInUtils.doPostSignUp(registered.getUsername(), request);
         }
   
         // After registration is complete, automatic login.
@@ -112,8 +118,9 @@ public class AccountController {
 	
 	@GetMapping("/home")
 	@ResponseBody
-	public String home() {
-		return "Home";
+	public PersistentLogin home(Principal principal) {
+		
+		return persistentLoginService.findPersistentLoginByUserName(principal.getName());
 	}
 	
 	@GetMapping("/home/candidate")
@@ -176,7 +183,5 @@ public class AccountController {
         {
             return "The link is invalid or broken!";
         }
-
-        //return "redirect:/home";
     }
 }

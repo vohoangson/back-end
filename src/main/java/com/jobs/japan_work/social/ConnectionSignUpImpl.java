@@ -21,7 +21,7 @@ public class ConnectionSignUpImpl implements ConnectionSignUp {
     public String execute(Connection<?> connection) {
  
     	Account account = accountRepository.createAccount(connection);
-        return account.getUserName();
+        return account.getUsername();
     }
  
 }
