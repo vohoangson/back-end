@@ -2,6 +2,7 @@ package com.jobs.japan_work.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +22,7 @@ public class AccountService {
 		
 		account.setEmail(accountForm.getEmail());
 		account.setUserName(accountForm.getUserName());
-		account.setProvider("google");
+		account.setProvider(accountForm.getSignInProvider());
 		account.setRole(role);
 		
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -29,8 +30,8 @@ public class AccountService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		account.setCreate_date(timestamp);
-		account.setUpdate_date(timestamp);
+		account.setCreateDate(timestamp);
+		account.setUpdateDate(timestamp);
 		account.setEnabled(1);
 		
 		return accountRepository.registerNewAccount(account);
@@ -38,5 +39,17 @@ public class AccountService {
 	
 	public Account registerNewAccount(Account account){
 		return accountRepository.registerNewAccount(account);
+	}
+	
+	public Account findAccountByEmail(String email) {
+		return accountRepository.findAccountByEmail(email);
+	}
+	
+	public Account findAccountById(UUID id) {
+		return accountRepository.findAccountById(id);
+	}
+	
+	public Account update(Account account) {
+		return accountRepository.update(account);
 	}
 }

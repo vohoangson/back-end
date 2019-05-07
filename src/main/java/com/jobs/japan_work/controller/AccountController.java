@@ -2,8 +2,10 @@ package com.jobs.japan_work.controller;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
@@ -13,16 +15,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jobs.japan_work.model.Account;
+import com.jobs.japan_work.model.ConfirmationToken;
 import com.jobs.japan_work.model.form.AccountForm;
 import com.jobs.japan_work.service.AccountService;
+import com.jobs.japan_work.service.ConfirmationTokenService;
+import com.jobs.japan_work.service.EmailSenderService;
 import com.jobs.japan_work.utils.SecurityUtil;
 
 @Controller
@@ -35,7 +40,13 @@ public class AccountController {
   
     @Autowired
     private UsersConnectionRepository usersConnectionRepository;
-	
+    
+    @Autowired
+    private ConfirmationTokenService confirmationTokenService;
+    
+    @Autowired
+    private EmailSenderService emailSenderService;
+    
 	@GetMapping("/login")
 	public String login() {
 		
@@ -118,20 +129,54 @@ public class AccountController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String register(@RequestBody Account account) {
+	@ResponseBody
+	public String register(@ModelAttribute Account account) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-		account.setCreate_date(timestamp);
-		account.setUpdate_date(timestamp);
-		account.setEnabled(1);
+		account.setCreateDate(timestamp);
+		account.setUpdateDate(timestamp);
+		account.setEnabled(0);
 		Account acc = accountService.registerNewAccount(account);
-		if(acc != null) {
-			return "redirect:/login";
-		} else {
-			return "redirect:/login";
-		}
+		
+		ConfirmationToken confirmationToken = new ConfirmationToken();
+
+		confirmationToken.setAccountId(acc.getId());
+		confirmationToken.setCreateDate(timestamp);
+		confirmationTokenService.save(confirmationToken);
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(acc.getEmail());
+		mailMessage.setSubject("Complete Registration!");
+		//mailMessage.setFrom("chand312902@gmail.com");
+		mailMessage.setText("To confirm your account, please click here : "
+         +"http://localhost:8080/confirm-account?token="+confirmationToken.getTokenId());
+
+		emailSenderService.sendEmail(mailMessage);
+
+		return "check mail giup tao cai";
 		
 	}
+	
+	@RequestMapping(value="/confirm-account", method= RequestMethod.GET)
+	@ResponseBody
+    public String confirmUserAccount(@RequestParam("token") UUID confirmationToken)
+    {
+        ConfirmationToken token = confirmationTokenService.findById(confirmationToken);
+
+        if(token != null)
+        {
+            Account account = accountService.findAccountById(token.getAccountId());
+            account.setEnabled(1);
+            accountService.update(account);
+            return "Success!!!!!!!!!!!!!!!!";
+        }
+        else
+        {
+            return "The link is invalid or broken!";
+        }
+
+        //return "redirect:/home";
+    }
 }

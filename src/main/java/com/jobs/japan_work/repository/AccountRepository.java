@@ -24,6 +24,18 @@ public class AccountRepository{
 	@Autowired
     private EntityManager entityManager;
 	
+	public Account findAccountById(UUID id) {
+		try {
+            String sql = "Select e from " + Account.class.getName() + " e " + " Where e.id = :id";
+            Query query = entityManager.createQuery(sql, Account.class);
+            query.setParameter("id", id);
+  
+            return (Account) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+	}
+	
 	public Account findAccountByUserName(String username) {        
         try {
             String sql = "Select e from " + Account.class.getName() + " e " + " Where e.userName = :username";
@@ -96,8 +108,8 @@ public class AccountRepository{
         
         Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		account.setCreate_date(timestamp);
-		account.setUpdate_date(timestamp);
+		account.setCreateDate(timestamp);
+		account.setUpdateDate(timestamp);
 		
 		this.entityManager.persist(account);
   
@@ -108,5 +120,9 @@ public class AccountRepository{
 		this.entityManager.persist(account);
 		  
         return account;
+	}
+	
+	public Account update(Account account) {
+		return this.entityManager.merge(account);
 	}
 }

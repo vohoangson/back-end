@@ -28,9 +28,9 @@ public class Account {
 	@Column(name="role")
 	private String role;
 	@Column(name="create_date")
-	private Timestamp create_date;
+	private Timestamp createDate;
 	@Column(name="update_date")
-	private Timestamp update_date;
+	private Timestamp updateDate;
 	@Column(name="enabled")
 	private int enabled;
 	public UUID getId() {
@@ -69,17 +69,17 @@ public class Account {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public Timestamp getCreate_date() {
-		return create_date;
+	public Timestamp getCreateDate() {
+		return createDate;
 	}
-	public void setCreate_date(Timestamp create_date) {
-		this.create_date = create_date;
+	public void setCreateDate(Timestamp createDate) {
+		this.createDate = createDate;
 	}
-	public Timestamp getUpdate_date() {
-		return update_date;
+	public Timestamp getUpdateDate() {
+		return updateDate;
 	}
-	public void setUpdate_date(Timestamp update_date) {
-		this.update_date = update_date;
+	public void setUpdateDate(Timestamp updateDate) {
+		this.updateDate = updateDate;
 	}
 	public int getEnabled() {
 		return enabled;
@@ -87,11 +87,8 @@ public class Account {
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
 	}
-	public Account() {
-		super();
-	}
 	public Account(UUID id, String email, String userName, String password, String provider, String role,
-			Timestamp create_date, Timestamp update_date, int enabled) {
+			Timestamp createDate, Timestamp updateDate, int enabled) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -99,10 +96,11 @@ public class Account {
 		this.password = password;
 		this.provider = provider;
 		this.role = role;
-		this.create_date = create_date;
-		this.update_date = update_date;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
 		this.enabled = enabled;
 	}
-	
-	
+	public Account() {
+		super();
+	}
 }
