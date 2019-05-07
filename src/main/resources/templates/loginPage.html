@@ -4,9 +4,28 @@
       <title>Login</title>
    </head>
    <body>
-      <!-- Include _menu.html -->
        
       <h1>Login</h1>
+       
+       <h2>Social Login</h2>
+  
+        <a th:href="@{/auth/facebook}">Face Book</a>
+        <br />
+        <a th:href="@{/auth/google}">Google</a>
+        <br />
+         
+       
+      <!-- /login?error=true -->
+      <div th:if="${#request.getParameter('error') == 'true'}"
+            style="color:red;margin:10px 0px;">
+         Login Failed!!!<br />
+         Reason :
+         <span th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}"
+            th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
+                Static summary
+         </span>
+            
+      </div>
       
       <h3>Enter user name and password:</h3>
       <form name='f' th:action="@{/login_post}" method='POST'>
@@ -32,7 +51,7 @@
       <br>
       Username/pass:
       <ul>
-        <li>phunv/12345678</li>
+        <li>dbuser1/123</li>
         <li>dbadmin1/123</li>
       </ul>  
        

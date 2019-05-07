@@ -9,18 +9,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-
-import com.jobs.japan_work.service.UserDetailsServiceImpl;
+import org.springframework.social.security.SpringSocialConfigurer;
  
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsService userDetailsService;
  
     @Autowired
     private DataSource dataSource;
@@ -65,7 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and()
                 .rememberMe().tokenRepository(this.persistentTokenRepository()) //
                 .tokenValiditySeconds(180);
- 
+        http.apply(new SpringSocialConfigurer())
+        .signupUrl("/signup");
     }
  
     @Bean
@@ -75,4 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return db;
     }
  
+    @Override
+    public UserDetailsService userDetailsService() {
+        return userDetailsService;
+    }
 }
