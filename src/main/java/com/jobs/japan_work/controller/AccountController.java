@@ -119,7 +119,7 @@ public class AccountController {
 	@GetMapping("/home")
 	@ResponseBody
 	public PersistentLogin home(Principal principal) {
-		
+		//
 		return persistentLoginService.findPersistentLoginByUserName(principal.getName());
 	}
 	
