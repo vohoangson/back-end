@@ -1,6 +1,8 @@
 package com.japanwork.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.UUID;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -11,8 +13,8 @@ import javax.validation.constraints.NotNull;
 })
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -34,12 +36,15 @@ public class User {
     private AuthProvider provider;
 
     private String providerId;
-
-    public Long getId() {
+    
+    @NotNull
+    private String role;
+    
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -98,4 +103,12 @@ public class User {
     public void setProviderId(String providerId) {
         this.providerId = providerId;
     }
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 }
