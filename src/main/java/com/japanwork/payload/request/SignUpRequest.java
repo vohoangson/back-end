@@ -1,4 +1,4 @@
-package com.japanwork.payload;
+package com.japanwork.payload.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

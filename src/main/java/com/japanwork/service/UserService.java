@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
-import com.japanwork.repository.UserRepository;
-import com.japanwork.repository.VerificationTokenRepository;
+import com.japanwork.repository.token.VerificationTokenRepository;
+import com.japanwork.repository.user.UserRepository;
 
 @Service
 public class UserService {
@@ -52,7 +52,7 @@ public class UserService {
             return TOKEN_EXPIRED;
         }
 
-        user.setEmailVerified(true);
+        user.setIsEnabled(true);
         // tokenRepository.delete(verificationToken);
         userRepository.save(user);
         return TOKEN_VALID;
@@ -66,7 +66,11 @@ public class UserService {
         return null;
     }
 	
-//	public User findUserByEmail(String email) {
-//		return userRepository.findByEmail(email);
-//	}
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+	
+	public User save(User user) {
+		return userRepository.save(user);
+	}
 }

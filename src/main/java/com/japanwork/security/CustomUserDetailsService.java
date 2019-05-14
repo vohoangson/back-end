@@ -3,7 +3,7 @@ package com.japanwork.security;
 
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.User;
-import com.japanwork.repository.UserRepository;
+import com.japanwork.repository.user.UserRepository;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package com.japanwork.payload;
+package com.japanwork.payload.response;
 
 public class ConfirmRegistrationTokenResponse {
 	private String message;

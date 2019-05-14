@@ -3,7 +3,7 @@ package com.japanwork.security.oauth2;
 import com.japanwork.exception.OAuth2AuthenticationProcessingException;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.User;
-import com.japanwork.repository.UserRepository;
+import com.japanwork.repository.user.UserRepository;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.security.oauth2.user.OAuth2UserInfo;
 import com.japanwork.security.oauth2.user.OAuth2UserInfoFactory;

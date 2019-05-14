@@ -1,4 +1,4 @@
-package com.japanwork.repository;
+package com.japanwork.repository.token;
 
 
 import java.util.UUID;

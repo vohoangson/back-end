@@ -15,37 +15,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.japanwork.constant.EmailConstants;
+import com.japanwork.constant.MessageConstant;
+import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
-import com.japanwork.payload.ApiResponse;
-import com.japanwork.payload.AuthResponse;
-import com.japanwork.payload.ConfirmRegistrationTokenResponse;
-import com.japanwork.payload.LoginRequest;
-import com.japanwork.payload.SignUpRequest;
-import com.japanwork.repository.UserRepository;
+import com.japanwork.payload.request.LoginRequest;
+import com.japanwork.payload.request.SignUpRequest;
+import com.japanwork.payload.response.ApiResponse;
+import com.japanwork.payload.response.AuthResponse;
+import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
 import com.japanwork.security.TokenProvider;
 import com.japanwork.service.EmailSenderService;
 import com.japanwork.service.UserService;
 
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -59,14 +55,9 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping(value = UrlConstant.URL_LOGIN)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-    	
-//    	User user = userService.findUserByEmail(loginRequest.getEmail());
-//    	if(user == null || !user.getEmailVerified()) {
-//    		throw new BadRequestException("Account has not been verified.");
-//    	}
-        Authentication authentication = authenticationManager.authenticate(
+		Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
                         loginRequest.getPassword()
@@ -76,13 +67,14 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
+        AuthResponse authResponse = new AuthResponse(token);
+        return ResponseEntity.ok(new BaseDataResponse(authResponse));        
     }
 
-    @PostMapping("/signup")
+    @PostMapping(value = UrlConstant.URL_REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+        if(userService.existsByEmail(signUpRequest.getEmail())) {
+            throw new BadRequestException(MessageConstant.EMAIL_ALREADY);
         }
 
         // Creating user's account
@@ -93,7 +85,7 @@ public class AuthController {
         user.setProvider(AuthProvider.local);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(signUpRequest.getRole());
-        User result = userRepository.save(user);
+        User result = userService.save(user);
         
         final VerificationToken newToken = userService.generateNewVerificationToken(user);
         this.sendEmail(user, newToken.getToken());
@@ -103,10 +95,10 @@ public class AuthController {
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+                .body(new ApiResponse(true, MessageConstant.REGISTER_SUCCESS));
     }
     
-    @GetMapping("/confirm-account")
+    @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
     @ResponseBody
     public ConfirmRegistrationTokenResponse confirmRegistration(@RequestParam("token") final String token) {
     	final String result = userService.validateVerificationToken(token);
@@ -123,7 +115,7 @@ public class AuthController {
     	
     }
     
-    @RequestMapping(value = "/resendRegistrationToken", method = RequestMethod.GET)
+    @GetMapping(value = UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
     @ResponseBody
     public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken) {
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
@@ -141,7 +133,7 @@ public class AuthController {
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom(EmailConstants.MY_EMAIL);
         mailMessage.setText("To confirm your account, please click here : "
-        +"http://localhost:8080/auth/confirm-account?token="+token);
+        +"http://localhost:8080"+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+token);
         emailSenderService.sendEmail(mailMessage);
     }
     

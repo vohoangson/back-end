@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="confirmation_token")
 public class VerificationToken {
-	private static final int EXPIRATION = 1;
+	private static final int EXPIRATION = 60*1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

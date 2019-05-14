@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.japanwork.constant.UrlConstant;
 import com.japanwork.security.CustomUserDetailsService;
 import com.japanwork.security.RestAuthenticationEntryPoint;
 import com.japanwork.security.TokenAuthenticationFilter;
@@ -108,7 +109,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers("/auth/**", "/oauth2/**", "/logout","/user/me")
+                    .antMatchers(UrlConstant.URL_LOGIN, 
+                		UrlConstant.URL_REGISTER,
+                		UrlConstant.URL_CONFIRM_ACCOUNT,
+                		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
+                		UrlConstant.URL_LOGOUT,
+                		UrlConstant.URL_ERROR_404)
                         .permitAll()
                     .anyRequest()
                         .authenticated()

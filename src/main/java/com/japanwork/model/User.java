@@ -3,7 +3,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -26,7 +34,7 @@ public class User {
     private String imageUrl;
 
     @Column(nullable = false)
-    private Boolean emailVerified = false;
+    private Boolean isEnabled = false;
 
     @JsonIgnore
     private String password;
@@ -72,12 +80,12 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    public Boolean getEmailVerified() {
-        return emailVerified;
+    public Boolean getIsEnabled() {
+        return isEnabled;
     }
 
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
     public String getPassword() {
