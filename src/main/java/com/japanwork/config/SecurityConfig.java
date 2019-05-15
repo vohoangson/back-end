@@ -114,8 +114,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
                 		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
                 		UrlConstant.URL_LOGOUT,
-                		UrlConstant.URL_ERROR_404)
+                		UrlConstant.URL_ERROR_404,
+                		UrlConstant.URL_COMPANY_FIND_BY_ID,
+                		UrlConstant.URL_COMPANY_LIST)
                         .permitAll()
+                    .antMatchers(
+                		UrlConstant.URL_COMPANY_CREATE,
+                		UrlConstant.URL_COMPANY_UPDATE).hasAnyRole("COMPANY","ADMIN")
+                    .antMatchers(
+                		UrlConstant.URL_BUSINESS,
+                		UrlConstant.URL_DISTRICT,
+                		UrlConstant.URL_COMPANY_DELETE).hasRole("ADMIN")
                     .anyRequest()
                         .authenticated()
                     .and()

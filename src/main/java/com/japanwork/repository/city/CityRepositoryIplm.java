@@ -1,4 +1,4 @@
-package com.japanwork.repository.district;
+package com.japanwork.repository.city;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,32 +11,32 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.District;
+import com.japanwork.model.City;
 
 @Repository
 @Transactional
-public class DistrictRepositoryIplm implements DistrictRepository{
+public class CityRepositoryIplm implements CityRepository{
 
 	@Override
-	public List<District> findAll() {
+	public List<City> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<District> findAll(Sort sort) {
+	public List<City> findAll(Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<District> findAllById(Iterable<UUID> ids) {
+	public List<City> findAllById(Iterable<UUID> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends District> List<S> saveAll(Iterable<S> entities) {
+	public <S extends City> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,13 +48,13 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public <S extends District> S saveAndFlush(S entity) {
+	public <S extends City> S saveAndFlush(S entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteInBatch(Iterable<District> entities) {
+	public void deleteInBatch(Iterable<City> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,37 +66,37 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public District getOne(UUID id) {
+	public City getOne(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends District> List<S> findAll(Example<S> example) {
+	public <S extends City> List<S> findAll(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends District> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends City> List<S> findAll(Example<S> example, Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<District> findAll(Pageable pageable) {
+	public Page<City> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends District> S save(S entity) {
+	public <S extends City> S save(S entity) {
 		// TODO Auto-generated method stub
-		return save(entity);
+		return null;
 	}
 
 	@Override
-	public Optional<District> findById(UUID id) {
+	public Optional<City> findById(UUID id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
@@ -120,13 +120,13 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public void delete(District entity) {
+	public void delete(City entity) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends District> entities) {
+	public void deleteAll(Iterable<? extends City> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -138,27 +138,27 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public <S extends District> Optional<S> findOne(Example<S> example) {
+	public <S extends City> Optional<S> findOne(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends District> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends City> Page<S> findAll(Example<S> example, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends District> long count(Example<S> example) {
+	public <S extends City> long count(Example<S> example) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public <S extends District> boolean exists(Example<S> example) {
+	public <S extends City> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 }

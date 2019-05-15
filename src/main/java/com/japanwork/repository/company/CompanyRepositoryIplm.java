@@ -16,11 +16,11 @@ import com.japanwork.model.Company;
 @Repository
 @Transactional
 public class CompanyRepositoryIplm implements CompanyRepository{
-
+	
 	@Override
 	public List<Company> findAll() {
 		// TODO Auto-generated method stub
-		return null;
+		return findAll();
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	@Override
 	public Optional<Company> findById(UUID id) {
 		// TODO Auto-generated method stub
-		return null;
+		return findById(id);
 	}
 
 	@Override
@@ -160,5 +160,4 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 }

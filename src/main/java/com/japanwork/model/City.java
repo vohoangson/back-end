@@ -11,10 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
-@Table(name="contract_type")
-public class ContractType {
+@Table(name = "city")
+public class City {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -91,16 +90,16 @@ public class ContractType {
 		this.updateDate = updateDate;
 	}
 
-	public boolean getIsDelete() {
+	public boolean isDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
+	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 
-	public ContractType(UUID id, String nameVi, String nameJa, String description,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public City(UUID id, String nameVi, String nameJa, String description, Timestamp createDate,
+			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.nameVi = nameVi;
@@ -111,7 +110,7 @@ public class ContractType {
 		this.isDelete = isDelete;
 	}
 
-	public ContractType() {
+	public City() {
 		super();
-	} 
+	}
 }

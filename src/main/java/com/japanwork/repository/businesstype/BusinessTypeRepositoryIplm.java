@@ -98,7 +98,7 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	@Override
 	public Optional<BusinessType> findById(UUID id) {
 		// TODO Auto-generated method stub
-		return null;
+		return findById(id);
 	}
 
 	@Override

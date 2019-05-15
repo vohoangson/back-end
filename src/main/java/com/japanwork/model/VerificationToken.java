@@ -34,7 +34,7 @@ public class VerificationToken {
     private Date expiryDate;
     
     @Column(name="is_delete")
-    private int isDelete;
+    private boolean isDelete = false;
     
     public VerificationToken() {
         super();

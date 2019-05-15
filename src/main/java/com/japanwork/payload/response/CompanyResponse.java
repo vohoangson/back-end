@@ -1,13 +1,16 @@
-package com.japanwork.payload.request;
+package com.japanwork.payload.response;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.BusinessType;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
 import com.japanwork.model.User;
-public class CompanyRequest {
+
+public class CompanyResponse {
+	private UUID id;
 	private User user;
 	private String name;
 	private int scale;
@@ -27,7 +30,12 @@ public class CompanyRequest {
 	private Timestamp updateDate;
 	@JsonProperty("is_delete")
 	private boolean isDelete;
-	
+	public UUID getId() {
+		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
 	public User getUser() {
 		return user;
 	}
@@ -112,5 +120,27 @@ public class CompanyRequest {
 	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
-	
+	public CompanyResponse(UUID id, User user, String name, int scale, BusinessType businesses, City city,
+			District district, String address, String logo, String coverImage, String introduction, int isPublised,
+			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.name = name;
+		this.scale = scale;
+		this.businesses = businesses;
+		this.city = city;
+		this.district = district;
+		this.address = address;
+		this.logo = logo;
+		this.coverImage = coverImage;
+		this.introduction = introduction;
+		this.isPublised = isPublised;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+		this.isDelete = isDelete;
+	}
+	public CompanyResponse() {
+		super();
+	}
 }

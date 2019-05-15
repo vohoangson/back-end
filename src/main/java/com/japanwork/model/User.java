@@ -1,5 +1,6 @@
 package com.japanwork.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
+    
     @Column(nullable = false)
     private String name;
 
@@ -31,8 +32,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    private String imageUrl;
-
+    @JsonProperty("is_enabled")
     @Column(nullable = false)
     private Boolean isEnabled = false;
 
@@ -43,6 +43,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
+    @JsonProperty("provider_id")
     private String providerId;
     
     @NotNull
@@ -70,14 +71,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public Boolean getIsEnabled() {

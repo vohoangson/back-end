@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="district")
 public class District {
@@ -18,24 +20,30 @@ public class District {
     @Column(name="id")
 	private UUID id;
 	
+	@JsonProperty("name_vi")
 	@Column(name="name_vi")
     private String nameVi;
     
+	@JsonProperty("name_ja")
     @Column(name="name_ja")
     private String nameJa;
     
+	@JsonProperty("country_code")
     @Column(name="country_code")
     private String countryCode;
     
     @Column(name="description")
     private String description;
     
+    @JsonProperty("create_date")
     @Column(name="create_date")
     private Timestamp createDate;
     
+    @JsonProperty("update_date")
     @Column(name="update_date")
     private Timestamp updateDate;
     
+    @JsonProperty("is_delete")
     @Column(name="is_delete")
     private boolean isDelete;
 

@@ -7,4 +7,6 @@ public class MessageConstant {
 	public static final String ERROR_403 = "Bag request";
 	public static final String EMAIL_ALREADY = "Email address already in use.";
 	public static final String REGISTER_SUCCESS = "User registered successfully";
+	public static final String DEL_SUCCESS = "Success";
+	public static final String DEL_FAIL = "Fail";
 }
