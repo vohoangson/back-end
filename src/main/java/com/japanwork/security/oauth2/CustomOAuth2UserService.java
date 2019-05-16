@@ -1,12 +1,6 @@
 package com.japanwork.security.oauth2;
 
-import com.japanwork.exception.OAuth2AuthenticationProcessingException;
-import com.japanwork.model.AuthProvider;
-import com.japanwork.model.User;
-import com.japanwork.repository.user.UserRepository;
-import com.japanwork.security.UserPrincipal;
-import com.japanwork.security.oauth2.user.OAuth2UserInfo;
-import com.japanwork.security.oauth2.user.OAuth2UserInfoFactory;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -18,14 +12,20 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
+import com.japanwork.exception.OAuth2AuthenticationProcessingException;
+import com.japanwork.model.AuthProvider;
+import com.japanwork.model.User;
+import com.japanwork.security.UserPrincipal;
+import com.japanwork.security.oauth2.user.OAuth2UserInfo;
+import com.japanwork.security.oauth2.user.OAuth2UserInfoFactory;
+import com.japanwork.service.UserService;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
-    private UserRepository userRepository;
-
+    private UserService userService;
+    
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
@@ -46,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Optional<User> userOptional = userService.findByEmail(oAuth2UserInfo.getEmail());
         User user;
         if(userOptional.isPresent()) {
             user = userOptional.get();
@@ -70,12 +70,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setProviderId(oAuth2UserInfo.getId());
         user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
-        return userRepository.save(user);
+        user.setRole("ROLE_COMPANY");
+        user.setIsEnabled(false);
+        return userService.save(user);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
         existingUser.setName(oAuth2UserInfo.getName());
-        return userRepository.save(existingUser);
+        return userService.save(existingUser);
     }
 
 }

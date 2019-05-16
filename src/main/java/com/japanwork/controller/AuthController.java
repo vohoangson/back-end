@@ -137,4 +137,9 @@ public class AuthController {
         emailSenderService.sendEmail(mailMessage);
     }
     
+    @GetMapping(value = UrlConstant.URL_OAUTH2_LOGIN)
+    public AuthResponse oauth2LoginRedirect(@RequestParam("token") String token) {
+    	AuthResponse authResponse = new AuthResponse(token);
+        return authResponse;        
+    }
 }

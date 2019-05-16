@@ -109,7 +109,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers(UrlConstant.URL_LOGIN, 
+                    .antMatchers(UrlConstant.URL_LOGIN,
+                		UrlConstant.URL_OAUTH2_LOGIN,	
                 		UrlConstant.URL_REGISTER,
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
                 		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
@@ -130,7 +131,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .oauth2Login()
                     .authorizationEndpoint()
-                        .baseUri("/oauth2/authorize")
+                        .baseUri("/oauth2/login")
                         .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                         .and()
                     .redirectionEndpoint()

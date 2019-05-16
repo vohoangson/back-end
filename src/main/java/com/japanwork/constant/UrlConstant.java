@@ -9,6 +9,7 @@ public class UrlConstant {
 	
 	//Auth
 	public static final String URL_LOGIN = "/login";
+	public static final String URL_OAUTH2_LOGIN = "/login/redirect";
 	public static final String URL_LOGOUT = "/logout";
 	public static final String URL_REGISTER = "/register";
 	public static final String URL_CONFIRM_ACCOUNT = "/confirm-account";

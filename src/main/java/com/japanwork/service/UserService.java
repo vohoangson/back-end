@@ -1,6 +1,7 @@
 package com.japanwork.service;
 
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,10 @@ public class UserService {
 	
 	public boolean existsByEmail(String email) {
 		return userRepository.existsByEmail(email);
+	}
+	
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 	
 	public User save(User user) {
