@@ -1,8 +1,5 @@
 package com.japanwork.controller;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.model.BusinessType;
 import com.japanwork.payload.request.BusinessTypeRequest;
+import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.BusinessTypeService;
 
 @Controller
@@ -23,20 +20,7 @@ public class BusinessTypeController {
 	
 	@PostMapping(value = UrlConstant.URL_BUSINESS_CREATE)
 	@ResponseBody
-	public BusinessType create(@Valid @RequestBody BusinessTypeRequest businessTypeRequest) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
-		BusinessType businessType = new BusinessType();
-		businessType.setNameJa(businessTypeRequest.getNameJa());
-		businessType.setNameVi(businessTypeRequest.getNameVi());
-		businessType.setDescription(businessTypeRequest.getDescription());
-		businessType.setCreateDate(timestamp);
-		businessType.setUpdateDate(timestamp);
-		businessType.setIsDelete(false);
-		
-		BusinessType result = businessTypeService.save(businessType);
-		
-		return result;
+	public BaseDataResponse create(@Valid @RequestBody BusinessTypeRequest businessTypeRequest) {		
+		return businessTypeService.save(businessTypeRequest);
 	}
 }

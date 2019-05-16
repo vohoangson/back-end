@@ -11,7 +11,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.ErrorResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 
 @ControllerAdvice
 public class CustomErrorController {
@@ -20,7 +20,7 @@ public class CustomErrorController {
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
     @ResponseBody
     public BaseDataResponse requestHandlingNoHandlerFound() {
-    	ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_404);
+    	BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_404);
     	return new BaseDataResponse(error);
     }
     
@@ -28,7 +28,7 @@ public class CustomErrorController {
     @ResponseStatus(value= HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public BaseDataResponse unauthorized() {
-    	ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_401);
+    	BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_401);
     	return new BaseDataResponse(error);
     }
     
@@ -36,7 +36,7 @@ public class CustomErrorController {
     @ResponseStatus(value= HttpStatus.FORBIDDEN)
     @ResponseBody
     public BaseDataResponse forbidden() {
-    	ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_401);
+    	BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_401);
     	return new BaseDataResponse(error);
     }
 //    @ExceptionHandler(Exception.class)

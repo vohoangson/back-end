@@ -4,18 +4,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.Company;
 
 @Repository
-@Transactional
 public class CompanyRepositoryIplm implements CompanyRepository{
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 	@Override
 	public List<Company> findAll() {
@@ -160,4 +166,21 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public Company findByIdAndIsDelete(UUID id, boolean isDelete) {
+//		String sql = "Select new " + Company.class.getName()
+//                + "(c.id,c.userId,c.name,c.bussinessTypeId,c.scale,c.districtId,c.address,c.logoUrl,"
+//                + "c.coverImageUrl,c.introduction,c.isPublised,c.createDate,c.updateDate,c.isDelete,c.cityId"
+//                + " from " + Company.class.getName() + " c "
+//				+ " where c.id = :id and c.isDelete = false";
+//		
+//		Query query = entityManager.createQuery(sql, Company.class);
+//        query.setParameter("id", id);
+//		String hql = "FROM company as c WHERE c.id = ? and c.is_delete = fasle";
+//		Company company = (Company) entityManager.createQuery(hql).setParameter(1, id).getResultList().get(0);
+		return findByIdAndIsDelete(id, isDelete) ;
+	}
+	
+	
 }

@@ -92,7 +92,7 @@ public class CityRepositoryIplm implements CityRepository{
 	@Override
 	public <S extends City> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return save(entity);
 	}
 
 	@Override
@@ -159,6 +159,12 @@ public class CityRepositoryIplm implements CityRepository{
 	public <S extends City> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public City findByIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByIdAndIsDelete(id,isDelete);
 	}
 	
 }

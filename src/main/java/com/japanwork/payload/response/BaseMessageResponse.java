@@ -1,9 +1,9 @@
 package com.japanwork.payload.response;
 
-public class ErrorResponse {
+public class BaseMessageResponse {
 	private String code;
 	private String message;
-	public ErrorResponse(String code, String message) {
+	public BaseMessageResponse(String code, String message) {
 		super();
 		this.code = code;
 		this.message = message;

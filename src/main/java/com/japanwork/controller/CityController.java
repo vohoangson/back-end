@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.payload.request.DistrictRequest;
+import com.japanwork.payload.request.CityRequest;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.service.DistrictService;
+import com.japanwork.service.CityService;
 
 @Controller
-public class DistrictController {
+public class CityController {
 	@Autowired
-	private DistrictService districtService;
+	private CityService cityService;
 	
-	@PostMapping(value = UrlConstant.URL_DISTRICT_CREATE)
+	@PostMapping(value = UrlConstant.URL_CITY_CREATE)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody DistrictRequest districtRequest) {		
-		return districtService.save(districtRequest);
+	public BaseDataResponse create(@Valid @RequestBody CityRequest cityRequest) {		
+		return cityService.save(cityRequest);
 	}
 }

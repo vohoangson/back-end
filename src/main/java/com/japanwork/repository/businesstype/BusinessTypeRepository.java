@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.japanwork.model.BusinessType;
 
 public interface BusinessTypeRepository extends JpaRepository<BusinessType, UUID>{
-
+	public BusinessType findByIdAndIsDelete(UUID id, boolean isDelete);
 }

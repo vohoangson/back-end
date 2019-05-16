@@ -52,4 +52,10 @@ public class CompanyController {
 	public BaseDataResponse del(@PathVariable UUID id) {		
 		return companyService.del(id);
 	}
+	
+	@GetMapping(UrlConstant.URL_COMPANY_UN_DELETE)
+	@ResponseBody
+	public BaseDataResponse unDel(@PathVariable UUID id) {		
+		return companyService.unDel(id);
+	}
 }

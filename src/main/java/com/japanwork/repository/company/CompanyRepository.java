@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.japanwork.model.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, UUID>{
-
+	public Company findByIdAndIsDelete(UUID id, boolean isDelete);
 }

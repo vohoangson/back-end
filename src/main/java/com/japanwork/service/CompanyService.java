@@ -13,8 +13,8 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.model.Company;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.CompanyResponse;
-import com.japanwork.payload.response.DeleteResponse;
 import com.japanwork.repository.company.CompanyRepository;
 
 @Service
@@ -91,16 +91,29 @@ public class CompanyService {
 		company.setDelete(true);
 		Company result = companyRepository.save(company);
 		if(result != null) {
-			DeleteResponse deleteResponse = new DeleteResponse(MessageConstant.DEL_SUCCESS);
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
 			return new BaseDataResponse(deleteResponse);
 		} else {
-			DeleteResponse deleteResponse = new DeleteResponse(MessageConstant.DEL_FAIL);
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_FAIL);
+			return new BaseDataResponse(deleteResponse);
+		}
+	}
+	
+	public BaseDataResponse unDel(UUID id) {
+		Company company = companyRepository.findById(id).get();
+		company.setDelete(false);
+		Company result = companyRepository.save(company);
+		if(result != null) {
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DEL_SUCCESS, MessageConstant.UN_DEL_SUCCESS);
+			return new BaseDataResponse(deleteResponse);
+		} else {
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DEL_SUCCESS, MessageConstant.UN_DEL_FAIL);
 			return new BaseDataResponse(deleteResponse);
 		}
 	}
 	
 	public BaseDataResponse findById(UUID id) {
-		Company company = companyRepository.findById(id).get();
+		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		CompanyResponse comResponse = this.setCompanyResponse(company);
 		
 		BaseDataResponse response = new BaseDataResponse(comResponse);

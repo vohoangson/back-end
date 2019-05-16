@@ -161,4 +161,10 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 		return false;
 	}
 
+	@Override
+	public BusinessType findByIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByIdAndIsDelete(id, isDelete);
+	}
+
 }
