@@ -1,8 +1,13 @@
 package com.japanwork.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DistrictRequest {
+	@JsonProperty("name_vi")
 	private String nameVi;
+	@JsonProperty("name_ja")
 	private String nameJa;
+	@JsonProperty("country_code")
 	private String countryCode;
 	private String description;
 	public String getNameVi() {

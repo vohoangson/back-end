@@ -1,7 +1,11 @@
 package com.japanwork.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CityRequest {
+	@JsonProperty("name_vi")
 	private String nameVi;
+	@JsonProperty("name_ja")
 	private String nameJa;
 	private String description;
 	public String getNameVi() {

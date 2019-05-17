@@ -42,8 +42,7 @@ public class User {
     @NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
-    
-    @NotNull
+
     @JsonProperty("provider_id")
     private String providerId;
     

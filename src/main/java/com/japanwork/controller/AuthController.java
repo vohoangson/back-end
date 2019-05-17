@@ -2,12 +2,14 @@ package com.japanwork.controller;
 
 import java.net.URI;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +25,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.japanwork.constant.EmailConstants;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
@@ -32,6 +33,7 @@ import com.japanwork.payload.request.SignUpRequest;
 import com.japanwork.payload.response.ApiResponse;
 import com.japanwork.payload.response.AuthResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
 import com.japanwork.security.TokenProvider;
 import com.japanwork.service.EmailSenderService;
@@ -57,24 +59,29 @@ public class AuthController {
 
     @PostMapping(value = UrlConstant.URL_LOGIN)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = tokenProvider.createToken(authentication);
-        AuthResponse authResponse = new AuthResponse(token);
-        return ResponseEntity.ok(new BaseDataResponse(authResponse));        
+            String token = tokenProvider.createToken(authentication);
+            AuthResponse authResponse = new AuthResponse(token);
+            return ResponseEntity.ok(new BaseDataResponse(authResponse));
+        } catch(BadCredentialsException e){
+            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.LOGIN_FAIL);
+            return ResponseEntity.badRequest().body(new BaseDataResponse(baseMessageResponse));
+        }
     }
 
     @PostMapping(value = UrlConstant.URL_REGISTER)
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException(MessageConstant.EMAIL_ALREADY);
+            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.EMAIL_ALREADY);
+            return ResponseEntity.badRequest().body(new BaseDataResponse(baseMessageResponse));
         }
 
         // Creating user's account
@@ -88,14 +95,14 @@ public class AuthController {
         User result = userService.save(user);
         
         final VerificationToken newToken = userService.generateNewVerificationToken(user);
-        this.sendEmail(user, newToken.getToken());
+        this.sendEmail(user, newToken.getToken(), request);
         
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/user/me")
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, MessageConstant.REGISTER_SUCCESS));
+                .body(new BaseDataResponse(new ApiResponse(true, MessageConstant.REGISTER_SUCCESS)));
     }
     
     @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
@@ -111,35 +118,40 @@ public class AuthController {
         } else {
         	ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Fail! Registration confirmation does not exist.", token);
             return api;
-        }
-    	
+        }    	
     }
     
     @GetMapping(value = UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
     @ResponseBody
-    public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken) {
+    public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken, HttpServletRequest request) {
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
         final User user = userService.getUser(newToken.getToken());
         
-        this.sendEmail(user, newToken.getToken());
+        this.sendEmail(user, newToken.getToken(), request);
         
         ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Please confirm your email!","");
         return api;
     }
     
-    private void sendEmail(User user, String token) {    	
+    private void sendEmail(User user, String token, HttpServletRequest request) {
     	SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom(EmailConstants.MY_EMAIL);
         mailMessage.setText("To confirm your account, please click here : "
-        +"http://localhost:8080"+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+token);
+        +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+token);
         emailSenderService.sendEmail(mailMessage);
     }
     
     @GetMapping(value = UrlConstant.URL_OAUTH2_LOGIN)
-    public AuthResponse oauth2LoginRedirect(@RequestParam("token") String token) {
-    	AuthResponse authResponse = new AuthResponse(token);
-        return authResponse;        
+    public ResponseEntity<?> oauth2LoginRedirect(@RequestParam("token") String token, @RequestParam("error") String error) {
+    	if(!token.isEmpty()) {
+    		AuthResponse authResponse = new AuthResponse(token);        	
+            return ResponseEntity.ok(new BaseDataResponse(authResponse));
+    	}else{
+    		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, error);
+    		return ResponseEntity.badRequest().body(new BaseDataResponse(baseMessageResponse));
+    	}
+    	        
     }
 }

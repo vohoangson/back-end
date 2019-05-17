@@ -16,6 +16,7 @@ import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
+import com.japanwork.security.UserPrincipal;
 
 @Service
 public class CompanyService {
@@ -31,12 +32,12 @@ public class CompanyService {
 	@Autowired
 	private DistrictService districtService;
 	
-	public BaseDataResponse save(CompanyRequest companyRequest) {
+	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Company company = new Company();
-		company.setUserId(companyRequest.getUser().getId());
+		company.setUserId(userPrincipal.getId());
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
 		company.setBussinessTypeId(companyRequest.getBusinesses().getId());
@@ -62,9 +63,7 @@ public class CompanyService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		Company company = new Company();
-		company.setId(id);
-		company.setUserId(companyRequest.getUser().getId());
+		Company company = companyRepository.findById(id).get();
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
 		company.setBussinessTypeId(companyRequest.getBusinesses().getId());
@@ -104,10 +103,10 @@ public class CompanyService {
 		company.setDelete(false);
 		Company result = companyRepository.save(company);
 		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DEL_SUCCESS, MessageConstant.UN_DEL_SUCCESS);
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_SUCCESS);
 			return new BaseDataResponse(deleteResponse);
 		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DEL_SUCCESS, MessageConstant.UN_DEL_FAIL);
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_FAIL);
 			return new BaseDataResponse(deleteResponse);
 		}
 	}

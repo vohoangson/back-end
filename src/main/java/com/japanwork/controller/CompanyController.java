@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.security.CurrentUser;
+import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CompanyService;
 
 @Controller
@@ -31,8 +33,8 @@ public class CompanyController {
 	
 	@PostMapping(UrlConstant.URL_COMPANY_CREATE)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest) {		
-		return companyService.save(companyRequest);
+	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest, @CurrentUser UserPrincipal userPrincipal) {		
+		return companyService.save(companyRequest, userPrincipal);
 	}
 	
 	@GetMapping(UrlConstant.URL_COMPANY_FIND_BY_ID)
