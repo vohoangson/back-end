@@ -1,4 +1,4 @@
-package com.japanwork.controller;
+package com.japanwork.exception.custom_error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,9 +12,8 @@ import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 
 @ControllerAdvice
-public class CustomErrorController {
-
-    @ExceptionHandler(NoHandlerFoundException.class)
+public class Error404 {
+	@ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
     @ResponseBody
     public BaseDataResponse requestHandlingNoHandlerFound() {

@@ -56,7 +56,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return email;
     }
 
-    @Override
+	@Override
     public String getPassword() {
         return password;
     }

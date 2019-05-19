@@ -6,7 +6,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,37 +27,37 @@ public class CompanyController {
 	private CompanyService companyService;
 	
 	
-	@GetMapping(UrlConstant.URL_COMPANY_LIST)
+	@GetMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public BaseDataResponse listCompany() {		
-		return companyService.findAll();
+		return companyService.findAllByIsDelete();
 	}
 	
-	@PostMapping(UrlConstant.URL_COMPANY_CREATE)
+	@PostMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest, @CurrentUser UserPrincipal userPrincipal) {		
 		return companyService.save(companyRequest, userPrincipal);
 	}
 	
-	@GetMapping(UrlConstant.URL_COMPANY_FIND_BY_ID)
+	@GetMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse findCompanyById(@PathVariable UUID id) {		
-		return companyService.findById(id);
+	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){		
+		return companyService.findByIdAndIsDelete(id);
 	}
 	
-	@PostMapping(UrlConstant.URL_COMPANY_UPDATE)
+	@PatchMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id) {		
-		return companyService.update(companyRequest, id);
+	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return companyService.update(companyRequest, id, userPrincipal);
 	}
 	
-	@GetMapping(UrlConstant.URL_COMPANY_DELETE)
+	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
 		return companyService.del(id);
 	}
 	
-	@GetMapping(UrlConstant.URL_COMPANY_UN_DELETE)
+	@GetMapping(UrlConstant.URL_COMPANY_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
 		return companyService.unDel(id);

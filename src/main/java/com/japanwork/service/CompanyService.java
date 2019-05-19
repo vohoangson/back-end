@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Company;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataResponse;
@@ -22,7 +23,6 @@ import com.japanwork.security.UserPrincipal;
 public class CompanyService {
 	@Autowired
 	private CompanyRepository companyRepository;
-	
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -59,11 +59,22 @@ public class CompanyService {
 		return response;
 	}
 	
-	public BaseDataResponse update(CompanyRequest companyRequest, UUID id) {
+	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		Company company = companyRepository.findById(id).get();
+		Company company = new Company();
+		
+		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
+			company = companyRepository.findByIdAndIsDelete(id, false);
+			if(company == null) {
+				throw new ResourceNotFoundException("Company not found for this id :: " + id);
+			}
+		} else {
+			company = companyRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + id));
+		}
+
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
 		company.setBussinessTypeId(companyRequest.getBusinesses().getId());
@@ -85,8 +96,9 @@ public class CompanyService {
 		return response;
 	}
 	
-	public BaseDataResponse del(UUID id) {
-		Company company = companyRepository.findById(id).get();
+	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
+		Company company = companyRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + id));
 		company.setDelete(true);
 		Company result = companyRepository.save(company);
 		if(result != null) {
@@ -98,8 +110,9 @@ public class CompanyService {
 		}
 	}
 	
-	public BaseDataResponse unDel(UUID id) {
-		Company company = companyRepository.findById(id).get();
+	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{
+		Company company = companyRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + id));
 		company.setDelete(false);
 		Company result = companyRepository.save(company);
 		if(result != null) {
@@ -111,8 +124,11 @@ public class CompanyService {
 		}
 	}
 	
-	public BaseDataResponse findById(UUID id) {
+	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndIsDelete(id, false);
+		if(company == null) {
+			throw new ResourceNotFoundException("Company not found for this id :: " + id);
+		}
 		CompanyResponse comResponse = this.setCompanyResponse(company);
 		
 		BaseDataResponse response = new BaseDataResponse(comResponse);
@@ -120,8 +136,8 @@ public class CompanyService {
 		return response;
 	}
 	
-	public BaseDataResponse findAll() {
-		List<Company> listCompany = companyRepository.findAll();
+	public BaseDataResponse findAllByIsDelete() {
+		List<Company> listCompany = companyRepository.findAllByIsDelete(false);
 		
 		List<CompanyResponse> ListCompanyResponses = new ArrayList<CompanyResponse>();
 		for (Company item : listCompany) {
@@ -150,9 +166,6 @@ public class CompanyService {
 		comResponse.setCoverImage(company.getCoverImageUrl());
 		comResponse.setIntroduction(company.getIntroduction());
 		comResponse.setIsPublised(company.getIsPublised());
-		comResponse.setCreateDate(company.getCreateDate());
-		comResponse.setUpdateDate(company.getUpdateDate());
-		comResponse.setDelete(company.isDelete());
 		
 		return comResponse;
 	}

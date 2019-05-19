@@ -24,12 +24,6 @@ public class CompanyResponse {
 	private String introduction;
 	@JsonProperty("is_publised")
 	private int isPublised;
-	@JsonProperty("create_date")
-	private Timestamp createDate;
-	@JsonProperty("update_date")
-	private Timestamp updateDate;
-	@JsonProperty("is_delete")
-	private boolean isDelete;
 	public UUID getId() {
 		return id;
 	}
@@ -102,27 +96,8 @@ public class CompanyResponse {
 	public void setIsPublised(int isPublised) {
 		this.isPublised = isPublised;
 	}
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
-	}
-	public boolean isDelete() {
-		return isDelete;
-	}
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
-	}
 	public CompanyResponse(UUID id, User user, String name, int scale, BusinessType businesses, City city,
-			District district, String address, String logo, String coverImage, String introduction, int isPublised,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+			District district, String address, String logo, String coverImage, String introduction, int isPublised) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -136,9 +111,6 @@ public class CompanyResponse {
 		this.coverImage = coverImage;
 		this.introduction = introduction;
 		this.isPublised = isPublised;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
 	}
 	public CompanyResponse() {
 		super();

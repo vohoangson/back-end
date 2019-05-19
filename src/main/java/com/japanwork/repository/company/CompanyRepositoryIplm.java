@@ -167,17 +167,12 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 
 	@Override
 	public Company findByIdAndIsDelete(UUID id, boolean isDelete) {
-//		String sql = "Select new " + Company.class.getName()
-//                + "(c.id,c.userId,c.name,c.bussinessTypeId,c.scale,c.districtId,c.address,c.logoUrl,"
-//                + "c.coverImageUrl,c.introduction,c.isPublised,c.createDate,c.updateDate,c.isDelete,c.cityId"
-//                + " from " + Company.class.getName() + " c "
-//				+ " where c.id = :id and c.isDelete = false";
-//		
-//		Query query = entityManager.createQuery(sql, Company.class);
-//        query.setParameter("id", id);
-//		String hql = "FROM company as c WHERE c.id = ? and c.is_delete = fasle";
-//		Company company = (Company) entityManager.createQuery(hql).setParameter(1, id).getResultList().get(0);
 		return findByIdAndIsDelete(id, isDelete) ;
+	}
+
+	@Override
+	public List<Company> findAllByIsDelete(boolean isDelete) {
+		return findAllByIsDelete(isDelete);
 	}
 	
 	

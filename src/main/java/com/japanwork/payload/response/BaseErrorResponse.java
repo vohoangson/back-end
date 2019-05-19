@@ -2,10 +2,10 @@ package com.japanwork.payload.response;
 
 import java.util.List;
 
-public class BaseMessageResponse {
+public class BaseErrorResponse {
 	private String code;
-	private String message;
-	public BaseMessageResponse(String code, String message) {
+	private List<String> message;
+	public BaseErrorResponse(String code, List<String> message) {
 		super();
 		this.code = code;
 		this.message = message;
@@ -16,11 +16,10 @@ public class BaseMessageResponse {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public String getMessage() {
+	public List<String> getMessage() {
 		return message;
 	}
-	public void setMessage(String message) {
+	public void setMessage(List<String> message) {
 		this.message = message;
 	}
-	
 }

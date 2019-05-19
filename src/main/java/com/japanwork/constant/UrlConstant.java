@@ -38,10 +38,7 @@ public class UrlConstant {
 	public static final String URL_CITY_DELETE = "/city/delete/{id}";
 	
 	//Company
-	public static final String URL_COMPANY_LIST = "/companies";
-	public static final String URL_COMPANY_FIND_BY_ID = "/companies/{id}";
-	public static final String URL_COMPANY_CREATE = "/companies/create";
-	public static final String URL_COMPANY_UPDATE = "/companies/update/{id}";
-	public static final String URL_COMPANY_DELETE = "/companies/delete/{id}";
-	public static final String URL_COMPANY_UN_DELETE = "/companies/undelete/{id}";
+	public static final String URL_COMPANY = "/companies";
+	public static final String URL_COMPANY_ID = "/companies/{id}";
+	public static final String URL_COMPANY_UNDEL = "/companies/undelete/{id}";
 }

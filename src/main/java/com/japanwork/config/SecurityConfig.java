@@ -3,6 +3,7 @@ package com.japanwork.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -96,6 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .disable()
                 .exceptionHandling()
                     .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                    .accessDeniedPage("/403")
                     .and()
                 .authorizeRequests()
                     .antMatchers("/",
@@ -114,18 +116,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_REGISTER,
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
                 		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
-                		UrlConstant.URL_LOGOUT,
-                		UrlConstant.URL_ERROR_404,
-                		UrlConstant.URL_COMPANY_FIND_BY_ID,
-                		UrlConstant.URL_COMPANY_LIST)
+                		UrlConstant.URL_ERROR_404)
                         .permitAll()
-                    .antMatchers(
-                		UrlConstant.URL_COMPANY_CREATE,
-                		UrlConstant.URL_COMPANY_UPDATE).hasAnyRole("COMPANY","ADMIN")
+                    .antMatchers(HttpMethod.GET, 
+                		UrlConstant.URL_COMPANY, 
+                		UrlConstant.URL_COMPANY_ID)
+                    	.permitAll()
+                    .antMatchers(HttpMethod.POST,
+                		UrlConstant.URL_COMPANY)
+                    	.hasAnyRole("COMPANY","ADMIN")
+                    .antMatchers(HttpMethod.PATCH,
+                		UrlConstant.URL_COMPANY_ID)
+                    	.hasAnyRole("COMPANY","ADMIN")
+                    .antMatchers(UrlConstant.URL_COMPANY_UNDEL)
+                    	.hasAnyRole("ADMIN")
+                    .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                     .antMatchers(
                 		UrlConstant.URL_BUSINESS,
-                		UrlConstant.URL_DISTRICT,
-                		UrlConstant.URL_COMPANY_DELETE).hasRole("ADMIN")
+                		UrlConstant.URL_DISTRICT).hasRole("ADMIN")
                     .anyRequest()
                         .authenticated()
                     .and()
