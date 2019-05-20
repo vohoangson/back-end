@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.payload.request.DistrictRequest;
+import com.japanwork.payload.request.LevelRequest;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.service.DistrictService;
+import com.japanwork.service.LevelService;
 
 @Controller
-public class DistrictController {
+public class LevelController {
 	@Autowired
-	private DistrictService districtService;
+	private LevelService levelService;
 	
-	@PostMapping(value = UrlConstant.URL_DISTRICT)
+	@PostMapping(value = UrlConstant.URL_LEVEL)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody DistrictRequest districtRequest) {		
-		return districtService.save(districtRequest);
+	public BaseDataResponse create(@Valid @RequestBody LevelRequest levelRequest) {		
+		return levelService.save(levelRequest);
 	}
 }

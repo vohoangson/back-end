@@ -1,7 +1,5 @@
 package com.japanwork.payload.response;
 
-import java.util.List;
-
 public class BaseMessageResponse {
 	private String code;
 	private String message;

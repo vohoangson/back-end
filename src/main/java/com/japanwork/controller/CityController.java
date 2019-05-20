@@ -18,7 +18,7 @@ public class CityController {
 	@Autowired
 	private CityService cityService;
 	
-	@PostMapping(value = UrlConstant.URL_CITY_CREATE)
+	@PostMapping(value = UrlConstant.URL_CITY)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody CityRequest cityRequest) {		
 		return cityService.save(cityRequest);

@@ -1,17 +1,18 @@
 package com.japanwork.payload.request;
 
-import java.sql.Timestamp;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.BusinessType;
+import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
 import com.japanwork.model.User;
 public class CompanyRequest {
+	private UUID id;
 	private User user;
 	private String name;
 	private int scale;
-	private BusinessType businesses;
+	private Business businesses;
 	private City city;
 	private District district;
 	private String address;
@@ -21,13 +22,13 @@ public class CompanyRequest {
 	private String introduction;
 	@JsonProperty("is_publised")
 	private int isPublised;
-	@JsonProperty("create_date")
-	private Timestamp createDate;
-	@JsonProperty("update_date")
-	private Timestamp updateDate;
-	@JsonProperty("is_delete")
-	private boolean isDelete;
 	
+	public UUID getId() {
+		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
 	public User getUser() {
 		return user;
 	}
@@ -46,10 +47,10 @@ public class CompanyRequest {
 	public void setScale(int scale) {
 		this.scale = scale;
 	}
-	public BusinessType getBusinesses() {
+	public Business getBusinesses() {
 		return businesses;
 	}
-	public void setBusinesses(BusinessType businesses) {
+	public void setBusinesses(Business businesses) {
 		this.businesses = businesses;
 	}
 	public City getCity() {
@@ -93,24 +94,5 @@ public class CompanyRequest {
 	}
 	public void setIsPublised(int isPublised) {
 		this.isPublised = isPublised;
-	}
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
-	}
-	public boolean isDelete() {
-		return isDelete;
-	}
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
-	}
-	
+	}	
 }

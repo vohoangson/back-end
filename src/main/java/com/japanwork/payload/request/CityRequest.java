@@ -1,13 +1,23 @@
 package com.japanwork.payload.request;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CityRequest {
+	private UUID id;
 	@JsonProperty("name_vi")
 	private String nameVi;
 	@JsonProperty("name_ja")
 	private String nameJa;
 	private String description;
+	
+	public UUID getId() {
+		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
 	public String getNameVi() {
 		return nameVi;
 	}
@@ -26,5 +36,4 @@ public class CityRequest {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
 }

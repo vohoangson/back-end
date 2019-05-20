@@ -1,17 +1,17 @@
-package com.japanwork.payload.request;
+package com.japanwork.payload.response;
 
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DistrictRequest {
+public class DistrictResponse {
 	private UUID id;
 	@JsonProperty("name_vi")
 	private String nameVi;
 	@JsonProperty("name_ja")
 	private String nameJa;
 	@JsonProperty("country_code")
-	private String countryCode;
+    private String countryCode;
 	private String description;
 	
 	public UUID getId() {
@@ -43,5 +43,17 @@ public class DistrictRequest {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public DistrictResponse(UUID id, String nameVi, String nameJa, String countryCode, String description) {
+		super();
+		this.id = id;
+		this.nameVi = nameVi;
+		this.nameJa = nameJa;
+		this.countryCode = countryCode;
+		this.description = description;
+	}
+	public DistrictResponse() {
+		super();
 	}
 }

@@ -1,22 +1,16 @@
 package com.japanwork.payload.response;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.BusinessType;
-import com.japanwork.model.City;
-import com.japanwork.model.District;
-import com.japanwork.model.User;
 
 public class CompanyResponse {
 	private UUID id;
-	private User user;
 	private String name;
 	private int scale;
-	private BusinessType businesses;
-	private City city;
-	private District district;
+	private BusinessResponse businesses;
+	private CityResponse city;
+	private DistrictResponse district;
 	private String address;
 	private String logo;
 	@JsonProperty("cover_image")
@@ -24,83 +18,100 @@ public class CompanyResponse {
 	private String introduction;
 	@JsonProperty("is_publised")
 	private int isPublised;
+	
 	public UUID getId() {
 		return id;
 	}
+
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public int getScale() {
 		return scale;
 	}
+
 	public void setScale(int scale) {
 		this.scale = scale;
 	}
-	public BusinessType getBusinesses() {
+
+	public BusinessResponse getBusinesses() {
 		return businesses;
 	}
-	public void setBusinesses(BusinessType businesses) {
+
+	public void setBusinesses(BusinessResponse businesses) {
 		this.businesses = businesses;
 	}
-	public City getCity() {
+
+	public CityResponse getCity() {
 		return city;
 	}
-	public void setCity(City city) {
+
+	public void setCity(CityResponse city) {
 		this.city = city;
 	}
-	public District getDistrict() {
+
+	public DistrictResponse getDistrict() {
 		return district;
 	}
-	public void setDistrict(District district) {
+
+	public void setDistrict(DistrictResponse district) {
 		this.district = district;
 	}
+
 	public String getAddress() {
 		return address;
 	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	public String getLogo() {
 		return logo;
 	}
+
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
+
 	public String getCoverImage() {
 		return coverImage;
 	}
+
 	public void setCoverImage(String coverImage) {
 		this.coverImage = coverImage;
 	}
+
 	public String getIntroduction() {
 		return introduction;
 	}
+
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
+
 	public int getIsPublised() {
 		return isPublised;
 	}
+
 	public void setIsPublised(int isPublised) {
 		this.isPublised = isPublised;
 	}
-	public CompanyResponse(UUID id, User user, String name, int scale, BusinessType businesses, City city,
-			District district, String address, String logo, String coverImage, String introduction, int isPublised) {
+
+	public CompanyResponse(UUID id, String name, int scale, BusinessResponse businesses, CityResponse city,
+			DistrictResponse district, String address, String logo, String coverImage, String introduction,
+			int isPublised) {
 		super();
 		this.id = id;
-		this.user = user;
 		this.name = name;
 		this.scale = scale;
 		this.businesses = businesses;
@@ -112,6 +123,7 @@ public class CompanyResponse {
 		this.introduction = introduction;
 		this.isPublised = isPublised;
 	}
+
 	public CompanyResponse() {
 		super();
 	}

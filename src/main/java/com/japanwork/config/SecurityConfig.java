@@ -115,25 +115,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_OAUTH2_LOGIN,	
                 		UrlConstant.URL_REGISTER,
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
-                		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
-                		UrlConstant.URL_ERROR_404)
+                		UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
                         .permitAll()
                     .antMatchers(HttpMethod.GET, 
                 		UrlConstant.URL_COMPANY, 
                 		UrlConstant.URL_COMPANY_ID)
                     	.permitAll()
                     .antMatchers(HttpMethod.POST,
-                		UrlConstant.URL_COMPANY)
+                		UrlConstant.URL_COMPANY,
+                		UrlConstant.URL_JOB)
                     	.hasAnyRole("COMPANY","ADMIN")
                     .antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_COMPANY_ID)
+                		UrlConstant.URL_COMPANY_ID,
+                		UrlConstant.URL_JOB_ID)
                     	.hasAnyRole("COMPANY","ADMIN")
-                    .antMatchers(UrlConstant.URL_COMPANY_UNDEL)
+                    .antMatchers(UrlConstant.URL_COMPANY_UNDEL,
+                    		UrlConstant.URL_JOB_UNDEL)
                     	.hasAnyRole("ADMIN")
                     .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                     .antMatchers(
                 		UrlConstant.URL_BUSINESS,
-                		UrlConstant.URL_DISTRICT).hasRole("ADMIN")
+                		UrlConstant.URL_CITY,
+                		UrlConstant.URL_DISTRICT,
+                		UrlConstant.URL_LEVEL,
+                		UrlConstant.URL_CONTRACT).hasRole("ADMIN")
                     .anyRequest()
                         .authenticated()
                     .and()

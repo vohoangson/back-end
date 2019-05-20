@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="contract_type")
-public class ContractType {
+public class Contract {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -99,7 +99,7 @@ public class ContractType {
 		this.isDelete = isDelete;
 	}
 
-	public ContractType(UUID id, String nameVi, String nameJa, String description,
+	public Contract(UUID id, String nameVi, String nameJa, String description,
 			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
@@ -111,7 +111,7 @@ public class ContractType {
 		this.isDelete = isDelete;
 	}
 
-	public ContractType() {
+	public Contract() {
 		super();
 	} 
 }

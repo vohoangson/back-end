@@ -16,29 +16,38 @@ public class UrlConstant {
 	public static final String URL_RESEND_REGISTRATION_TOKEN = "/resend-registration";		
 	
 	//Business Type
-	public static final String URL_BUSINESS = "/business/*";
-	public static final String URL_BUSINESS_FIND_BY_ID = "/business/{id}";
-	public static final String URL_BUSINESS_CREATE = "/business/create";
-	public static final String URL_BUSINESS_UPDATE = "/business/update/{id}";
-	public static final String URL_BUSINESS_DELETE = "/business/delete/{id}";
+	public static final String URL_BUSINESS = "/business";
+	public static final String URL_BUSINESS_ID = "/business/{id}";
+	public static final String URL_BUSINESS_UNDEL = "/business/undelete/{id}";
 	
 	
 	//District
-	public static final String URL_DISTRICT = "/district/*";
-	public static final String URL_DISTRICT_FIND_BY_ID = "/district/{id}";
-	public static final String URL_DISTRICT_CREATE = "/district/create";
-	public static final String URL_DISTRICT_UPDATE = "/district/update/{id}";
-	public static final String URL_DISTRICT_DELETE = "/district/delete/{id}";
+	public static final String URL_DISTRICT = "/districts";
+	public static final String URL_DISTRICT_ID = "/districts/{id}";
+	public static final String URL_DISTRICT_UNDEL = "/districts/undelete/{id}";
 	
 	//District
-	public static final String URL_CITY = "/city/*";
-	public static final String URL_CITY_FIND_BY_ID = "/city/{id}";
-	public static final String URL_CITY_CREATE = "/city/create";
-	public static final String URL_CITY_UPDATE = "/city/update/{id}";
-	public static final String URL_CITY_DELETE = "/city/delete/{id}";
+	public static final String URL_CITY = "/citys";
+	public static final String URL_CITY_ID = "/citys/{id}";
+	public static final String URL_CITY_UNDEL = "/citys/undelete/{id}";
 	
 	//Company
 	public static final String URL_COMPANY = "/companies";
 	public static final String URL_COMPANY_ID = "/companies/{id}";
 	public static final String URL_COMPANY_UNDEL = "/companies/undelete/{id}";
+	
+	//Job
+	public static final String URL_JOB = "/jobs";
+	public static final String URL_JOB_ID = "/jobs/{id}";
+	public static final String URL_JOB_UNDEL = "/jobs/undelete/{id}";
+	
+	//Contract
+	public static final String URL_CONTRACT = "/contracts";
+	public static final String URL_CONTRACT_ID = "/contracts/{id}";
+	public static final String URL_CONTRACT_UNDEL = "/contracts/undelete/{id}";
+	
+	//Level
+	public static final String URL_LEVEL = "/levels";
+	public static final String URL_LEVEL_ID = "/levels/{id}";
+	public static final String URL_LEVEL_UNDEL = "/levels/undelete/{id}";
 }

@@ -27,6 +27,15 @@ public class Job {
     @Column(name="contract_type_id")
     private UUID contractTypeId;
     
+    @Column(name="business_type_id")
+    private UUID businessTypeId;
+    
+    @Column(name="level_id")
+    private UUID levelId;
+    
+    @Column(name="work_place_city_id")
+    private UUID workPlaceCityId;
+    
     @Column(name="work_place_district_id")
     private UUID workPlaceDistrictId;
     
@@ -44,6 +53,15 @@ public class Job {
     
     @Column(name="japanese_level_requirement")
     private int japaneseLevelRequirement;
+    
+    @Column(name="min_salary")
+    private float minSalary;
+    
+    @Column(name="max_salary")
+    private float maxSalary;
+    
+    @Column(name="status")
+    private int status;
     
     @Column(name="create_date")
     private Timestamp createDate;
@@ -84,6 +102,30 @@ public class Job {
 
 	public void setContractTypeId(UUID contractTypeId) {
 		this.contractTypeId = contractTypeId;
+	}
+	
+	public UUID getWorkPlaceCityId() {
+		return workPlaceCityId;
+	}
+	
+	public UUID getBusinessTypeId() {
+		return businessTypeId;
+	}
+
+	public void setBusinessTypeId(UUID businessTypeId) {
+		this.businessTypeId = businessTypeId;
+	}
+
+	public UUID getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(UUID levelId) {
+		this.levelId = levelId;
+	}
+
+	public void setWorkPlaceCityId(UUID workPlaceCityId) {
+		this.workPlaceCityId = workPlaceCityId;
 	}
 
 	public UUID getWorkPlaceDistrictId() {
@@ -134,6 +176,30 @@ public class Job {
 		this.japaneseLevelRequirement = japaneseLevelRequirement;
 	}
 
+	public float getMinSalary() {
+		return minSalary;
+	}
+
+	public void setMinSalary(float minSalary) {
+		this.minSalary = minSalary;
+	}
+
+	public float getMaxSalary() {
+		return maxSalary;
+	}
+
+	public void setMaxSalary(float maxSalary) {
+		this.maxSalary = maxSalary;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	public Timestamp getCreateDate() {
 		return createDate;
 	}
@@ -150,29 +216,35 @@ public class Job {
 		this.updateDate = updateDate;
 	}
 
-	public boolean getIsDelete() {
+	public boolean isDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
+	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 
-	public Job(UUID id, String name, UUID companyId, UUID contractTypeId, UUID workPlaceDistrictId,
-			String workPlaceAddress, String description, String skillRequirement, String benefit,
-			int japaneseLevelRequirement, Timestamp createDate, Timestamp updateDate,
-			boolean isDelete) {
+	public Job(UUID id, String name, UUID companyId, UUID contractTypeId, UUID businessTypeId, UUID levelId,
+			UUID workPlaceCityId, UUID workPlaceDistrictId, String workPlaceAddress, String description,
+			String skillRequirement, String benefit, int japaneseLevelRequirement, float minSalary, float maxSalary,
+			int status, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.companyId = companyId;
 		this.contractTypeId = contractTypeId;
+		this.businessTypeId = businessTypeId;
+		this.levelId = levelId;
+		this.workPlaceCityId = workPlaceCityId;
 		this.workPlaceDistrictId = workPlaceDistrictId;
 		this.workPlaceAddress = workPlaceAddress;
 		this.description = description;
 		this.skillRequirement = skillRequirement;
 		this.benefit = benefit;
 		this.japaneseLevelRequirement = japaneseLevelRequirement;
+		this.minSalary = minSalary;
+		this.maxSalary = maxSalary;
+		this.status = status;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;

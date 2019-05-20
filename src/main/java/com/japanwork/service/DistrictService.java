@@ -7,9 +7,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.District;
 import com.japanwork.payload.request.DistrictRequest;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.DistrictResponse;
 import com.japanwork.repository.district.DistrictRepository;
 
 @Service
@@ -31,11 +33,30 @@ public class DistrictService {
 		district.setIsDelete(false);
 		
 		District result = districtRepository.save(district);
-		BaseDataResponse response = new BaseDataResponse(result);
+		DistrictResponse districtResponse = this.setDistrictResponse(result);
+		BaseDataResponse response = new BaseDataResponse(districtResponse);
 		return response;
 	}
 	
-	public District findById(UUID id) {
+	public District findByIdAndIsDelete(UUID id) {
 		return districtRepository.findByIdAndIsDelete(id, false);
+	}
+	
+	public DistrictResponse convertDistrict(UUID id) throws ResourceNotFoundException{
+		District district = districtRepository.findByIdAndIsDelete(id, false);
+		if(district == null) {
+			throw new ResourceNotFoundException("District not found for this id :: " + id);
+		}
+		DistrictResponse districtResponse = this.setDistrictResponse(district);
+		
+		return districtResponse;
+	}
+	
+	private DistrictResponse setDistrictResponse(District district) {
+		DistrictResponse districtResponse = new DistrictResponse();
+		districtResponse.setNameVi(district.getNameVi());
+		districtResponse.setNameJa(district.getNameJa());
+		districtResponse.setDescription(district.getDescription());
+		return districtResponse;
 	}
 }

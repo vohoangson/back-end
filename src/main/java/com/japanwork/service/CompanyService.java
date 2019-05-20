@@ -26,7 +26,7 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private BusinessTypeService businessTypeService;
+	private BusinessService businessTypeService;
 	@Autowired
 	private CityService cityService;
 	@Autowired
@@ -52,9 +52,7 @@ public class CompanyService {
 		company.setDelete(false);
 		
 		Company result = companyRepository.save(company);
-
 		CompanyResponse comResponse = this.setCompanyResponse(result);
-		
 		BaseDataResponse response = new BaseDataResponse(comResponse);		
 		return response;
 	}
@@ -84,9 +82,7 @@ public class CompanyService {
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
 		company.setIntroduction(companyRequest.getIntroduction());
-		company.setUpdateDate(companyRequest.getCreateDate());
 		company.setUpdateDate(timestamp);
-		company.setDelete(false);
 		
 		Company result = companyRepository.save(company);
 
@@ -97,8 +93,10 @@ public class CompanyService {
 	}
 	
 	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
-		Company company = companyRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + id));
+		Company company = companyRepository.findByIdAndIsDelete(id, false);
+		if(company == null) {
+			throw new ResourceNotFoundException("Company not found for this id :: " + id);
+		}
 		company.setDelete(true);
 		Company result = companyRepository.save(company);
 		if(result != null) {
@@ -129,44 +127,51 @@ public class CompanyService {
 		if(company == null) {
 			throw new ResourceNotFoundException("Company not found for this id :: " + id);
 		}
-		CompanyResponse comResponse = this.setCompanyResponse(company);
+		CompanyResponse companyResponse = this.setCompanyResponse(company);
 		
-		BaseDataResponse response = new BaseDataResponse(comResponse);
+		BaseDataResponse response = new BaseDataResponse(companyResponse);
 		
 		return response;
+	}
+	
+	public CompanyResponse convertCompany(UUID id) throws ResourceNotFoundException{
+		Company company = companyRepository.findByIdAndIsDelete(id, false);
+		if(company == null) {
+			throw new ResourceNotFoundException("Company not found for this id :: " + id);
+		}
+		CompanyResponse companyResponse = this.setCompanyResponse(company);
+		
+		return companyResponse;
 	}
 	
 	public BaseDataResponse findAllByIsDelete() {
 		List<Company> listCompany = companyRepository.findAllByIsDelete(false);
 		
-		List<CompanyResponse> ListCompanyResponses = new ArrayList<CompanyResponse>();
+		List<CompanyResponse> listCompanyResponses = new ArrayList<CompanyResponse>();
 		for (Company item : listCompany) {
 			CompanyResponse companyResponses = this.setCompanyResponse(item);
-			ListCompanyResponses.add(companyResponses);
+			listCompanyResponses.add(companyResponses);
 		}
 		
-		
-		BaseDataResponse response = new BaseDataResponse(ListCompanyResponses);
-		
+		BaseDataResponse response = new BaseDataResponse(listCompanyResponses);
 		return response;
 	}
 	
 	private CompanyResponse setCompanyResponse(Company company) {
-		CompanyResponse comResponse = new CompanyResponse();
+		CompanyResponse companyResponse = new CompanyResponse();
 		
-		comResponse.setId(company.getId());
-		comResponse.setUser(userService.findById(company.getUserId()));
-		comResponse.setName(company.getName());
-		comResponse.setScale(company.getScale());
-		comResponse.setBusinesses(businessTypeService.findById(company.getBussinessTypeId()));
-		comResponse.setCity(cityService.findById(company.getCityId()));
-		comResponse.setDistrict(districtService.findById(company.getDistrictId()));
-		comResponse.setAddress(company.getAddress());
-		comResponse.setLogo(company.getLogoUrl());
-		comResponse.setCoverImage(company.getCoverImageUrl());
-		comResponse.setIntroduction(company.getIntroduction());
-		comResponse.setIsPublised(company.getIsPublised());
+		companyResponse.setId(company.getId());
+		companyResponse.setName(company.getName());
+		companyResponse.setScale(company.getScale());
+		companyResponse.setBusinesses(businessTypeService.convertBusiness(company.getBussinessTypeId()));
+		companyResponse.setCity(cityService.convertCity(company.getCityId()));
+		companyResponse.setDistrict(districtService.convertDistrict(company.getDistrictId()));
+		companyResponse.setAddress(company.getAddress());
+		companyResponse.setLogo(company.getLogoUrl());
+		companyResponse.setCoverImage(company.getCoverImageUrl());
+		companyResponse.setIntroduction(company.getIntroduction());
+		companyResponse.setIsPublised(company.getIsPublised());
 		
-		return comResponse;
+		return companyResponse;
 	}
 }

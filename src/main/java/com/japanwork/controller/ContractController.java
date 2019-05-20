@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.payload.request.DistrictRequest;
+import com.japanwork.payload.request.ContractRequest;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.service.DistrictService;
+import com.japanwork.service.ContractService;
 
 @Controller
-public class DistrictController {
+public class ContractController {
 	@Autowired
-	private DistrictService districtService;
+	private ContractService contractService;
 	
-	@PostMapping(value = UrlConstant.URL_DISTRICT)
+	@PostMapping(value = UrlConstant.URL_CONTRACT)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody DistrictRequest districtRequest) {		
-		return districtService.save(districtRequest);
+	public BaseDataResponse create(@Valid @RequestBody ContractRequest contractRequest) {		
+		return contractService.save(contractRequest);
 	}
 }

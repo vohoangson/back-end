@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "business_type")
-public class BusinessType {
+public class Business {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -99,7 +99,7 @@ public class BusinessType {
 		this.isDelete = isDelete;
 	}
 
-	public BusinessType(UUID id, String nameVi, String nameJa, String description, Timestamp createDate,
+	public Business(UUID id, String nameVi, String nameJa, String description, Timestamp createDate,
 			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
@@ -111,7 +111,7 @@ public class BusinessType {
 		this.isDelete = isDelete;
 	}
 
-	public BusinessType() {
+	public Business() {
 		super();
 	}
 }
