@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name="contract_type")
-public class Contract {
+@Table(name="language_certificate_type")
+public class LanguageCertificateType {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
-	private UUID id;
-	
-	@JsonProperty("name_vi")
-	@Column(name="name_vi")
+    private UUID id;
+    
+    @JsonProperty("name_vi")
+    @Column(name="name_vi")
     private String nameVi;
     
-	@JsonProperty("name_ja")
+    @JsonProperty("name_ja")
     @Column(name="name_ja")
     private String nameJa;
     
@@ -101,8 +101,8 @@ public class Contract {
 		this.isDelete = isDelete;
 	}
 
-	public Contract(UUID id, String nameVi, String nameJa, String description,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public LanguageCertificateType(UUID id, String nameVi, String nameJa, String description, Timestamp createDate,
+			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.nameVi = nameVi;
@@ -113,7 +113,7 @@ public class Contract {
 		this.isDelete = isDelete;
 	}
 
-	public Contract() {
+	public LanguageCertificateType() {
 		super();
-	} 
+	}
 }

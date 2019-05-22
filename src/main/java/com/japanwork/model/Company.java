@@ -8,7 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name="company")
 public class Company {
@@ -17,45 +23,55 @@ public class Company {
     @Column(name="id")
 	private UUID id;
     
-    @Column(name="user_id")
-    private UUID userId;
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     
     @Column(name="name")
     private String name;
     
-    @Column(name="bussiness_type_id")
-    private UUID bussinessTypeId;
+    @ManyToOne
+    @JoinColumn(name = "business_type_id")
+    private Business business;
     
     @Column(name="scale")
     private int scale;
     
-    @Column(name="city_id")
-    private UUID cityId;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
-    @Column(name="district_id")    
-    private UUID districtId;
+    @ManyToOne
+    @JoinColumn(name = "district_id")   
+    private District district;
     
     @Column(name="address")
     private String address;
     
+    @JsonProperty("logo_url")
     @Column(name="logo_url")
     private String logoUrl;
     
+    @JsonProperty("cover_image_url")
     @Column(name="cover_image_url")
     private String coverImageUrl;
     
     @Column(name="introduction")
     private String introduction;
     
-    @Column(name="is_publised")
-    private int isPublised;
+    @Column(name="status")
+    private String status;
     
+    @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
     
+    @JsonIgnore
     @Column(name="update_date")
     private Timestamp updateDate;
     
+    @JsonIgnore
     @Column(name="is_delete")
     private boolean isDelete;
 
@@ -67,12 +83,12 @@ public class Company {
 		this.id = id;
 	}
 
-	public UUID getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(UUID userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getName() {
@@ -83,12 +99,12 @@ public class Company {
 		this.name = name;
 	}
 
-	public UUID getBussinessTypeId() {
-		return bussinessTypeId;
+	public Business getBusiness() {
+		return business;
 	}
 
-	public void setBussinessTypeId(UUID bussinessTypeId) {
-		this.bussinessTypeId = bussinessTypeId;
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 
 	public int getScale() {
@@ -99,20 +115,20 @@ public class Company {
 		this.scale = scale;
 	}
 
-	public UUID getCityId() {
-		return cityId;
+	public City getCity() {
+		return city;
 	}
 
-	public void setCityId(UUID cityId) {
-		this.cityId = cityId;
+	public void setCity(City city) {
+		this.city = city;
 	}
 
-	public UUID getDistrictId() {
-		return districtId;
+	public District getDistrict() {
+		return district;
 	}
 
-	public void setDistrictId(UUID districtId) {
-		this.districtId = districtId;
+	public void setDistrict(District district) {
+		this.district = district;
 	}
 
 	public String getAddress() {
@@ -147,12 +163,12 @@ public class Company {
 		this.introduction = introduction;
 	}
 
-	public int getIsPublised() {
-		return isPublised;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setIsPublised(int isPublised) {
-		this.isPublised = isPublised;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Timestamp getCreateDate() {
@@ -166,11 +182,12 @@ public class Company {
 	public Timestamp getUpdateDate() {
 		return updateDate;
 	}
-
+	
 	public void setUpdateDate(Timestamp updateDate) {
 		this.updateDate = updateDate;
 	}
 
+	@JsonIgnore
 	public boolean isDelete() {
 		return isDelete;
 	}
@@ -178,29 +195,29 @@ public class Company {
 	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
+	
+	public Company() {
+		super();
+	}
 
-	public Company(UUID id, UUID userId, String name, UUID bussinessTypeId, int scale, UUID cityId, UUID districtId,
-			String address, String logoUrl, String coverImageUrl, String introduction, int isPublised,
+	public Company(UUID id, User user, String name, Business business, int scale, City city, District district,
+			String address, String logoUrl, String coverImageUrl, String introduction, String status,
 			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
-		this.userId = userId;
+		this.user = user;
 		this.name = name;
-		this.bussinessTypeId = bussinessTypeId;
+		this.business = business;
 		this.scale = scale;
-		this.cityId = cityId;
-		this.districtId = districtId;
+		this.city = city;
+		this.district = district;
 		this.address = address;
 		this.logoUrl = logoUrl;
 		this.coverImageUrl = coverImageUrl;
 		this.introduction = introduction;
-		this.isPublised = isPublised;
+		this.status = status;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;
-	}
-
-	public Company() {
-		super();
 	}
 }

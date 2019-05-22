@@ -1,47 +1,43 @@
-package com.japanwork.repository.company;
+package com.japanwork.repository.candidate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.Company;
+import com.japanwork.model.Candidate;
 import com.japanwork.model.User;
 
 @Repository
-public class CompanyRepositoryIplm implements CompanyRepository{
-	
-	@PersistenceContext
-    private EntityManager entityManager;
-	
-	@Override
-	public List<Company> findAll() {
-		// TODO Auto-generated method stub
-		return findAll();
-	}
+@Transactional
+public class CandidateRepositoryIplm implements CandidateRepository{
 
 	@Override
-	public List<Company> findAll(Sort sort) {
+	public List<Candidate> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Company> findAllById(Iterable<UUID> ids) {
+	public List<Candidate> findAll(Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Company> List<S> saveAll(Iterable<S> entities) {
+	public List<Candidate> findAllById(Iterable<UUID> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <S extends Candidate> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -53,13 +49,13 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public <S extends Company> S saveAndFlush(S entity) {
+	public <S extends Candidate> S saveAndFlush(S entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteInBatch(Iterable<Company> entities) {
+	public void deleteInBatch(Iterable<Candidate> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -71,39 +67,39 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Company getOne(UUID id) {
+	public Candidate getOne(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Company> List<S> findAll(Example<S> example) {
+	public <S extends Candidate> List<S> findAll(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Company> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends Candidate> List<S> findAll(Example<S> example, Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<Company> findAll(Pageable pageable) {
+	public Page<Candidate> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Company> S save(S entity) {
+	public <S extends Candidate> S save(S entity) {
 		// TODO Auto-generated method stub
 		return save(entity);
 	}
 
 	@Override
-	public Optional<Company> findById(UUID id) {
+	public Optional<Candidate> findById(UUID id) {
 		// TODO Auto-generated method stub
-		return findById(id);
+		return null;
 	}
 
 	@Override
@@ -125,13 +121,13 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public void delete(Company entity) {
+	public void delete(Candidate entity) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends Company> entities) {
+	public void deleteAll(Iterable<? extends Candidate> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -143,42 +139,45 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public <S extends Company> Optional<S> findOne(Example<S> example) {
+	public <S extends Candidate> Optional<S> findOne(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Company> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends Candidate> Page<S> findAll(Example<S> example, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Company> long count(Example<S> example) {
+	public <S extends Candidate> long count(Example<S> example) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public <S extends Company> boolean exists(Example<S> example) {
+	public <S extends Candidate> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public Company findByIdAndIsDelete(UUID id, boolean isDelete) {
-		return findByIdAndIsDelete(id, isDelete) ;
+	public Candidate findByIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByIdAndIsDelete(id, isDelete);
 	}
 
 	@Override
-	public List<Company> findAllByIsDelete(boolean isDelete) {
+	public List<Candidate> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
 		return findAllByIsDelete(isDelete);
 	}
 
 	@Override
-	public Company findByUser(User user) {
+	public Candidate findByUser(User user) {
 		// TODO Auto-generated method stub
 		return findByUser(user);
 	}
+	
 }

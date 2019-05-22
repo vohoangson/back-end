@@ -1,7 +1,6 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +14,6 @@ import com.japanwork.model.Job;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
-import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -25,29 +23,10 @@ public class JobService {
 	private JobRepository jobRepository;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private CompanyService companyService;
-	@Autowired
-	private ContractService contractService;
-	@Autowired
-	private LevelService levelService;
-	@Autowired
-	private BusinessService businessService;
-	@Autowired 
-	private CityService cityService;
-	@Autowired
-	private DistrictService districtService;
 	
 	public BaseDataResponse findAllByIsDelete() {
 		List<Job> listJob = jobRepository.findAllByIsDelete(false);
-		
-		List<JobResponse> listJobResponses = new ArrayList<JobResponse>();
-		for (Job item : listJob) {
-			JobResponse jobResponse = this.setJobResponse(item);
-			listJobResponses.add(jobResponse);
-		}
-		BaseDataResponse response = new BaseDataResponse(listJobResponses);
-		
+		BaseDataResponse response = new BaseDataResponse(listJob);
 		return response;
 	}
 	
@@ -57,13 +36,12 @@ public class JobService {
 		
 		Job job = new Job();
 		job.setName(jobRequest.getName());
-		job.setCompanyId(jobRequest.getCompany().getId());
-		job.setContractTypeId(jobRequest.getContract().getId());
-		job.setBusinessTypeId(jobRequest.getBusiness().getId());
-		job.setLevelId(jobRequest.getLevel().getId());
-		job.setWorkPlaceCityId(jobRequest.getCity().getId());
-		job.setWorkPlaceDistrictId(jobRequest.getDistrict().getId());
-		job.setWorkPlaceAddress(jobRequest.getAddress());
+		job.setCompany(jobRequest.getCompany());
+		job.setContract(jobRequest.getContract());
+		job.setLevel(jobRequest.getLevel());
+		job.setCity(jobRequest.getCity());
+		job.setDistrict(jobRequest.getDistrict());
+		job.setAddress(jobRequest.getAddress());
 		job.setDescription(jobRequest.getDescription());
 		job.setSkillRequirement(jobRequest.getSkillRequirement());
 		job.setBenefit(jobRequest.getBenefit());
@@ -76,8 +54,7 @@ public class JobService {
 		job.setDelete(false);
 		
 		Job result = jobRepository.save(job);
-		JobResponse jobResponse = this.setJobResponse(result);
-		BaseDataResponse response = new BaseDataResponse(jobResponse);		
+		BaseDataResponse response = new BaseDataResponse(result);		
 		return response;
 	}
 	
@@ -90,21 +67,20 @@ public class JobService {
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 			job = jobRepository.findByIdAndIsDelete(id, false);
 			if(job == null) {
-				throw new ResourceNotFoundException("Job not found for this id :: " + id);
+				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 			}
 		} else {
 			job = jobRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Job not found for this id :: " + id));
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		}
 
 		job.setName(jobRequest.getName());
-		job.setCompanyId(jobRequest.getCompany().getId());
-		job.setContractTypeId(jobRequest.getContract().getId());
-		job.setBusinessTypeId(jobRequest.getBusiness().getId());
-		job.setLevelId(jobRequest.getLevel().getId());
-		job.setWorkPlaceCityId(jobRequest.getCity().getId());
-		job.setWorkPlaceDistrictId(jobRequest.getDistrict().getId());
-		job.setWorkPlaceAddress(jobRequest.getAddress());
+		job.setCompany(jobRequest.getCompany());
+		job.setContract(jobRequest.getContract());
+		job.setLevel(jobRequest.getLevel());
+		job.setCity(jobRequest.getCity());
+		job.setDistrict(jobRequest.getDistrict());
+		job.setAddress(jobRequest.getAddress());
 		job.setDescription(jobRequest.getDescription());
 		job.setSkillRequirement(jobRequest.getSkillRequirement());
 		job.setBenefit(jobRequest.getBenefit());
@@ -114,18 +90,15 @@ public class JobService {
 		job.setStatus(jobRequest.getStatus());
 		job.setUpdateDate(timestamp);
 		
-		Job result = jobRepository.save(job);
-
-		JobResponse jobResponse = this.setJobResponse(result);
-		
-		BaseDataResponse response = new BaseDataResponse(jobResponse);		
+		Job result = jobRepository.save(job);		
+		BaseDataResponse response = new BaseDataResponse(result);		
 		return response;
 	}
 	
 	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
 		Job job = jobRepository.findByIdAndIsDelete(id, false);
 		if(job == null) {
-			throw new ResourceNotFoundException("Job not found for this id :: " + id);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 		}
 		job.setDelete(true);
 		Job result = jobRepository.save(job);
@@ -140,7 +113,7 @@ public class JobService {
 	
 	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{
 		Job job = jobRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Job not found for this id :: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		job.setDelete(false);
 		Job result = jobRepository.save(job);
 		if(result != null) {
@@ -155,34 +128,10 @@ public class JobService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Job job = jobRepository.findByIdAndIsDelete(id, false);
 		if(job == null) {
-			throw new ResourceNotFoundException("Job not found for this id :: " + id);
-		}
-		JobResponse jobResponse = this.setJobResponse(job);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+		}		
 		
-		BaseDataResponse response = new BaseDataResponse(jobResponse);
-		
+		BaseDataResponse response = new BaseDataResponse(job);
 		return response;
-	}
-	
-	private JobResponse setJobResponse(Job job) {
-		JobResponse jobResponse = new JobResponse();
-		
-		jobResponse.setId(job.getId());
-		jobResponse.setCompany(companyService.convertCompany(job.getId()));
-		jobResponse.setName(job.getName());
-		jobResponse.setContract(contractService.convertContract(job.getContractTypeId()));
-		jobResponse.setBusiness(businessService.convertBusiness(job.getBusinessTypeId()));
-		jobResponse.setLevel(levelService.convertLevel(job.getLevelId()));
-		jobResponse.setSkillRequirement(job.getSkillRequirement());
-		jobResponse.setJapaneseLevel(job.getJapaneseLevelRequirement());
-		jobResponse.setDescription(job.getDescription());
-		jobResponse.setCity(cityService.convertCity(job.getWorkPlaceCityId()));
-		jobResponse.setDistrict(districtService.convertDistrict(job.getWorkPlaceDistrictId()));
-		jobResponse.setAddress(job.getWorkPlaceAddress());
-		jobResponse.setMinSalary(job.getMinSalary());
-		jobResponse.setMaxSalary(job.getMaxSalary());
-		jobResponse.setBenefit(job.getBenefit());
-		jobResponse.setStatus(job.getStatus());
-		return jobResponse;
 	}
 }

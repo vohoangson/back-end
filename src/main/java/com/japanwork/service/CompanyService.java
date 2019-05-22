@@ -1,7 +1,6 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,10 +11,10 @@ import org.springframework.stereotype.Service;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Company;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
-import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -25,35 +24,29 @@ public class CompanyService {
 	private CompanyRepository companyRepository;
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private BusinessService businessTypeService;
-	@Autowired
-	private CityService cityService;
-	@Autowired
-	private DistrictService districtService;
 	
 	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Company company = new Company();
-		company.setUserId(userPrincipal.getId());
+		company.setUser(userService.findById(userPrincipal.getId()));
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
-		company.setBussinessTypeId(companyRequest.getBusinesses().getId());
-		company.setCityId(companyRequest.getCity().getId());
-		company.setDistrictId(companyRequest.getDistrict().getId());
+		company.setBusiness(companyRequest.getBusinesses());
+		company.setCity(companyRequest.getCity());
+		company.setDistrict(companyRequest.getDistrict());
 		company.setAddress(companyRequest.getAddress());
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
 		company.setIntroduction(companyRequest.getIntroduction());
+		company.setStatus(companyRequest.getStatus());
 		company.setCreateDate(timestamp);
 		company.setUpdateDate(timestamp);
 		company.setDelete(false);
 		
 		Company result = companyRepository.save(company);
-		CompanyResponse comResponse = this.setCompanyResponse(result);
-		BaseDataResponse response = new BaseDataResponse(comResponse);		
+		BaseDataResponse response = new BaseDataResponse(result);		
 		return response;
 	}
 	
@@ -66,36 +59,34 @@ public class CompanyService {
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 			company = companyRepository.findByIdAndIsDelete(id, false);
 			if(company == null) {
-				throw new ResourceNotFoundException("Company not found for this id :: " + id);
+				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 			}
 		} else {
 			company = companyRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + id));
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		}
 
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
-		company.setBussinessTypeId(companyRequest.getBusinesses().getId());
-		company.setCityId(companyRequest.getCity().getId());
-		company.setDistrictId(companyRequest.getDistrict().getId());
+		company.setBusiness(companyRequest.getBusinesses());
+		company.setCity(companyRequest.getCity());
+		company.setDistrict(companyRequest.getDistrict());
 		company.setAddress(companyRequest.getAddress());
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
 		company.setIntroduction(companyRequest.getIntroduction());
+		company.setStatus(companyRequest.getStatus());
 		company.setUpdateDate(timestamp);
 		
 		Company result = companyRepository.save(company);
-
-		CompanyResponse comResponse = this.setCompanyResponse(result);
-		
-		BaseDataResponse response = new BaseDataResponse(comResponse);		
+		BaseDataResponse response = new BaseDataResponse(result);		
 		return response;
 	}
 	
 	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		if(company == null) {
-			throw new ResourceNotFoundException("Company not found for this id :: " + id);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 		}
 		company.setDelete(true);
 		Company result = companyRepository.save(company);
@@ -110,7 +101,7 @@ public class CompanyService {
 	
 	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Company not found for this id :: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		company.setDelete(false);
 		Company result = companyRepository.save(company);
 		if(result != null) {
@@ -125,53 +116,25 @@ public class CompanyService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		if(company == null) {
-			throw new ResourceNotFoundException("Company not found for this id :: " + id);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 		}
-		CompanyResponse companyResponse = this.setCompanyResponse(company);
 		
-		BaseDataResponse response = new BaseDataResponse(companyResponse);
-		
+		BaseDataResponse response = new BaseDataResponse(company);	
 		return response;
 	}
 	
-	public CompanyResponse convertCompany(UUID id) throws ResourceNotFoundException{
-		Company company = companyRepository.findByIdAndIsDelete(id, false);
+	public boolean checkCompanyByUser(User user) throws ResourceNotFoundException{
+		Company company = companyRepository.findByUser(user);
 		if(company == null) {
-			throw new ResourceNotFoundException("Company not found for this id :: " + id);
+			return false;
 		}
-		CompanyResponse companyResponse = this.setCompanyResponse(company);
-		
-		return companyResponse;
+		 return true;
 	}
 	
 	public BaseDataResponse findAllByIsDelete() {
 		List<Company> listCompany = companyRepository.findAllByIsDelete(false);
 		
-		List<CompanyResponse> listCompanyResponses = new ArrayList<CompanyResponse>();
-		for (Company item : listCompany) {
-			CompanyResponse companyResponses = this.setCompanyResponse(item);
-			listCompanyResponses.add(companyResponses);
-		}
-		
-		BaseDataResponse response = new BaseDataResponse(listCompanyResponses);
+		BaseDataResponse response = new BaseDataResponse(listCompany);
 		return response;
-	}
-	
-	private CompanyResponse setCompanyResponse(Company company) {
-		CompanyResponse companyResponse = new CompanyResponse();
-		
-		companyResponse.setId(company.getId());
-		companyResponse.setName(company.getName());
-		companyResponse.setScale(company.getScale());
-		companyResponse.setBusinesses(businessTypeService.convertBusiness(company.getBussinessTypeId()));
-		companyResponse.setCity(cityService.convertCity(company.getCityId()));
-		companyResponse.setDistrict(districtService.convertDistrict(company.getDistrictId()));
-		companyResponse.setAddress(company.getAddress());
-		companyResponse.setLogo(company.getLogoUrl());
-		companyResponse.setCoverImage(company.getCoverImageUrl());
-		companyResponse.setIntroduction(company.getIntroduction());
-		companyResponse.setIsPublised(company.getIsPublised());
-		
-		return companyResponse;
 	}
 }

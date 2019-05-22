@@ -1,15 +1,10 @@
 package com.japanwork.payload.request;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
-import com.japanwork.model.User;
 public class CompanyRequest {
-	private UUID id;
-	private User user;
 	private String name;
 	private int scale;
 	private Business businesses;
@@ -20,21 +15,8 @@ public class CompanyRequest {
 	@JsonProperty("cover_image")
 	private String coverImage;
 	private String introduction;
-	@JsonProperty("is_publised")
-	private int isPublised;
+	private String status;
 	
-	public UUID getId() {
-		return id;
-	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
 	public String getName() {
 		return name;
 	}
@@ -89,10 +71,10 @@ public class CompanyRequest {
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-	public int getIsPublised() {
-		return isPublised;
+	public String getStatus() {
+		return status;
 	}
-	public void setIsPublised(int isPublised) {
-		this.isPublised = isPublised;
-	}	
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

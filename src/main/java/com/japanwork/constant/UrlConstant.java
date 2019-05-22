@@ -50,4 +50,9 @@ public class UrlConstant {
 	public static final String URL_LEVEL = "/levels";
 	public static final String URL_LEVEL_ID = "/levels/{id}";
 	public static final String URL_LEVEL_UNDEL = "/levels/undelete/{id}";
+	
+	//CANDIDATE
+	public static final String URL_CANDIDATE = "/candidates";
+	public static final String URL_CANDIDATE_ID = "/candidates/{id}";
+	public static final String URL_CANDIDATE_UNDEL = "/candidates/undelete/{id}";
 }

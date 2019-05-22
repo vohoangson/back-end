@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="company_translation")
 public class CompanyTranslation {
@@ -33,12 +35,15 @@ public class CompanyTranslation {
     @Column(name="status")
     private int status;
     
+    @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
     
+    @JsonIgnore
     @Column(name="update_date")
     private Timestamp updateDate;
     
+    @JsonIgnore
     @Column(name="is_delete")
     private boolean isDelete;
 
@@ -106,11 +111,12 @@ public class CompanyTranslation {
 		this.updateDate = updateDate;
 	}
 
-	public boolean getIsDelete() {
+	@JsonIgnore
+	public boolean isDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
+	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 

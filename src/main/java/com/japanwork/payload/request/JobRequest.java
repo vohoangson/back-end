@@ -1,23 +1,24 @@
 package com.japanwork.payload.request;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.City;
+import com.japanwork.model.Company;
+import com.japanwork.model.Contract;
+import com.japanwork.model.District;
+import com.japanwork.model.Level;
 
 public class JobRequest {
-	private UUID id;
-	private CompanyRequest company;
+	private Company company;
 	private String name;
-	private ContractRequest contract;
-	private BusinessRequest business;
-	private LevelRequest level;
+	private Contract contract;
+	private Level level;
 	@JsonProperty("skill_requirement")
 	private String skillRequirement;
 	@JsonProperty("japanese_level")
 	private int japaneseLevel;
 	private String description;
-	private CityRequest city;
-	private DistrictRequest district;
+	private City city;
+	private District district;
 	private String address;
 	@JsonProperty("min_salary")
 	private float minSalary;
@@ -26,16 +27,10 @@ public class JobRequest {
 	private String benefit;
 	private int status;
 	
-	public UUID getId() {
-		return id;
-	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public CompanyRequest getCompany() {
+	public Company getCompany() {
 		return company;
 	}
-	public void setCompany(CompanyRequest company) {
+	public void setCompany(Company company) {
 		this.company = company;
 	}
 	public String getName() {
@@ -44,22 +39,16 @@ public class JobRequest {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ContractRequest getContract() {
+	public Contract getContract() {
 		return contract;
 	}
-	public void setContract(ContractRequest contract) {
+	public void setContract(Contract contract) {
 		this.contract = contract;
 	}
-	public BusinessRequest getBusiness() {
-		return business;
-	}
-	public void setBusiness(BusinessRequest business) {
-		this.business = business;
-	}
-	public LevelRequest getLevel() {
+	public Level getLevel() {
 		return level;
 	}
-	public void setLevel(LevelRequest level) {
+	public void setLevel(Level level) {
 		this.level = level;
 	}
 	public String getSkillRequirement() {
@@ -80,16 +69,16 @@ public class JobRequest {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public CityRequest getCity() {
+	public City getCity() {
 		return city;
 	}
-	public void setCity(CityRequest city) {
+	public void setCity(City city) {
 		this.city = city;
 	}
-	public DistrictRequest getDistrict() {
+	public District getDistrict() {
 		return district;
 	}
-	public void setDistrict(DistrictRequest district) {
+	public void setDistrict(District district) {
 		this.district = district;
 	}
 	public String getAddress() {

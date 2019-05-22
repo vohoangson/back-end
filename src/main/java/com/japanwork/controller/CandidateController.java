@@ -16,62 +16,56 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.payload.request.CompanyRequest;
+import com.japanwork.payload.request.CandidateRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
-import com.japanwork.service.CompanyService;
+import com.japanwork.service.CandidateService;
 import com.japanwork.service.UserService;
 
 @Controller
-public class CompanyController {
+public class CandidateController {
 	@Autowired
-	private CompanyService companyService;
+	private CandidateService candidateService;
+	
 	@Autowired
 	private UserService userService;
 	
-	
-	@GetMapping(UrlConstant.URL_COMPANY)
+	@PostMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
-	public BaseDataResponse listCompany() {		
-		return companyService.findAllByIsDelete();
-	}
-	
-	@PostMapping(UrlConstant.URL_COMPANY)
-	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest, @CurrentUser UserPrincipal userPrincipal) {
+	public BaseDataResponse create(@Valid @RequestBody CandidateRequest candidateRequest, @CurrentUser UserPrincipal userPrincipal) {
 		
-		if(companyService.checkCompanyByUser(userService.findById(userPrincipal.getId()))) {
-			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.COMPANY_ALREADY);
+		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
+			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.CADIDATE_ALREADY);
 			BaseDataResponse baseDataResponse = new BaseDataResponse(baseMessageResponse);
 			return baseDataResponse;
 		}
 		
-		return companyService.save(companyRequest, userPrincipal);
+		return candidateService.save(candidateRequest, userPrincipal);
 	}
 	
-	@GetMapping(UrlConstant.URL_COMPANY_ID)
+	@GetMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){		
-		return companyService.findByIdAndIsDelete(id);
+		return candidateService.findByIdAndIsDelete(id);
 	}
 	
-	@PatchMapping(UrlConstant.URL_COMPANY_ID)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return companyService.update(companyRequest, id, userPrincipal);
+	public BaseDataResponse update(@Valid @RequestBody CandidateRequest candidateRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return candidateService.update(candidateRequest, id, userPrincipal);
 	}
 	
-	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
+	@DeleteMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		return companyService.del(id);
+		return candidateService.del(id);
 	}
 	
-	@GetMapping(UrlConstant.URL_COMPANY_UNDEL)
+	@GetMapping(UrlConstant.URL_CANDIDATE_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		return companyService.unDel(id);
+		return candidateService.unDel(id);
 	}
 }

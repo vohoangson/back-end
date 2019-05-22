@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "city")
@@ -30,15 +31,15 @@ public class City {
     @Column(name="description")
     private String description;
     
-    @JsonProperty("create_date")
+    @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
     
-    @JsonProperty("update_date")
+    @JsonIgnore
     @Column(name="update_date")
     private Timestamp updateDate;
     
-    @JsonProperty("is_delete")
+    @JsonIgnore
     @Column(name="is_delete")
     private boolean isDelete;
 
@@ -90,6 +91,7 @@ public class City {
 		this.updateDate = updateDate;
 	}
 
+	@JsonIgnore
 	public boolean isDelete() {
 		return isDelete;
 	}

@@ -7,11 +7,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.City;
 import com.japanwork.payload.request.CityRequest;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.CityResponse;
 import com.japanwork.repository.city.CityRepository;
 
 @Service
@@ -19,8 +19,14 @@ public class CityService {
 	@Autowired
 	private CityRepository cityRepository;
 	
-	public City findByIdAndIsDelete(UUID id) {
-		return cityRepository.findByIdAndIsDelete(id,false);
+	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+		City city = cityRepository.findByIdAndIsDelete(id, false);
+		if(city == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+		}
+		
+		BaseDataResponse response = new BaseDataResponse(city);	
+		return response;
 	}
 	
 	public BaseDataResponse save(CityRequest cityRequest) {
@@ -36,28 +42,8 @@ public class CityService {
 		city.setDelete(false);;
 		
 		City result = cityRepository.save(city);
-		CityResponse cityResponse = this.setCityResponse(result);
-		BaseDataResponse response = new BaseDataResponse(cityResponse);
+		BaseDataResponse response = new BaseDataResponse(result);
 		
 		return response;
-	}
-	
-	public CityResponse convertCity(UUID id) throws ResourceNotFoundException{
-		City city = cityRepository.findByIdAndIsDelete(id, false);
-		if(city == null) {
-			throw new ResourceNotFoundException("City not found for this id :: " + id);
-		}
-		CityResponse cityResponse = this.setCityResponse(city);
-		
-		return cityResponse;
-	}
-	
-	private CityResponse setCityResponse(City city) {
-		CityResponse cityResponse = new CityResponse();
-		cityResponse.setNameVi(city.getNameVi());
-		cityResponse.setNameJa(city.getNameJa());
-		cityResponse.setDescription(city.getDescription());
-		
-		return cityResponse;
 	}
 }

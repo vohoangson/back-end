@@ -8,26 +8,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name="contract_type")
-public class Contract {
+@Table(name="language_certificate")
+public class LanguageCertificate {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
-	private UUID id;
-	
-	@JsonProperty("name_vi")
-	@Column(name="name_vi")
-    private String nameVi;
+    private UUID id;
     
-	@JsonProperty("name_ja")
-    @Column(name="name_ja")
-    private String nameJa;
+    @Column(name="score")
+    private int score;
+    
+    @ManyToOne
+    @JoinColumn(name = "language_certificate_type_id")
+    private LanguageCertificateType LanguageCertificateType;
     
     @Column(name="description")
     private String description;
@@ -52,20 +52,20 @@ public class Contract {
 		this.id = id;
 	}
 
-	public String getNameVi() {
-		return nameVi;
+	public int getScore() {
+		return score;
 	}
 
-	public void setNameVi(String nameVi) {
-		this.nameVi = nameVi;
+	public void setScore(int score) {
+		this.score = score;
 	}
 
-	public String getNameJa() {
-		return nameJa;
+	public LanguageCertificateType getLanguageCertificateType() {
+		return LanguageCertificateType;
 	}
 
-	public void setNameJa(String nameJa) {
-		this.nameJa = nameJa;
+	public void setLanguageCertificateType(LanguageCertificateType languageCertificateType) {
+		LanguageCertificateType = languageCertificateType;
 	}
 
 	public String getDescription() {
@@ -101,19 +101,19 @@ public class Contract {
 		this.isDelete = isDelete;
 	}
 
-	public Contract(UUID id, String nameVi, String nameJa, String description,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public LanguageCertificate(UUID id, int score, com.japanwork.model.LanguageCertificateType languageCertificateType,
+			String description, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
-		this.nameVi = nameVi;
-		this.nameJa = nameJa;
+		this.score = score;
+		LanguageCertificateType = languageCertificateType;
 		this.description = description;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;
 	}
 
-	public Contract() {
+	public LanguageCertificate() {
 		super();
-	} 
+	}
 }

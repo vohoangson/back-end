@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -31,15 +32,15 @@ public class Business {
     @Column(name="description")
     private String description;
     
-    @JsonProperty("create_date")
+    @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
     
-    @JsonProperty("update_date")
+    @JsonIgnore
     @Column(name="update_date")
     private Timestamp updateDate;
     
-    @JsonProperty("is_delete")
+    @JsonIgnore
     @Column(name="is_delete")
     private boolean isDelete;
 
@@ -90,12 +91,13 @@ public class Business {
 	public void setUpdateDate(Timestamp updateDate) {
 		this.updateDate = updateDate;
 	}
-
-	public boolean getIsDelete() {
+	
+	@JsonIgnore
+	public boolean isDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
+	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 

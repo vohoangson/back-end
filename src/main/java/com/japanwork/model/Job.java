@@ -8,7 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="job")
@@ -21,54 +26,63 @@ public class Job {
 	@Column(name="name")
     private String name;
     
-    @Column(name="company_id")
-    private UUID companyId;
+	@ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
     
-    @Column(name="contract_type_id")
-    private UUID contractTypeId;
+	@ManyToOne
+    @JoinColumn(name = "contract_type_id")
+    private Contract contract;
     
-    @Column(name="business_type_id")
-    private UUID businessTypeId;
+	@ManyToOne
+    @JoinColumn(name = "level_id")
+    private Level level;
     
-    @Column(name="level_id")
-    private UUID levelId;
+	@ManyToOne
+    @JoinColumn(name = "work_place_city_id")
+    private City city;
     
-    @Column(name="work_place_city_id")
-    private UUID workPlaceCityId;
-    
-    @Column(name="work_place_district_id")
-    private UUID workPlaceDistrictId;
+	@ManyToOne
+    @JoinColumn(name = "work_place_district_id")
+    private District district;
     
     @Column(name="work_place_address")
-    private String workPlaceAddress;
+    private String address;
     
     @Column(name="description")
     private String description;
     
+    @JsonProperty("skill_requirement")
     @Column(name="skill_requirement")
     private String skillRequirement;
     
     @Column(name="benefit")
     private String benefit;
     
+    @JsonProperty("japanese_level_requirement")
     @Column(name="japanese_level_requirement")
     private int japaneseLevelRequirement;
     
+    @JsonProperty("min_salary")
     @Column(name="min_salary")
     private float minSalary;
     
+    @JsonProperty("max_salary")
     @Column(name="max_salary")
     private float maxSalary;
     
     @Column(name="status")
     private int status;
     
+    @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
     
+    @JsonIgnore
     @Column(name="update_date")
     private Timestamp updateDate;
     
+    @JsonIgnore
     @Column(name="is_delete")
     private boolean isDelete;
 
@@ -88,60 +102,52 @@ public class Job {
 		this.name = name;
 	}
 
-	public UUID getCompanyId() {
-		return companyId;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setCompanyId(UUID companyId) {
-		this.companyId = companyId;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
-	public UUID getContractTypeId() {
-		return contractTypeId;
+	public Contract getContract() {
+		return contract;
 	}
 
-	public void setContractTypeId(UUID contractTypeId) {
-		this.contractTypeId = contractTypeId;
-	}
-	
-	public UUID getWorkPlaceCityId() {
-		return workPlaceCityId;
-	}
-	
-	public UUID getBusinessTypeId() {
-		return businessTypeId;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 
-	public void setBusinessTypeId(UUID businessTypeId) {
-		this.businessTypeId = businessTypeId;
+	public Level getLevel() {
+		return level;
 	}
 
-	public UUID getLevelId() {
-		return levelId;
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 
-	public void setLevelId(UUID levelId) {
-		this.levelId = levelId;
+	public City getCity() {
+		return city;
 	}
 
-	public void setWorkPlaceCityId(UUID workPlaceCityId) {
-		this.workPlaceCityId = workPlaceCityId;
+	public void setCity(City city) {
+		this.city = city;
 	}
 
-	public UUID getWorkPlaceDistrictId() {
-		return workPlaceDistrictId;
+	public District getDistrict() {
+		return district;
 	}
 
-	public void setWorkPlaceDistrictId(UUID workPlaceDistrictId) {
-		this.workPlaceDistrictId = workPlaceDistrictId;
+	public void setDistrict(District district) {
+		this.district = district;
 	}
 
-	public String getWorkPlaceAddress() {
-		return workPlaceAddress;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setWorkPlaceAddress(String workPlaceAddress) {
-		this.workPlaceAddress = workPlaceAddress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getDescription() {
@@ -216,6 +222,7 @@ public class Job {
 		this.updateDate = updateDate;
 	}
 
+	@JsonIgnore
 	public boolean isDelete() {
 		return isDelete;
 	}
@@ -224,20 +231,19 @@ public class Job {
 		this.isDelete = isDelete;
 	}
 
-	public Job(UUID id, String name, UUID companyId, UUID contractTypeId, UUID businessTypeId, UUID levelId,
-			UUID workPlaceCityId, UUID workPlaceDistrictId, String workPlaceAddress, String description,
-			String skillRequirement, String benefit, int japaneseLevelRequirement, float minSalary, float maxSalary,
-			int status, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public Job(UUID id, String name, Company company, Contract contract, Level level, City city, District district,
+			String address, String description, String skillRequirement, String benefit, int japaneseLevelRequirement,
+			float minSalary, float maxSalary, int status, Timestamp createDate, Timestamp updateDate,
+			boolean isDelete) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.companyId = companyId;
-		this.contractTypeId = contractTypeId;
-		this.businessTypeId = businessTypeId;
-		this.levelId = levelId;
-		this.workPlaceCityId = workPlaceCityId;
-		this.workPlaceDistrictId = workPlaceDistrictId;
-		this.workPlaceAddress = workPlaceAddress;
+		this.company = company;
+		this.contract = contract;
+		this.level = level;
+		this.city = city;
+		this.district = district;
+		this.address = address;
 		this.description = description;
 		this.skillRequirement = skillRequirement;
 		this.benefit = benefit;
@@ -252,5 +258,5 @@ public class Job {
 
 	public Job() {
 		super();
-	}    
+	}
 }
