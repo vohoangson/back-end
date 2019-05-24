@@ -1,6 +1,8 @@
 package com.japanwork.model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,8 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,8 +37,15 @@ public class Candidate {
 	@Column(name="name")
 	private String fullName;
 	
-	@Column(name="")
+	@JsonProperty("date_of_birth")
+	@Column(name="dob")
+	private Date dateOfBirth;
+	
+	@Column(name="gender")
 	private String gender;
+	
+	@Column(name="marital")
+	private String marital;
 	
 	@JsonProperty("residental_city")
 	@ManyToOne
@@ -49,7 +61,7 @@ public class Candidate {
     @Column(name="residental_address")
     private String residentalAddres;
     
-    @Column(name="living_url")
+    @Column(name="avatar_url")
     private String avatar;
     
     @Column(name="introduction")
@@ -91,15 +103,33 @@ public class Candidate {
     @JsonProperty("wish_contract")
     @ManyToOne
     @JoinColumn(name="wish_contract_type_id")
-    private Level wishContract;
+    private Contract wishContract;
 
     @JsonProperty("wish_salary")
     @Column(name="wish_salary")
-    private String wishSalary;
+    private float wishSalary;
+    
+    @OneToMany
+    @JoinColumn(name="candidate_id")
+    @Where(clause = "is_delete = false")
+	private Set<Academy> academies;
+
+    @OneToMany
+    @JoinColumn(name="candidate_id")
+    @Where(clause = "is_delete = false")
+	private Set<Experience> experiences;
+    
+    @OneToMany
+    @JoinColumn(name="candidate_id")
+    @Where(clause = "is_delete = false")
+	private Set<LanguageCertificate> languageCertificates;
     
     @Column(name="status")
-    private int status;
+    private String status;
 
+    @Column(name="status_info")
+    private int statusInfo;
+    
     @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
@@ -135,6 +165,14 @@ public class Candidate {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
+	
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 
 	public String getGender() {
 		return gender;
@@ -142,6 +180,14 @@ public class Candidate {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getMarital() {
+		return marital;
+	}
+
+	public void setMarital(String marital) {
+		this.marital = marital;
 	}
 
 	public City getResidentalCity() {
@@ -240,28 +286,60 @@ public class Candidate {
 		this.wishLevel = wishLevel;
 	}
 
-	public Level getWishContract() {
+	public Contract getWishContract() {
 		return wishContract;
 	}
 
-	public void setWishContract(Level wishContract) {
+	public void setWishContract(Contract wishContract) {
 		this.wishContract = wishContract;
 	}
 
-	public String getWishSalary() {
+	public float getWishSalary() {
 		return wishSalary;
 	}
 
-	public void setWishSalary(String wishSalary) {
+	public void setWishSalary(float wishSalary) {
 		this.wishSalary = wishSalary;
 	}
 
-	public int getStatus() {
+	public Set<Academy> getAcademies() {
+		return academies;
+	}
+
+	public void setAcademies(Set<Academy> academies) {
+		this.academies = academies;
+	}
+
+	public Set<Experience> getExperiences() {
+		return experiences;
+	}
+
+	public void setExperiences(Set<Experience> experiences) {
+		this.experiences = experiences;
+	}
+
+	public Set<LanguageCertificate> getLanguageCertificates() {
+		return languageCertificates;
+	}
+
+	public void setLanguageCertificates(Set<LanguageCertificate> languageCertificates) {
+		this.languageCertificates = languageCertificates;
+	}
+
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public int getStatusInfo() {
+		return statusInfo;
+	}
+
+	public void setStatusInfo(int statusInfo) {
+		this.statusInfo = statusInfo;
 	}
 
 	public Timestamp getCreateDate() {
@@ -289,16 +367,20 @@ public class Candidate {
 		this.isDelete = isDelete;
 	}
 
-	public Candidate(UUID id, User user, String fullName, String gender, City residentalCity,
-			District residentalDistrict, String residentalAddres, String avatar, String introduction, int japaneseLevel,
-			LanguageCertificate languageCertificate, City wishWorkingCity, District wishWorkingDistrict,
-			String wishWorkingAddress, Business wishBusiness, Level wishLevel, Level wishContract, String wishSalary,
-			int status, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital,
+			City residentalCity, District residentalDistrict, String residentalAddres, String avatar,
+			String introduction, int japaneseLevel, LanguageCertificate languageCertificate, City wishWorkingCity,
+			District wishWorkingDistrict, String wishWorkingAddress, Business wishBusiness, Level wishLevel,
+			Contract wishContract, float wishSalary, Set<Academy> academies, Set<Experience> experiences,
+			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createDate,
+			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.fullName = fullName;
+		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
+		this.marital = marital;
 		this.residentalCity = residentalCity;
 		this.residentalDistrict = residentalDistrict;
 		this.residentalAddres = residentalAddres;
@@ -313,7 +395,11 @@ public class Candidate {
 		this.wishLevel = wishLevel;
 		this.wishContract = wishContract;
 		this.wishSalary = wishSalary;
+		this.academies = academies;
+		this.experiences = experiences;
+		this.languageCertificates = languageCertificates;
 		this.status = status;
+		this.statusInfo = statusInfo;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;

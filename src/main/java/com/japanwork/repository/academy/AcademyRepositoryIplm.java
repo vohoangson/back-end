@@ -1,4 +1,4 @@
-package com.japanwork.repository.businesstype;
+package com.japanwork.repository.academy;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,32 +11,32 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.Business;
+import com.japanwork.model.Academy;
 
 @Repository
 @Transactional
-public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
+public class AcademyRepositoryIplm implements AcademyRepository{
 
 	@Override
-	public List<Business> findAll() {
+	public List<Academy> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Business> findAll(Sort sort) {
+	public List<Academy> findAll(Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Business> findAllById(Iterable<UUID> ids) {
+	public List<Academy> findAllById(Iterable<UUID> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Business> List<S> saveAll(Iterable<S> entities) {
+	public <S extends Academy> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,13 +48,13 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public <S extends Business> S saveAndFlush(S entity) {
+	public <S extends Academy> S saveAndFlush(S entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteInBatch(Iterable<Business> entities) {
+	public void deleteInBatch(Iterable<Academy> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,39 +66,39 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public Business getOne(UUID id) {
+	public Academy getOne(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Business> List<S> findAll(Example<S> example) {
+	public <S extends Academy> List<S> findAll(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Business> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends Academy> List<S> findAll(Example<S> example, Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<Business> findAll(Pageable pageable) {
+	public Page<Academy> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Business> S save(S entity) {
+	public <S extends Academy> S save(S entity) {
 		// TODO Auto-generated method stub
 		return save(entity);
 	}
 
 	@Override
-	public Optional<Business> findById(UUID id) {
+	public Optional<Academy> findById(UUID id) {
 		// TODO Auto-generated method stub
-		return findById(id);
+		return null;
 	}
 
 	@Override
@@ -120,13 +120,13 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public void delete(Business entity) {
+	public void delete(Academy entity) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends Business> entities) {
+	public void deleteAll(Iterable<? extends Academy> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -138,33 +138,39 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public <S extends Business> Optional<S> findOne(Example<S> example) {
+	public <S extends Academy> Optional<S> findOne(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Business> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends Academy> Page<S> findAll(Example<S> example, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Business> long count(Example<S> example) {
+	public <S extends Academy> long count(Example<S> example) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public <S extends Business> boolean exists(Example<S> example) {
+	public <S extends Academy> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public Business findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Academy findByIdAndIsDelete(UUID id, boolean isDelete) {
 		// TODO Auto-generated method stub
 		return findByIdAndIsDelete(id, isDelete);
+	}
+
+	@Override
+	public List<Academy> findByCandidateIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByCandidateIdAndIsDelete(id, isDelete);
 	}
 
 }

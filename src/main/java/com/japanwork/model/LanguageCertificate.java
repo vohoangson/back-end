@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="language_certificate")
@@ -22,15 +24,20 @@ public class LanguageCertificate {
     @Column(name="id")
     private UUID id;
     
+	@Column(name = "candidate_id")
+	private UUID candidateId;
+	
     @Column(name="score")
     private int score;
     
+    @JsonProperty("language_certificate_type")
     @ManyToOne
     @JoinColumn(name = "language_certificate_type_id")
-    private LanguageCertificateType LanguageCertificateType;
+    private LanguageCertificateType languageCertificateType;
     
-    @Column(name="description")
-    private String description;
+    @JsonProperty("taken_date")
+    @Column(name="taken_date")
+    private Date takenDate;
     
     @JsonIgnore
     @Column(name="create_date")
@@ -52,6 +59,14 @@ public class LanguageCertificate {
 		this.id = id;
 	}
 
+	public UUID getCandidateId() {
+		return candidateId;
+	}
+
+	public void setCandidateId(UUID candidateId) {
+		this.candidateId = candidateId;
+	}
+
 	public int getScore() {
 		return score;
 	}
@@ -61,19 +76,19 @@ public class LanguageCertificate {
 	}
 
 	public LanguageCertificateType getLanguageCertificateType() {
-		return LanguageCertificateType;
+		return languageCertificateType;
 	}
 
 	public void setLanguageCertificateType(LanguageCertificateType languageCertificateType) {
-		LanguageCertificateType = languageCertificateType;
+		this.languageCertificateType = languageCertificateType;
 	}
 
-	public String getDescription() {
-		return description;
+	public Date getTakenDate() {
+		return takenDate;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setTakenDate(Date takenDate) {
+		this.takenDate = takenDate;
 	}
 
 	public Timestamp getCreateDate() {
@@ -101,13 +116,14 @@ public class LanguageCertificate {
 		this.isDelete = isDelete;
 	}
 
-	public LanguageCertificate(UUID id, int score, com.japanwork.model.LanguageCertificateType languageCertificateType,
-			String description, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public LanguageCertificate(UUID id, UUID candidateId, int score, LanguageCertificateType languageCertificateType,
+			Date takenDate, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
+		this.candidateId = candidateId;
 		this.score = score;
-		LanguageCertificateType = languageCertificateType;
-		this.description = description;
+		this.languageCertificateType = languageCertificateType;
+		this.takenDate = takenDate;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;

@@ -7,12 +7,14 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.User;
-import com.japanwork.payload.request.CandidateRequest;
+import com.japanwork.payload.request.CandidateInfoRequest;
+import com.japanwork.payload.request.CandidateJobRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.candidate.CandidateRepository;
@@ -26,29 +28,24 @@ public class CandidateService {
 	@Autowired
 	private UserService userService;
 	
-	public BaseDataResponse save(CandidateRequest candidateRequest, UserPrincipal userPrincipal) {
+	public BaseDataResponse saveInfo(CandidateInfoRequest candidateInfoRequest, UserPrincipal userPrincipal) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Candidate candidate = new Candidate();
 		candidate.setUser(userService.findById(userPrincipal.getId()));
-		candidate.setFullName(candidateRequest.getFullName());
-		candidate.setGender(candidateRequest.getGender());
-		candidate.setResidentalCity(candidateRequest.getResidentalCity());
-		candidate.setResidentalDistrict(candidateRequest.getResidentalDistrict());
-		candidate.setResidentalAddres(candidateRequest.getResidentalAddres());
-		candidate.setAvatar(candidateRequest.getAvatar());
-		candidate.setIntroduction(candidateRequest.getIntroduction());
-		candidate.setJapaneseLevel(candidateRequest.getJapaneseLevel());
-		candidate.setLanguageCertificate(candidateRequest.getLanguageCertificate());
-		candidate.setWishWorkingCity(candidateRequest.getWishWorkingCity());
-		candidate.setWishWorkingDistrict(candidateRequest.getWishWorkingDistrict());
-		candidate.setWishWorkingAddress(candidateRequest.getWishWorkingAddress());
-		candidate.setWishBusiness(candidateRequest.getWishBusiness());
-		candidate.setWishLevel(candidateRequest.getWishLevel());
-		candidate.setWishContract(candidateRequest.getWishContract());
-		candidate.setWishSalary(candidateRequest.getWishSalary());
-		candidate.setStatus(candidateRequest.getStatus());
+		candidate.setFullName(candidateInfoRequest.getFullName());
+		candidate.setDateOfBirth(candidateInfoRequest.getDateOfBirth());
+		candidate.setGender(candidateInfoRequest.getGender());
+		candidate.setMarital(candidateInfoRequest.getMarital());
+		candidate.setResidentalCity(candidateInfoRequest.getResidentalCity());
+		candidate.setResidentalDistrict(candidateInfoRequest.getResidentalDistrict());
+		candidate.setResidentalAddres(candidateInfoRequest.getResidentalAddres());
+		candidate.setAvatar(candidateInfoRequest.getAvatar());
+		candidate.setIntroduction(candidateInfoRequest.getIntroduction());
+		candidate.setJapaneseLevel(candidateInfoRequest.getJapaneseLevel());
+		candidate.setStatus("untranslated");
+		candidate.setStatusInfo(1);
 		candidate.setCreateDate(timestamp);
 		candidate.setUpdateDate(timestamp);
 		candidate.setDelete(false);
@@ -58,7 +55,7 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataResponse update(CandidateRequest candidateRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse updateInfo(CandidateInfoRequest candidateInfoRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -74,28 +71,60 @@ public class CandidateService {
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		}
 
-		candidate.setFullName(candidateRequest.getFullName());
-		candidate.setGender(candidateRequest.getGender());
-		candidate.setResidentalCity(candidateRequest.getResidentalCity());
-		candidate.setResidentalDistrict(candidateRequest.getResidentalDistrict());
-		candidate.setResidentalAddres(candidateRequest.getResidentalAddres());
-		candidate.setAvatar(candidateRequest.getAvatar());
-		candidate.setIntroduction(candidateRequest.getIntroduction());
-		candidate.setJapaneseLevel(candidateRequest.getJapaneseLevel());
-		candidate.setLanguageCertificate(candidateRequest.getLanguageCertificate());
-		candidate.setWishWorkingCity(candidateRequest.getWishWorkingCity());
-		candidate.setWishWorkingDistrict(candidateRequest.getWishWorkingDistrict());
-		candidate.setWishWorkingAddress(candidateRequest.getWishWorkingAddress());
-		candidate.setWishBusiness(candidateRequest.getWishBusiness());
-		candidate.setWishLevel(candidateRequest.getWishLevel());
-		candidate.setWishContract(candidateRequest.getWishContract());
-		candidate.setWishSalary(candidateRequest.getWishSalary());
-		candidate.setStatus(candidateRequest.getStatus());
+		candidate.setFullName(candidateInfoRequest.getFullName());
+		candidate.setDateOfBirth(candidateInfoRequest.getDateOfBirth());
+		candidate.setGender(candidateInfoRequest.getGender());
+		candidate.setMarital(candidateInfoRequest.getMarital());
+		candidate.setResidentalCity(candidateInfoRequest.getResidentalCity());
+		candidate.setResidentalDistrict(candidateInfoRequest.getResidentalDistrict());
+		candidate.setResidentalAddres(candidateInfoRequest.getResidentalAddres());
+		candidate.setAvatar(candidateInfoRequest.getAvatar());
+		candidate.setIntroduction(candidateInfoRequest.getIntroduction());
+		candidate.setJapaneseLevel(candidateInfoRequest.getJapaneseLevel());
+		candidate.setStatus("untranslated");
 		candidate.setUpdateDate(timestamp);
 		
 		Candidate result = candidateRepository.save(candidate);
 		BaseDataResponse response = new BaseDataResponse(result);		
 		return response;
+	}
+	
+	public BaseDataResponse updateJob(CandidateJobRequest candidateJobRequest, @PathVariable UUID id,UserPrincipal userPrincipal) throws ResourceNotFoundException{
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		
+		Candidate candidate = new Candidate();
+		
+		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
+			candidate = candidateRepository.findByIdAndIsDelete(id, false);
+			if(candidate == null) {
+				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			}
+		} else {
+			candidate = candidateRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+		}
+
+		candidate.setWishWorkingCity(candidateJobRequest.getWishWorkingCity());
+		candidate.setWishWorkingDistrict(candidateJobRequest.getWishWorkingDistrict());
+		candidate.setWishWorkingAddress(candidateJobRequest.getWishWorkingAddress());
+		candidate.setWishBusiness(candidateJobRequest.getWishBusiness());
+		candidate.setWishLevel(candidateJobRequest.getWishLevel());
+		candidate.setWishContract(candidateJobRequest.getWishContract());
+		candidate.setWishSalary(candidateJobRequest.getWishSalary());
+		candidate.setStatus("untranslated");
+		candidate.setStatusInfo(candidate.getStatusInfo()+1);
+		candidate.setUpdateDate(timestamp);
+		
+		Candidate result = candidateRepository.save(candidate);
+		BaseDataResponse response = new BaseDataResponse(result);		
+		return response;
+	}
+	
+	public Candidate updateStatusInfo(UUID id, int status) {
+		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+		candidate.setStatusInfo(candidate.getStatusInfo() + status);
+		return candidateRepository.save(candidate);
 	}
 	
 	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
@@ -136,6 +165,11 @@ public class CandidateService {
 		
 		BaseDataResponse response = new BaseDataResponse(candidate);	
 		return response;
+	}
+	
+	public Candidate findCandidateByIdAndIsDelete(UUID id){
+		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+		return candidate;
 	}
 	
 	public boolean checkCandidateByUser(User user) throws ResourceNotFoundException{

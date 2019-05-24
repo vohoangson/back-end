@@ -37,6 +37,7 @@ public class JobService {
 		Job job = new Job();
 		job.setName(jobRequest.getName());
 		job.setCompany(jobRequest.getCompany());
+		job.setBusinesses(jobRequest.getBusinesses());
 		job.setContract(jobRequest.getContract());
 		job.setLevel(jobRequest.getLevel());
 		job.setCity(jobRequest.getCity());
@@ -46,6 +47,8 @@ public class JobService {
 		job.setSkillRequirement(jobRequest.getSkillRequirement());
 		job.setBenefit(jobRequest.getBenefit());
 		job.setJapaneseLevelRequirement(jobRequest.getJapaneseLevel());
+		job.setApplicationDeadline(jobRequest.getApplicationDeadline());
+		job.setCurrencyUnit(jobRequest.getCurrencyUnit());
 		job.setMinSalary(jobRequest.getMinSalary());
 		job.setMaxSalary(jobRequest.getMaxSalary());
 		job.setStatus(jobRequest.getStatus());		
@@ -76,6 +79,7 @@ public class JobService {
 
 		job.setName(jobRequest.getName());
 		job.setCompany(jobRequest.getCompany());
+		job.setBusinesses(jobRequest.getBusinesses());
 		job.setContract(jobRequest.getContract());
 		job.setLevel(jobRequest.getLevel());
 		job.setCity(jobRequest.getCity());
@@ -85,6 +89,8 @@ public class JobService {
 		job.setSkillRequirement(jobRequest.getSkillRequirement());
 		job.setBenefit(jobRequest.getBenefit());
 		job.setJapaneseLevelRequirement(jobRequest.getJapaneseLevel());
+		job.setApplicationDeadline(jobRequest.getApplicationDeadline());
+		job.setCurrencyUnit(jobRequest.getCurrencyUnit());
 		job.setMinSalary(jobRequest.getMinSalary());
 		job.setMaxSalary(jobRequest.getMaxSalary());
 		job.setStatus(jobRequest.getStatus());

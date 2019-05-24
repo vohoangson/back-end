@@ -1,6 +1,9 @@
 package com.japanwork.model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -30,6 +35,12 @@ public class Job {
     @JoinColumn(name = "company_id")
     private Company company;
     
+	@ManyToMany
+    @JoinTable(name = "job_business", 
+      joinColumns = { @JoinColumn(name = "job_id") }, 
+      inverseJoinColumns = {@JoinColumn(name = "business_id") })
+    private Set<Business> businesses = new HashSet<>();
+	
 	@ManyToOne
     @JoinColumn(name = "contract_type_id")
     private Contract contract;
@@ -63,6 +74,15 @@ public class Job {
     @Column(name="japanese_level_requirement")
     private int japaneseLevelRequirement;
     
+    @JsonProperty("application_deadline")
+    @Column(name="application_deadline")
+    private Date applicationDeadline;
+    
+    @JsonProperty("currency_unit")
+    @ManyToOne
+    @JoinColumn(name = "currency_unit_id")
+    private CurrencyUnit currencyUnit;
+    
     @JsonProperty("min_salary")
     @Column(name="min_salary")
     private float minSalary;
@@ -72,7 +92,7 @@ public class Job {
     private float maxSalary;
     
     @Column(name="status")
-    private int status;
+    private String status;
     
     @JsonIgnore
     @Column(name="create_date")
@@ -108,6 +128,14 @@ public class Job {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+	
+	public Set<Business> getBusinesses() {
+		return businesses;
+	}
+
+	public void setBusinesses(Set<Business> businesses) {
+		this.businesses = businesses;
 	}
 
 	public Contract getContract() {
@@ -182,6 +210,22 @@ public class Job {
 		this.japaneseLevelRequirement = japaneseLevelRequirement;
 	}
 
+	public Date getApplicationDeadline() {
+		return applicationDeadline;
+	}
+
+	public void setApplicationDeadline(Date applicationDeadline) {
+		this.applicationDeadline = applicationDeadline;
+	}
+
+	public CurrencyUnit getCurrencyUnit() {
+		return currencyUnit;
+	}
+
+	public void setCurrencyUnit(CurrencyUnit currencyUnit) {
+		this.currencyUnit = currencyUnit;
+	}
+
 	public float getMinSalary() {
 		return minSalary;
 	}
@@ -198,11 +242,11 @@ public class Job {
 		this.maxSalary = maxSalary;
 	}
 
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -231,14 +275,15 @@ public class Job {
 		this.isDelete = isDelete;
 	}
 
-	public Job(UUID id, String name, Company company, Contract contract, Level level, City city, District district,
-			String address, String description, String skillRequirement, String benefit, int japaneseLevelRequirement,
-			float minSalary, float maxSalary, int status, Timestamp createDate, Timestamp updateDate,
-			boolean isDelete) {
+	public Job(UUID id, String name, Company company, Set<Business> businesses, Contract contract, Level level,
+			City city, District district, String address, String description, String skillRequirement, String benefit,
+			int japaneseLevelRequirement, Date applicationDeadline, CurrencyUnit currencyUnit, float minSalary,
+			float maxSalary, String status, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.company = company;
+		this.businesses = businesses;
 		this.contract = contract;
 		this.level = level;
 		this.city = city;
@@ -248,6 +293,8 @@ public class Job {
 		this.skillRequirement = skillRequirement;
 		this.benefit = benefit;
 		this.japaneseLevelRequirement = japaneseLevelRequirement;
+		this.applicationDeadline = applicationDeadline;
+		this.currencyUnit = currencyUnit;
 		this.minSalary = minSalary;
 		this.maxSalary = maxSalary;
 		this.status = status;

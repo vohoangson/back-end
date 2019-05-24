@@ -1,5 +1,7 @@
 package com.japanwork.payload.request;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
@@ -7,7 +9,7 @@ import com.japanwork.model.District;
 public class CompanyRequest {
 	private String name;
 	private int scale;
-	private Business businesses;
+	private Set<Business> businesses;
 	private City city;
 	private District district;
 	private String address;
@@ -29,10 +31,10 @@ public class CompanyRequest {
 	public void setScale(int scale) {
 		this.scale = scale;
 	}
-	public Business getBusinesses() {
+	public Set<Business> getBusinesses() {
 		return businesses;
 	}
-	public void setBusinesses(Business businesses) {
+	public void setBusinesses(Set<Business> businesses) {
 		this.businesses = businesses;
 	}
 	public City getCity() {

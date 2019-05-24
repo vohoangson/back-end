@@ -1,6 +1,8 @@
 package com.japanwork.model;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,9 +35,11 @@ public class Company {
     @Column(name="name")
     private String name;
     
-    @ManyToOne
-    @JoinColumn(name = "business_type_id")
-    private Business business;
+    @ManyToMany
+    @JoinTable(name = "company_business", 
+      joinColumns = { @JoinColumn(name = "company_id") }, 
+      inverseJoinColumns = {@JoinColumn(name = "business_id") })
+    private Set<Business> businesses = new HashSet<>();
     
     @Column(name="scale")
     private int scale;
@@ -99,12 +105,12 @@ public class Company {
 		this.name = name;
 	}
 
-	public Business getBusiness() {
-		return business;
+	public Set<Business> getBusinesses() {
+		return businesses;
 	}
 
-	public void setBusiness(Business business) {
-		this.business = business;
+	public void setBusinesses(Set<Business> businesses) {
+		this.businesses = businesses;
 	}
 
 	public int getScale() {
@@ -200,14 +206,14 @@ public class Company {
 		super();
 	}
 
-	public Company(UUID id, User user, String name, Business business, int scale, City city, District district,
+	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city, District district,
 			String address, String logoUrl, String coverImageUrl, String introduction, String status,
 			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.name = name;
-		this.business = business;
+		this.businesses = businesses;
 		this.scale = scale;
 		this.city = city;
 		this.district = district;

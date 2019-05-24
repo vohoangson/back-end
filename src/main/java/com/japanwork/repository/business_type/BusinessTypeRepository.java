@@ -1,4 +1,4 @@
-package com.japanwork.repository.businesstype;
+package com.japanwork.repository.business_type;
 
 import java.util.UUID;
 

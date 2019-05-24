@@ -20,6 +20,16 @@ public class UrlConstant {
 	public static final String URL_BUSINESS_ID = "/business/{id}";
 	public static final String URL_BUSINESS_UNDEL = "/business/undelete/{id}";
 	
+	//Business Type
+	public static final String URL_LANGUAGUE_TYPE = "/languagues_type";
+	public static final String URL_LANGUAGUE_TYPE_ID = "/languagues_type/{id}";
+	public static final String URL_LANGUAGUE_TYPE_UNDEL = "/languagues_type/undelete/{id}";
+	
+	//Currency Unit
+	public static final String URL_CURRENCYUNIT = "/currency_unit";
+	public static final String URL_CURRENCYUNIT_ID = "/currency_unit/{id}";
+	public static final String URL_CURRENCYUNIT_UNDEL = "/currency_unit/undelete/{id}";
+	
 	
 	//District
 	public static final String URL_DISTRICT = "/districts";
@@ -55,4 +65,20 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE = "/candidates";
 	public static final String URL_CANDIDATE_ID = "/candidates/{id}";
 	public static final String URL_CANDIDATE_UNDEL = "/candidates/undelete/{id}";
+	
+	//CANDIDATE_INFO
+	public static final String URL_CANDIDATE_INFO = "/candidates/info";
+	public static final String URL_CANDIDATE_INFO_ID = "/candidates/info/{id}";
+	
+	//CANDIDATE_JOB
+	public static final String URL_CANDIDATE_JOB_ID = "/candidates/job/{id}";
+	
+	//CANDIDATE_ACADEMY
+	public static final String URL_CANDIDATE_ACADEMY_ID = "/candidates/academies/{id}";
+	
+	//CANDIDATE_EXPERIENCES
+	public static final String URL_CANDIDATE_EXPERIENCE_ID = "/candidates/experiences/{id}";
+		
+	//CANDIDATE
+	public static final String URL_CANDIDATE_LANGUAGE_ID = "/candidates/language/{id}";
 }

@@ -12,7 +12,7 @@ import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Business;
 import com.japanwork.payload.request.BusinessRequest;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.repository.businesstype.BusinessTypeRepository;
+import com.japanwork.repository.business_type.BusinessTypeRepository;
 
 @Service
 public class BusinessService {

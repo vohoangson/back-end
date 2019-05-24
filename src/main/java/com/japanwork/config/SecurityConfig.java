@@ -129,16 +129,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_COMPANY_ID,
                 		UrlConstant.URL_JOB_ID)
                     	.hasAnyRole("COMPANY","ADMIN")
-                    .antMatchers(UrlConstant.URL_COMPANY_UNDEL,
-                    		UrlConstant.URL_JOB_UNDEL)
-                    	.hasAnyRole("ADMIN")
-                    .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+                	.antMatchers(HttpMethod.POST,
+                		UrlConstant.URL_CANDIDATE_INFO,
+                		UrlConstant.URL_CANDIDATE_JOB_ID,
+                		UrlConstant.URL_CANDIDATE_ACADEMY_ID,
+                		UrlConstant.URL_CANDIDATE_EXPERIENCE_ID,
+                		UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
+                    	.hasAnyRole("CADIDATE","ADMIN")
+                    .antMatchers(HttpMethod.PATCH,
+                		UrlConstant.URL_CANDIDATE_INFO_ID,
+                		UrlConstant.URL_CANDIDATE_JOB_ID,
+                		UrlConstant.URL_CANDIDATE_ACADEMY_ID,
+                		UrlConstant.URL_CANDIDATE_EXPERIENCE_ID,
+                		UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
+                    	.hasAnyRole("CADIDATE","ADMIN")	
+                	.antMatchers(HttpMethod.DELETE,
+                		UrlConstant.URL_CANDIDATE_LANGUAGE_ID,
+                		UrlConstant.URL_CANDIDATE_EXPERIENCE_ID,
+                		UrlConstant.URL_CANDIDATE_ACADEMY_ID,
+                		UrlConstant.URL_CANDIDATE_JOB_ID
+                		).hasAnyRole("ADMIN","CANDIDATE")
+                    .antMatchers(HttpMethod.DELETE,
+                		UrlConstant.URL_COMPANY_ID,
+                		UrlConstant.URL_JOB_ID,
+                		UrlConstant.URL_CANDIDATE_ID
+                		).hasRole("ADMIN")
                     .antMatchers(
                 		UrlConstant.URL_BUSINESS,
                 		UrlConstant.URL_CITY,
                 		UrlConstant.URL_DISTRICT,
                 		UrlConstant.URL_LEVEL,
-                		UrlConstant.URL_CONTRACT).hasRole("ADMIN")
+                		UrlConstant.URL_CONTRACT,
+                		UrlConstant.URL_LANGUAGUE_TYPE,
+                		UrlConstant.URL_CURRENCYUNIT,
+                		UrlConstant.URL_COMPANY_UNDEL,
+                		UrlConstant.URL_JOB_UNDEL,
+                		UrlConstant.URL_CANDIDATE_UNDEL
+                		).hasRole("ADMIN")
                     .anyRequest()
                         .authenticated()
                     .and()
