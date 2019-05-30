@@ -16,19 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.payload.request.CandidateAcademyRequest;
-import com.japanwork.payload.request.CandidateExperiencesRequest;
-import com.japanwork.payload.request.CandidateInfoRequest;
-import com.japanwork.payload.request.CandidateJobRequest;
-import com.japanwork.payload.request.CandidateLangugeRequest;
+import com.japanwork.payload.request.CandidateExperienceRequest;
+import com.japanwork.payload.request.CandidatePersonalRequest;
+import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
-import com.japanwork.service.AcademyService;
 import com.japanwork.service.CandidateService;
-import com.japanwork.service.ExperienceService;
-import com.japanwork.service.LanguageCertificateService;
 import com.japanwork.service.UserService;
 
 @Controller
@@ -39,18 +34,9 @@ public class CandidateController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private AcademyService academyService;
-	
-	@Autowired
-	private ExperienceService experienceService;
-	
-	@Autowired
-	private LanguageCertificateService languageCertificateService;
-	
-	@PostMapping(UrlConstant.URL_CANDIDATE_INFO)
+	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
 	@ResponseBody
-	public BaseDataResponse createCandidateInfo(@Valid @RequestBody CandidateInfoRequest candidateInfoRequest, @CurrentUser UserPrincipal userPrincipal) {
+	public BaseDataResponse createCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, @CurrentUser UserPrincipal userPrincipal) {
 		
 		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
 			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.CADIDATE_ALREADY);
@@ -58,73 +44,31 @@ public class CandidateController {
 			return baseDataResponse;
 		}
 		
-		return candidateService.saveInfo(candidateInfoRequest, userPrincipal);
+		return candidateService.savePersonal(candidatePersonalRequest, userPrincipal);
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_INFO_ID)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_PERSONAL)
 	@ResponseBody
-	public BaseDataResponse updateCandidateInfo(@Valid @RequestBody CandidateInfoRequest candidateInfoRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return candidateService.updateInfo(candidateInfoRequest, id, userPrincipal);
+	public BaseDataResponse updateCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return candidateService.updatePersonal(candidatePersonalRequest, id, userPrincipal);
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_JOB_ID)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_WISH)
 	@ResponseBody
-	public BaseDataResponse updateCandidateJob(@Valid @RequestBody CandidateJobRequest candidateJobRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return candidateService.updateJob(candidateJobRequest, id, userPrincipal);
+	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateWishRequest candidateWishRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return candidateService.updateWish(candidateWishRequest, id, userPrincipal);
 	}
 	
-	@PostMapping(UrlConstant.URL_CANDIDATE_ACADEMY_ID)
+	@PostMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
 	@ResponseBody
-	public BaseDataResponse createCandidateAcademy(@Valid @RequestBody CandidateAcademyRequest candidateAcademyRequest, @PathVariable UUID id) {		
-		return academyService.save(candidateAcademyRequest, id);
+	public BaseDataResponse createCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id) {		
+		return candidateService.createExperience(candidateExperienceRequest, id);
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_ACADEMY_ID)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
 	@ResponseBody
-	public BaseDataResponse updateCandidateAcademy(@Valid @RequestBody CandidateAcademyRequest candidateAcademyRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return academyService.update(candidateAcademyRequest, id, userPrincipal);
-	}
-	
-	@DeleteMapping(UrlConstant.URL_CANDIDATE_ACADEMY_ID)
-	@ResponseBody
-	public BaseDataResponse deleteCandidateAcademy(@PathVariable UUID id) {		
-		return academyService.del(id);
-	}
-	
-	@PostMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE_ID)
-	@ResponseBody
-	public BaseDataResponse createCandidateExperience(@Valid @RequestBody CandidateExperiencesRequest candidateExperiencesRequest, @PathVariable UUID id) {		
-		return experienceService.save(candidateExperiencesRequest, id);
-	}
-	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE_ID)
-	@ResponseBody
-	public BaseDataResponse updateCandidateExperience(@Valid @RequestBody CandidateExperiencesRequest candidateExperiencesRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return experienceService.update(candidateExperiencesRequest, id, userPrincipal);
-	}
-	
-	@DeleteMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE_ID)
-	@ResponseBody
-	public BaseDataResponse deleteCandidateExperience(@PathVariable UUID id) {		
-		return experienceService.del(id);
-	}
-	
-	@PostMapping(UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
-	@ResponseBody
-	public BaseDataResponse createCandidateLanguage(@Valid @RequestBody CandidateLangugeRequest candidateLangugeRequest, @PathVariable UUID id) {		
-		return languageCertificateService.save(candidateLangugeRequest, id);
-	}
-	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
-	@ResponseBody
-	public BaseDataResponse updateCandidateLanguage(@Valid @RequestBody CandidateLangugeRequest candidateLangugeRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return languageCertificateService.update(candidateLangugeRequest, id, userPrincipal);
-	}
-	
-	@DeleteMapping(UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
-	@ResponseBody
-	public BaseDataResponse deleteCandidateLanguage(@PathVariable UUID id) {		
-		return languageCertificateService.del(id);
+	public BaseDataResponse updateCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return candidateService.updateExperience(candidateExperienceRequest, id, userPrincipal);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE)

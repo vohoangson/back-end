@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
 
-public class CandidateInfoRequest {	
+public class CandidatePersonalRequest {	
 	@JsonProperty("full_name")
 	private String fullName;
 	

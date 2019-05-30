@@ -7,7 +7,7 @@ import com.japanwork.model.Contract;
 import com.japanwork.model.District;
 import com.japanwork.model.Level;
 
-public class CandidateJobRequest {
+public class CandidateWishRequest {
 	@JsonProperty("wish_working_city")
     private City wishWorkingCity;
 

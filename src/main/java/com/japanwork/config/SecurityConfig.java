@@ -130,28 +130,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_JOB_ID)
                     	.hasAnyRole("COMPANY","ADMIN")
                 	.antMatchers(HttpMethod.POST,
-                		UrlConstant.URL_CANDIDATE_INFO,
-                		UrlConstant.URL_CANDIDATE_JOB_ID,
-                		UrlConstant.URL_CANDIDATE_ACADEMY_ID,
-                		UrlConstant.URL_CANDIDATE_EXPERIENCE_ID,
-                		UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
-                    	.hasAnyRole("CADIDATE","ADMIN")
+                		UrlConstant.URL_CANDIDATE_PERSONAL,
+                		UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
+                    	.hasAnyRole("CANDIDATE","ADMIN")
                     .antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_CANDIDATE_INFO_ID,
-                		UrlConstant.URL_CANDIDATE_JOB_ID,
-                		UrlConstant.URL_CANDIDATE_ACADEMY_ID,
-                		UrlConstant.URL_CANDIDATE_EXPERIENCE_ID,
-                		UrlConstant.URL_CANDIDATE_LANGUAGE_ID)
-                    	.hasAnyRole("CADIDATE","ADMIN")	
+                		UrlConstant.URL_CANDIDATE_ID_PERSONAL,
+                		UrlConstant.URL_CANDIDATE_ID_WISH)
+                    	.hasAnyRole("CANDIDATE","ADMIN")
                 	.antMatchers(HttpMethod.DELETE,
-                		UrlConstant.URL_CANDIDATE_LANGUAGE_ID,
-                		UrlConstant.URL_CANDIDATE_EXPERIENCE_ID,
-                		UrlConstant.URL_CANDIDATE_ACADEMY_ID,
-                		UrlConstant.URL_CANDIDATE_JOB_ID
-                		).hasAnyRole("ADMIN","CANDIDATE")
+                    		UrlConstant.URL_JOB_ID
+                    		).hasAnyRole("ADMIN","COMPANY")
                     .antMatchers(HttpMethod.DELETE,
                 		UrlConstant.URL_COMPANY_ID,
-                		UrlConstant.URL_JOB_ID,
                 		UrlConstant.URL_CANDIDATE_ID
                 		).hasRole("ADMIN")
                     .antMatchers(

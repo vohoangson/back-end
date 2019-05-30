@@ -66,19 +66,13 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_ID = "/candidates/{id}";
 	public static final String URL_CANDIDATE_UNDEL = "/candidates/undelete/{id}";
 	
-	//CANDIDATE_INFO
-	public static final String URL_CANDIDATE_INFO = "/candidates/info";
-	public static final String URL_CANDIDATE_INFO_ID = "/candidates/info/{id}";
+	//CANDIDATE_PERSONAL
+	public static final String URL_CANDIDATE_PERSONAL = "/candidates/personal";
+	public static final String URL_CANDIDATE_ID_PERSONAL = "/candidates/{id}/personal";
 	
-	//CANDIDATE_JOB
-	public static final String URL_CANDIDATE_JOB_ID = "/candidates/job/{id}";
-	
-	//CANDIDATE_ACADEMY
-	public static final String URL_CANDIDATE_ACADEMY_ID = "/candidates/academies/{id}";
+	//CANDIDATE_WISH
+	public static final String URL_CANDIDATE_ID_WISH = "/candidates/{id}/wish";
 	
 	//CANDIDATE_EXPERIENCES
-	public static final String URL_CANDIDATE_EXPERIENCE_ID = "/candidates/experiences/{id}";
-		
-	//CANDIDATE
-	public static final String URL_CANDIDATE_LANGUAGE_ID = "/candidates/language/{id}";
+	public static final String URL_CANDIDATE_ID_EXPERIENCE = "/candidates/{id}/experience";
 }

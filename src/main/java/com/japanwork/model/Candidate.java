@@ -71,11 +71,6 @@ public class Candidate {
     @Column(name="japanese_level")
     private int japaneseLevel;
     
-    @JsonProperty("language_certificate")
-    @ManyToOne
-    @JoinColumn(name = "language_certificate_id")
-    private LanguageCertificate languageCertificate;
-    
     @JsonProperty("wish_working_city")
     @ManyToOne
     @JoinColumn(name = "wish_working_city_id")
@@ -238,14 +233,6 @@ public class Candidate {
 		this.japaneseLevel = japaneseLevel;
 	}
 
-	public LanguageCertificate getLanguageCertificate() {
-		return languageCertificate;
-	}
-
-	public void setLanguageCertificate(LanguageCertificate languageCertificate) {
-		this.languageCertificate = languageCertificate;
-	}
-
 	public City getWishWorkingCity() {
 		return wishWorkingCity;
 	}
@@ -369,7 +356,7 @@ public class Candidate {
 
 	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital,
 			City residentalCity, District residentalDistrict, String residentalAddres, String avatar,
-			String introduction, int japaneseLevel, LanguageCertificate languageCertificate, City wishWorkingCity,
+			String introduction, int japaneseLevel, City wishWorkingCity,
 			District wishWorkingDistrict, String wishWorkingAddress, Business wishBusiness, Level wishLevel,
 			Contract wishContract, float wishSalary, Set<Academy> academies, Set<Experience> experiences,
 			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createDate,
@@ -387,7 +374,6 @@ public class Candidate {
 		this.avatar = avatar;
 		this.introduction = introduction;
 		this.japaneseLevel = japaneseLevel;
-		this.languageCertificate = languageCertificate;
 		this.wishWorkingCity = wishWorkingCity;
 		this.wishWorkingDistrict = wishWorkingDistrict;
 		this.wishWorkingAddress = wishWorkingAddress;

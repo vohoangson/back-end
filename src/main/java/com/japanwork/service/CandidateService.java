@@ -1,6 +1,7 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -11,12 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.model.Academy;
 import com.japanwork.model.Candidate;
+import com.japanwork.model.Experience;
+import com.japanwork.model.LanguageCertificate;
 import com.japanwork.model.User;
-import com.japanwork.payload.request.CandidateInfoRequest;
-import com.japanwork.payload.request.CandidateJobRequest;
+import com.japanwork.payload.request.CandidateExperienceRequest;
+import com.japanwork.payload.request.CandidatePersonalRequest;
+import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
+import com.japanwork.payload.response.CandidateExperienceRespone;
 import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -28,22 +34,31 @@ public class CandidateService {
 	@Autowired
 	private UserService userService;
 	
-	public BaseDataResponse saveInfo(CandidateInfoRequest candidateInfoRequest, UserPrincipal userPrincipal) {
+	@Autowired
+	private AcademyService academyService;
+	
+	@Autowired
+	private ExperienceService experienceService;
+	
+	@Autowired
+	private LanguageCertificateService languageCertificateService;
+	
+	public BaseDataResponse savePersonal(CandidatePersonalRequest candidatePersonalRequest, UserPrincipal userPrincipal) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Candidate candidate = new Candidate();
 		candidate.setUser(userService.findById(userPrincipal.getId()));
-		candidate.setFullName(candidateInfoRequest.getFullName());
-		candidate.setDateOfBirth(candidateInfoRequest.getDateOfBirth());
-		candidate.setGender(candidateInfoRequest.getGender());
-		candidate.setMarital(candidateInfoRequest.getMarital());
-		candidate.setResidentalCity(candidateInfoRequest.getResidentalCity());
-		candidate.setResidentalDistrict(candidateInfoRequest.getResidentalDistrict());
-		candidate.setResidentalAddres(candidateInfoRequest.getResidentalAddres());
-		candidate.setAvatar(candidateInfoRequest.getAvatar());
-		candidate.setIntroduction(candidateInfoRequest.getIntroduction());
-		candidate.setJapaneseLevel(candidateInfoRequest.getJapaneseLevel());
+		candidate.setFullName(candidatePersonalRequest.getFullName());
+		candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
+		candidate.setGender(candidatePersonalRequest.getGender());
+		candidate.setMarital(candidatePersonalRequest.getMarital());
+		candidate.setResidentalCity(candidatePersonalRequest.getResidentalCity());
+		candidate.setResidentalDistrict(candidatePersonalRequest.getResidentalDistrict());
+		candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
+		candidate.setAvatar(candidatePersonalRequest.getAvatar());
+		candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
+		candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 		candidate.setStatus("untranslated");
 		candidate.setStatusInfo(1);
 		candidate.setCreateDate(timestamp);
@@ -55,7 +70,7 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataResponse updateInfo(CandidateInfoRequest candidateInfoRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse updatePersonal(CandidatePersonalRequest candidatePersonalRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -71,16 +86,16 @@ public class CandidateService {
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		}
 
-		candidate.setFullName(candidateInfoRequest.getFullName());
-		candidate.setDateOfBirth(candidateInfoRequest.getDateOfBirth());
-		candidate.setGender(candidateInfoRequest.getGender());
-		candidate.setMarital(candidateInfoRequest.getMarital());
-		candidate.setResidentalCity(candidateInfoRequest.getResidentalCity());
-		candidate.setResidentalDistrict(candidateInfoRequest.getResidentalDistrict());
-		candidate.setResidentalAddres(candidateInfoRequest.getResidentalAddres());
-		candidate.setAvatar(candidateInfoRequest.getAvatar());
-		candidate.setIntroduction(candidateInfoRequest.getIntroduction());
-		candidate.setJapaneseLevel(candidateInfoRequest.getJapaneseLevel());
+		candidate.setFullName(candidatePersonalRequest.getFullName());
+		candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
+		candidate.setGender(candidatePersonalRequest.getGender());
+		candidate.setMarital(candidatePersonalRequest.getMarital());
+		candidate.setResidentalCity(candidatePersonalRequest.getResidentalCity());
+		candidate.setResidentalDistrict(candidatePersonalRequest.getResidentalDistrict());
+		candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
+		candidate.setAvatar(candidatePersonalRequest.getAvatar());
+		candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
+		candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 		candidate.setStatus("untranslated");
 		candidate.setUpdateDate(timestamp);
 		
@@ -89,7 +104,7 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataResponse updateJob(CandidateJobRequest candidateJobRequest, @PathVariable UUID id,UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse updateWish(CandidateWishRequest candidateJobRequest, UUID id,UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -113,11 +128,119 @@ public class CandidateService {
 		candidate.setWishContract(candidateJobRequest.getWishContract());
 		candidate.setWishSalary(candidateJobRequest.getWishSalary());
 		candidate.setStatus("untranslated");
-		candidate.setStatusInfo(candidate.getStatusInfo()+1);
+		candidate.setStatusInfo(2);
 		candidate.setUpdateDate(timestamp);
 		
 		Candidate result = candidateRepository.save(candidate);
 		BaseDataResponse response = new BaseDataResponse(result);		
+		return response;
+	}
+	
+	public BaseDataResponse createExperience(CandidateExperienceRequest candidateExperienceRequest, UUID id) throws ResourceNotFoundException{		
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		
+		CandidateExperienceRespone candidateExperienceRespone = new CandidateExperienceRespone();
+		
+		if(!candidateExperienceRequest.getAcademies().isEmpty()) {
+			List<Academy> listAcademy = new ArrayList<>();
+			for (Academy academy : candidateExperienceRequest.getAcademies()) {
+				academy.setCandidateId(id);
+				academy.setCreateDate(timestamp);
+				academy.setUpdateDate(timestamp);
+				academy.setDelete(false);
+				
+				listAcademy.add(academy);
+			}
+			List<Academy> result = academyService.saveAll(listAcademy);
+			candidateExperienceRespone.setAcademies(result);
+		}
+		
+		if(!candidateExperienceRequest.getExperiences().isEmpty()) {
+			List<Experience> listExperience = new ArrayList<>();
+			for (Experience experience : candidateExperienceRequest.getExperiences()) {
+				experience.setCandidateId(id);
+				experience.setCreateDate(timestamp);
+				experience.setUpdateDate(timestamp);
+				experience.setDelete(false);
+				
+				listExperience.add(experience);
+			}
+			
+			List<Experience> result = experienceService.saveAll(listExperience);
+			candidateExperienceRespone.setExperiences(result);
+		}
+		
+		if(!candidateExperienceRequest.getLanguageCertificates().isEmpty()) {
+			List<LanguageCertificate> listLanguageCertificate = new ArrayList<>();
+			for (LanguageCertificate languageCertificate : candidateExperienceRequest.getLanguageCertificates()) {
+				languageCertificate.setCandidateId(id);
+				languageCertificate.setCreateDate(timestamp);
+				languageCertificate.setUpdateDate(timestamp);
+				languageCertificate.setDelete(false);
+				
+				listLanguageCertificate.add(languageCertificate);
+			}
+			
+			List<LanguageCertificate> result = languageCertificateService.saveAll(listLanguageCertificate);
+			candidateExperienceRespone.setLanguageCertificates(result);
+		}
+		
+		BaseDataResponse response = new BaseDataResponse(candidateExperienceRespone);		
+		return response;
+	}
+	
+	public BaseDataResponse updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id,UserPrincipal userPrincipal) throws ResourceNotFoundException{
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		
+		CandidateExperienceRespone candidateExperienceRespone = new CandidateExperienceRespone();
+		
+		if(!candidateExperienceRequest.getAcademies().isEmpty()) {
+			List<Academy> listAcademy = new ArrayList<>();
+			for (Academy academy : candidateExperienceRequest.getAcademies()) {
+				academy.setCandidateId(id);
+				academy.setCreateDate(timestamp);
+				academy.setUpdateDate(timestamp);
+				academy.setDelete(false);
+				
+				listAcademy.add(academy);
+			}
+			List<Academy> result = academyService.saveAll(listAcademy);
+			candidateExperienceRespone.setAcademies(result);
+		}
+		
+		if(!candidateExperienceRequest.getExperiences().isEmpty()) {
+			List<Experience> listExperience = new ArrayList<>();
+			for (Experience experience : candidateExperienceRequest.getExperiences()) {
+				experience.setCandidateId(id);
+				experience.setCreateDate(timestamp);
+				experience.setUpdateDate(timestamp);
+				experience.setDelete(false);
+				
+				listExperience.add(experience);
+			}
+			
+			List<Experience> result = experienceService.saveAll(listExperience);
+			candidateExperienceRespone.setExperiences(result);
+		}
+		
+		if(!candidateExperienceRequest.getLanguageCertificates().isEmpty()) {
+			List<LanguageCertificate> listLanguageCertificate = new ArrayList<>();
+			for (LanguageCertificate languageCertificate : candidateExperienceRequest.getLanguageCertificates()) {
+				languageCertificate.setCandidateId(id);
+				languageCertificate.setCreateDate(timestamp);
+				languageCertificate.setUpdateDate(timestamp);
+				languageCertificate.setDelete(false);
+				
+				listLanguageCertificate.add(languageCertificate);
+			}
+			
+			List<LanguageCertificate> result = languageCertificateService.saveAll(listLanguageCertificate);
+			candidateExperienceRespone.setLanguageCertificates(result);
+		}
+		
+		BaseDataResponse response = new BaseDataResponse(candidateExperienceRespone);		
 		return response;
 	}
 	

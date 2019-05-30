@@ -38,7 +38,7 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	@Override
 	public <S extends LanguageCertificate> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
-		return null;
+		return saveAll(entities);
 	}
 
 	@Override

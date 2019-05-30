@@ -1,4 +1,4 @@
-package com.japanwork.payload.request;
+package com.japanwork.payload.response;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.japanwork.model.Academy;
 import com.japanwork.model.Experience;
 import com.japanwork.model.LanguageCertificate;
 
-public class CandidateExperienceRequest {
+public class CandidateExperienceRespone {
 	private List<Academy> academies;
 	private List<Experience> experiences;
 	@JsonProperty("language_certificates")
@@ -29,5 +29,15 @@ public class CandidateExperienceRequest {
 	}
 	public void setLanguageCertificates(List<LanguageCertificate> languageCertificates) {
 		this.languageCertificates = languageCertificates;
+	}
+	public CandidateExperienceRespone(List<Academy> academies, List<Experience> experiences,
+			List<LanguageCertificate> languageCertificates) {
+		super();
+		this.academies = academies;
+		this.experiences = experiences;
+		this.languageCertificates = languageCertificates;
+	}
+	public CandidateExperienceRespone() {
+		super();
 	}
 }
