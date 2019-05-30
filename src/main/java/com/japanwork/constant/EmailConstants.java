@@ -2,8 +2,8 @@ package com.japanwork.constant;
 
 public class EmailConstants {
 	// Replace with your email here:  
-    public static final String MY_EMAIL = "nguyenphu14@gmail.com";
+    public static final String MY_EMAIL = "japanwork.ja@gmail.com";
  
     // Replace password!!
-    public static final String MY_PASSWORD = "huonglt220296";
+    public static final String MY_PASSWORD = "japanwork2202";
 }
