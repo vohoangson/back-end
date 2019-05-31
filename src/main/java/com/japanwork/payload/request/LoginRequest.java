@@ -7,11 +7,11 @@ import javax.validation.constraints.NotBlank;
  * Created by rajeevkumarsingh on 02/08/17.
  */
 public class LoginRequest {
-    @NotBlank
-    @Email
+    @NotBlank(message = "\"email\":\"Email is required!\"")
+    @Email(message = "\"email\":\"Email is not correct!\"")
     private String email;
     
-    @NotBlank
+    @NotBlank(message = "\"password\":\"Password is required!\"")
 	private String password;
 
 	public String getEmail() {

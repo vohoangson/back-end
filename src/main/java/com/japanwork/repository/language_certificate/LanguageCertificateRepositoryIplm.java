@@ -128,7 +128,7 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	@Override
 	public void deleteAll(Iterable<? extends LanguageCertificate> entities) {
 		// TODO Auto-generated method stub
-		
+		deleteAll(entities);
 	}
 
 	@Override
@@ -168,9 +168,9 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public List<LanguageCertificate> findByCandidateIdAndIsDelete(UUID id, boolean isDelete) {
+	public List<LanguageCertificate> findByCandidateId(UUID id) {
 		// TODO Auto-generated method stub
-		return findByCandidateIdAndIsDelete(id, isDelete);
+		return findByCandidateId(id);
 	}
 
 }

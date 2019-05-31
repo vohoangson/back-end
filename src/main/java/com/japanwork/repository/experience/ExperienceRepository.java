@@ -9,5 +9,5 @@ import com.japanwork.model.Experience;
 
 public interface ExperienceRepository extends JpaRepository<Experience, UUID>{
 	public Experience findByIdAndIsDelete(UUID id, boolean isDelete);
-	public List<Experience> findByCandidateIdAndIsDelete(UUID id, boolean isDelete);
+	public List<Experience> findByCandidateId(UUID id);
 }

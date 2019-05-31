@@ -1,5 +1,8 @@
 package com.japanwork.payload.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
@@ -8,24 +11,32 @@ import com.japanwork.model.District;
 import com.japanwork.model.Level;
 
 public class CandidateWishRequest {
+	
+	@NotNull(message = "\"wish_working_city\":\"City is required!\"")
 	@JsonProperty("wish_working_city")
     private City wishWorkingCity;
 
+	@NotNull(message = "\"wish_working_district\":\"District is required!\"")
     @JsonProperty("wish_working_district")  
     private District wishWorkingDistrict;
     
+	@NotBlank(message = "\"wish_working_address\":\"Address is required!\"")
     @JsonProperty("wish_working_address")
     private String wishWorkingAddress;
     
+    @NotNull(message = "\"wish_business\":\"Business is required!\"")
     @JsonProperty("wish_business")
     private Business wishBusiness;
     
+    @NotNull(message = "\"wish_level\":\"Level is required!\"")
     @JsonProperty("wish_level")
     private Level wishLevel;
     
+    @NotNull(message = "\"wish_contract\":\"Contract is required!\"")
     @JsonProperty("wish_contract")
     private Contract wishContract;
 
+    @NotBlank(message = "\"wish_salary\":\"Salary is required!\"")
     @JsonProperty("wish_salary")
     private float wishSalary;
 

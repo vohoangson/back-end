@@ -128,7 +128,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteAll(Iterable<? extends Academy> entities) {
 		// TODO Auto-generated method stub
-		
+		deleteAll(entities);
 	}
 
 	@Override
@@ -168,9 +168,9 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public List<Academy> findByCandidateIdAndIsDelete(UUID id, boolean isDelete) {
+	public List<Academy> findByCandidateId(UUID id) {
 		// TODO Auto-generated method stub
-		return findByCandidateIdAndIsDelete(id, isDelete);
+		return findByCandidateId(id);
 	}
 
 }

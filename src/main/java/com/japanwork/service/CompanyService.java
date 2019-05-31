@@ -40,7 +40,7 @@ public class CompanyService {
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
 		company.setIntroduction(companyRequest.getIntroduction());
-		company.setStatus(companyRequest.getStatus());
+		company.setStatus("");
 		company.setCreateDate(timestamp);
 		company.setUpdateDate(timestamp);
 		company.setDelete(false);
@@ -75,7 +75,7 @@ public class CompanyService {
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
 		company.setIntroduction(companyRequest.getIntroduction());
-		company.setStatus(companyRequest.getStatus());
+		company.setStatus("");
 		company.setUpdateDate(timestamp);
 		
 		Company result = companyRepository.save(company);

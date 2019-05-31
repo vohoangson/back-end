@@ -9,5 +9,5 @@ import com.japanwork.model.Academy;
 
 public interface AcademyRepository extends JpaRepository<Academy, UUID>{
 	public Academy findByIdAndIsDelete(UUID id, boolean isDelete);
-	public List<Academy> findByCandidateIdAndIsDelete(UUID id, boolean isDelete);
+	public List<Academy> findByCandidateId(UUID id);
 }

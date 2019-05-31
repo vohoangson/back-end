@@ -4,22 +4,22 @@ import java.util.List;
 
 public class BaseErrorResponse {
 	private String code;
-	private List<String> message;
-	public BaseErrorResponse(String code, List<String> message) {
-		super();
-		this.code = code;
-		this.message = message;
-	}
+	private Object message;
 	public String getCode() {
 		return code;
 	}
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public List<String> getMessage() {
+	public Object getMessage() {
 		return message;
 	}
-	public void setMessage(List<String> message) {
+	public void setMessage(Object message) {
+		this.message = message;
+	}
+	public BaseErrorResponse(String code, Object message) {
+		super();
+		this.code = code;
 		this.message = message;
 	}
 }

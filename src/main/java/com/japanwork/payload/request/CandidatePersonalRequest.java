@@ -2,27 +2,37 @@ package com.japanwork.payload.request;
 
 import java.sql.Date;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
 
 public class CandidatePersonalRequest {	
+	@NotBlank(message = "\"full_name\":\"Full name is required!\"")
 	@JsonProperty("full_name")
 	private String fullName;
 	
+	@NotBlank(message = "\"date_of_birth\":\"Date of birth is required!\"")
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
 	
+	@NotBlank(message = "\"gender\":\"Gender is required!\"")
 	private String gender;
 	
+	@NotBlank(message = "\"marital\":\"Marital is required!\"")
 	private String marital;
 	
+	@NotNull(message = "\"residental_city\":\"City is required!\"")
 	@JsonProperty("residental_city")
     private City residentalCity;
 
+	@NotNull(message = "\"residental_district\":\"District is required!\"")
 	@JsonProperty("residental_district") 
     private District residentalDistrict;
     
+	@NotBlank(message = "\"residental_address\":\"Addres is required!\"")
 	@JsonProperty("residental_address")
     private String residentalAddres;
 

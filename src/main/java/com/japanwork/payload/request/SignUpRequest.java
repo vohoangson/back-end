@@ -8,17 +8,17 @@ import javax.validation.constraints.NotBlank;
  */
 
 public class SignUpRequest {
-    @NotBlank
+    @NotBlank(message = "\"name\":\"Name is required!\"")
     private String name;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "\"email\":\"Email is required!\"")
+    @Email(message = "\"email\":\"Email is not correct!\"")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "\"password\":\"Password is required!\"")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "\"role\":\"You are a business or an individual?\"")
     private String role;
     
     public String getName() {

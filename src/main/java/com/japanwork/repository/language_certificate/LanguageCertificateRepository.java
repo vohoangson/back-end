@@ -9,5 +9,5 @@ import com.japanwork.model.LanguageCertificate;
 
 public interface LanguageCertificateRepository extends JpaRepository<LanguageCertificate, UUID>{
 	public LanguageCertificate findByIdAndIsDelete(UUID id, boolean isDelete);
-	public List<LanguageCertificate> findByCandidateIdAndIsDelete(UUID id, boolean isDelete);
+	public List<LanguageCertificate> findByCandidateId(UUID id);
 }

@@ -1,8 +1,5 @@
 package com.japanwork.exception;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseErrorResponse;
@@ -37,11 +37,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 	      HttpHeaders headers, HttpStatus status, WebRequest request) {
-		List<String> list = new ArrayList<>();
+		String er = "";
 		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-			list.add(error.getDefaultMessage());
+			er += error.getDefaultMessage() + ",";
 		}
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, list);
+		er = "{" + er.substring(0, er.length()-1) + "}";
+		Gson gson = new Gson();
+		JsonObject jsonObject = new JsonParser().parse(er).getAsJsonObject();
+		Object object = gson.fromJson(jsonObject, Object.class);
+		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, object);
 		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
 	    return new ResponseEntity(baseDataResponse, HttpStatus.BAD_REQUEST);
 	  } 

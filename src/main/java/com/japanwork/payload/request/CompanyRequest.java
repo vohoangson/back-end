@@ -2,22 +2,29 @@ package com.japanwork.payload.request;
 
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
 public class CompanyRequest {
+	@NotBlank(message = "\"name\":\"Name is required!\"")
 	private String name;
 	private int scale;
+	@NotNull(message = "\"businesses\":\"Businesses is required!\"")
 	private Set<Business> businesses;
+	@NotNull(message = "\"city\":\"City is required!\"")
 	private City city;
+	@NotNull(message = "\"district\":\"District is required!\"")
 	private District district;
+	@NotBlank(message = "\"address\":\"Address is required!\"")
 	private String address;
 	private String logo;
 	@JsonProperty("cover_image")
 	private String coverImage;
 	private String introduction;
-	private String status;
 	
 	public String getName() {
 		return name;
@@ -72,11 +79,5 @@ public class CompanyRequest {
 	}
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 }

@@ -190,7 +190,9 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataResponse updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id,UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+		this.deleteExperiencer(id);
+		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -242,12 +244,6 @@ public class CandidateService {
 		
 		BaseDataResponse response = new BaseDataResponse(candidateExperienceRespone);		
 		return response;
-	}
-	
-	public Candidate updateStatusInfo(UUID id, int status) {
-		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
-		candidate.setStatusInfo(candidate.getStatusInfo() + status);
-		return candidateRepository.save(candidate);
 	}
 	
 	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
@@ -308,5 +304,11 @@ public class CandidateService {
 		
 		BaseDataResponse response = new BaseDataResponse(listCandidate);
 		return response;
+	}
+	
+	private void deleteExperiencer(UUID id) {
+		academyService.del(id);
+		experienceService.del(id);
+		languageCertificateService.del(id);
 	}
 }
