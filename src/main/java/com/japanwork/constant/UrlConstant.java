@@ -16,19 +16,19 @@ public class UrlConstant {
 	public static final String URL_RESEND_REGISTRATION_TOKEN = "/resend-registration";		
 	
 	//Business Type
-	public static final String URL_BUSINESS = "/business";
+	public static final String URL_BUSINESS = "/businesses";
 	public static final String URL_BUSINESS_ID = "/business/{id}";
 	public static final String URL_BUSINESS_UNDEL = "/business/undelete/{id}";
 	
 	//Business Type
-	public static final String URL_LANGUAGUE_TYPE = "/languagues_type";
-	public static final String URL_LANGUAGUE_TYPE_ID = "/languagues_type/{id}";
-	public static final String URL_LANGUAGUE_TYPE_UNDEL = "/languagues_type/undelete/{id}";
+	public static final String URL_LANGUAGUE_TYPE = "/languagues";
+	public static final String URL_LANGUAGUE_TYPE_ID = "/languagues/{id}";
+	public static final String URL_LANGUAGUE_TYPE_UNDEL = "/languagues/undelete/{id}";
 	
 	//Currency Unit
-	public static final String URL_CURRENCYUNIT = "/currency_unit";
-	public static final String URL_CURRENCYUNIT_ID = "/currency_unit/{id}";
-	public static final String URL_CURRENCYUNIT_UNDEL = "/currency_unit/undelete/{id}";
+	public static final String URL_CURRENCYUNIT = "/currencyunit";
+	public static final String URL_CURRENCYUNIT_ID = "/currencyunit/{id}";
+	public static final String URL_CURRENCYUNIT_UNDEL = "/currencyunit/undelete/{id}";
 	
 	
 	//District
@@ -37,9 +37,9 @@ public class UrlConstant {
 	public static final String URL_DISTRICT_UNDEL = "/districts/undelete/{id}";
 	
 	//District
-	public static final String URL_CITY = "/citys";
-	public static final String URL_CITY_ID = "/citys/{id}";
-	public static final String URL_CITY_UNDEL = "/citys/undelete/{id}";
+	public static final String URL_CITY = "/cities";
+	public static final String URL_CITY_ID = "/city/{id}";
+	public static final String URL_CITY_UNDEL = "/city/undelete/{id}";
 	
 	//Company
 	public static final String URL_COMPANY = "/companies";
