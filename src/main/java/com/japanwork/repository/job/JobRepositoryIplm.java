@@ -169,4 +169,10 @@ public class JobRepositoryIplm implements JobRepository{
 		return findAllByIsDelete(isDelete);
 	}
 
+	@Override
+	public Page<Job> findAllByIsDelete(Pageable page, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(page, isDelete);
+	}
+
 }

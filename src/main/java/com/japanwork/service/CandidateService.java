@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -16,10 +18,12 @@ import com.japanwork.model.Academy;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Experience;
 import com.japanwork.model.LanguageCertificate;
+import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
 import com.japanwork.payload.request.CandidateWishRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.CandidateExperienceRespone;
@@ -303,6 +307,30 @@ public class CandidateService {
 		List<Candidate> listCandidate = candidateRepository.findAllByIsDelete(false);
 		
 		BaseDataResponse response = new BaseDataResponse(listCandidate);
+		return response;
+	}
+	
+	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
+		Page<Candidate> pageCandidate = candidateRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setCurrentPage(page);
+		
+		if(page == 0) {
+			pageInfo.setPrevPage(0);
+		} else {
+			pageInfo.setPrevPage(page - 1);
+		}
+		
+		if(page == pageCandidate.getTotalPages()) {
+			pageInfo.setNextPage(page);
+		} else {
+			pageInfo.setNextPage(page + 1);
+		}
+		
+		pageInfo.setTotalPage(pageCandidate.getTotalPages());
+		pageInfo.setTotalCount(pageCandidate.getTotalElements());
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(pageCandidate.getContent(), pageInfo);
 		return response;
 	}
 	

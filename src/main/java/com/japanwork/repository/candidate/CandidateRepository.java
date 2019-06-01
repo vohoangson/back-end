@@ -3,6 +3,8 @@ package com.japanwork.repository.candidate;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.japanwork.model.Candidate;
@@ -12,4 +14,5 @@ public interface CandidateRepository extends JpaRepository<Candidate, UUID>{
 	public Candidate findByIdAndIsDelete(UUID id, boolean isDelete);
 	public List<Candidate> findAllByIsDelete(boolean isDelete);
 	public Candidate findByUser(User user);
+	public Page<Candidate> findAllByIsDelete(Pageable page,boolean isDelete);
 }

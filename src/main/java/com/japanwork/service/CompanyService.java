@@ -2,17 +2,20 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Company;
+import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.company.CompanyRepository;
@@ -131,10 +134,27 @@ public class CompanyService {
 		 return true;
 	}
 	
-	public BaseDataResponse findAllByIsDelete() {
-		List<Company> listCompany = companyRepository.findAllByIsDelete(false);
+	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
+		Page<Company> pageCompany = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setCurrentPage(page);
 		
-		BaseDataResponse response = new BaseDataResponse(listCompany);
+		if(page == 0) {
+			pageInfo.setPrevPage(0);
+		} else {
+			pageInfo.setPrevPage(page - 1);
+		}
+		
+		if(page == pageCompany.getTotalPages()) {
+			pageInfo.setNextPage(page);
+		} else {
+			pageInfo.setNextPage(page + 1);
+		}
+		
+		pageInfo.setTotalPage(pageCompany.getTotalPages());
+		pageInfo.setTotalCount(pageCompany.getTotalElements());
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(pageCompany.getContent(), pageInfo);
 		return response;
 	}
 }

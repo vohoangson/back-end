@@ -28,7 +28,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 //                e.getLocalizedMessage());
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
-        BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_401);
+        BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
         BaseDataResponse baseDataResponse = new BaseDataResponse(baseMessageResponse);
         httpServletResponse.getWriter().write(CommonFunction.convertToJSONString(baseDataResponse));
     }

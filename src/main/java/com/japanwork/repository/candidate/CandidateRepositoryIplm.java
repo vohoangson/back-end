@@ -179,5 +179,11 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 		// TODO Auto-generated method stub
 		return findByUser(user);
 	}
+
+	@Override
+	public Page<Candidate> findAllByIsDelete(Pageable page, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(page, isDelete);
+	}
 	
 }

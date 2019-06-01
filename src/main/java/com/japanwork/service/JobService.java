@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Job;
+import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.job.JobRepository;
@@ -29,6 +33,31 @@ public class JobService {
 		BaseDataResponse response = new BaseDataResponse(listJob);
 		return response;
 	}
+	
+	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
+		Page<Job> pageJob = jobRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setCurrentPage(page);
+		
+		if(page == 0) {
+			pageInfo.setPrevPage(0);
+		} else {
+			pageInfo.setPrevPage(page - 1);
+		}
+		
+		if(page == pageJob.getTotalPages()) {
+			pageInfo.setNextPage(page);
+		} else {
+			pageInfo.setNextPage(page + 1);
+		}
+		
+		pageInfo.setTotalPage(pageJob.getTotalPages());
+		pageInfo.setTotalCount(pageJob.getTotalElements());
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(pageJob.getContent(), pageInfo);
+		return response;
+	}
+	
 	
 	public BaseDataResponse save(JobRequest jobRequest, UserPrincipal userPrincipal) {
 		Date date = new Date();

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.payload.request.CompanyRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.security.CurrentUser;
@@ -35,9 +36,8 @@ public class CompanyController {
 	
 	@GetMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
-	public BaseDataResponse listCompany(@RequestParam("page") int page) {
-		System.out.println(page);
-		return companyService.findAllByIsDelete();
+	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page, @RequestParam(defaultValue = "25", name = "paging") int paging) {
+		return companyService.findAllByIsDelete(page, paging);
 	}
 	
 	@PostMapping(UrlConstant.URL_COMPANY)

@@ -1,14 +1,12 @@
 package com.japanwork.payload.response;
 
-import java.util.List;
-
 public class BaseDataMetaResponse {
-	private List<Object> data;
+	private Object data;
 	private Object meta;
-	public List<Object> getData() {
+	public Object getData() {
 		return data;
 	}
-	public void setData(List<Object> data) {
+	public void setData(Object data) {
 		this.data = data;
 	}
 	public Object getMeta() {
@@ -17,7 +15,7 @@ public class BaseDataMetaResponse {
 	public void setMeta(Object meta) {
 		this.meta = meta;
 	}
-	public BaseDataMetaResponse(List<Object> data, Object meta) {
+	public BaseDataMetaResponse(Object data, Object meta) {
 		super();
 		this.data = data;
 		this.meta = meta;
