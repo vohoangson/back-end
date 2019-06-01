@@ -59,7 +59,7 @@ public class CandidateService {
 		candidate.setAvatar(candidatePersonalRequest.getAvatar());
 		candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 		candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
-		candidate.setStatus("untranslated");
+		candidate.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
 		candidate.setStatusInfo(1);
 		candidate.setCreateDate(timestamp);
 		candidate.setUpdateDate(timestamp);
@@ -96,7 +96,7 @@ public class CandidateService {
 		candidate.setAvatar(candidatePersonalRequest.getAvatar());
 		candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 		candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
-		candidate.setStatus("untranslated");
+		candidate.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
 		candidate.setUpdateDate(timestamp);
 		
 		Candidate result = candidateRepository.save(candidate);
@@ -127,7 +127,7 @@ public class CandidateService {
 		candidate.setWishLevel(candidateJobRequest.getWishLevel());
 		candidate.setWishContract(candidateJobRequest.getWishContract());
 		candidate.setWishSalary(candidateJobRequest.getWishSalary());
-		candidate.setStatus("untranslated");
+		candidate.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
 		candidate.setStatusInfo(2);
 		candidate.setUpdateDate(timestamp);
 		

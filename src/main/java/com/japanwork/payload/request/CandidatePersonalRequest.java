@@ -14,7 +14,7 @@ public class CandidatePersonalRequest {
 	@JsonProperty("full_name")
 	private String fullName;
 	
-	@NotBlank(message = "\"date_of_birth\":\"Date of birth is required!\"")
+	@NotNull(message = "\"date_of_birth\":\"Date of birth is required!\"")
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
 	

@@ -51,7 +51,7 @@ public class JobService {
 		job.setCurrencyUnit(jobRequest.getCurrencyUnit());
 		job.setMinSalary(jobRequest.getMinSalary());
 		job.setMaxSalary(jobRequest.getMaxSalary());
-		job.setStatus(jobRequest.getStatus());		
+		job.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);		
 		job.setCreateDate(timestamp);
 		job.setUpdateDate(timestamp);
 		job.setDelete(false);
@@ -93,7 +93,7 @@ public class JobService {
 		job.setCurrencyUnit(jobRequest.getCurrencyUnit());
 		job.setMinSalary(jobRequest.getMinSalary());
 		job.setMaxSalary(jobRequest.getMaxSalary());
-		job.setStatus(jobRequest.getStatus());
+		job.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
 		job.setUpdateDate(timestamp);
 		
 		Job result = jobRepository.save(job);		

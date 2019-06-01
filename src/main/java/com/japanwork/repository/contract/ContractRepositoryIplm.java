@@ -167,4 +167,10 @@ public class ContractRepositoryIplm implements ContractRepository{
 		return findByIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public List<Contract> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(isDelete);
+	}
+
 }

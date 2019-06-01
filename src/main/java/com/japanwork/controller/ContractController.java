@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,12 @@ import com.japanwork.service.ContractService;
 public class ContractController {
 	@Autowired
 	private ContractService contractService;
+	
+	@GetMapping(value = UrlConstant.URL_CONTRACT)
+	@ResponseBody
+	public BaseDataResponse listContract() {		
+		return contractService.findAllByIsDelete();
+	}
 	
 	@PostMapping(value = UrlConstant.URL_CONTRACT)
 	@ResponseBody

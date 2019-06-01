@@ -36,8 +36,7 @@ public class CandidateController {
 	
 	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
 	@ResponseBody
-	public BaseDataResponse createCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, @CurrentUser UserPrincipal userPrincipal) {
-		
+	public BaseDataResponse createCandidatePersonal (@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, @CurrentUser UserPrincipal userPrincipal) {
 		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
 			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.CADIDATE_ALREADY);
 			BaseDataResponse baseDataResponse = new BaseDataResponse(baseMessageResponse);

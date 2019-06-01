@@ -17,5 +17,6 @@ public class MessageConstant {
 	public static final String UN_DELETE = "UnDelete";
 	public static final String UN_DEL_SUCCESS = "Success";
 	public static final String UN_DEL_FAIL = "Fail";
+	public static final String STATUS_TRANSLATE_UNTRANSLATE  = "untranslated";
 	
 }

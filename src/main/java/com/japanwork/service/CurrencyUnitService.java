@@ -2,6 +2,7 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,13 @@ public class CurrencyUnitService {
 		
 		CurrencyUnit result = currencyUnitRepository.save(currencyUnit);
 		BaseDataResponse response = new BaseDataResponse(result);	
+		return response;
+	}
+	
+	public BaseDataResponse findAllByIsDelete() {
+		List<CurrencyUnit> list = currencyUnitRepository.findAllByIsDelete(false);
+		
+		BaseDataResponse response = new BaseDataResponse(list);	
 		return response;
 	}
 	

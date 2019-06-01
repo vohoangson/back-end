@@ -163,4 +163,9 @@ public class LevelRepositoryIplm implements LevelRepository{
 		return findByIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public List<Level> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(isDelete);
+	}
 }

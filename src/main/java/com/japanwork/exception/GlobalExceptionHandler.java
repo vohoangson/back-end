@@ -27,12 +27,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(baseDataResponse, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-		return new ResponseEntity<>(baseDataResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
+//		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
+//		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
+//		return new ResponseEntity<>(baseDataResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
 	
 	@Override
 	  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

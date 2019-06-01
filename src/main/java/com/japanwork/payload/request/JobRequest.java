@@ -66,8 +66,6 @@ public class JobRequest {
 	@NotBlank(message = "\"benefit\":\"Benefit is required!\"")
 	private String benefit;
 	
-	private String status;
-	
 	public Company getCompany() {
 		return company;
 	}
@@ -163,11 +161,5 @@ public class JobRequest {
 	}
 	public void setCurrencyUnit(CurrencyUnit currencyUnit) {
 		this.currencyUnit = currencyUnit;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 }

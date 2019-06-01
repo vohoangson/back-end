@@ -2,6 +2,7 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ import com.japanwork.repository.city.CityRepository;
 public class CityService {
 	@Autowired
 	private CityRepository cityRepository;
+	
+	public BaseDataResponse findAllByIsDelete() {
+		List<City> list = cityRepository.findAllByIsDelete(false);		
+		BaseDataResponse response = new BaseDataResponse(list);	
+		return response;
+	}
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		City city = cityRepository.findByIdAndIsDelete(id, false);

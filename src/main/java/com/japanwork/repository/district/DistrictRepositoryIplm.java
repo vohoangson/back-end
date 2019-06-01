@@ -167,4 +167,10 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 		return findByIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public List<District> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(isDelete);
+	}
+
 }

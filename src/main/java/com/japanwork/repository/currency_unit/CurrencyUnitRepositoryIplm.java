@@ -167,4 +167,10 @@ public class CurrencyUnitRepositoryIplm implements CurrencyUnitRepository{
 		return findByIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public List<CurrencyUnit> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(isDelete);
+	}
+
 }

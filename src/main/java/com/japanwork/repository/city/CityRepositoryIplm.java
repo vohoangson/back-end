@@ -166,5 +166,11 @@ public class CityRepositoryIplm implements CityRepository{
 		// TODO Auto-generated method stub
 		return findByIdAndIsDelete(id,isDelete);
 	}
+
+	@Override
+	public List<City> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(isDelete);
+	}
 	
 }

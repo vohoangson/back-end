@@ -2,6 +2,7 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ import com.japanwork.repository.contract.ContractRepository;
 public class ContractService {
 	@Autowired
 	private ContractRepository contractRepository;
+	
+	public BaseDataResponse findAllByIsDelete() {
+		List<Contract> list = contractRepository.findAllByIsDelete(false);
+		BaseDataResponse response = new BaseDataResponse(list);	
+		return response;
+	}
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		Contract contract = contractRepository.findByIdAndIsDelete(id, false);

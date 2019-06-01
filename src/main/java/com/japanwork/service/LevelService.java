@@ -2,6 +2,7 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,13 @@ import com.japanwork.repository.level.LevelRepository;
 public class LevelService {
 	@Autowired
 	private LevelRepository levelRepository;
+	
+	public BaseDataResponse findAllByIsDelete() {
+		List<Level> list = levelRepository.findAllByIsDelete(false);
+		
+		BaseDataResponse response = new BaseDataResponse(list);	
+		return response;
+	}
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		Level level = levelRepository.findByIdAndIsDelete(id, false);

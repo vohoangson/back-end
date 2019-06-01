@@ -166,4 +166,10 @@ public class LanguageCertificateTypeRepositoryIplm implements LanguageCertificat
 		return findByIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public List<LanguageCertificateType> findAllByIsDelete(boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByIsDelete(isDelete);
+	}
+
 }

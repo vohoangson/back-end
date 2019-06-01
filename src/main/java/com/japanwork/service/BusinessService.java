@@ -2,6 +2,7 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,10 @@ public class BusinessService {
 		BaseDataResponse response = new BaseDataResponse(business);	
 		return response;
 	}
+	
+	public BaseDataResponse findAllByIsDelete() {
+		List<Business> list = businessTypeRepository.findAllByIsDelete(false);
+		BaseDataResponse response = new BaseDataResponse(list);	
+		return response;
+	} 
 }
