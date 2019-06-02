@@ -36,7 +36,7 @@ public class CandidateWishRequest {
     @JsonProperty("wish_contract")
     private Contract wishContract;
 
-    @NotBlank(message = "\"wish_salary\":\"Salary is required!\"")
+    @NotNull(message = "\"wish_salary\":\"Salary is required!\"")
     @JsonProperty("wish_salary")
     private float wishSalary;
 

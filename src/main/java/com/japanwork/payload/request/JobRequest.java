@@ -51,7 +51,7 @@ public class JobRequest {
 	@NotBlank(message = "\"address\":\"Address is required!\"")
 	private String address;
 	
-    @JsonProperty("application_deadline")
+    @JsonProperty("expiring_date")
     private Date applicationDeadline;
     
     @JsonProperty("currency_unit")

@@ -91,7 +91,7 @@ public class AuthController {
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(signUpRequest.getRole());
+        user.setRole("ROLE_"+signUpRequest.getRole());
         User result = userService.save(user);
         
         final VerificationToken newToken = userService.generateNewVerificationToken(user);
