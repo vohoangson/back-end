@@ -13,6 +13,7 @@ import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
+import com.japanwork.security.UserPrincipal;
 
 @Service
 public class UserService {
@@ -67,6 +68,14 @@ public class UserService {
             return token.getUser();
         }
         return null;
+    }
+	
+	public BaseDataResponse getUser(UserPrincipal userPrincipal) {
+        User user = new User();
+        user.setEmail(userPrincipal.getEmail());
+        user.setName(userPrincipal.getName());
+        BaseDataResponse response = new BaseDataResponse(user);
+        return response;
     }
 	
 	public boolean existsByEmail(String email) {

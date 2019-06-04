@@ -133,7 +133,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_LEVEL,
                 		UrlConstant.URL_CONTRACT,
                 		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT)
+                		UrlConstant.URL_CURRENCYUNIT,
+                		UrlConstant.URL_USER)
                     	.permitAll()
                     .antMatchers(HttpMethod.POST,
                 		UrlConstant.URL_COMPANY,

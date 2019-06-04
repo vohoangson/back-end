@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.japanwork.constant.EmailConstants;
 import com.japanwork.constant.MessageConstant;
@@ -35,7 +35,9 @@ import com.japanwork.payload.response.AuthResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
+import com.japanwork.security.CurrentUser;
 import com.japanwork.security.TokenProvider;
+import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.EmailSenderService;
 import com.japanwork.service.UserService;
 
@@ -106,23 +108,21 @@ public class AuthController {
     }
     
     @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
-    @ResponseBody
-    public ConfirmRegistrationTokenResponse confirmRegistration(@RequestParam("token") final String token) {
+    public RedirectView confirmRegistration(@RequestParam("token") final String token) {
     	final String result = userService.validateVerificationToken(token);
     	if (result.equals("valid")) {
-    		ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Success!","");
-            return api;
+    		//ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Success!","");
+            return new RedirectView("http://datvo.io/login");
         } else if(result.equals("expired")) {
         	ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Fail! Confirm expired registration.", token);
-            return api;
+            return null;
         } else {
         	ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Fail! Registration confirmation does not exist.", token);
-            return api;
+            return null;
         }    	
     }
     
     @GetMapping(value = UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
-    @ResponseBody
     public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken, HttpServletRequest request) {
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
         final User user = userService.getUser(newToken.getToken());
@@ -158,5 +158,10 @@ public class AuthController {
     @GetMapping(value = UrlConstant.URL_DELETE_ACCOUNT)
     public BaseDataResponse deleteUserByEmail(@RequestParam("email") String email) {
     	return userService.deleteUserByEmail(email);    
+    }
+    
+    @GetMapping(value = UrlConstant.URL_USER)
+    public BaseDataResponse getUser(@CurrentUser UserPrincipal userPrincipal) {
+    	return userService.getUser(userPrincipal);    
     }
 }
