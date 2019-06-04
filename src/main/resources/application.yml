@@ -68,4 +68,7 @@ amazonProperties:
   region: us-east-1
   accessKey: AKIAXNXIB2BRHJTCC54U
   secretKey: 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
-  bucketName: amazon.japanwork
+  bucketName: amazon.japanwork 
+server:
+    servlet:
+        context-path: /api  
