@@ -37,6 +37,7 @@ public class CompanyService {
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
 		company.setBusinesses(companyRequest.getBusinesses());
+		company.setCountry(companyRequest.getCountry());
 		company.setCity(companyRequest.getCity());
 		company.setDistrict(companyRequest.getDistrict());
 		company.setAddress(companyRequest.getAddress());
@@ -72,6 +73,7 @@ public class CompanyService {
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
 		company.setBusinesses(companyRequest.getBusinesses());
+		company.setCountry(companyRequest.getCountry());
 		company.setCity(companyRequest.getCity());
 		company.setDistrict(companyRequest.getDistrict());
 		company.setAddress(companyRequest.getAddress());

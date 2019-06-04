@@ -8,24 +8,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
-@Table(name="district")
-public class District {
+@Table(name = "country")
+public class Country {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
-	@OneToOne
-    @JoinColumn(name = "city_id")
-	private City city;
 	
 	@JsonProperty("name_vi")
 	@Column(name="name_vi")
@@ -56,14 +49,6 @@ public class District {
 
 	public void setId(UUID id) {
 		this.id = id;
-	}
-	
-	public City getCity() {
-		return city;
-	}
-
-	public void setCity(City city) {
-		this.city = city;
 	}
 
 	public String getNameVi() {
@@ -115,11 +100,10 @@ public class District {
 		this.isDelete = isDelete;
 	}
 
-	public District(UUID id, City city, String nameVi, String nameJa, String description, Timestamp createDate,
+	public Country(UUID id, String nameVi, String nameJa, String description, Timestamp createDate,
 			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
-		this.city = city;
 		this.nameVi = nameVi;
 		this.nameJa = nameJa;
 		this.description = description;
@@ -128,7 +112,7 @@ public class District {
 		this.isDelete = isDelete;
 	}
 
-	public District() {
+	public Country() {
 		super();
 	}
 }

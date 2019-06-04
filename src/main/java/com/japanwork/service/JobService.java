@@ -69,6 +69,7 @@ public class JobService {
 		job.setBusinesses(jobRequest.getBusinesses());
 		job.setContract(jobRequest.getContract());
 		job.setLevel(jobRequest.getLevel());
+		job.setCountry(jobRequest.getCountry());
 		job.setCity(jobRequest.getCity());
 		job.setDistrict(jobRequest.getDistrict());
 		job.setAddress(jobRequest.getAddress());
@@ -111,6 +112,7 @@ public class JobService {
 		job.setBusinesses(jobRequest.getBusinesses());
 		job.setContract(jobRequest.getContract());
 		job.setLevel(jobRequest.getLevel());
+		job.setCountry(jobRequest.getCountry());
 		job.setCity(jobRequest.getCity());
 		job.setDistrict(jobRequest.getDistrict());
 		job.setAddress(jobRequest.getAddress());

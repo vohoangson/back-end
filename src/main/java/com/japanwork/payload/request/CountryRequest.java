@@ -1,23 +1,14 @@
 package com.japanwork.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.City;
 
-public class DistrictRequest {
-	private City city;
+public class CountryRequest {
 	@JsonProperty("name_vi")
 	private String nameVi;
 	@JsonProperty("name_ja")
 	private String nameJa;
 	private String description;
 	
-	
-	public City getCity() {
-		return city;
-	}
-	public void setCity(City city) {
-		this.city = city;
-	}
 	public String getNameVi() {
 		return nameVi;
 	}

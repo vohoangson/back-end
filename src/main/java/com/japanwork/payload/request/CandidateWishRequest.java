@@ -7,10 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.Contract;
+import com.japanwork.model.Country;
 import com.japanwork.model.District;
 import com.japanwork.model.Level;
 
 public class CandidateWishRequest {
+	
+	@NotNull(message = "\"wish_working_country\":\"Country is required!\"")
+	@JsonProperty("wish_working_country")
+    private Country wishWorkingCountry;
 	
 	@NotNull(message = "\"wish_working_city\":\"City is required!\"")
 	@JsonProperty("wish_working_city")
@@ -39,6 +44,14 @@ public class CandidateWishRequest {
     @NotNull(message = "\"wish_salary\":\"Salary is required!\"")
     @JsonProperty("wish_salary")
     private float wishSalary;
+    
+	public Country getWishWorkingCountry() {
+		return wishWorkingCountry;
+	}
+
+	public void setWishWorkingCountry(Country wishWorkingCountry) {
+		this.wishWorkingCountry = wishWorkingCountry;
+	}
 
 	public City getWishWorkingCity() {
 		return wishWorkingCity;

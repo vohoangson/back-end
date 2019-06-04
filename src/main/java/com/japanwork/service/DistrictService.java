@@ -1,6 +1,7 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.District;
 import com.japanwork.payload.request.DistrictRequest;
+import com.japanwork.payload.request.ListDistrictRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.district.DistrictRepository;
 
@@ -25,9 +27,9 @@ public class DistrictService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		District district = new District();
+		district.setCity(district.getCity());
 		district.setNameJa(districtRequest.getNameJa());
 		district.setNameVi(districtRequest.getNameVi());
-		district.setCountryCode(districtRequest.getCountryCode());
 		district.setDescription(districtRequest.getDescription());
 		district.setCreateDate(timestamp);
 		district.setUpdateDate(timestamp);
@@ -43,7 +45,11 @@ public class DistrictService {
 		BaseDataResponse response = new BaseDataResponse(list);	
 		return response;
 	}
-	
+	public BaseDataResponse findAllByCityIdAndIsDelete(UUID id){
+		List<District> list = districtRepository.findAllByCityIdAndIsDelete(id, false);
+		BaseDataResponse response = new BaseDataResponse(list);	
+		return response;
+	}
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		District district = districtRepository.findByIdAndIsDelete(id, false);
 		if(district == null) {
@@ -54,4 +60,26 @@ public class DistrictService {
 		return response;
 	}
 	
+	public BaseDataResponse saves(ListDistrictRequest listDistrictRequest) {
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		List<District> listDistrict = new ArrayList<>();
+		for (DistrictRequest districtRequest : listDistrictRequest.getDistricts()){
+			District obj = new District();
+			
+			obj.setCity(districtRequest.getCity());
+			obj.setNameJa(districtRequest.getNameJa());
+			obj.setNameVi(districtRequest.getNameVi());
+			obj.setDescription(districtRequest.getDescription());
+			obj.setCreateDate(timestamp);
+			obj.setUpdateDate(timestamp);
+			obj.setDelete(false);
+			
+			listDistrict.add(obj);
+		}
+		List<District> result = districtRepository.saveAll(listDistrict);
+		BaseDataResponse response = new BaseDataResponse(result);
+		
+		return response;
+	}
 }

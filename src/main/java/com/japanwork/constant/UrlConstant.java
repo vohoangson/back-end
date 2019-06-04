@@ -12,6 +12,7 @@ public class UrlConstant {
 	public static final String URL_OAUTH2_LOGIN = "/login/redirect";
 	public static final String URL_LOGOUT = "/logout";
 	public static final String URL_REGISTER = "/register";
+	public static final String URL_DELETE_ACCOUNT = "/user/delete";
 	public static final String URL_CONFIRM_ACCOUNT = "/confirm-account";
 	public static final String URL_RESEND_REGISTRATION_TOKEN = "/resend-registration";		
 	
@@ -33,13 +34,23 @@ public class UrlConstant {
 	
 	//District
 	public static final String URL_DISTRICT = "/districts";
+	public static final String URL_DISTRICTS = "/districts/list";
+	public static final String URL_DISTRICTS_ID = "/districts/list/{id}";
 	public static final String URL_DISTRICT_ID = "/districts/{id}";
 	public static final String URL_DISTRICT_UNDEL = "/districts/undelete/{id}";
 	
+	
+	//District
+	public static final String URL_COUNTRY = "/countries";
+	public static final String URL_COUNTRY_ID = "/country/{id}";
+	public static final String URL_COUNTRY_UNDEL = "/country/undelete/{id}";
+	
 	//District
 	public static final String URL_CITY = "/cities";
-	public static final String URL_CITY_ID = "/city/{id}";
-	public static final String URL_CITY_UNDEL = "/city/undelete/{id}";
+	public static final String URL_CITIES = "/cities/list";
+	public static final String URL_CITIES_ID = "/cities/list/{id}";
+	public static final String URL_CITY_ID = "/cities/{id}";
+	public static final String URL_CITY_UNDEL = "/cities/undelete/{id}";
 	
 	//Company
 	public static final String URL_COMPANY = "/companies";
@@ -75,4 +86,8 @@ public class UrlConstant {
 	
 	//CANDIDATE_EXPERIENCES
 	public static final String URL_CANDIDATE_ID_EXPERIENCE = "/candidates/{id}/experience";
+	
+	//UPLOAD FILE ON AMW
+	public static final String URL_AMW_UPLOAD_FILE = "/storage/upload-file";
+	public static final String URL_AMW_DELETE_FILE = "/storage/delete-file";
 }

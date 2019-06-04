@@ -57,6 +57,7 @@ public class CandidateService {
 		candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
 		candidate.setGender(candidatePersonalRequest.getGender());
 		candidate.setMarital(candidatePersonalRequest.getMarital());
+		candidate.setResidentalCoutry(candidatePersonalRequest.getResidentalCountry());
 		candidate.setResidentalCity(candidatePersonalRequest.getResidentalCity());
 		candidate.setResidentalDistrict(candidatePersonalRequest.getResidentalDistrict());
 		candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
@@ -94,6 +95,7 @@ public class CandidateService {
 		candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
 		candidate.setGender(candidatePersonalRequest.getGender());
 		candidate.setMarital(candidatePersonalRequest.getMarital());
+		candidate.setResidentalCoutry(candidatePersonalRequest.getResidentalCountry());
 		candidate.setResidentalCity(candidatePersonalRequest.getResidentalCity());
 		candidate.setResidentalDistrict(candidatePersonalRequest.getResidentalDistrict());
 		candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
@@ -124,6 +126,7 @@ public class CandidateService {
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		}
 
+		candidate.setWishWorkingCoutry(candidateJobRequest.getWishWorkingCountry());
 		candidate.setWishWorkingCity(candidateJobRequest.getWishWorkingCity());
 		candidate.setWishWorkingDistrict(candidateJobRequest.getWishWorkingDistrict());
 		candidate.setWishWorkingAddress(candidateJobRequest.getWishWorkingAddress());

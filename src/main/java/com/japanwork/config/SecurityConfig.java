@@ -115,7 +115,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_OAUTH2_LOGIN,	
                 		UrlConstant.URL_REGISTER,
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
-                		UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
+                		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
+                		UrlConstant.URL_AMW_UPLOAD_FILE,
+                		UrlConstant.URL_AMW_DELETE_FILE)
                         .permitAll()
                     .antMatchers(HttpMethod.GET, 
                 		UrlConstant.URL_COMPANY, 
@@ -125,6 +127,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CANDIDATE, 
                 		UrlConstant.URL_CANDIDATE_ID,
                 		UrlConstant.URL_BUSINESS,
+                		UrlConstant.URL_COUNTRY,
                 		UrlConstant.URL_CITY,
                 		UrlConstant.URL_DISTRICT,
                 		UrlConstant.URL_LEVEL,
@@ -162,30 +165,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.POST,
                 		UrlConstant.URL_BUSINESS,
+                		UrlConstant.URL_COUNTRY,
                 		UrlConstant.URL_CITY,
+                		UrlConstant.URL_CITIES,
                 		UrlConstant.URL_DISTRICT,
+                		UrlConstant.URL_DISTRICTS,
                 		UrlConstant.URL_LEVEL,
                 		UrlConstant.URL_CONTRACT,
                 		UrlConstant.URL_LANGUAGUE_TYPE,
                 		UrlConstant.URL_CURRENCYUNIT
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.PATCH,
-                    		UrlConstant.URL_BUSINESS,
-                    		UrlConstant.URL_CITY,
-                    		UrlConstant.URL_DISTRICT,
-                    		UrlConstant.URL_LEVEL,
-                    		UrlConstant.URL_CONTRACT,
-                    		UrlConstant.URL_LANGUAGUE_TYPE,
-                    		UrlConstant.URL_CURRENCYUNIT
+                    		UrlConstant.URL_BUSINESS_ID,
+                    		UrlConstant.URL_CITY_ID,
+                    		UrlConstant.URL_DISTRICT_ID,
+                    		UrlConstant.URL_LEVEL_ID,
+                    		UrlConstant.URL_CONTRACT_ID,
+                    		UrlConstant.URL_LANGUAGUE_TYPE_ID,
+                    		UrlConstant.URL_CURRENCYUNIT_ID
                     		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.DELETE,
-                    		UrlConstant.URL_BUSINESS,
-                    		UrlConstant.URL_CITY,
-                    		UrlConstant.URL_DISTRICT,
-                    		UrlConstant.URL_LEVEL,
-                    		UrlConstant.URL_CONTRACT,
+                    		UrlConstant.URL_BUSINESS_ID,
+                    		UrlConstant.URL_CITY_ID,
+                    		UrlConstant.URL_DISTRICT_ID,
+                    		UrlConstant.URL_LEVEL_ID,
+                    		UrlConstant.URL_CONTRACT_ID,
                     		UrlConstant.URL_LANGUAGUE_TYPE,
-                    		UrlConstant.URL_CURRENCYUNIT
+                    		UrlConstant.URL_CURRENCYUNIT_ID
                     		).hasRole("ADMIN")
                     .anyRequest()
                         .authenticated()

@@ -47,6 +47,11 @@ public class Candidate {
 	@Column(name="marital")
 	private String marital;
 	
+	@JsonProperty("residental_country")
+	@ManyToOne
+    @JoinColumn(name = "residental_country_id")
+    private Country residentalCoutry;
+	
 	@JsonProperty("residental_city")
 	@ManyToOne
     @JoinColumn(name = "residental_city_id")
@@ -70,6 +75,11 @@ public class Candidate {
     @JsonProperty("japanese_level")
     @Column(name="japanese_level")
     private int japaneseLevel;
+    
+    @JsonProperty("wish_working_country")
+	@ManyToOne
+    @JoinColumn(name = "wish_working_country_id")
+    private Country wishWorkingCoutry;
     
     @JsonProperty("wish_working_city")
     @ManyToOne
@@ -185,6 +195,14 @@ public class Candidate {
 		this.marital = marital;
 	}
 
+	public Country getResidentalCoutry() {
+		return residentalCoutry;
+	}
+
+	public void setResidentalCoutry(Country residentalCoutry) {
+		this.residentalCoutry = residentalCoutry;
+	}
+	
 	public City getResidentalCity() {
 		return residentalCity;
 	}
@@ -231,6 +249,14 @@ public class Candidate {
 
 	public void setJapaneseLevel(int japaneseLevel) {
 		this.japaneseLevel = japaneseLevel;
+	}
+
+	public Country getWishWorkingCoutry() {
+		return wishWorkingCoutry;
+	}
+
+	public void setWishWorkingCoutry(Country wishWorkingCoutry) {
+		this.wishWorkingCoutry = wishWorkingCoutry;
 	}
 
 	public City getWishWorkingCity() {
@@ -355,8 +381,8 @@ public class Candidate {
 	}
 
 	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital,
-			City residentalCity, District residentalDistrict, String residentalAddres, String avatar,
-			String introduction, int japaneseLevel, City wishWorkingCity,
+			Country residentalCoutry, City residentalCity, District residentalDistrict, String residentalAddres,
+			String avatar, String introduction, int japaneseLevel, Country wishWorkingCoutry, City wishWorkingCity,
 			District wishWorkingDistrict, String wishWorkingAddress, Business wishBusiness, Level wishLevel,
 			Contract wishContract, float wishSalary, Set<Academy> academies, Set<Experience> experiences,
 			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createDate,
@@ -368,12 +394,14 @@ public class Candidate {
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.marital = marital;
+		this.residentalCoutry = residentalCoutry;
 		this.residentalCity = residentalCity;
 		this.residentalDistrict = residentalDistrict;
 		this.residentalAddres = residentalAddres;
 		this.avatar = avatar;
 		this.introduction = introduction;
 		this.japaneseLevel = japaneseLevel;
+		this.wishWorkingCoutry = wishWorkingCoutry;
 		this.wishWorkingCity = wishWorkingCity;
 		this.wishWorkingDistrict = wishWorkingDistrict;
 		this.wishWorkingAddress = wishWorkingAddress;

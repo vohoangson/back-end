@@ -3,6 +3,9 @@ spring:
         url: jdbc:postgresql://103.81.84.160:5432/japanwork
         username: postgres
         password: japanwork2202
+        #url: jdbc:postgresql://localhost:5432/japanwork
+        #username: postgres
+        #password: phunv143
 
     jpa:
         show-sql: true
@@ -60,3 +63,9 @@ app:
       - http://localhost:8080/oauth2/login
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
+amazonProperties:
+  url: https://510514024546.signin.aws.amazon.com
+  region: us-east-1
+  accessKey: AKIAXNXIB2BRHJTCC54U
+  secretKey: 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
+  bucketName: amazon.japanwork

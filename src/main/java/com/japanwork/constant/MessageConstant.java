@@ -12,11 +12,12 @@ public class MessageConstant {
 	public static final String LOGOUT_SUCCESS = "Logout successfully";
 	public static final String LOGIN_FAIL = "Incorrect email or password";
 	public static final String DELETE = "Delete";
-	public static final String DEL_SUCCESS = "Success";
+	public static final String DEL_SUCCESS = "Successfully";
 	public static final String DEL_FAIL = "Fail";
 	public static final String UN_DELETE = "UnDelete";
-	public static final String UN_DEL_SUCCESS = "Success";
+	public static final String UN_DEL_SUCCESS = "Successfully";
 	public static final String UN_DEL_FAIL = "Fail";
+	public static final String DELETE_FILE_AWS = "Delete file on Amazon Web Service:";
 	public static final String STATUS_TRANSLATE_UNTRANSLATE  = "untranslated";
 	
 }

@@ -12,6 +12,7 @@ import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.Company;
 import com.japanwork.model.Contract;
+import com.japanwork.model.Country;
 import com.japanwork.model.CurrencyUnit;
 import com.japanwork.model.District;
 import com.japanwork.model.Level;
@@ -41,6 +42,9 @@ public class JobRequest {
 	private int japaneseLevel;
 	
 	private String description;
+	
+	@NotNull(message = "\"country\":\"Country is required!\"")
+	private Country country;
 	
 	@NotNull(message = "\"city\":\"City is required!\"")
 	private City city;
@@ -113,6 +117,12 @@ public class JobRequest {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Country getCountry() {
+		return country;
+	}
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 	public City getCity() {
 		return city;

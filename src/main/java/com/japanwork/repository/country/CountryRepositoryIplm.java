@@ -1,4 +1,4 @@
-package com.japanwork.repository.city;
+package com.japanwork.repository.country;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,34 +11,34 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.City;
+import com.japanwork.model.Country;
 
-@Repository
 @Transactional
-public class CityRepositoryIplm implements CityRepository{
+@Repository
+public class CountryRepositoryIplm implements CountryRepository{
 
 	@Override
-	public List<City> findAll() {
+	public List<Country> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<City> findAll(Sort sort) {
+	public List<Country> findAll(Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<City> findAllById(Iterable<UUID> ids) {
+	public List<Country> findAllById(Iterable<UUID> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends City> List<S> saveAll(Iterable<S> entities) {
+	public <S extends Country> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
-		return saveAll(entities);
+		return null;
 	}
 
 	@Override
@@ -48,13 +48,13 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public <S extends City> S saveAndFlush(S entity) {
+	public <S extends Country> S saveAndFlush(S entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteInBatch(Iterable<City> entities) {
+	public void deleteInBatch(Iterable<Country> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,39 +66,39 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public City getOne(UUID id) {
+	public Country getOne(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends City> List<S> findAll(Example<S> example) {
+	public <S extends Country> List<S> findAll(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends City> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends Country> List<S> findAll(Example<S> example, Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<City> findAll(Pageable pageable) {
+	public Page<Country> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends City> S save(S entity) {
+	public <S extends Country> S save(S entity) {
 		// TODO Auto-generated method stub
 		return save(entity);
 	}
 
 	@Override
-	public Optional<City> findById(UUID id) {
+	public Optional<Country> findById(UUID id) {
 		// TODO Auto-generated method stub
-		return findById(id);
+		return null;
 	}
 
 	@Override
@@ -120,13 +120,13 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public void delete(City entity) {
+	public void delete(Country entity) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends City> entities) {
+	public void deleteAll(Iterable<? extends Country> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -138,45 +138,39 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public <S extends City> Optional<S> findOne(Example<S> example) {
+	public <S extends Country> Optional<S> findOne(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends City> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends Country> Page<S> findAll(Example<S> example, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends City> long count(Example<S> example) {
+	public <S extends Country> long count(Example<S> example) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public <S extends City> boolean exists(Example<S> example) {
+	public <S extends Country> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public City findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Country findByIdAndIsDelete(UUID id, boolean isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id,isDelete);
+		return findByIdAndIsDelete(id, isDelete);
 	}
 
 	@Override
-	public List<City> findAllByIsDelete(boolean isDelete) {
+	public List<Country> findAllByIsDelete(boolean isDelete) {
 		// TODO Auto-generated method stub
 		return findAllByIsDelete(isDelete);
-	}
-
-	@Override
-	public List<City> findAllByCountryIdAndIsDelete(UUID id, boolean isDelete) {
-		// TODO Auto-generated method stub
-		return findAllByCountryIdAndIsDelete(id, isDelete);
 	}
 	
 }

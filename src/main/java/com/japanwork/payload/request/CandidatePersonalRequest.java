@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.City;
+import com.japanwork.model.Country;
 import com.japanwork.model.District;
 
 public class CandidatePersonalRequest {	
@@ -23,6 +24,10 @@ public class CandidatePersonalRequest {
 	
 	@NotBlank(message = "\"marital\":\"Marital is required!\"")
 	private String marital;
+	
+	@NotNull(message = "\"residental_country\":\"Country is required!\"")
+	@JsonProperty("residental_country")
+    private Country residentalCountry;
 	
 	@NotNull(message = "\"residental_city\":\"City is required!\"")
 	@JsonProperty("residental_city")
@@ -65,6 +70,14 @@ public class CandidatePersonalRequest {
 
 	public void setMarital(String marital) {
 		this.marital = marital;
+	}
+	
+	public Country getResidentalCountry() {
+		return residentalCountry;
+	}
+
+	public void setResidentalCountry(Country residentalCountry) {
+		this.residentalCountry = residentalCountry;
 	}
 
 	public City getResidentalCity() {

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
+import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
 
@@ -81,5 +83,17 @@ public class UserService {
 	
 	public User findById(UUID id) {
 		return userRepository.findById(id).get();
+	}
+	
+	public BaseDataResponse deleteUserByEmail(String email) {
+		userRepository.delete(this.findByEmail(email).get());
+		BaseMessageResponse message;
+		if(this.findByEmail(email).get() == null) {
+			message = new BaseMessageResponse("Delete user by email:" + email, "Success!");
+		} else {
+			message = new BaseMessageResponse("Delete user by email:" + email, "Fail!");
+		}
+		BaseDataResponse response = new BaseDataResponse(message);
+		return response;
 	}
 }

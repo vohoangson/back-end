@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
+import com.japanwork.model.Country;
 import com.japanwork.model.District;
 public class CompanyRequest {
 	@NotBlank(message = "\"name\":\"Name is required!\"")
@@ -15,6 +16,8 @@ public class CompanyRequest {
 	private int scale;
 	@NotNull(message = "\"businesses\":\"Businesses is required!\"")
 	private Set<Business> businesses;
+	@NotNull(message = "\"country\":\"Country is required!\"")
+	private Country country;
 	@NotNull(message = "\"city\":\"City is required!\"")
 	private City city;
 	@NotNull(message = "\"district\":\"District is required!\"")
@@ -43,6 +46,12 @@ public class CompanyRequest {
 	}
 	public void setBusinesses(Set<Business> businesses) {
 		this.businesses = businesses;
+	}
+	public Country getCountry() {
+		return country;
+	}
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 	public City getCity() {
 		return city;

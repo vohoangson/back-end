@@ -10,4 +10,5 @@ import com.japanwork.model.City;
 public interface CityRepository extends JpaRepository<City, UUID>{
 	public City findByIdAndIsDelete(UUID id, boolean isDelete);
 	public List<City> findAllByIsDelete(boolean isDelete);
+	public List<City> findAllByCountryIdAndIsDelete(UUID id, boolean isDelete);
 }

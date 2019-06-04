@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,6 +21,10 @@ public class City {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
+	
+	@OneToOne
+    @JoinColumn(name = "country_id")
+	private Country country;
 	
 	@JsonProperty("name_vi")
 	@Column(name="name_vi")
@@ -49,6 +55,14 @@ public class City {
 
 	public void setId(UUID id) {
 		this.id = id;
+	}
+	
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 	public String getNameVi() {
@@ -100,10 +114,11 @@ public class City {
 		this.isDelete = isDelete;
 	}
 
-	public City(UUID id, String nameVi, String nameJa, String description, Timestamp createDate,
+	public City(UUID id, Country country, String nameVi, String nameJa, String description, Timestamp createDate,
 			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
+		this.country = country;
 		this.nameVi = nameVi;
 		this.nameJa = nameJa;
 		this.description = description;

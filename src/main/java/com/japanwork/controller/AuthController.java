@@ -154,4 +154,9 @@ public class AuthController {
     	}
     	        
     }
+    
+    @GetMapping(value = UrlConstant.URL_DELETE_ACCOUNT)
+    public BaseDataResponse deleteUserByEmail(@RequestParam("email") String email) {
+    	return userService.deleteUserByEmail(email);    
+    }
 }
