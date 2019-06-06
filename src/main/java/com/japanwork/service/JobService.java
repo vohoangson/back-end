@@ -35,26 +35,9 @@ public class JobService {
 	}
 	
 	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
-		Page<Job> pageJob = jobRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setCurrentPage(page);
-		
-		if(page == 0) {
-			pageInfo.setPrevPage(0);
-		} else {
-			pageInfo.setPrevPage(page - 1);
-		}
-		
-		if(page == pageJob.getTotalPages()) {
-			pageInfo.setNextPage(page);
-		} else {
-			pageInfo.setNextPage(page + 1);
-		}
-		
-		pageInfo.setTotalPage(pageJob.getTotalPages());
-		pageInfo.setTotalCount(pageJob.getTotalElements());
-		
-		BaseDataMetaResponse response = new BaseDataMetaResponse(pageJob.getContent(), pageInfo);
+		Page<Job> pages = jobRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		BaseDataMetaResponse response = new BaseDataMetaResponse(pages.getContent(), pageInfo);
 		return response;
 	}
 	

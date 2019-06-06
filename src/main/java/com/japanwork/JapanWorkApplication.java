@@ -14,9 +14,7 @@ import com.japanwork.config.AppProperties;
 @EnableConfigurationProperties(AppProperties.class)
 public class JapanWorkApplication {
 
-	public static void main(String[] args) {
-		//SpringApplication.run(JapanWorkApplication.class, args);
-		
+	public static void main(String[] args) {		
 		ApplicationContext ctx = SpringApplication.run(JapanWorkApplication.class, args);
 
         DispatcherServlet dispatcherServlet = (DispatcherServlet)ctx.getBean("dispatcherServlet");

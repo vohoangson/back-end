@@ -195,7 +195,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     		UrlConstant.URL_CURRENCYUNIT_ID
                     		).hasRole("ADMIN")
                     .anyRequest()
-                        .authenticated()
+                        .permitAll()
                     .and()
                 .oauth2Login()
                     .authorizationEndpoint()

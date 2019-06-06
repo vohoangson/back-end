@@ -51,6 +51,24 @@ public class PageInfo {
 		this.totalPage = totalPage;
 		this.totalCount = totalCount;
 	}
+	
+	public PageInfo(int currentPage, int totalPage, long totalCount) {
+		super();
+		this.currentPage = currentPage;
+		if(currentPage == 1) {
+			this.prevPage = currentPage;
+		} else {
+			this.prevPage = currentPage - 1;
+		}
+		
+		if(currentPage == totalPage) {
+			this.nextPage = totalPage;
+		} else {
+			this.nextPage = totalPage;
+		}
+		this.totalPage = totalPage;
+		this.totalCount = totalCount;
+	}
 	public PageInfo() {
 		super();
 	}

@@ -137,26 +137,9 @@ public class CompanyService {
 	}
 	
 	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
-		Page<Company> pageCompany = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setCurrentPage(page);
-		
-		if(page == 0) {
-			pageInfo.setPrevPage(0);
-		} else {
-			pageInfo.setPrevPage(page - 1);
-		}
-		
-		if(page == pageCompany.getTotalPages()) {
-			pageInfo.setNextPage(page);
-		} else {
-			pageInfo.setNextPage(page + 1);
-		}
-		
-		pageInfo.setTotalPage(pageCompany.getTotalPages());
-		pageInfo.setTotalCount(pageCompany.getTotalElements());
-		
-		BaseDataMetaResponse response = new BaseDataMetaResponse(pageCompany.getContent(), pageInfo);
+		Page<Company> pages = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		BaseDataMetaResponse response = new BaseDataMetaResponse(pages.getContent(), pageInfo);
 		return response;
 	}
 }
