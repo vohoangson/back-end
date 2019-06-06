@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
 import com.japanwork.payload.response.BaseDataResponse;
@@ -71,9 +73,8 @@ public class UserService {
     }
 	
 	public BaseDataResponse getUser(UserPrincipal userPrincipal) {
-        User user = new User();
-        user.setEmail(userPrincipal.getEmail());
-        user.setName(userPrincipal.getName());
+        User user = userRepository.findById(userPrincipal.getId())
+        		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));;
         BaseDataResponse response = new BaseDataResponse(user);
         return response;
     }
