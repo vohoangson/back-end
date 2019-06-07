@@ -65,14 +65,22 @@ public class Job {
     private String address;
     
     @Column(name="description")
-    private String description;
+    private String desc;
     
-    @JsonProperty("skill_requirement")
-    @Column(name="skill_requirement")
-    private String skillRequirement;
+    @JsonProperty("required_education")
+    @Column(name="required_education")
+    private String requiredEducation;
     
-    @Column(name="benefit")
-    private String benefit;
+    @JsonProperty("required_experience")
+    @Column(name="required_experience")
+    private String requiredExperience;
+    
+    @JsonProperty("required_language")
+    @Column(name="required_language")
+    private String requiredLanguage;
+    
+    @Column(name="benefits")
+    private String benefits;
     
     @JsonProperty("japanese_level_requirement")
     @Column(name="japanese_level_requirement")
@@ -81,11 +89,6 @@ public class Job {
     @JsonProperty("application_deadline")
     @Column(name="application_deadline")
     private Date applicationDeadline;
-    
-    @JsonProperty("currency_unit")
-    @ManyToOne
-    @JoinColumn(name = "currency_unit_id")
-    private CurrencyUnit currencyUnit;
     
     @JsonProperty("min_salary")
     @Column(name="min_salary")
@@ -190,28 +193,44 @@ public class Job {
 		this.address = address;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
-	public String getSkillRequirement() {
-		return skillRequirement;
+	public String getRequiredEducation() {
+		return requiredEducation;
 	}
 
-	public void setSkillRequirement(String skillRequirement) {
-		this.skillRequirement = skillRequirement;
+	public void setRequiredEducation(String requiredEducation) {
+		this.requiredEducation = requiredEducation;
 	}
 
-	public String getBenefit() {
-		return benefit;
+	public String getRequiredExperience() {
+		return requiredExperience;
 	}
 
-	public void setBenefit(String benefit) {
-		this.benefit = benefit;
+	public void setRequiredExperience(String requiredExperience) {
+		this.requiredExperience = requiredExperience;
+	}
+
+	public String getRequiredLanguage() {
+		return requiredLanguage;
+	}
+
+	public void setRequiredLanguage(String requiredLanguage) {
+		this.requiredLanguage = requiredLanguage;
+	}
+
+	public String getBenefits() {
+		return benefits;
+	}
+
+	public void setBenefits(String benefits) {
+		this.benefits = benefits;
 	}
 
 	public int getJapaneseLevelRequirement() {
@@ -228,14 +247,6 @@ public class Job {
 
 	public void setApplicationDeadline(Date applicationDeadline) {
 		this.applicationDeadline = applicationDeadline;
-	}
-
-	public CurrencyUnit getCurrencyUnit() {
-		return currencyUnit;
-	}
-
-	public void setCurrencyUnit(CurrencyUnit currencyUnit) {
-		this.currencyUnit = currencyUnit;
 	}
 
 	public float getMinSalary() {
@@ -288,10 +299,10 @@ public class Job {
 	}
 
 	public Job(UUID id, String name, Company company, Set<Business> businesses, Contract contract, Level level,
-			Country country, City city, District district, String address, String description, String skillRequirement,
-			String benefit, int japaneseLevelRequirement, Date applicationDeadline, CurrencyUnit currencyUnit,
-			float minSalary, float maxSalary, String status, Timestamp createDate, Timestamp updateDate,
-			boolean isDelete) {
+			Country country, City city, District district, String address, String desc, String requiredEducation,
+			String requiredExperience, String requiredLanguage, String benefits, int japaneseLevelRequirement,
+			Date applicationDeadline, float minSalary, float maxSalary, String status, Timestamp createDate,
+			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -303,12 +314,13 @@ public class Job {
 		this.city = city;
 		this.district = district;
 		this.address = address;
-		this.description = description;
-		this.skillRequirement = skillRequirement;
-		this.benefit = benefit;
+		this.desc = desc;
+		this.requiredEducation = requiredEducation;
+		this.requiredExperience = requiredExperience;
+		this.requiredLanguage = requiredLanguage;
+		this.benefits = benefits;
 		this.japaneseLevelRequirement = japaneseLevelRequirement;
 		this.applicationDeadline = applicationDeadline;
-		this.currencyUnit = currencyUnit;
 		this.minSalary = minSalary;
 		this.maxSalary = maxSalary;
 		this.status = status;

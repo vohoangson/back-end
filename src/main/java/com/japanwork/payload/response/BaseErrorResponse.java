@@ -1,7 +1,5 @@
 package com.japanwork.payload.response;
 
-import java.util.List;
-
 public class BaseErrorResponse {
 	private String code;
 	private Object message;

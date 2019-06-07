@@ -60,8 +60,7 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(token);
             return ResponseEntity.ok(new BaseDataResponse(authResponse));
         } catch(BadCredentialsException e){
-            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.LOGIN_FAIL);
-            return ResponseEntity.badRequest().body(new BaseDataResponse(baseMessageResponse));
+            return ResponseEntity.badRequest().body(new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.LOGIN_FAIL));
         }
     }
 
