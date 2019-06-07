@@ -26,9 +26,9 @@ public class CurrencyUnitService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		CurrencyUnit currencyUnit = new CurrencyUnit();
-		currencyUnit.setNameJa(currencyUnitRequest.getNameJa());
-		currencyUnit.setNameVi(currencyUnitRequest.getNameVi());
-		currencyUnit.setDescription(currencyUnitRequest.getDescription());
+		currencyUnit.setJa(currencyUnitRequest.getJa());
+		currencyUnit.setVi(currencyUnitRequest.getVi());
+		currencyUnit.setDesc(currencyUnitRequest.getDesc());
 		currencyUnit.setCreateDate(timestamp);
 		currencyUnit.setUpdateDate(timestamp);
 		currencyUnit.setDelete(false);

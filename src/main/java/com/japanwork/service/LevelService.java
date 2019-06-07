@@ -42,9 +42,9 @@ public class LevelService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Level level = new Level();
-		level.setNameJa(levelRequest.getNameJa());
-		level.setNameVi(levelRequest.getNameVi());
-		level.setDescription(levelRequest.getDescription());
+		level.setJa(levelRequest.getJa());
+		level.setVi(levelRequest.getVi());
+		level.setDesc(levelRequest.getDesc());
 		level.setCreateDate(timestamp);
 		level.setUpdateDate(timestamp);
 		level.setDelete(false);

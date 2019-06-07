@@ -26,9 +26,9 @@ public class BusinessService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Business businessType = new Business();
-		businessType.setNameJa(businessTypeRequest.getNameJa());
-		businessType.setNameVi(businessTypeRequest.getNameVi());
-		businessType.setDescription(businessTypeRequest.getDescription());
+		businessType.setJa(businessTypeRequest.getJa());
+		businessType.setVi(businessTypeRequest.getVi());
+		businessType.setDesc(businessTypeRequest.getDesc());
 		businessType.setCreateDate(timestamp);
 		businessType.setUpdateDate(timestamp);
 		businessType.setDelete(false);

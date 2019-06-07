@@ -26,9 +26,9 @@ public class LanguageCertificateTypeService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		LanguageCertificateType LanguageCertificateType = new LanguageCertificateType();
-		LanguageCertificateType.setNameJa(languageCertificateTypeRequest.getNameJa());
-		LanguageCertificateType.setNameVi(languageCertificateTypeRequest.getNameVi());
-		LanguageCertificateType.setDescription(languageCertificateTypeRequest.getDescription());
+		LanguageCertificateType.setJa(languageCertificateTypeRequest.getJa());
+		LanguageCertificateType.setVi(languageCertificateTypeRequest.getVi());
+		LanguageCertificateType.setDesc(languageCertificateTypeRequest.getDesc());
 		LanguageCertificateType.setCreateDate(timestamp);
 		LanguageCertificateType.setUpdateDate(timestamp);
 		LanguageCertificateType.setDelete(false);

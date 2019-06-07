@@ -50,9 +50,9 @@ public class CityService {
 		
 		City city = new City();
 		city.setCountry(cityRequest.getCountry());
-		city.setNameJa(cityRequest.getNameJa());
-		city.setNameVi(cityRequest.getNameVi());
-		city.setDescription(cityRequest.getDescription());
+		city.setJa(cityRequest.getJa());
+		city.setVi(cityRequest.getVi());
+		city.setDesc(cityRequest.getDesc());
 		city.setCreateDate(timestamp);
 		city.setUpdateDate(timestamp);
 		city.setDelete(false);
@@ -71,9 +71,9 @@ public class CityService {
 			City obj = new City();
 			
 			obj.setCountry(cityRequest.getCountry());
-			obj.setNameJa(cityRequest.getNameJa());
-			obj.setNameVi(cityRequest.getNameVi());
-			obj.setDescription(cityRequest.getDescription());
+			obj.setJa(cityRequest.getJa());
+			obj.setVi(cityRequest.getVi());
+			obj.setDesc(cityRequest.getDesc());
 			obj.setCreateDate(timestamp);
 			obj.setUpdateDate(timestamp);
 			obj.setDelete(false);

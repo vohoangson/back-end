@@ -75,17 +75,15 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataResponse updatePersonal(CandidatePersonalRequest candidatePersonalRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse updatePersonal(CandidatePersonalRequest candidatePersonalRequest, UUID id, 
+			UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Candidate candidate = new Candidate();
 		
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
-			candidate = candidateRepository.findByIdAndIsDelete(id, false);
-			if(candidate == null) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
-			}
+			candidate = this.findCandidateByIdAndIsDelete(id);
 		} else {
 			candidate = candidateRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
@@ -117,10 +115,7 @@ public class CandidateService {
 		Candidate candidate = new Candidate();
 		
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
-			candidate = candidateRepository.findByIdAndIsDelete(id, false);
-			if(candidate == null) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
-			}
+			candidate = this.findCandidateByIdAndIsDelete(id);
 		} else {
 			candidate = candidateRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
@@ -295,6 +290,9 @@ public class CandidateService {
 	
 	public Candidate findCandidateByIdAndIsDelete(UUID id){
 		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+		if(candidate == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+		}
 		return candidate;
 	}
 	

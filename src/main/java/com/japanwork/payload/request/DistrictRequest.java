@@ -1,16 +1,12 @@
 package com.japanwork.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.City;
 
 public class DistrictRequest {
 	private City city;
-	@JsonProperty("name_vi")
-	private String nameVi;
-	@JsonProperty("name_ja")
-	private String nameJa;
-	private String description;
-	
+	private String vi;
+	private String ja;
+	private String desc;
 	
 	public City getCity() {
 		return city;
@@ -18,22 +14,22 @@ public class DistrictRequest {
 	public void setCity(City city) {
 		this.city = city;
 	}
-	public String getNameVi() {
-		return nameVi;
+	public String getVi() {
+		return vi;
 	}
-	public void setNameVi(String nameVi) {
-		this.nameVi = nameVi;
+	public void setVi(String vi) {
+		this.vi = vi;
 	}
-	public String getNameJa() {
-		return nameJa;
+	public String getJa() {
+		return ja;
 	}
-	public void setNameJa(String nameJa) {
-		this.nameJa = nameJa;
+	public void setJa(String ja) {
+		this.ja = ja;
 	}
-	public String getDescription() {
-		return description;
+	public String getDesc() {
+		return desc;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 }

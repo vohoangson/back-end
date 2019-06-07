@@ -41,9 +41,9 @@ public class ContractService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Contract contract = new Contract();
-		contract.setNameJa(contractRequest.getNameJa());
-		contract.setNameVi(contractRequest.getNameVi());
-		contract.setDescription(contractRequest.getDescription());
+		contract.setJa(contractRequest.getJa());
+		contract.setVi(contractRequest.getVi());
+		contract.setDesc(contractRequest.getDesc());
 		contract.setCreateDate(timestamp);
 		contract.setUpdateDate(timestamp);
 		contract.setDelete(false);

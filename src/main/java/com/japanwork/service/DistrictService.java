@@ -28,9 +28,9 @@ public class DistrictService {
 		
 		District district = new District();
 		district.setCity(district.getCity());
-		district.setNameJa(districtRequest.getNameJa());
-		district.setNameVi(districtRequest.getNameVi());
-		district.setDescription(districtRequest.getDescription());
+		district.setJa(districtRequest.getJa());
+		district.setVi(districtRequest.getVi());
+		district.setDesc(districtRequest.getDesc());
 		district.setCreateDate(timestamp);
 		district.setUpdateDate(timestamp);
 		district.setDelete(false);
@@ -68,9 +68,9 @@ public class DistrictService {
 			District obj = new District();
 			
 			obj.setCity(districtRequest.getCity());
-			obj.setNameJa(districtRequest.getNameJa());
-			obj.setNameVi(districtRequest.getNameVi());
-			obj.setDescription(districtRequest.getDescription());
+			obj.setJa(districtRequest.getJa());
+			obj.setVi(districtRequest.getVi());
+			obj.setDesc(districtRequest.getDesc());
 			obj.setCreateDate(timestamp);
 			obj.setUpdateDate(timestamp);
 			obj.setDelete(false);

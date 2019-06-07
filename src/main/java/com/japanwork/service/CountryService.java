@@ -41,9 +41,9 @@ public class CountryService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		Country country = new Country();
-		country.setNameJa(countryRequest.getNameJa());
-		country.setNameVi(countryRequest.getNameVi());
-		country.setDescription(countryRequest.getDescription());
+		country.setJa(countryRequest.getJa());
+		country.setVi(countryRequest.getVi());
+		country.setDesc(countryRequest.getDesc());
 		country.setCreateDate(timestamp);
 		country.setUpdateDate(timestamp);
 		country.setDelete(false);;

@@ -1,30 +1,25 @@
 package com.japanwork.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class LevelRequest {
-	@JsonProperty("name_vi")
-	private String nameVi;
-	@JsonProperty("name_ja")
-	private String nameJa;
-	private String description;
-	
-	public String getNameVi() {
-		return nameVi;
+	private String vi;
+	private String ja;
+	private String desc;
+	public String getVi() {
+		return vi;
 	}
-	public void setNameVi(String nameVi) {
-		this.nameVi = nameVi;
+	public void setVi(String vi) {
+		this.vi = vi;
 	}
-	public String getNameJa() {
-		return nameJa;
+	public String getJa() {
+		return ja;
 	}
-	public void setNameJa(String nameJa) {
-		this.nameJa = nameJa;
+	public void setJa(String ja) {
+		this.ja = ja;
 	}
-	public String getDescription() {
-		return description;
+	public String getDesc() {
+		return desc;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 }

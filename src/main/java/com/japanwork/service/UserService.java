@@ -198,6 +198,11 @@ public class UserService {
 			BaseDataResponse response = new BaseDataResponse(message);
 	        return response;
 		} else {
+			ForgetPassword fp = forgetPasswordRepository.findByUserId(user.getId());
+			if(fp != null) {
+				forgetPasswordRepository.delete(fp);
+			}
+			
 			String code = generateCode();
 			
 			Date date = new Date();

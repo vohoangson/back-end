@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "city")
 public class City {
@@ -26,16 +25,14 @@ public class City {
     @JoinColumn(name = "country_id")
 	private Country country;
 	
-	@JsonProperty("name_vi")
 	@Column(name="name_vi")
-    private String nameVi;
+    private String vi;
     
-	@JsonProperty("name_ja")
     @Column(name="name_ja")
-    private String nameJa;
+    private String ja;
     
     @Column(name="description")
-    private String description;
+    private String desc;
     
     @JsonIgnore
     @Column(name="create_date")
@@ -65,28 +62,28 @@ public class City {
 		this.country = country;
 	}
 
-	public String getNameVi() {
-		return nameVi;
+	public String getVi() {
+		return vi;
 	}
 
-	public void setNameVi(String nameVi) {
-		this.nameVi = nameVi;
+	public void setVi(String vi) {
+		this.vi = vi;
 	}
 
-	public String getNameJa() {
-		return nameJa;
+	public String getJa() {
+		return ja;
 	}
 
-	public void setNameJa(String nameJa) {
-		this.nameJa = nameJa;
+	public void setJa(String ja) {
+		this.ja = ja;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public Timestamp getCreateDate() {
@@ -114,14 +111,14 @@ public class City {
 		this.isDelete = isDelete;
 	}
 
-	public City(UUID id, Country country, String nameVi, String nameJa, String description, Timestamp createDate,
-			Timestamp updateDate, boolean isDelete) {
+	public City(UUID id, Country country, String vi, String ja, String desc, Timestamp createDate, Timestamp updateDate,
+			boolean isDelete) {
 		super();
 		this.id = id;
 		this.country = country;
-		this.nameVi = nameVi;
-		this.nameJa = nameJa;
-		this.description = description;
+		this.vi = vi;
+		this.ja = ja;
+		this.desc = desc;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;

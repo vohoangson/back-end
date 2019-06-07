@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,7 +76,7 @@ public class JobService {
 		return response;
 	}
 	
-	public BaseDataResponse update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -84,6 +86,13 @@ public class JobService {
 			job = jobRepository.findByIdAndIsDelete(id, false);
 			if(job == null) {
 				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			}
+			
+			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+				httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
+				BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
+				return response;
 			}
 		} else {
 			job = jobRepository.findById(id)
@@ -115,11 +124,22 @@ public class JobService {
 		return response;
 	}
 	
-	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
+	public BaseDataResponse del(UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) throws ResourceNotFoundException{
 		Job job = jobRepository.findByIdAndIsDelete(id, false);
+		
 		if(job == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 		}
+		
+		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
+			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+				httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
+				BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
+				return response;
+			}
+		}
+		
 		job.setDelete(true);
 		Job result = jobRepository.save(job);
 		if(result != null) {
