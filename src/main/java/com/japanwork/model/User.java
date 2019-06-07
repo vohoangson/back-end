@@ -51,7 +51,6 @@ public class User {
     @JsonProperty("provider_id")
     private String providerId;
     
-    @JsonIgnore
     private String role;
     
     @JsonIgnore

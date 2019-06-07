@@ -2,6 +2,7 @@ package com.japanwork.payload.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SignUpRequest {
@@ -17,6 +18,7 @@ public class SignUpRequest {
     private String password;
 
     @NotBlank(message = "\"role\":\"You are a business or an individual?\"")
+    @Pattern(regexp = "COMPANY|CANDIDATE",message = "\"role\":\"You are a business or an individual?\"")
     private String role;
     
     public String getName() {

@@ -90,6 +90,7 @@ public class UserService {
 	public BaseDataResponse getUser(UserPrincipal userPrincipal) {
         User user = userRepository.findById(userPrincipal.getId())
         		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+        user.setRole(user.getRole().replaceAll("ROLE_", ""));
         BaseDataResponse response = new BaseDataResponse(user);
         return response;
     }
