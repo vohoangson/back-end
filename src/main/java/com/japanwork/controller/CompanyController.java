@@ -2,6 +2,7 @@ package com.japanwork.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,8 @@ public class CompanyController {
 	
 	@PatchMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return companyService.update(companyRequest, id, userPrincipal);
+	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse){		
+		return companyService.update(companyRequest, id, userPrincipal, httpServletResponse);
 	}
 	
 	@DeleteMapping(UrlConstant.URL_COMPANY_ID)

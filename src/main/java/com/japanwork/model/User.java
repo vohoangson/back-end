@@ -2,6 +2,7 @@ package com.japanwork.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -52,6 +53,18 @@ public class User {
     
     @JsonIgnore
     private String role;
+    
+    @JsonIgnore
+    @Column(name="create_date")
+    private Timestamp createDate;
+    
+    @JsonIgnore
+    @Column(name="update_date")
+    private Timestamp updateDate;
+    
+    @JsonIgnore
+    @Column(name="is_delete")
+    private boolean isDelete;
     
     public UUID getId() {
         return id;
@@ -120,6 +133,31 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
+	public Timestamp getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Timestamp createDate) {
+		this.createDate = createDate;
+	}
+
+	public Timestamp getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Timestamp updateDate) {
+		this.updateDate = updateDate;
+	}
+	
+	@JsonIgnore
+	public boolean isDelete() {
+		return isDelete;
+	}
+
+	public void setDelete(boolean isDelete) {
+		this.isDelete = isDelete;
+	}
 
 	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
 			@NotNull AuthProvider provider, String providerId, String role) {
@@ -134,6 +172,23 @@ public class User {
 		this.role = role;
 	}
 
+	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
+			@NotNull AuthProvider provider, String providerId, String role, Timestamp createDate,
+			Timestamp updateDate, boolean isDelete) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.isEnabled = isEnabled;
+		this.password = password;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.role = role;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+		this.isDelete = isDelete;
+	}
+	
 	public User() {
 		super();
 	}

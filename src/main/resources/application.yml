@@ -64,7 +64,7 @@ app:
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
 amazonProperties:
-  url: https://510514024546.signin.aws.amazon.com
+  url: https://s3.amazonaws.com
   region: us-east-1
   accessKey: AKIAXNXIB2BRHJTCC54U
   secretKey: 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

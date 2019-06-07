@@ -12,6 +12,16 @@ public class MessageConstant {
 	public static final String REGISTER_SUCCESS = "User registered successfully";
 	public static final String LOGOUT_SUCCESS = "Logout successfully";
 	public static final String LOGIN_FAIL = "Incorrect email or password";
+	public static final String CHANGE_PASSWORD = "Change password";
+	public static final String CHANGE_PASSWORD_SUCCESS = "Change password successfully!";
+	public static final String CHANGE_PASSWORD_FAIL = "Change password failed!";
+	public static final String CHANGE_PASSWORD_NOT_CORRECT = "Old password is not correct!";
+	public static final String FORGET_PASSWORD = "Forget password";
+	public static final String RESET_FORGET_PASSWORD_SUCCESS = "We have just sent you an email to confirm the provision of a new password. Please check the mailbox!";
+	public static final String RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST = "Email does not exist!";
+	public static final String RESET_PASSWORD = "Reset password";
+	public static final String RESET_PASSWORD_SUCCESS = "Reset password successfully!";
+	public static final String RESET_PASSWORD_FAIL = "Reset password failed!";
 	public static final String DELETE = "Delete";
 	public static final String DEL_SUCCESS = "Successfully";
 	public static final String DEL_FAIL = "Fail";

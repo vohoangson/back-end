@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +56,7 @@ public class CompanyService {
 		return response;
 	}
 	
-	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -64,6 +66,12 @@ public class CompanyService {
 			company = companyRepository.findByIdAndIsDelete(id, false);
 			if(company == null) {
 				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			}
+			if(!company.getUser().getId().equals(userPrincipal.getId())) {
+				 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
+				BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
+				return response;
 			}
 		} else {
 			company = companyRepository.findById(id)

@@ -2,10 +2,7 @@ package com.japanwork.payload.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-/**
- * Created by rajeevkumarsingh on 02/08/17.
- */
+import javax.validation.constraints.Size;
 
 public class SignUpRequest {
     @NotBlank(message = "\"name\":\"Name is required!\"")
@@ -16,6 +13,7 @@ public class SignUpRequest {
     private String email;
 
     @NotBlank(message = "\"password\":\"Password is required!\"")
+    @Size(min=8,message = "\"password\":\"Password at least 8 characters!\"")
     private String password;
 
     @NotBlank(message = "\"role\":\"You are a business or an individual?\"")

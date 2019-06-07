@@ -13,6 +13,9 @@ public class UrlConstant {
 	public static final String URL_LOGOUT = "/logout";
 	public static final String URL_REGISTER = "/register";
 	public static final String URL_USER = "/user";
+	public static final String URL_USER_CHANGE_PASSWORD = "/user/change-password";
+	public static final String URL_USER_FORGET_PASSWORD = "/forget-password";
+	public static final String URL_USER_RESET_PASSWORD = "/reset-password";
 	public static final String URL_DELETE_ACCOUNT = "/user/delete";
 	public static final String URL_CONFIRM_ACCOUNT = "/confirm-account";
 	public static final String URL_RESEND_REGISTRATION_TOKEN = "/resend-registration";		
