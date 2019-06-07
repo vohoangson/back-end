@@ -59,7 +59,7 @@ public class Company {
     @Column(name="address")
     private String address;
     
-    @JsonProperty("logo_url")
+    @JsonProperty("logo")
     @Column(name="logo_url")
     private String logoUrl;
     
