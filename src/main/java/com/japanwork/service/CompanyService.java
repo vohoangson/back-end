@@ -96,6 +96,22 @@ public class CompanyService {
 		return response;
 	}
 	
+	public BaseDataResponse isDel(UUID id) throws ResourceNotFoundException{
+		Company company = companyRepository.findByIdAndIsDelete(id, false);
+		if(company == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+		}
+		company.setDelete(true);
+		Company result = companyRepository.save(company);
+		if(result != null) {
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
+			return new BaseDataResponse(deleteResponse);
+		} else {
+			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_FAIL);
+			return new BaseDataResponse(deleteResponse);
+		}
+	}
+	
 	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		if(company == null) {
@@ -149,5 +165,9 @@ public class CompanyService {
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		BaseDataMetaResponse response = new BaseDataMetaResponse(pages.getContent(), pageInfo);
 		return response;
+	}
+	
+	public Company findById(UUID id) {
+		return companyRepository.findById(id).get();
 	}
 }

@@ -20,7 +20,7 @@ public class FileHandlerController {
     }
 
     @DeleteMapping(UrlConstant.URL_AMW_DELETE_FILE)
-    public BaseDataResponse deleteFile(@RequestPart(value = "url") String fileUrl) {
+    public BaseDataResponse deleteFile(@RequestParam("url") String fileUrl) {
         return this.amazonService.deleteFileFromS3Bucket(fileUrl);
     }
 }

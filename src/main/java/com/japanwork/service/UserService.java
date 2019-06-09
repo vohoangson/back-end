@@ -27,6 +27,8 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.AuthProvider;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.ForgetPassword;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
@@ -38,7 +40,13 @@ import com.japanwork.payload.response.ApiResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
+import com.japanwork.repository.academy.AcademyRepository;
+import com.japanwork.repository.candidate.CandidateRepository;
+import com.japanwork.repository.company.CompanyRepository;
+import com.japanwork.repository.experience.ExperienceRepository;
 import com.japanwork.repository.forget_password.ForgetPasswordRepository;
+import com.japanwork.repository.job.JobRepository;
+import com.japanwork.repository.language_certificate.LanguageCertificateRepository;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
 import com.japanwork.security.CurrentUser;
@@ -52,6 +60,24 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private CompanyRepository companyRepository;
+    
+    @Autowired
+    private JobRepository jobRepository;
+    
+    @Autowired
+    private CandidateRepository candidateRepository;
+    
+    @Autowired
+    private AcademyRepository academyRepository;
+    
+    @Autowired
+    private ExperienceRepository experienceRepository;
+    
+    @Autowired
+    private LanguageCertificateRepository languageCertificateRepository;
     
     @Autowired
     private ForgetPasswordRepository forgetPasswordRepository;
@@ -154,14 +180,26 @@ public class UserService {
 	}
 	
 	public BaseDataResponse deleteUserByEmail(String email) {
-		userRepository.delete(this.findUserByEmail(email));
-		BaseMessageResponse message;
-		if(this.findUserByEmail(email) == null) {
-			message = new BaseMessageResponse("Delete user by email:" + email, "Success!");
-		} else {
-			message = new BaseMessageResponse("Delete user by email:" + email, "Fail!");
+		User user = this.findUserByEmail(email);
+		
+		Company company = companyRepository.findByUser(user);
+		if(company != null){
+			
+			jobRepository.deleteAll(jobRepository.findAllByCompany(company));
+			companyRepository.delete(company);
+		} 
+		
+		Candidate candidate = candidateRepository.findByUser(user);
+		if(candidate != null) {
+			academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getId()));
+			experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getId()));
+			languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getId()));
+			candidateRepository.delete(candidate);
 		}
-		BaseDataResponse response = new BaseDataResponse(message);
+		
+		tokenRepository.delete(tokenRepository.findByUserId(user.getId()));
+		userRepository.delete(user);
+		BaseDataResponse response = new BaseDataResponse("123123");
 		return response;
 	}
 	

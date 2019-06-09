@@ -20,7 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseErrorResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 
@@ -29,8 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
 		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_404, ex.getMessage());
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-		return new ResponseEntity<>(baseDataResponse, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
@@ -40,15 +38,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	      ex.getName() + " should be of type " + ex.getRequiredType().getName();
 	 
 	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, msg);
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-	    return new ResponseEntity<Object>(baseDataResponse, HttpStatus.BAD_REQUEST);
+	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
 		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, ex.getMessage());
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-		return new ResponseEntity<>(baseDataResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@Override
@@ -63,15 +59,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		JsonObject jsonObject = new JsonParser().parse(er).getAsJsonObject();
 		Object object = gson.fromJson(jsonObject, Object.class);
 		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, object);
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-	    return new ResponseEntity<Object>(baseDataResponse, HttpStatus.BAD_REQUEST);
+	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.ERROR_404, "Page not found!");
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-		return new ResponseEntity<Object>(baseDataResponse, HttpStatus.NOT_FOUND);
+		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.ERROR_404, MessageConstant.ERROR_404_MSG);
+		return new ResponseEntity<Object>(error, HttpStatus.NOT_FOUND);
 	}
 	
 	@Override
@@ -79,8 +73,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	  MissingServletRequestParameterException ex, HttpHeaders headers, 
 	  HttpStatus status, WebRequest request) {	     
 	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, ex.getParameterName() + " parameter is missing");
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-	    return new ResponseEntity<Object>(baseDataResponse, HttpStatus.BAD_REQUEST);
+	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@Override
@@ -93,8 +86,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	    ex.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
 	 
 	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, builder.toString());
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-	    return new ResponseEntity<Object>(baseDataResponse, HttpStatus.METHOD_NOT_ALLOWED);
+	    return new ResponseEntity<Object>(error, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 	
 	@Override
@@ -106,15 +98,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	    ex.getSupportedMediaTypes().forEach(t -> builder.append(t + ", "));
 	 
 	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, builder.toString());
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-	    return new ResponseEntity<Object>(baseDataResponse, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+	    return new ResponseEntity<Object>(error, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 	}
+	
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
 			HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, MessageConstant.INVALID_INPUT);
-		BaseDataResponse baseDataResponse = new BaseDataResponse(error);
-	    return new ResponseEntity<Object>(baseDataResponse, HttpStatus.BAD_REQUEST);
+		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, MessageConstant.INVALID_INPUT_MSG);
+	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 }

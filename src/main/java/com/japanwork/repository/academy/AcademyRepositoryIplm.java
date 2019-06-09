@@ -122,7 +122,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void delete(Academy entity) {
 		// TODO Auto-generated method stub
-		
+		delete(entity);
 	}
 
 	@Override

@@ -2,8 +2,10 @@ package com.japanwork.constant;
 
 public class MessageConstant {
 	public static final String INVALID_INPUT = "invalid_input";
-	public static final String SERVER_ERROR = "Internal Server Error";
-	public static final String ERROR_404 = "Page Not Found!";
+	public static final String INVALID_INPUT_MSG = "Invalid input!";
+	public static final String SERVER_ERROR = "internal_server_error";
+	public static final String ERROR_404 = "page_not_found";
+	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String ERROR_401 = "Unauthorized";
 	public static final String ERROR_403 = "You do not have permission to access this page!";
 	public static final String EMAIL_ALREADY = "Email address already in use.";

@@ -160,7 +160,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CANDIDATE_ID
                 		).hasRole("ADMIN")
                     .antMatchers(
-                		UrlConstant.URL_COMPANY_UNDEL,
+                		UrlConstant.URL_COMPANY_UNDEL_ID,
                 		UrlConstant.URL_JOB_UNDEL,
                 		UrlConstant.URL_CANDIDATE_UNDEL
                 		).hasRole("ADMIN")

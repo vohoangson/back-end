@@ -127,7 +127,7 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	@Override
 	public void delete(Company entity) {
 		// TODO Auto-generated method stub
-		
+		delete(entity);
 	}
 
 	@Override

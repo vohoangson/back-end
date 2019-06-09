@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.japanwork.model.Company;
 import com.japanwork.model.Job;
 
 public class JobRepositoryIplm implements JobRepository{
@@ -124,7 +125,7 @@ public class JobRepositoryIplm implements JobRepository{
 	@Override
 	public void deleteAll(Iterable<? extends Job> entities) {
 		// TODO Auto-generated method stub
-		
+		deleteAll(entities);
 	}
 
 	@Override
@@ -173,6 +174,12 @@ public class JobRepositoryIplm implements JobRepository{
 	public Page<Job> findAllByIsDelete(Pageable page, boolean isDelete) {
 		// TODO Auto-generated method stub
 		return findAllByIsDelete(page, isDelete);
+	}
+
+	@Override
+	public List<Job> findAllByCompany(Company company) {
+		// TODO Auto-generated method stub
+		return findAllByCompany(company);
 	}
 
 }
