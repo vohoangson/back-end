@@ -72,4 +72,4 @@ amazonProperties:
 server:
     servlet:
         context-path: /api  
-    port: 8090    
+    port: 8080    
