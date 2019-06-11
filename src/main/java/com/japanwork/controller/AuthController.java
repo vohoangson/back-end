@@ -19,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.payload.request.ChangePasswordRequest;
 import com.japanwork.payload.request.LoginRequest;
 import com.japanwork.payload.request.MailForgetPasswordRequest;
@@ -60,35 +61,36 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(token);
             return ResponseEntity.ok(new BaseDataResponse(authResponse));
         } catch(BadCredentialsException e){
-            return ResponseEntity.badRequest().body(new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.LOGIN_FAIL));
+            return ResponseEntity.badRequest().body(new BaseMessageResponse(MessageConstant.INVALID_INPUT, 
+            		MessageConstant.LOGIN_FAIL));
         }
     }
 
     @PostMapping(value = UrlConstant.URL_REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.EMAIL_ALREADY);
-            return ResponseEntity.badRequest().body(new BaseDataResponse(baseMessageResponse));
+            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, 
+            		MessageConstant.EMAIL_ALREADY);
+            return ResponseEntity.badRequest().body(baseMessageResponse);
         }
         return userService.registerUser(signUpRequest, request);
     }
     
     @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
-    public RedirectView confirmRegistration(@RequestParam("token") final String token) {
+    public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException{
     	final String result = userService.validateVerificationToken(token);
     	if (result.equals("valid")) {
             return new RedirectView("http://datvo.io/login");
         } else if(result.equals("expired")) {
-        	ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Fail! Confirm expired registration.", token);
-            return null;
+            throw new ResourceNotFoundException("Confirm Register Fail! Confirm expired registration.");
         } else {
-        	ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Confirm Register Fail! Registration confirmation does not exist.", token);
-            return null;
+            throw new ResourceNotFoundException("Confirm Register Fail! Registration confirmation does not exist.");
         }    	
     }
     
     @GetMapping(value = UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
-    public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken, HttpServletRequest request) {
+    public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken, 
+    		HttpServletRequest request) {
         return userService.resendRegistrationToken(existingToken, request);
     }
     
@@ -99,7 +101,7 @@ public class AuthController {
             return ResponseEntity.ok(new BaseDataResponse(authResponse));
     	}else{
     		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, error);
-    		return ResponseEntity.badRequest().body(new BaseDataResponse(baseMessageResponse));
+    		return ResponseEntity.badRequest().body(baseMessageResponse);
     	}
     	        
     }
@@ -115,7 +117,8 @@ public class AuthController {
     }
     
     @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)
-    public BaseDataResponse changePassword(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
+    public BaseDataResponse changePassword(@CurrentUser UserPrincipal userPrincipal, 
+    		@Valid @RequestBody ChangePasswordRequest changePasswordRequest) throws Exception{
     	return userService.changePassword(userPrincipal, changePasswordRequest);    
     }
     
@@ -125,7 +128,8 @@ public class AuthController {
     }
     
     @PostMapping(value = UrlConstant.URL_USER_RESET_PASSWORD)
-    public BaseDataResponse resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public BaseDataResponse resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) 
+    		throws Exception{
     	return userService.resetPassword(resetPasswordRequest);    
     }
 }

@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.UnauthorizedException;
 import com.japanwork.model.Company;
 import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
@@ -30,7 +29,7 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 	
-	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal) {
+	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal){
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -56,7 +55,8 @@ public class CompanyService {
 		return response;
 	}
 	
-	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) throws ResourceNotFoundException{
+	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) 
+			throws ResourceNotFoundException, UnauthorizedException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -68,10 +68,7 @@ public class CompanyService {
 				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 			}
 			if(!company.getUser().getId().equals(userPrincipal.getId())) {
-				 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
-				BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
-				return response;
+				throw new UnauthorizedException(MessageConstant.ERROR_403);
 			}
 		} else {
 			company = companyRepository.findById(id)
@@ -112,20 +109,8 @@ public class CompanyService {
 		}
 	}
 	
-	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
-		Company company = companyRepository.findByIdAndIsDelete(id, false);
-		if(company == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
-		}
-		company.setDelete(true);
-		Company result = companyRepository.save(company);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
+	public void del(Company company){
+		companyRepository.delete(company);
 	}
 	
 	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{

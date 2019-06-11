@@ -50,8 +50,9 @@ public class JobController {
 	
 	@PatchMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody JobRequest jobRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) {		
-		return jobService.update(jobRequest, id, userPrincipal, httpServletResponse);
+	public BaseDataResponse update(@Valid @RequestBody JobRequest jobRequest, @PathVariable UUID id, 
+			@CurrentUser UserPrincipal userPrincipal) {		
+		return jobService.update(jobRequest, id, userPrincipal);
 	}
 	
 	@DeleteMapping(UrlConstant.URL_JOB_ID)

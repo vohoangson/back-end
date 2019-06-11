@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.UnauthorizedException;
 import com.japanwork.model.Job;
 import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobRequest;
@@ -77,7 +78,8 @@ public class JobService {
 		return response;
 	}
 	
-	public BaseDataResponse update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) throws ResourceNotFoundException{
+	public BaseDataResponse update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal) 
+			throws ResourceNotFoundException, UnauthorizedException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -90,10 +92,7 @@ public class JobService {
 			}
 			
 			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-				httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
-				BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
-				return response;
+				throw new UnauthorizedException(MessageConstant.ERROR_403);
 			}
 		} else {
 			job = jobRepository.findById(id)
@@ -126,7 +125,8 @@ public class JobService {
 		return response;
 	}
 	
-	public BaseDataResponse del(UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) throws ResourceNotFoundException{
+	public BaseDataResponse del(UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) 
+			throws ResourceNotFoundException, UnauthorizedException{
 		Job job = jobRepository.findByIdAndIsDelete(id, false);
 		
 		if(job == null) {
@@ -135,10 +135,7 @@ public class JobService {
 		
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-				httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
-				BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
-				return response;
+				throw new UnauthorizedException(MessageConstant.ERROR_403);
 			}
 		}
 		

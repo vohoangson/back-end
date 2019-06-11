@@ -3,7 +3,10 @@ package com.japanwork.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +22,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.BadRequestException;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 
@@ -40,17 +44,29 @@ public class AmazonService {
         this.awsS3AudioBucket = awsS3AudioBucket;
     }
     
-    public BaseDataResponse uploadFile(MultipartFile multipartFile) {
+    public BaseDataResponse uploadFile(MultipartFile multipartFile,HttpServletResponse httpServletResponse) 
+    		throws BadRequestException{
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
-            String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + this.awsS3AudioBucket + "/" + fileName;
-            uploadFileTos3bucket(fileName, file);
+            
+            String mimeType = Files.probeContentType(file.toPath());
+            
+            if(mimeType.startsWith("image", 0)) {
+            	String fileName = generateFileName(multipartFile);
+                fileUrl = endpointUrl + "/" + this.awsS3AudioBucket + "/" + fileName;
+                uploadFileTos3bucket(fileName, file);
+            } else {
+            	file.delete();
+            	throw new BadRequestException("The file is not properly formatted!");
+            }
             file.delete();
+        } catch(BadRequestException ex) {
+        	throw ex;
         } catch (Exception e) {
            e.printStackTrace();
         }
+        
         BaseDataResponse response = new BaseDataResponse(fileUrl);
         return response;
     }
@@ -72,7 +88,7 @@ public class AmazonService {
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
-    public BaseDataResponse deleteFileFromS3Bucket(String fileUrl) {
+    public BaseDataResponse deleteFileFromS3Bucket(String fileUrl, HttpServletResponse httpServletResponse) {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
         amazonS3.deleteObject(new DeleteObjectRequest(this.awsS3AudioBucket, fileName));
         BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.DELETE_FILE_AWS, MessageConstant.DEL_SUCCESS);

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.japanwork.constant.MessageConstant;
@@ -138,6 +140,7 @@ public class CandidateService {
 		return response;
 	}
 	
+	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
 	public BaseDataResponse createExperience(CandidateExperienceRequest candidateExperienceRequest, UUID id) throws ResourceNotFoundException{		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
@@ -192,6 +195,7 @@ public class CandidateService {
 		return response;
 	}
 	
+	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
 	public BaseDataResponse updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		this.deleteExperiencer(id);
 		
@@ -288,7 +292,7 @@ public class CandidateService {
 		return response;
 	}
 	
-	public Candidate findCandidateByIdAndIsDelete(UUID id){
+	public Candidate findCandidateByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
@@ -296,7 +300,7 @@ public class CandidateService {
 		return candidate;
 	}
 	
-	public boolean checkCandidateByUser(User user) throws ResourceNotFoundException{
+	public boolean checkCandidateByUser(User user){
 		Candidate candidate = candidateRepository.findByUser(user);
 		if(candidate == null) {
 			return false;

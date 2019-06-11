@@ -2,7 +2,6 @@ package com.japanwork.controller;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.exception.BadRequestException;
+import com.japanwork.exception.UnauthorizedException;
 import com.japanwork.model.Candidate;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
 import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CandidateService;
@@ -41,12 +41,9 @@ public class CandidateController {
 	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
 	@ResponseBody
 	public BaseDataResponse createCandidatePersonal (@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
-			@CurrentUser UserPrincipal userPrincipal) {
+			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
-			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, 
-					MessageConstant.CADIDATE_ALREADY);
-			BaseDataResponse baseDataResponse = new BaseDataResponse(baseMessageResponse);
-			return baseDataResponse;
+			throw new BadRequestException(MessageConstant.CADIDATE_ALREADY);
 		}
 		
 		return candidateService.savePersonal(candidatePersonalRequest, userPrincipal);
@@ -55,9 +52,9 @@ public class CandidateController {
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_PERSONAL)
 	@ResponseBody
 	public BaseDataResponse updateCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, 
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) {
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{
 		if(!checkPermission(userPrincipal, id)) {
-			return error401(httpServletResponse);
+			throw new UnauthorizedException(MessageConstant.ERROR_403);
 		}
 		return candidateService.updatePersonal(candidatePersonalRequest, id, userPrincipal);
 	}
@@ -65,9 +62,9 @@ public class CandidateController {
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_WISH)
 	@ResponseBody
 	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateWishRequest candidateWishRequest, 
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) {
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{
 		if(!checkPermission(userPrincipal, id)) {
-			return error401(httpServletResponse);
+			throw new UnauthorizedException(MessageConstant.ERROR_403);
 		}
 		return candidateService.updateWish(candidateWishRequest, id, userPrincipal);
 	}
@@ -75,9 +72,9 @@ public class CandidateController {
 	@PostMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
 	@ResponseBody
 	public BaseDataResponse createCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) {	
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{	
 		if(!checkPermission(userPrincipal, id)) {
-			return error401(httpServletResponse);
+			throw new UnauthorizedException(MessageConstant.ERROR_403);
 		}
 		return candidateService.createExperience(candidateExperienceRequest, id);
 	}
@@ -85,9 +82,9 @@ public class CandidateController {
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
 	@ResponseBody
 	public BaseDataResponse updateCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) {	
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{	
 		if(!checkPermission(userPrincipal, id)) {
-			return error401(httpServletResponse);
+			throw new UnauthorizedException(MessageConstant.ERROR_403);
 		}
 		return candidateService.updateExperience(candidateExperienceRequest, id, userPrincipal);
 	}
@@ -126,12 +123,5 @@ public class CandidateController {
 		}
 		
 		return true;
-	}
-	
-	private BaseDataResponse error401(HttpServletResponse httpServletResponse) {
-		httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_403);
-		BaseDataResponse response = new BaseDataResponse(baseMessageResponse);		
-		return response;
 	}
 }

@@ -20,11 +20,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.japanwork.constant.EmailConstants;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.Candidate;
@@ -179,31 +182,34 @@ public class UserService {
 		return userRepository.findById(id).get();
 	}
 	
+	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
 	public BaseDataResponse deleteUserByEmail(String email) {
 		User user = this.findUserByEmail(email);
-		
-		Company company = companyRepository.findByUser(user);
-		if(company != null){
+		if(user != null) {
+			Company company = companyRepository.findByUser(user);
+			if(company != null){
+				
+				jobRepository.deleteAll(jobRepository.findAllByCompany(company));
+				companyRepository.delete(company);
+			} 
 			
-			jobRepository.deleteAll(jobRepository.findAllByCompany(company));
-			companyRepository.delete(company);
-		} 
-		
-		Candidate candidate = candidateRepository.findByUser(user);
-		if(candidate != null) {
-			academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getId()));
-			experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getId()));
-			languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getId()));
-			candidateRepository.delete(candidate);
+			Candidate candidate = candidateRepository.findByUser(user);
+			if(candidate != null) {
+				academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getId()));
+				experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getId()));
+				languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getId()));
+				candidateRepository.delete(candidate);
+			}
+			
+			tokenRepository.delete(tokenRepository.findByUserId(user.getId()));
+			userRepository.delete(user);
 		}
 		
-		tokenRepository.delete(tokenRepository.findByUserId(user.getId()));
-		userRepository.delete(user);
-		BaseDataResponse response = new BaseDataResponse("123123");
+		BaseDataResponse response = new BaseDataResponse("Delete success");
 		return response;
 	}
 	
-	public BaseDataResponse changePassword(@CurrentUser UserPrincipal userPrincipal, ChangePasswordRequest changePasswordRequest) {
+	public BaseDataResponse changePassword(@CurrentUser UserPrincipal userPrincipal, ChangePasswordRequest changePasswordRequest) throws Exception{
 		boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());
 		if(checkOldPassword) {
 			User user = userRepository.findById(userPrincipal.getId())
@@ -213,9 +219,7 @@ public class UserService {
 			User result = userRepository.save(user);
 			BaseDataResponse response;
 			if(result == null) {
-				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.CHANGE_PASSWORD, MessageConstant.CHANGE_PASSWORD_FAIL);
-				response = new BaseDataResponse(message);
-		        return response;
+				throw new Exception(MessageConstant.CHANGE_PASSWORD_FAIL);
 			} else {
 				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.CHANGE_PASSWORD, MessageConstant.CHANGE_PASSWORD_SUCCESS);
 				response = new BaseDataResponse(message);
@@ -229,12 +233,11 @@ public class UserService {
 		}
 	}
 	
-	public BaseDataResponse forgetPassword(MailForgetPasswordRequest mailForgetPasswordRequest){
+	public BaseDataResponse forgetPassword(MailForgetPasswordRequest mailForgetPasswordRequest) 
+		throws BadRequestException{
 		User user = this.findUserByEmail(mailForgetPasswordRequest.getEmail());
 		if(user == null) {
-			BaseMessageResponse message = new BaseMessageResponse(MessageConstant.FORGET_PASSWORD, MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
-			BaseDataResponse response = new BaseDataResponse(message);
-	        return response;
+			throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
 		} else {
 			ForgetPassword fp = forgetPasswordRepository.findByUserId(user.getId());
 			if(fp != null) {
@@ -262,12 +265,10 @@ public class UserService {
 		}
 	}
 	
-	public BaseDataResponse resetPassword(ResetPasswordRequest resetPasswordRequest){
+	public BaseDataResponse resetPassword(ResetPasswordRequest resetPasswordRequest) throws BadRequestException, Exception{
 		User user = this.findUserByEmail(resetPasswordRequest.getEmail());
 		if(user == null) {
-			BaseMessageResponse message = new BaseMessageResponse(MessageConstant.RESET_PASSWORD, MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
-			BaseDataResponse response = new BaseDataResponse(message);
-	        return response;
+			throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
 		} else {
 			forgetPasswordRepository.delete(forgetPasswordRepository.findByUserId(user.getId()));
 			
@@ -276,9 +277,7 @@ public class UserService {
 			
 			BaseDataResponse response;
 			if(result == null) {
-				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.RESET_PASSWORD, MessageConstant.RESET_PASSWORD_FAIL);
-				response = new BaseDataResponse(message);
-		        return response;
+				throw new Exception(MessageConstant.RESET_PASSWORD_FAIL);
 			} else {
 				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.RESET_PASSWORD, MessageConstant.RESET_PASSWORD_SUCCESS);
 				response = new BaseDataResponse(message);

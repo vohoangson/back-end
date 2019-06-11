@@ -31,6 +31,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<?> badRequestException(BadRequestException ex, WebRequest request) {
+		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<?> unauthorizedException(UnauthorizedException ex, WebRequest request) {
+		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_401, ex.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+	}
+	
 	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
 	public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
 	  MethodArgumentTypeMismatchException ex, WebRequest request) {
@@ -105,7 +117,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
 			HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, MessageConstant.INVALID_INPUT_MSG);
+		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 }

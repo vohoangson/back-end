@@ -2,7 +2,6 @@ package com.japanwork.controller;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.exception.BadRequestException;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
@@ -37,18 +37,18 @@ public class CompanyController {
 	
 	@GetMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
-	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page, @RequestParam(defaultValue = "25", name = "paging") int paging) {
+	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page, 
+			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		return companyService.findAllByIsDelete(page, paging);
 	}
 	
 	@PostMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest, @CurrentUser UserPrincipal userPrincipal) {
+	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest, 
+			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		
 		if(companyService.checkCompanyByUser(userService.findById(userPrincipal.getId()))) {
-			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.COMPANY_ALREADY);
-			BaseDataResponse baseDataResponse = new BaseDataResponse(baseMessageResponse);
-			return baseDataResponse;
+			throw new BadRequestException(MessageConstant.COMPANY_ALREADY);
 		}
 		
 		return companyService.save(companyRequest, userPrincipal);
@@ -62,8 +62,9 @@ public class CompanyController {
 	
 	@PatchMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse){		
-		return companyService.update(companyRequest, id, userPrincipal, httpServletResponse);
+	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, 
+			@CurrentUser UserPrincipal userPrincipal){		
+		return companyService.update(companyRequest, id, userPrincipal);
 	}
 	
 	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
@@ -81,6 +82,8 @@ public class CompanyController {
 	@DeleteMapping(UrlConstant.URL_COMPANY_DEL_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		return companyService.del(id);
+		companyService.del(companyService.findById(id));
+		BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
+		return new BaseDataResponse(deleteResponse);
 	}
 }
