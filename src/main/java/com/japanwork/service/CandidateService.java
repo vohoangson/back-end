@@ -27,7 +27,6 @@ import com.japanwork.payload.request.CandidatePersonalRequest;
 import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.CandidateExperienceRespone;
 import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.security.UserPrincipal;
@@ -59,7 +58,7 @@ public class CandidateService {
 		candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
 		candidate.setGender(candidatePersonalRequest.getGender());
 		candidate.setMarital(candidatePersonalRequest.getMarital());
-		candidate.setResidentalCoutry(candidatePersonalRequest.getResidentalCountry());
+		candidate.setResidentalCountry(candidatePersonalRequest.getResidentalCountry());
 		candidate.setResidentalCity(candidatePersonalRequest.getResidentalCity());
 		candidate.setResidentalDistrict(candidatePersonalRequest.getResidentalDistrict());
 		candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
@@ -95,7 +94,7 @@ public class CandidateService {
 		candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
 		candidate.setGender(candidatePersonalRequest.getGender());
 		candidate.setMarital(candidatePersonalRequest.getMarital());
-		candidate.setResidentalCoutry(candidatePersonalRequest.getResidentalCountry());
+		candidate.setResidentalCountry(candidatePersonalRequest.getResidentalCountry());
 		candidate.setResidentalCity(candidatePersonalRequest.getResidentalCity());
 		candidate.setResidentalDistrict(candidatePersonalRequest.getResidentalDistrict());
 		candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
@@ -252,34 +251,15 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataResponse del(UUID id) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
-		if(candidate == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
-		}
-		candidate.setDelete(true);
-		Candidate result = candidateRepository.save(candidate);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
-	}
-	
-	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{
+	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
-		candidate.setDelete(false);
-		Candidate result = candidateRepository.save(candidate);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
+		candidate.setDelete(isDel);
+		candidateRepository.save(candidate);
+		Candidate result = candidateRepository.findByIdAndIsDelete(id, false);
+		
+		BaseDataResponse response = new BaseDataResponse(result);	
+		return response;
 	}
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{

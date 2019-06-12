@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +18,6 @@ import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -125,13 +122,10 @@ public class JobService {
 		return response;
 	}
 	
-	public BaseDataResponse del(UUID id, UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) 
+	public BaseDataResponse isDel(UUID id, UserPrincipal userPrincipal, boolean isDel) 
 			throws ResourceNotFoundException, UnauthorizedException{
-		Job job = jobRepository.findByIdAndIsDelete(id, false);
-		
-		if(job == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
-		}
+		Job job = jobRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 		
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
@@ -139,29 +133,11 @@ public class JobService {
 			}
 		}
 		
-		job.setDelete(true);
-		Job result = jobRepository.save(job);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
-	}
-	
-	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{
-		Job job = jobRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
-		job.setDelete(false);
-		Job result = jobRepository.save(job);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
+		job.setDelete(isDel);
+		jobRepository.save(job);
+		Job result = jobRepository.findByIdAndIsDelete(id, false);
+		BaseDataResponse response = new BaseDataResponse(result);
+		return response;
 	}
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{

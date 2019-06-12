@@ -2,7 +2,6 @@ package com.japanwork.controller;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +56,13 @@ public class JobController {
 	
 	@DeleteMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, HttpServletResponse httpServletResponse) {		
-		return jobService.del(id, userPrincipal, httpServletResponse);
+	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return jobService.isDel(id, userPrincipal, true);
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_UNDEL)
 	@ResponseBody
-	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		return jobService.unDel(id);
+	public BaseDataResponse unDel(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		return jobService.isDel(id, userPrincipal, false);
 	}
 }

@@ -95,4 +95,10 @@ public class UrlConstant {
 	//UPLOAD FILE ON AMW
 	public static final String URL_AMW_UPLOAD_FILE = "/storage/upload-file";
 	public static final String URL_AMW_DELETE_FILE = "/storage/delete-file";
+	
+	//Translator
+	public static final String URL_TRANSLATOR = "/translators";
+	public static final String URL_TRANSLATOR_ID = "/translators/{id}";
+	public static final String URL_TRANSLATOR_UNDEL_ID = "/translators/undelete/{id}";
+	public static final String URL_TRANSLATOR_DEL_ID = "/translators/delete/{id}";
 }

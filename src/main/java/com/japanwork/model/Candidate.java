@@ -50,7 +50,7 @@ public class Candidate {
 	@JsonProperty("residental_country")
 	@ManyToOne
     @JoinColumn(name = "residental_country_id")
-    private Country residentalCoutry;
+    private Country residentalCountry;
 	
 	@JsonProperty("residental_city")
 	@ManyToOne
@@ -195,12 +195,12 @@ public class Candidate {
 		this.marital = marital;
 	}
 
-	public Country getResidentalCoutry() {
-		return residentalCoutry;
+	public Country getResidentalCountry() {
+		return residentalCountry;
 	}
 
-	public void setResidentalCoutry(Country residentalCoutry) {
-		this.residentalCoutry = residentalCoutry;
+	public void setResidentalCountry(Country residentalCountry) {
+		this.residentalCountry = residentalCountry;
 	}
 	
 	public City getResidentalCity() {
@@ -381,7 +381,7 @@ public class Candidate {
 	}
 
 	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital,
-			Country residentalCoutry, City residentalCity, District residentalDistrict, String residentalAddres,
+			Country residentalCountry, City residentalCity, District residentalDistrict, String residentalAddres,
 			String avatar, String introduction, int japaneseLevel, Country wishWorkingCoutry, City wishWorkingCity,
 			District wishWorkingDistrict, String wishWorkingAddress, Business wishBusiness, Level wishLevel,
 			Contract wishContract, float wishSalary, Set<Academy> academies, Set<Experience> experiences,
@@ -394,7 +394,7 @@ public class Candidate {
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 		this.marital = marital;
-		this.residentalCoutry = residentalCoutry;
+		this.residentalCountry = residentalCountry;
 		this.residentalCity = residentalCity;
 		this.residentalDistrict = residentalDistrict;
 		this.residentalAddres = residentalAddres;

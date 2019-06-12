@@ -70,13 +70,13 @@ public class CompanyController {
 	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
 	public BaseDataResponse isDel(@PathVariable UUID id) {		
-		return companyService.isDel(id);
+		return companyService.isDel(id, true);
 	}
 	
 	@GetMapping(UrlConstant.URL_COMPANY_UNDEL_ID)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		return companyService.unDel(id);
+		return companyService.isDel(id, false);
 	}
 	
 	@DeleteMapping(UrlConstant.URL_COMPANY_DEL_ID)

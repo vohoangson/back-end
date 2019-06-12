@@ -9,7 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="translator")
@@ -19,56 +25,71 @@ public class Translator {
     @Column(name="id")
 	private UUID id;
 	
-	@Column(name="account_id")
-    private UUID accountId;
+	@JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     
     @Column(name="name")
     private String name;
     
     @Column(name="gender")
-    private int gender;
+    private String gender;
     
+    @JsonProperty("date_of_birth")
     @Column(name="dob")
-    private Date dob;
+    private Date dateOfBirth;
     
-    @Column(name="living_district_id")
-    private UUID livingDistrictId;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
     
-    @Column(name="living_address")
-    private String livingAddress;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "district_id")   
+    private District district;
+    
+    @Column(name="address")
+    private String address;
     
     @Column(name="introduction")
     private String introduction;
     
     @Column(name="avatar_url")
-    private String avatarUrl;
+    private String avatar;
     
+    @JsonProperty("japanese_level")
     @Column(name="japanese_level")
     private int japaneseLevel;
     
+    @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
     
+    @JsonIgnore
     @Column(name="update_date")
     private Timestamp updateDate;
     
+    @JsonIgnore
     @Column(name="is_delete")
     private boolean isDelete;
- 
+    
 	public UUID getId() {
 		return id;
 	}
-	
 	public void setId(UUID id) {
 		this.id = id;
 	}
-
-	public UUID getAccountId() {
-		return accountId;
+	
+	public User getUser() {
+		return user;
 	}
 
-	public void setAccountId(UUID accountId) {
-		this.accountId = accountId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getName() {
@@ -79,36 +100,52 @@ public class Translator {
 		this.name = name;
 	}
 
-	public int getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(int gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
-	public Date getDob() {
-		return dob;
+	public Date getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setDob(Date dob) {
-		this.dob = dob;
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
-	public UUID getLivingDistrictId() {
-		return livingDistrictId;
+	public Country getCountry() {
+		return country;
 	}
 
-	public void setLivingDistrictId(UUID livingDistrictId) {
-		this.livingDistrictId = livingDistrictId;
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
-	public String getLivingAddress() {
-		return livingAddress;
+	public City getCity() {
+		return city;
 	}
 
-	public void setLivingAddress(String livingAddress) {
-		this.livingAddress = livingAddress;
+	public void setCity(City city) {
+		this.city = city;
+	}
+
+	public District getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+	
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getIntroduction() {
@@ -119,18 +156,19 @@ public class Translator {
 		this.introduction = introduction;
 	}
 
-	public String getAvatarUrl() {
-		return avatarUrl;
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setAvatarUrl(String avatarUrl) {
-		this.avatarUrl = avatarUrl;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public int getJapaneseLevel() {
 		return japaneseLevel;
 	}
-	void setJapaneseLevel(int japaneseLevel) {
+
+	public void setJapaneseLevel(int japaneseLevel) {
 		this.japaneseLevel = japaneseLevel;
 	}
 
@@ -150,34 +188,37 @@ public class Translator {
 		this.updateDate = updateDate;
 	}
 
-	public boolean getIsDelete() {
+	public boolean isDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
-		this.isDelete = isDelete;
-	}
-
-	public Translator(UUID id, UUID account_id, String name, int gender, Date dob, UUID livingDistrictId,
-			String livingAddress, String introduction, String avatarUrl, int japaneseLevel, 
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
-		super();
-		this.id = id;
-		this.accountId = account_id;
-		this.name = name;
-		this.gender = gender;
-		this.dob = dob;
-		this.livingDistrictId = livingDistrictId;
-		this.livingAddress = livingAddress;
-		this.introduction = introduction;
-		this.avatarUrl = avatarUrl;
-		this.japaneseLevel = japaneseLevel;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
+	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
 
 	public Translator() {
 		super();
+	}
+	public Translator(UUID id, User user, String name, String gender, Date dateOfBirth, Country country, City city,
+			District district, String address, String introduction, String avatar, int japaneseLevel,
+			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.name = name;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
+		this.country = country;
+		this.city = city;
+		this.district = district;
+		this.address = address;
+		this.introduction = introduction;
+		this.avatar = avatar;
+		this.japaneseLevel = japaneseLevel;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+		this.isDelete = isDelete;
 	}    
+	
+	
 }

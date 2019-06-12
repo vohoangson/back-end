@@ -18,7 +18,6 @@ import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -93,38 +92,18 @@ public class CompanyService {
 		return response;
 	}
 	
-	public BaseDataResponse isDel(UUID id) throws ResourceNotFoundException{
-		Company company = companyRepository.findByIdAndIsDelete(id, false);
-		if(company == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
-		}
-		company.setDelete(true);
-		Company result = companyRepository.save(company);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
+	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
+		Company company = companyRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+		company.setDelete(isDel);
+		companyRepository.save(company);
+		Company result = companyRepository.findByIdAndIsDelete(id, false);
+		BaseDataResponse response = new BaseDataResponse(result);	
+		return response;
 	}
 	
 	public void del(Company company){
 		companyRepository.delete(company);
-	}
-	
-	public BaseDataResponse unDel(UUID id) throws ResourceNotFoundException{
-		Company company = companyRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
-		company.setDelete(false);
-		Company result = companyRepository.save(company);
-		if(result != null) {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_SUCCESS);
-			return new BaseDataResponse(deleteResponse);
-		} else {
-			BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.UN_DELETE, MessageConstant.UN_DEL_FAIL);
-			return new BaseDataResponse(deleteResponse);
-		}
 	}
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{

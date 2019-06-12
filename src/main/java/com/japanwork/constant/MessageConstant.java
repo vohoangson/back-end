@@ -11,6 +11,7 @@ public class MessageConstant {
 	public static final String EMAIL_ALREADY = "Email address already in use.";
 	public static final String COMPANY_ALREADY = "Only one company can be created per account!";
 	public static final String CADIDATE_ALREADY = "Only one candidate can be created per account!";
+	public static final String TRANSLATOR_ALREADY = "Only one translator can be created per account!";
 	public static final String REGISTER_SUCCESS = "User registered successfully";
 	public static final String LOGOUT_SUCCESS = "Logout successfully";
 	public static final String LOGIN_FAIL = "Incorrect email or password";

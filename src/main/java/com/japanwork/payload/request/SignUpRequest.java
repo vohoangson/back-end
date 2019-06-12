@@ -17,8 +17,8 @@ public class SignUpRequest {
     @Size(min=8,message = "\"password\":\"Password at least 8 characters!\"")
     private String password;
 
-    @NotBlank(message = "\"role\":\"You are a business or an individual?\"")
-    @Pattern(regexp = "COMPANY|CANDIDATE",message = "\"role\":\"You are a business or an individual?\"")
+    @NotBlank(message = "\"role\":\"You are a business or an individual or an translator?\"")
+    @Pattern(regexp = "COMPANY|CANDIDATE|TRANSLATOR",message = "\"role\":\"You are a business or an individual or an translator?\"")
     private String role;
     
     public String getName() {

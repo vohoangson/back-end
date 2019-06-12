@@ -105,13 +105,13 @@ public class CandidateController {
 	@DeleteMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		return candidateService.del(id);
+		return candidateService.isDel(id, true);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		return candidateService.unDel(id);
+		return candidateService.isDel(id, false);
 	}
 	
 	private boolean checkPermission(UserPrincipal userPrincipal, UUID id) {
