@@ -13,26 +13,30 @@ import com.japanwork.model.Country;
 import com.japanwork.model.District;
 
 public class TranslatorRequest {
-	@NotBlank(message = "\"name\":\"Name is required!\"")
+	@NotBlank(message = "name_translator_required")
 	private String name;
-	@NotBlank(message = "\"gender\":\"Gender is required!\"")
+	
+	@NotBlank(message = "gender_required")
 	private String gender;
-	@NotNull(message = "\"date_of_birth\":\"Date of birth is required!\"")
+	
+	@NotNull(message = "date_of_birth_required")
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
-	@NotNull(message = "\"country\":\"Country is required!\"")
+	
+	@NotNull(message = "country_required")
 	private Country country;
-	@NotNull(message = "\"city\":\"City is required!\"")
+	@NotNull(message = "city_required")
 	private City city;
-	@NotNull(message = "\"district\":\"District is required!\"")
+	@NotNull(message = "district_required")
 	private District district;
-	@NotBlank(message = "\"address\":\"Address is required!\"")
+	@NotBlank(message = "address_required")
 	private String address;
 	private String introduction;
+	@NotBlank(message = "avatar_required")
 	private String avatar;
 	
 	@JsonProperty("japanese_level")
-	@NotNull(message = "\"japanese_level\":\"Japanese level is required!\"")
+	@NotNull(message = "japanese_level_required")
 	@Min(1)
 	@Max(5)
 	private int japaneseLevel;

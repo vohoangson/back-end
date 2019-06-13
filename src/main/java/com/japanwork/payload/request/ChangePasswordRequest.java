@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ChangePasswordRequest {
 	@JsonProperty("old_password")
-	@NotBlank(message = "\"old_password\":\"Old password is required!\"")
-    @Size(min=8,message = "\"old_password\":\"Old password at least 8 characters!\"")
+	@NotBlank(message = "old_password_required")
+    @Size(min=8,message = "invalid_old_password_length")
 	private String oldPassword;
 	
 	@JsonProperty("new_password")
-	@NotBlank(message = "\"new_password\":\"New password is required!\"")
-    @Size(min=8,message = "\"new_password\":\"New password at least 8 characters!\"")
+	@NotBlank(message = "new_password_required")
+    @Size(min=8,message = "invalid_new_password_length")
 	private String newPassword;
 
 	public String getOldPassword() {

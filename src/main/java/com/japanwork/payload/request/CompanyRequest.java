@@ -11,22 +11,33 @@ import com.japanwork.model.City;
 import com.japanwork.model.Country;
 import com.japanwork.model.District;
 public class CompanyRequest {
-	@NotBlank(message = "\"name\":\"Name is required!\"")
+	@NotBlank(message = "name_company_required")
 	private String name;
+	
 	private int scale;
-	@NotNull(message = "\"businesses\":\"Businesses is required!\"")
+	
+	@NotNull(message = "businesses_required")
 	private Set<Business> businesses;
-	@NotNull(message = "\"country\":\"Country is required!\"")
+	
+	@NotNull(message ="country_required")
 	private Country country;
-	@NotNull(message = "\"city\":\"City is required!\"")
+	
+	@NotNull(message = "city_required")
 	private City city;
-	@NotNull(message = "\"district\":\"District is required!\"")
+	
+	@NotNull(message = "district_required")
 	private District district;
-	@NotBlank(message = "\"address\":\"Address is required!\"")
+	
+	@NotBlank(message = "address_required")
 	private String address;
+	
+	@NotBlank(message = "logo_required")
 	private String logo;
+	
 	@JsonProperty("cover_image")
+	@NotBlank(message = "cover_image_required")
 	private String coverImage;
+	
 	private String introduction;
 	
 	public String getName() {

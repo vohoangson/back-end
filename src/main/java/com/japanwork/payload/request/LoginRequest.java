@@ -2,16 +2,15 @@ package com.japanwork.payload.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-/**
- * Created by rajeevkumarsingh on 02/08/17.
- */
 public class LoginRequest {
-    @NotBlank(message = "\"email\":\"Email is required!\"")
-    @Email(message = "\"email\":\"Email is not correct!\"")
+    @NotBlank(message = "email_required")
+    @Email(message = "invalid_email_format")
     private String email;
     
-    @NotBlank(message = "\"password\":\"Password is required!\"")
+    @NotBlank(message = "password_required")
+    @Size(min=8,message = "invalid_password_length")
 	private String password;
 
 	public String getEmail() {

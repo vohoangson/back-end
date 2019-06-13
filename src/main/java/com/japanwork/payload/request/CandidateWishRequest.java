@@ -13,35 +13,35 @@ import com.japanwork.model.Level;
 
 public class CandidateWishRequest {
 	
-	@NotNull(message = "\"wish_working_country\":\"Country is required!\"")
+	@NotNull(message = "wish_working_country_required")
 	@JsonProperty("wish_working_country")
     private Country wishWorkingCountry;
 	
-	@NotNull(message = "\"wish_working_city\":\"City is required!\"")
+	@NotNull(message = "wish_working_city_required")
 	@JsonProperty("wish_working_city")
     private City wishWorkingCity;
 
-	@NotNull(message = "\"wish_working_district\":\"District is required!\"")
+	@NotNull(message = "wish_working_district_required")
     @JsonProperty("wish_working_district")  
     private District wishWorkingDistrict;
     
-	@NotBlank(message = "\"wish_working_address\":\"Address is required!\"")
+	@NotBlank(message = "wish_working_address_required")
     @JsonProperty("wish_working_address")
     private String wishWorkingAddress;
     
-    @NotNull(message = "\"wish_business\":\"Business is required!\"")
+    @NotNull(message = "wish_business_required")
     @JsonProperty("wish_business")
     private Business wishBusiness;
     
-    @NotNull(message = "\"wish_level\":\"Level is required!\"")
+    @NotNull(message = "wish_level_required")
     @JsonProperty("wish_level")
     private Level wishLevel;
     
-    @NotNull(message = "\"wish_contract\":\"Contract is required!\"")
+    @NotNull(message = "wish_contract_required")
     @JsonProperty("wish_contract")
     private Contract wishContract;
 
-    @NotNull(message = "\"wish_salary\":\"Salary is required!\"")
+    @NotNull(message = "wish_salary_required")
     @JsonProperty("wish_salary")
     private float wishSalary;
     

@@ -1,5 +1,11 @@
 package com.japanwork.exception;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +22,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.payload.response.BaseErrorResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
@@ -33,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> badRequestException(BadRequestException ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
+		BaseMessageResponse error = new BaseMessageResponse(ex.getCode(), ex.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 	
@@ -41,6 +44,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> unauthorizedException(UnauthorizedException ex, WebRequest request) {
 		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_401, ex.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(ServerError.class)
+	public ResponseEntity<?> serverError(ServerError ex, WebRequest request) {
+		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, ex.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
@@ -55,22 +64,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, ex.getMessage());
+		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, MessageConstant.SERVER_ERROR_MSG);
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-      HttpHeaders headers, HttpStatus status, WebRequest request) {
-		String er = "";
-		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-			er += error.getDefaultMessage() + ",";
-		}
-		er = "{" + er.substring(0, er.length()-1) + "}";
-		Gson gson = new Gson();
-		JsonObject jsonObject = new JsonParser().parse(er).getAsJsonObject();
-		Object object = gson.fromJson(jsonObject, Object.class);
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, object);
+      HttpHeaders headers, HttpStatus status, WebRequest request) {		
+		List<ObjectError> listError = ex.getBindingResult().getAllErrors();
+		String code = listError.get(listError.size()-1).getDefaultMessage();
+		String msg = "";
+		Properties prop = new Properties();
+	    InputStream input = null;
+		
+	    try {
+
+	        input = new FileInputStream("src/main/resources/validate.properties");
+
+	        // load a properties file
+	        prop.load(input);
+	        msg = prop.getProperty(code);
+	        
+	    } catch (IOException e) {
+	        ex.printStackTrace();
+	    } finally {
+	        if (input != null) {
+	            try {
+	                input.close();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+		BaseErrorResponse error = new BaseErrorResponse(code, msg);
+		
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 	

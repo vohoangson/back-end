@@ -124,11 +124,15 @@ public class CompanyService {
 		 return true;
 	}
 	
-	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
+	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
+		try {
 		Page<Company> pages = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		BaseDataMetaResponse response = new BaseDataMetaResponse(pages.getContent(), pageInfo);
 		return response;
+		} catch (IllegalArgumentException e) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
 	}
 	
 	public Company findById(UUID id) {

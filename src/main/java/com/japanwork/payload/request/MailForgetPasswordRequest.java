@@ -4,8 +4,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class MailForgetPasswordRequest {
-	@NotBlank(message = "\"email\":\"Email is required!\"")
-    @Email(message = "\"email\":\"Email is not correct!\"")
+	@NotBlank(message = "email_required")
+    @Email(message = "invalid_email_format")
 	private String email;
 
 	public String getEmail() {

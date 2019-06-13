@@ -61,16 +61,16 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(token);
             return ResponseEntity.ok(new BaseDataResponse(authResponse));
         } catch(BadCredentialsException e){
-            return ResponseEntity.badRequest().body(new BaseMessageResponse(MessageConstant.INVALID_INPUT, 
-            		MessageConstant.LOGIN_FAIL));
+            return ResponseEntity.badRequest().body(new BaseMessageResponse(MessageConstant.LOGIN_FAIL, 
+            		MessageConstant.LOGIN_FAIL_MSG));
         }
     }
 
     @PostMapping(value = UrlConstant.URL_REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
         if(userService.existsByEmail(signUpRequest.getEmail())) {
-            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, 
-            		MessageConstant.EMAIL_ALREADY);
+            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.EMAIL_ALREADY, 
+            		MessageConstant.EMAIL_ALREADY_MSG);
             return ResponseEntity.badRequest().body(baseMessageResponse);
         }
         return userService.registerUser(signUpRequest, request);
@@ -100,14 +100,14 @@ public class AuthController {
     		AuthResponse authResponse = new AuthResponse(token);        	
             return ResponseEntity.ok(new BaseDataResponse(authResponse));
     	}else{
-    		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, error);
+    		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.LOGIN_OAUTH2_FAIL, error);
     		return ResponseEntity.badRequest().body(baseMessageResponse);
     	}
     	        
     }
     
     @GetMapping(value = UrlConstant.URL_DELETE_ACCOUNT)
-    public BaseDataResponse deleteUserByEmail(@RequestParam("email") String email) {
+    public BaseMessageResponse deleteUserByEmail(@RequestParam("email") String email) {
     	return userService.deleteUserByEmail(email);    
     }
     
@@ -117,19 +117,18 @@ public class AuthController {
     }
     
     @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)
-    public BaseDataResponse changePassword(@CurrentUser UserPrincipal userPrincipal, 
-    		@Valid @RequestBody ChangePasswordRequest changePasswordRequest) throws Exception{
+    public BaseMessageResponse changePassword(@CurrentUser UserPrincipal userPrincipal, 
+    		@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
     	return userService.changePassword(userPrincipal, changePasswordRequest);    
     }
     
     @PostMapping(value = UrlConstant.URL_USER_FORGET_PASSWORD)
-    public BaseDataResponse forgetPassword(@Valid @RequestBody MailForgetPasswordRequest mailForgetPasswordRequest) {
+    public BaseMessageResponse forgetPassword(@Valid @RequestBody MailForgetPasswordRequest mailForgetPasswordRequest) {
     	return userService.forgetPassword(mailForgetPasswordRequest);    
     }
     
     @PostMapping(value = UrlConstant.URL_USER_RESET_PASSWORD)
-    public BaseDataResponse resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) 
-    		throws Exception{
+    public BaseMessageResponse resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
     	return userService.resetPassword(resetPasswordRequest);    
     }
 }

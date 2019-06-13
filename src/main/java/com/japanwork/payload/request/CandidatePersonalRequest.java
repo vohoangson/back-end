@@ -11,41 +11,42 @@ import com.japanwork.model.Country;
 import com.japanwork.model.District;
 
 public class CandidatePersonalRequest {	
-	@NotBlank(message = "\"full_name\":\"Full name is required!\"")
+	@NotBlank(message = "Full name is required!")
 	@JsonProperty("full_name")
 	private String fullName;
 	
-	@NotNull(message = "\"date_of_birth\":\"Date of birth is required!\"")
+	@NotNull(message = "date_of_birth_required")
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
 	
-	@NotBlank(message = "\"gender\":\"Gender is required!\"")
+	@NotBlank(message = "gender_required")
 	private String gender;
 	
-	@NotBlank(message = "\"marital\":\"Marital is required!\"")
+	@NotBlank(message = "marital_required")
 	private String marital;
 	
-	@NotNull(message = "\"residental_country\":\"Country is required!\"")
+	@NotNull(message = "residental_country_required")
 	@JsonProperty("residental_country")
     private Country residentalCountry;
 	
-	@NotNull(message = "\"residental_city\":\"City is required!\"")
+	@NotNull(message = "residental_city_required")
 	@JsonProperty("residental_city")
     private City residentalCity;
 
-	@NotNull(message = "\"residental_district\":\"District is required!\"")
+	@NotNull(message = "residental_district_required")
 	@JsonProperty("residental_district") 
     private District residentalDistrict;
     
-	@NotBlank(message = "\"residental_address\":\"Addres is required!\"")
+	@NotBlank(message = "residental_address_required")
 	@JsonProperty("residental_address")
     private String residentalAddres;
 
+	@NotBlank(message = "avatar_required")
     private String avatar;
     
     private String introduction;
     
-	@JsonProperty("japanese_level")
+    @JsonProperty("japanese_level")
     private int japaneseLevel;
 
 	public String getFullName() {

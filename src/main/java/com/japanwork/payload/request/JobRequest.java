@@ -17,20 +17,20 @@ import com.japanwork.model.District;
 import com.japanwork.model.Level;
 
 public class JobRequest {
-	@NotNull(message = "\"company\":\"Company is required!\"")
+	@NotNull(message = "company_required")
 	private Company company;
 	
 	
-	@NotBlank(message = "\"name\":\"Name is required!\"")
+	@NotBlank(message = "name_job_required")
 	private String name;
 	
-	@NotNull(message = "\"businesses\":\"Businesses is required!\"")
+	@NotNull(message = "businesses_required")
 	private Set<Business> businesses = new HashSet<>();
 	
-	@NotNull(message = "\"contract\":\"Contract is required!\"")
+	@NotNull(message = "contract_required")
 	private Contract contract;
 	
-	@NotNull(message = "\"level\":\"Level is required!\"")
+	@NotNull(message = "level_required")
 	private Level level;
 	
 	@JsonProperty("japanese_level")
@@ -48,16 +48,16 @@ public class JobRequest {
 	
 	private String desc;
 	
-	@NotNull(message = "\"country\":\"Country is required!\"")
+	@NotNull(message = "country_required")
 	private Country country;
 	
-	@NotNull(message = "\"city\":\"City is required!\"")
+	@NotNull(message = "city_required")
 	private City city;
 	
-	@NotNull(message = "\"district\":\"District is required!\"")
+	@NotNull(message = "district_required")
 	private District district;
 	
-	@NotBlank(message = "\"address\":\"Address is required!\"")
+	@NotBlank(message = "address_required")
 	private String address;
 	
     @JsonProperty("expiring_date")
@@ -69,7 +69,7 @@ public class JobRequest {
 	@JsonProperty("max_salary")
 	private float maxSalary;
 	
-	@NotBlank(message = "\"benefits\":\"Benefits is required!\"")
+	@NotBlank(message = "benefits_required")
 	private String benefits;
 
 	public Company getCompany() {

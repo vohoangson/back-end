@@ -29,6 +29,7 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.ServerError;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Company;
@@ -116,9 +117,9 @@ public class UserService {
         return TOKEN_VALID;
     }
 	
-	public BaseDataResponse getUser(UserPrincipal userPrincipal) {
+	public BaseDataResponse getUser(UserPrincipal userPrincipal) throws ResourceNotFoundException{
         User user = userRepository.findById(userPrincipal.getId())
-        		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+        		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
         user.setRole(user.getRole().replaceAll("ROLE_", ""));
         BaseDataResponse response = new BaseDataResponse(user);
         return response;
@@ -136,35 +137,39 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
-	public ResponseEntity<?> registerUser(SignUpRequest signUpRequest, HttpServletRequest request){
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-        
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
-        user.setProvider(AuthProvider.local);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_"+signUpRequest.getRole());
-        user.setCreateDate(timestamp);
-        user.setUpdateDate(timestamp);
-        user.setDelete(false);
-        User result = userRepository.save(user);
-        
-        final VerificationToken newToken = this.generateNewVerificationToken(user);
-        
-        String content = "To confirm your account, please click here : "
-                +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
-        this.sendEmail(user.getEmail(), "Complete Registration!", content);
-        
-        
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new BaseDataResponse(new ApiResponse(true, MessageConstant.REGISTER_SUCCESS)));
+	public ResponseEntity<?> registerUser(SignUpRequest signUpRequest, HttpServletRequest request) throws ServerError{
+		try {
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+	        
+	        User user = new User();
+	        user.setName(signUpRequest.getName());
+	        user.setEmail(signUpRequest.getEmail());
+	        user.setPassword(signUpRequest.getPassword());
+	        user.setProvider(AuthProvider.local);
+	        user.setPassword(passwordEncoder.encode(user.getPassword()));
+	        user.setRole("ROLE_"+signUpRequest.getRole());
+	        user.setCreateDate(timestamp);
+	        user.setUpdateDate(timestamp);
+	        user.setDelete(false);
+	        User result = userRepository.save(user);
+	        
+	        final VerificationToken newToken = this.generateNewVerificationToken(user);
+	        
+	        String content = "To confirm your account, please click here : "
+	                +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
+	        this.sendEmail(user.getEmail(), "Complete Registration!", content);
+	        
+	        
+	        URI location = ServletUriComponentsBuilder
+	                .fromCurrentContextPath().path("/user/me")
+	                .buildAndExpand(result.getId()).toUri();
+	
+	        return ResponseEntity.created(location)
+	                .body(new BaseDataResponse(new ApiResponse(true, MessageConstant.REGISTER_SUCCESS)));
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.REGISTER_FAIL);
+		}
 	}
 	
 	public ConfirmRegistrationTokenResponse resendRegistrationToken(String existingToken, HttpServletRequest request) {
@@ -183,106 +188,114 @@ public class UserService {
 	}
 	
 	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
-	public BaseDataResponse deleteUserByEmail(String email) {
-		User user = this.findUserByEmail(email);
-		if(user != null) {
-			Company company = companyRepository.findByUser(user);
-			if(company != null){
+	public BaseMessageResponse deleteUserByEmail(String email)  throws ServerError{
+		try {
+			User user = this.findUserByEmail(email);
+			if(user != null) {
+				Company company = companyRepository.findByUser(user);
+				if(company != null){
+					
+					jobRepository.deleteAll(jobRepository.findAllByCompany(company));
+					companyRepository.delete(company);
+				} 
 				
-				jobRepository.deleteAll(jobRepository.findAllByCompany(company));
-				companyRepository.delete(company);
-			} 
-			
-			Candidate candidate = candidateRepository.findByUser(user);
-			if(candidate != null) {
-				academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getId()));
-				experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getId()));
-				languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getId()));
-				candidateRepository.delete(candidate);
+				Candidate candidate = candidateRepository.findByUser(user);
+				if(candidate != null) {
+					academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getId()));
+					experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getId()));
+					languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getId()));
+					candidateRepository.delete(candidate);
+				}
+				
+				tokenRepository.delete(tokenRepository.findByUserId(user.getId()));
+				userRepository.delete(user);
 			}
 			
-			tokenRepository.delete(tokenRepository.findByUserId(user.getId()));
-			userRepository.delete(user);
+			BaseMessageResponse response = new BaseMessageResponse(MessageConstant.DELETE_USER_BY_EMAIL, MessageConstant.DELETE_USER_BY_EMAIL_SUCCESS);
+			return response;
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.DELETE_USER_BY_EMAIL_FAIL);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse("Delete success");
-		return response;
 	}
 	
-	public BaseDataResponse changePassword(@CurrentUser UserPrincipal userPrincipal, ChangePasswordRequest changePasswordRequest) throws Exception{
-		boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());
-		if(checkOldPassword) {
-			User user = userRepository.findById(userPrincipal.getId())
-	        		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
-			user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
-			
-			User result = userRepository.save(user);
-			BaseDataResponse response;
-			if(result == null) {
-				throw new Exception(MessageConstant.CHANGE_PASSWORD_FAIL);
-			} else {
+	public BaseMessageResponse changePassword(@CurrentUser UserPrincipal userPrincipal, 
+			ChangePasswordRequest changePasswordRequest) throws ServerError, BadRequestException{
+		try {
+			boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());
+			if(checkOldPassword) {
+				User user = userRepository.findByIdAndIsDelete(userPrincipal.getId(), false);
+				user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+				
+				userRepository.save(user);
 				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.CHANGE_PASSWORD, MessageConstant.CHANGE_PASSWORD_SUCCESS);
-				response = new BaseDataResponse(message);
-		        return response;
-			}
-			
-		} else {
-			BaseMessageResponse message = new BaseMessageResponse(MessageConstant.CHANGE_PASSWORD, MessageConstant.CHANGE_PASSWORD_NOT_CORRECT);
-			BaseDataResponse response = new BaseDataResponse(message);
-	        return response;
-		}
-	}
-	
-	public BaseDataResponse forgetPassword(MailForgetPasswordRequest mailForgetPasswordRequest) 
-		throws BadRequestException{
-		User user = this.findUserByEmail(mailForgetPasswordRequest.getEmail());
-		if(user == null) {
-			throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
-		} else {
-			ForgetPassword fp = forgetPasswordRepository.findByUserId(user.getId());
-			if(fp != null) {
-				forgetPasswordRepository.delete(fp);
-			}
-			
-			String code = generateCode();
-			
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			ForgetPassword forgetPassword = new ForgetPassword();
-			forgetPassword.setCode(code);
-			forgetPassword.setUser(user);
-			forgetPassword.setCreate_date(timestamp);
-			
-			ForgetPassword result = forgetPasswordRepository.save(forgetPassword);
-			if(result != null) {
-				this.sendEmail(user.getEmail(), "Reset the password!", "Confirmation code is: " + code);
-			}
-			
-			BaseMessageResponse message = new BaseMessageResponse(MessageConstant.FORGET_PASSWORD, MessageConstant.RESET_FORGET_PASSWORD_SUCCESS);
-			BaseDataResponse response = new BaseDataResponse(message);
-	        return response;
-		}
-	}
-	
-	public BaseDataResponse resetPassword(ResetPasswordRequest resetPasswordRequest) throws BadRequestException, Exception{
-		User user = this.findUserByEmail(resetPasswordRequest.getEmail());
-		if(user == null) {
-			throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
-		} else {
-			forgetPasswordRepository.delete(forgetPasswordRepository.findByUserId(user.getId()));
-			
-			user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));	
-			User result = userRepository.save(user);
-			
-			BaseDataResponse response;
-			if(result == null) {
-				throw new Exception(MessageConstant.RESET_PASSWORD_FAIL);
+		        return message;
 			} else {
-				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.RESET_PASSWORD, MessageConstant.RESET_PASSWORD_SUCCESS);
-				response = new BaseDataResponse(message);
-		        return response;
+				throw new BadRequestException(MessageConstant.CHANGE_PASSWORD_NOT_CORRECT, MessageConstant.CHANGE_PASSWORD_NOT_CORRECT_MSG);
 			}
+		} catch (BadRequestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.CHANGE_PASSWORD_FAIL_MSG);
+		}
+	}
+	
+	public BaseMessageResponse forgetPassword(MailForgetPasswordRequest mailForgetPasswordRequest) 
+		throws BadRequestException, ServerError{
+		try {
+			User user = this.findUserByEmail(mailForgetPasswordRequest.getEmail());
+			if(user == null) {
+				throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST, MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST_MSG);
+			} else {
+				ForgetPassword fp = forgetPasswordRepository.findByUserId(user.getId());
+				if(fp != null) {
+					forgetPasswordRepository.delete(fp);
+				}
+				
+				String code = generateCode();
+				
+				Date date = new Date();
+				Timestamp timestamp = new Timestamp(date.getTime());
+				
+				ForgetPassword forgetPassword = new ForgetPassword();
+				forgetPassword.setCode(code);
+				forgetPassword.setUser(user);
+				forgetPassword.setCreate_date(timestamp);
+				
+				ForgetPassword result = forgetPasswordRepository.save(forgetPassword);
+				if(result != null) {
+					this.sendEmail(user.getEmail(), "Reset the password!", "Confirmation code is: " + code);
+				}
+				
+				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.FORGET_PASSWORD, MessageConstant.RESET_FORGET_PASSWORD_SUCCESS);
+		        return message;
+			}
+		} catch(BadRequestException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new ServerError(MessageConstant.RESET_PASSWORD_FAIL_MSG);
+		}
+	}
+	
+	public BaseMessageResponse resetPassword(ResetPasswordRequest resetPasswordRequest) 
+			throws BadRequestException, ServerError{
+		try {
+			User user = this.findUserByEmail(resetPasswordRequest.getEmail());
+			if(user == null) {
+				throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST, 
+						MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST_MSG);
+			} else {
+				forgetPasswordRepository.delete(forgetPasswordRepository.findByUserId(user.getId()));
+				
+				user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));	
+				userRepository.save(user);
+				
+				BaseMessageResponse message = new BaseMessageResponse(MessageConstant.RESET_PASSWORD, MessageConstant.RESET_PASSWORD_SUCCESS);
+		        return message;
+			}
+		} catch (BadRequestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.RESET_PASSWORD_FAIL_MSG);
 		}
 	}
 	

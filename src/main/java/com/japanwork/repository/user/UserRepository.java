@@ -9,8 +9,10 @@ import com.japanwork.model.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByEmail(String email);
+    public Optional<User> findByEmail(String email);
 
-    Boolean existsByEmail(String email);
+    public Boolean existsByEmail(String email);
+    
+    public User findByIdAndIsDelete(UUID id, boolean isDelete);
 
 }

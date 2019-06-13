@@ -6,19 +6,19 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SignUpRequest {
-    @NotBlank(message = "\"name\":\"Name is required!\"")
+    @NotBlank(message = "username_required")
     private String name;
 
-    @NotBlank(message = "\"email\":\"Email is required!\"")
-    @Email(message = "\"email\":\"Email is not correct!\"")
+    @NotBlank(message = "email_required")
+    @Email(message = "invalid_email_format")
     private String email;
 
-    @NotBlank(message = "\"password\":\"Password is required!\"")
-    @Size(min=8,message = "\"password\":\"Password at least 8 characters!\"")
+    @NotBlank(message = "password_required")
+    @Size(min=8,message = "invalid_password_length")
     private String password;
 
-    @NotBlank(message = "\"role\":\"You are a business or an individual or an translator?\"")
-    @Pattern(regexp = "COMPANY|CANDIDATE|TRANSLATOR",message = "\"role\":\"You are a business or an individual or an translator?\"")
+    @NotBlank(message = "role_required")
+    @Pattern(regexp = "COMPANY|CANDIDATE|TRANSLATOR",message = "invalid_role_format")
     private String role;
     
     public String getName() {
