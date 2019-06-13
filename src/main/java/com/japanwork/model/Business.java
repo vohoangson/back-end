@@ -1,6 +1,8 @@
 package com.japanwork.model;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -110,7 +112,29 @@ public class Business {
 		this.isDelete = isDelete;
 	}
 
+	public Business(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public Business() {
 		super();
+	}
+	
+	public static Set<Business> convertBusiness(Set<UUID> businessIds){
+		Set<Business> businesses = new HashSet<>();
+		for (UUID id : businessIds) {
+			Business business = new Business(id);
+			businesses.add(business);
+		}
+		return businesses;
+	}
+	
+	public static Set<UUID> convertBusinessIDs(Set<Business> businesses){
+		Set<UUID> businessIds = new HashSet<>();
+		for (Business obj : businesses) {
+			businessIds.add(obj.getId());
+		}
+		return businessIds;
 	}
 }

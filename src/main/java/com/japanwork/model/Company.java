@@ -45,10 +45,6 @@ public class Company {
     private int scale;
     
     @ManyToOne
-    @JoinColumn(name = "country_id")
-    private Country country;
-    
-    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
@@ -123,14 +119,6 @@ public class Company {
 
 	public void setScale(int scale) {
 		this.scale = scale;
-	}
-	
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
 	}
 
 	public City getCity() {
@@ -218,7 +206,7 @@ public class Company {
 		super();
 	}
 
-	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, Country country, City city,
+	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city,
 			District district, String address, String logoUrl, String coverImageUrl, String introduction, String status,
 			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
@@ -227,7 +215,6 @@ public class Company {
 		this.name = name;
 		this.businesses = businesses;
 		this.scale = scale;
-		this.country = country;
 		this.city = city;
 		this.district = district;
 		this.address = address;

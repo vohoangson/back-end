@@ -48,7 +48,7 @@ public class CompanyController {
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		
 		if(companyService.checkCompanyByUser(userService.findById(userPrincipal.getId()))) {
-			throw new BadRequestException(MessageConstant.COMPANY_ALREADY);
+			throw new BadRequestException(MessageConstant.COMPANY_ALREADY, MessageConstant.COMPANY_ALREADY_MSG);
 		}
 		
 		return companyService.save(companyRequest, userPrincipal);

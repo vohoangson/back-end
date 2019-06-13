@@ -124,6 +124,11 @@ public class City {
 		this.isDelete = isDelete;
 	}
 
+	public City(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public City() {
 		super();
 	}

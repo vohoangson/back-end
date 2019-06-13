@@ -1,7 +1,9 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,16 @@ import org.springframework.stereotype.Service;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.UnauthorizedException;
+import com.japanwork.model.Business;
+import com.japanwork.model.City;
 import com.japanwork.model.Company;
+import com.japanwork.model.District;
 import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -36,10 +42,9 @@ public class CompanyService {
 		company.setUser(userService.findById(userPrincipal.getId()));
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
-		company.setBusinesses(companyRequest.getBusinesses());
-		company.setCountry(companyRequest.getCountry());
-		company.setCity(companyRequest.getCity());
-		company.setDistrict(companyRequest.getDistrict());
+		company.setBusinesses(Business.convertBusiness(companyRequest.getBusinessIds()));
+		company.setCity(new City(companyRequest.getCityId()));
+		company.setDistrict(new District(companyRequest.getDistrictId()));
 		company.setAddress(companyRequest.getAddress());
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
@@ -50,7 +55,7 @@ public class CompanyService {
 		company.setDelete(false);
 		
 		Company result = companyRepository.save(company);
-		BaseDataResponse response = new BaseDataResponse(result);		
+		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
 		return response;
 	}
 	
@@ -76,10 +81,9 @@ public class CompanyService {
 
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
-		company.setBusinesses(companyRequest.getBusinesses());
-		company.setCountry(companyRequest.getCountry());
-		company.setCity(companyRequest.getCity());
-		company.setDistrict(companyRequest.getDistrict());
+		company.setBusinesses(Business.convertBusiness(companyRequest.getBusinessIds()));
+		company.setCity(new City(companyRequest.getCityId()));
+		company.setDistrict(new District(companyRequest.getDistrictId()));
 		company.setAddress(companyRequest.getAddress());
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
@@ -88,7 +92,7 @@ public class CompanyService {
 		company.setUpdateDate(timestamp);
 		
 		Company result = companyRepository.save(company);
-		BaseDataResponse response = new BaseDataResponse(result);		
+		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
 		return response;
 	}
 	
@@ -98,7 +102,7 @@ public class CompanyService {
 		company.setDelete(isDel);
 		companyRepository.save(company);
 		Company result = companyRepository.findByIdAndIsDelete(id, false);
-		BaseDataResponse response = new BaseDataResponse(result);	
+		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));	
 		return response;
 	}
 	
@@ -112,7 +116,7 @@ public class CompanyService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
 		}
 		
-		BaseDataResponse response = new BaseDataResponse(company);	
+		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(company));	
 		return response;
 	}
 	
@@ -126,10 +130,18 @@ public class CompanyService {
 	
 	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
-		Page<Company> pages = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
-		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-		BaseDataMetaResponse response = new BaseDataMetaResponse(pages.getContent(), pageInfo);
-		return response;
+			Page<Company> pages = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+			List<CompanyResponse> list = new ArrayList<CompanyResponse>();
+			
+			if(pages.getContent().size() > 0) {
+				for (Company company : pages.getContent()) {
+					list.add(convertCompanyResponse(company));
+				}
+			}
+			
+			BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
+			return response;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -137,5 +149,18 @@ public class CompanyService {
 	
 	public Company findById(UUID id) {
 		return companyRepository.findById(id).get();
+	}
+	
+	private CompanyResponse convertCompanyResponse(Company company) {
+		CompanyResponse companyResponse = new CompanyResponse(
+				company.getName(), 
+				company.getScale(), 
+				Business.convertBusinessIDs(company.getBusinesses()),
+				company.getCity().getId(), 
+				company.getDistrict().getId(), 
+				company.getAddress(), 
+				company.getLogoUrl(), 
+				company.getCoverImageUrl());
+		return companyResponse;
 	}
 }

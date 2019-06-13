@@ -125,6 +125,11 @@ public class District {
 		this.isDelete = isDelete;
 	}
 
+	public District(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public District() {
 		super();
 	}

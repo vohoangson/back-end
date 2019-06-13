@@ -1,41 +1,30 @@
-package com.japanwork.payload.request;
+package com.japanwork.payload.response;
 
 import java.util.Set;
 import java.util.UUID;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-public class CompanyRequest {
-	@NotBlank(message = "name_company_required")
+
+public class CompanyResponse {
 	private String name;
 	
 	private int scale;
 	
 	@JsonProperty("business_ids")
-	@NotNull(message = "businesses_required")
 	private Set<UUID> businessIds;
 	
 	@JsonProperty("city_id")
-	@NotNull(message = "city_required")
 	private UUID cityId;
 	
 	@JsonProperty("district_id")
-	@NotNull(message = "district_required")
 	private UUID districtId;
 	
-	@NotBlank(message = "address_required")
 	private String address;
 	
-	@NotBlank(message = "logo_required")
 	private String logo;
 	
 	@JsonProperty("cover_image")
-	@NotBlank(message = "cover_image_required")
 	private String coverImage;
-	
-	private String introduction;
 
 	public String getName() {
 		return name;
@@ -101,11 +90,20 @@ public class CompanyRequest {
 		this.coverImage = coverImage;
 	}
 
-	public String getIntroduction() {
-		return introduction;
+	public CompanyResponse(String name, int scale, Set<UUID> businessIds, UUID cityId, UUID districtId, String address,
+			String logo, String coverImage) {
+		super();
+		this.name = name;
+		this.scale = scale;
+		this.businessIds = businessIds;
+		this.cityId = cityId;
+		this.districtId = districtId;
+		this.address = address;
+		this.logo = logo;
+		this.coverImage = coverImage;
 	}
 
-	public void setIntroduction(String introduction) {
-		this.introduction = introduction;
+	public CompanyResponse() {
+		super();
 	}
 }

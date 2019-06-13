@@ -8,7 +8,7 @@ public class MessageConstant {
 	
 	public static final String ERROR_401 = "Unauthorized";
 	public static final String ERROR_403 = "You do not have permission to access this page!";
-	public static final String COMPANY_ALREADY = "Only one company can be created per account!";
+	
 	public static final String CADIDATE_ALREADY = "Only one candidate can be created per account!";
 	public static final String TRANSLATOR_ALREADY = "Only one translator can be created per account!";
 	public static final String LOGOUT_SUCCESS = "Logout successfully";
@@ -34,6 +34,7 @@ public class MessageConstant {
 	public static final String FORGET_PASSWORD = "forget_password";
 	public static final String RESET_PASSWORD = "reset_password";
 	public static final String DELETE_USER_BY_EMAIL = "delete_user_by_email";
+	public static final String COMPANY_ALREADY = "only_one_company_created";
 	
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
@@ -52,6 +53,8 @@ public class MessageConstant {
 	public static final String REGISTER_FAIL = "User registered failed!";
 	public static final String DELETE_USER_BY_EMAIL_FAIL = "Delete user by email failed!";
 	public static final String DELETE_USER_BY_EMAIL_SUCCESS = "Delete user by email successfilly!";
+	public static final String COMPANY_ALREADY_MSG = "Only one company can be created per account!";
+	
 	
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
