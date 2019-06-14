@@ -2,8 +2,6 @@ package com.japanwork.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -176,30 +174,5 @@ public class Experience {
 	
 	public Experience() {
 		super();
-	}
-	
-	public static Set<Experience> listExperience(Set<UUID> experienceIds){
-		if(experienceIds != null) {
-			Set<Experience> experiences = new HashSet<>();
-			for (UUID id : experienceIds) {
-				Experience academy = new Experience(id);
-				experiences.add(academy);
-			}
-			return experiences;
-		} else {
-			return null;
-		}
-	}
-	
-	public static Set<UUID> listExperienceID(Set<Experience> experiences){
-		if(experiences != null) {
-			Set<UUID> experienceIds = new HashSet<>();
-			for (Experience obj : experiences) {
-				experienceIds.add(obj.getId());
-			}
-			return experienceIds;
-		} else {
-			return null;
-		}
 	}
 }

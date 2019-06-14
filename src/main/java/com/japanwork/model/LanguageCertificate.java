@@ -2,8 +2,6 @@ package com.japanwork.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -138,30 +136,5 @@ public class LanguageCertificate {
 	
 	public LanguageCertificate() {
 		super();
-	}
-	
-	public static Set<LanguageCertificate> listLanguageCertificate(Set<UUID> languageCertificateIds){
-		if(languageCertificateIds != null) {
-			Set<LanguageCertificate> languageCertificates = new HashSet<>();
-			for (UUID id : languageCertificateIds) {
-				LanguageCertificate obj = new LanguageCertificate(id);
-				languageCertificates.add(obj);
-			}
-			return languageCertificates;
-		} else {
-			return null;
-		}
-	}
-	
-	public static Set<UUID> listLanguageCertificateID(Set<LanguageCertificate> languageCertificates){
-		if(languageCertificates != null) {
-			Set<UUID> languageCertificateIds = new HashSet<>();
-			for (LanguageCertificate obj : languageCertificates) {
-				languageCertificateIds.add(obj.getId());
-			}
-			return languageCertificateIds;
-		} else {
-			return null;
-		}
 	}
 }

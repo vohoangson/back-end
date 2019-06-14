@@ -24,8 +24,8 @@ public class AcademyService {
 	}
 	
 	public Set<AcademyResponse> listAcademyResponse(Set<Academy> academies){
+		Set<AcademyResponse> list = new HashSet<AcademyResponse>();
 		if(academies != null) {
-			Set<AcademyResponse> list = new HashSet<AcademyResponse>();
 			for (Academy academy : academies) {
 				AcademyResponse academyResponse = new AcademyResponse();
 				academyResponse.setAcademyCenterName(academy.getAcademyCenterName());
@@ -37,9 +37,8 @@ public class AcademyService {
 				
 				list.add(academyResponse);
 			}
-			return list;
 		}
-		return null;
+		return list;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		

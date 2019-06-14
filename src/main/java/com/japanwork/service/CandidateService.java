@@ -442,16 +442,9 @@ public class CandidateService {
 		
 		candidateResponse.setWishSalary(candidate.getWishSalary());
 
-		if(candidate.getAcademies() != null) {
-			candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
-		}
-		
-		if(candidate.getExperiences() != null) {
-			candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
-		}
-		if(candidate.getLanguageCertificates() != null) {
-			candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
-		}
+		candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
+		candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
+		candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
 		
 		return candidateResponse;
 	}

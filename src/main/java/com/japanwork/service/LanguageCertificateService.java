@@ -24,8 +24,8 @@ public class LanguageCertificateService {
 	}
 	
 	public Set<LanguageCertificateResponse> listLanguageCertificateResponse(Set<LanguageCertificate> languageCertificates){
+		Set<LanguageCertificateResponse> list = new HashSet<LanguageCertificateResponse>();
 		if(languageCertificates != null) {
-			Set<LanguageCertificateResponse> list = new HashSet<LanguageCertificateResponse>();
 			for (LanguageCertificate languageCertificate : languageCertificates) {
 				LanguageCertificateResponse languageCertificateResponse = new LanguageCertificateResponse();
 				
@@ -35,9 +35,8 @@ public class LanguageCertificateService {
 				
 				list.add(languageCertificateResponse);
 			}
-			return list;
 		}
-		return null;
+		return list;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		

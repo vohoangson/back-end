@@ -2,8 +2,6 @@ package com.japanwork.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -175,30 +173,5 @@ public class Academy {
 	
 	public Academy() {
 		super();
-	}
-	
-	public static Set<Academy> listAcademy(Set<UUID> academyIds){
-		if(academyIds != null) {
-			Set<Academy> academies = new HashSet<>();
-			for (UUID id : academyIds) {
-				Academy academy = new Academy(id);
-				academies.add(academy);
-			}
-			return academies;
-		} else {
-			return null;
-		}
-	}
-	
-	public static Set<UUID> listAcademyID(Set<Academy> academies){
-		if(academies != null) {
-			Set<UUID> academyIds = new HashSet<>();
-			for (Academy obj : academies) {
-				academyIds.add(obj.getId());
-			}
-			return academyIds;
-		} else {
-			return null;
-		}
 	}
 }

@@ -24,8 +24,8 @@ public class ExperienceService {
 	}
 	
 	public Set<ExperienceResponse> listExperienceResponse(Set<Experience> experiences){
+		Set<ExperienceResponse> list = new HashSet<ExperienceResponse>();
 		if(experiences != null) {
-			Set<ExperienceResponse> list = new HashSet<ExperienceResponse>();
 			for (Experience experience : experiences) {
 				ExperienceResponse experienceResponse = new ExperienceResponse();
 				experienceResponse.setOrganizaion(experience.getOrganizaion());
@@ -37,9 +37,8 @@ public class ExperienceService {
 				
 				list.add(experienceResponse);
 			}
-			return list;
 		}
-		return null;
+		return list;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		
