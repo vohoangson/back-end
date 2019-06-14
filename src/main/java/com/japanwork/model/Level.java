@@ -110,6 +110,11 @@ public class Level {
 		this.isDelete = isDelete;
 	}
 
+	public Level(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public Level() {
 		super();
 	}

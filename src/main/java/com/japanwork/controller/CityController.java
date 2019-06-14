@@ -1,7 +1,5 @@
 package com.japanwork.controller;
 
-import java.util.UUID;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +30,8 @@ public class CityController {
 	
 	@GetMapping(UrlConstant.URL_CITIES_ID)
 	@ResponseBody
-	public BaseDataResponse listCityByCountry(@PathVariable UUID id) {
-		return cityService.listCityByCountry(id);
+	public BaseDataResponse listCityByCountry(@PathVariable String code) {
+		return cityService.listCityByCountry(code);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_CITY)

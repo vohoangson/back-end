@@ -1,18 +1,19 @@
 package com.japanwork.payload.request;
 
-import com.japanwork.model.Country;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CityRequest {
-	private Country country;
+	@JsonProperty("country_code")
+	private String countryCode;
 	private String vi;
 	private String ja;
 	private String desc;
 	
-	public Country getCountry() {
-		return country;
+	public String getCountryCode() {
+		return countryCode;
 	}
-	public void setCountry(Country country) {
-		this.country = country;
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 	public String getVi() {
 		return vi;

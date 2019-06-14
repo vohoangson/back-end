@@ -1,14 +1,12 @@
 package com.japanwork.payload.request;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.City;
-import com.japanwork.model.Country;
-import com.japanwork.model.District;
 
 public class CandidatePersonalRequest {	
 	@NotBlank(message = "Full name is required!")
@@ -25,17 +23,13 @@ public class CandidatePersonalRequest {
 	@NotBlank(message = "marital_required")
 	private String marital;
 	
-	@NotNull(message = "residental_country_required")
-	@JsonProperty("residental_country")
-    private Country residentalCountry;
-	
 	@NotNull(message = "residental_city_required")
-	@JsonProperty("residental_city")
-    private City residentalCity;
+	@JsonProperty("residental_city_id")
+    private UUID residentalCityId;
 
 	@NotNull(message = "residental_district_required")
-	@JsonProperty("residental_district") 
-    private District residentalDistrict;
+	@JsonProperty("residental_district_id") 
+    private UUID residentalDistrictId;
     
 	@NotBlank(message = "residental_address_required")
 	@JsonProperty("residental_address")
@@ -57,6 +51,14 @@ public class CandidatePersonalRequest {
 		this.fullName = fullName;
 	}
 
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
 	public String getGender() {
 		return gender;
 	}
@@ -72,29 +74,21 @@ public class CandidatePersonalRequest {
 	public void setMarital(String marital) {
 		this.marital = marital;
 	}
-	
-	public Country getResidentalCountry() {
-		return residentalCountry;
+
+	public UUID getResidentalCityId() {
+		return residentalCityId;
 	}
 
-	public void setResidentalCountry(Country residentalCountry) {
-		this.residentalCountry = residentalCountry;
+	public void setResidentalCityId(UUID residentalCityId) {
+		this.residentalCityId = residentalCityId;
 	}
 
-	public City getResidentalCity() {
-		return residentalCity;
+	public UUID getResidentalDistrictId() {
+		return residentalDistrictId;
 	}
 
-	public void setResidentalCity(City residentalCity) {
-		this.residentalCity = residentalCity;
-	}
-
-	public District getResidentalDistrict() {
-		return residentalDistrict;
-	}
-
-	public void setResidentalDistrict(District residentalDistrict) {
-		this.residentalDistrict = residentalDistrict;
+	public void setResidentalDistrictId(UUID residentalDistrictId) {
+		this.residentalDistrictId = residentalDistrictId;
 	}
 
 	public String getResidentalAddres() {
@@ -127,13 +121,5 @@ public class CandidatePersonalRequest {
 
 	public void setJapaneseLevel(int japaneseLevel) {
 		this.japaneseLevel = japaneseLevel;
-	}
-
-	public Date getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
+	}    
 }

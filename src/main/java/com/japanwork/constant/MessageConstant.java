@@ -54,6 +54,13 @@ public class MessageConstant {
 	public static final String DELETE_USER_BY_EMAIL_FAIL = "Delete user by email failed!";
 	public static final String DELETE_USER_BY_EMAIL_SUCCESS = "Delete user by email successfilly!";
 	public static final String COMPANY_ALREADY_MSG = "Only one company can be created per account!";
+	public static final String COMPANY_CREATE_FAIL = "Create company failed!";
+	public static final String COMPANY_UPDATE_FAIL = "Update company failed!";
+	public static final String CANDIDATE_CREATE_FAIL = "Create candidate failed!";
+	public static final String CANDIDATE_UPDATE_PERSONAL_FAIL = "Update candidate personal failed!";
+	public static final String CANDIDATE_UPDATE_WISH_FAIL = "Update candidate wish failed!";
+	public static final String CANDIDATE_ADD_EXPERIENCE_FAIL = "Create candidate experience failed!";
+	public static final String CANDIDATE_UPDATE_EXPERIENCE_FAIL = "Update candidate experience failed!";
 	
 	
 	public static final String ERROR_404_MSG = "Page not found!";

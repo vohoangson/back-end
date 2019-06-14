@@ -3,31 +3,28 @@ package com.japanwork.payload.request;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.Academy;
-import com.japanwork.model.Experience;
-import com.japanwork.model.LanguageCertificate;
 
 public class CandidateExperienceRequest {
-	private List<Academy> academies;
-	private List<Experience> experiences;
+	private List<AcademyRequest> academies;
+	private List<ExperienceRequest> experiences;
 	@JsonProperty("language_certificates")
-	private List<LanguageCertificate> languageCertificates;
-	public List<Academy> getAcademies() {
+	private List<LanguageCertificateRequest> languageCertificates;
+	public List<AcademyRequest> getAcademies() {
 		return academies;
 	}
-	public void setAcademies(List<Academy> academies) {
+	public void setAcademies(List<AcademyRequest> academies) {
 		this.academies = academies;
 	}
-	public List<Experience> getExperiences() {
+	public List<ExperienceRequest> getExperiences() {
 		return experiences;
 	}
-	public void setExperiences(List<Experience> experiences) {
+	public void setExperiences(List<ExperienceRequest> experiences) {
 		this.experiences = experiences;
 	}
-	public List<LanguageCertificate> getLanguageCertificates() {
+	public List<LanguageCertificateRequest> getLanguageCertificates() {
 		return languageCertificates;
 	}
-	public void setLanguageCertificates(List<LanguageCertificate> languageCertificates) {
+	public void setLanguageCertificates(List<LanguageCertificateRequest> languageCertificates) {
 		this.languageCertificates = languageCertificates;
 	}
 }

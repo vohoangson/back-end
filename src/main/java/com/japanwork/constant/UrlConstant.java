@@ -52,7 +52,7 @@ public class UrlConstant {
 	//District
 	public static final String URL_CITY = "/cities";
 	public static final String URL_CITIES = "/cities/list";
-	public static final String URL_CITIES_ID = "/cities/list/{id}";
+	public static final String URL_CITIES_ID = "/cities/list/{code}";
 	public static final String URL_CITY_ID = "/cities/{id}";
 	public static final String URL_CITY_UNDEL = "/cities/undelete/{id}";
 	

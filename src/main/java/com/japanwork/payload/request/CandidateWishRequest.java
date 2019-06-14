@@ -1,72 +1,55 @@
 package com.japanwork.payload.request;
 
+import java.util.UUID;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.Business;
-import com.japanwork.model.City;
-import com.japanwork.model.Contract;
-import com.japanwork.model.Country;
-import com.japanwork.model.District;
-import com.japanwork.model.Level;
 
-public class CandidateWishRequest {
-	
-	@NotNull(message = "wish_working_country_required")
-	@JsonProperty("wish_working_country")
-    private Country wishWorkingCountry;
-	
+public class CandidateWishRequest {	
 	@NotNull(message = "wish_working_city_required")
-	@JsonProperty("wish_working_city")
-    private City wishWorkingCity;
+	@JsonProperty("wish_working_city_id")
+    private UUID wishWorkingCityId;
 
 	@NotNull(message = "wish_working_district_required")
-    @JsonProperty("wish_working_district")  
-    private District wishWorkingDistrict;
+    @JsonProperty("wish_working_district_id")  
+    private UUID wishWorkingDistrictId;
     
 	@NotBlank(message = "wish_working_address_required")
     @JsonProperty("wish_working_address")
     private String wishWorkingAddress;
     
     @NotNull(message = "wish_business_required")
-    @JsonProperty("wish_business")
-    private Business wishBusiness;
+    @JsonProperty("wish_business_id")
+    private UUID wishBusinessId;
     
     @NotNull(message = "wish_level_required")
-    @JsonProperty("wish_level")
-    private Level wishLevel;
+    @JsonProperty("wish_level_id")
+    private UUID wishLevelId;
     
     @NotNull(message = "wish_contract_required")
-    @JsonProperty("wish_contract")
-    private Contract wishContract;
+    @JsonProperty("wish_contract_id")
+    private UUID wishContractId;
 
     @NotNull(message = "wish_salary_required")
     @JsonProperty("wish_salary")
     private float wishSalary;
-    
-	public Country getWishWorkingCountry() {
-		return wishWorkingCountry;
+
+	public UUID getWishWorkingCityId() {
+		return wishWorkingCityId;
 	}
 
-	public void setWishWorkingCountry(Country wishWorkingCountry) {
-		this.wishWorkingCountry = wishWorkingCountry;
+	public void setWishWorkingCityId(UUID wishWorkingCityId) {
+		this.wishWorkingCityId = wishWorkingCityId;
 	}
 
-	public City getWishWorkingCity() {
-		return wishWorkingCity;
+	public UUID getWishWorkingDistrictId() {
+		return wishWorkingDistrictId;
 	}
 
-	public void setWishWorkingCity(City wishWorkingCity) {
-		this.wishWorkingCity = wishWorkingCity;
-	}
-
-	public District getWishWorkingDistrict() {
-		return wishWorkingDistrict;
-	}
-
-	public void setWishWorkingDistrict(District wishWorkingDistrict) {
-		this.wishWorkingDistrict = wishWorkingDistrict;
+	public void setWishWorkingDistrictId(UUID wishWorkingDistrictId) {
+		this.wishWorkingDistrictId = wishWorkingDistrictId;
 	}
 
 	public String getWishWorkingAddress() {
@@ -77,28 +60,28 @@ public class CandidateWishRequest {
 		this.wishWorkingAddress = wishWorkingAddress;
 	}
 
-	public Business getWishBusiness() {
-		return wishBusiness;
+	public UUID getWishBusinessId() {
+		return wishBusinessId;
 	}
 
-	public void setWishBusiness(Business wishBusiness) {
-		this.wishBusiness = wishBusiness;
+	public void setWishBusinessId(UUID wishBusinessId) {
+		this.wishBusinessId = wishBusinessId;
 	}
 
-	public Level getWishLevel() {
-		return wishLevel;
+	public UUID getWishLevelId() {
+		return wishLevelId;
 	}
 
-	public void setWishLevel(Level wishLevel) {
-		this.wishLevel = wishLevel;
+	public void setWishLevelId(UUID wishLevelId) {
+		this.wishLevelId = wishLevelId;
 	}
 
-	public Contract getWishContract() {
-		return wishContract;
+	public UUID getWishContractId() {
+		return wishContractId;
 	}
 
-	public void setWishContract(Contract wishContract) {
-		this.wishContract = wishContract;
+	public void setWishContractId(UUID wishContractId) {
+		this.wishContractId = wishContractId;
 	}
 
 	public float getWishSalary() {

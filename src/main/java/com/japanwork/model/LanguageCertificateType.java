@@ -110,6 +110,11 @@ public class LanguageCertificateType {
 		this.isDelete = isDelete;
 	}
 
+	public LanguageCertificateType(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public LanguageCertificateType() {
 		super();
 	}

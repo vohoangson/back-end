@@ -174,9 +174,9 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public List<City> findAllByCountryIdAndIsDelete(UUID id, boolean isDelete) {
+	public List<City> findAllByCountryCodeAndIsDelete(String code, boolean isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByCountryIdAndIsDelete(id, isDelete);
+		return findAllByCountryCodeAndIsDelete(code, isDelete);
 	}
 	
 }

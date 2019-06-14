@@ -20,7 +20,6 @@ public class JobRequest {
 	@NotNull(message = "company_required")
 	private Company company;
 	
-	
 	@NotBlank(message = "name_job_required")
 	private String name;
 	

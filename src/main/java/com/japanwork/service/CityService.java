@@ -28,8 +28,8 @@ public class CityService {
 		return response;
 	}
 	
-	public BaseDataResponse listCityByCountry(UUID id) {
-		List<City> list = cityRepository.findAllByCountryIdAndIsDelete(id, false);		
+	public BaseDataResponse listCityByCountry(String code) {
+		List<City> list = cityRepository.findAllByCountryCodeAndIsDelete(code, false);		
 		BaseDataResponse response = new BaseDataResponse(list);	
 		return response;
 	}
@@ -49,7 +49,7 @@ public class CityService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		City city = new City();
-		city.setCountry(cityRequest.getCountry());
+		city.setCountryCode(cityRequest.getCountryCode());
 		city.setJa(cityRequest.getJa());
 		city.setVi(cityRequest.getVi());
 		city.setDesc(cityRequest.getDesc());
@@ -70,7 +70,7 @@ public class CityService {
 		for (CityRequest cityRequest : listCityRequest.getCities()) {
 			City obj = new City();
 			
-			obj.setCountry(cityRequest.getCountry());
+			obj.setCountryCode(cityRequest.getCountryCode());
 			obj.setJa(cityRequest.getJa());
 			obj.setVi(cityRequest.getVi());
 			obj.setDesc(cityRequest.getDesc());

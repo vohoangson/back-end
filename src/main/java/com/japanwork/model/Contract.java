@@ -110,6 +110,11 @@ public class Contract {
 		this.isDelete = isDelete;
 	}
 
+	public Contract(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public Contract() {
 		super();
 	} 

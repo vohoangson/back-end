@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CompanyResponse {
+	private UUID id;
+	
 	private String name;
 	
 	private int scale;
@@ -25,6 +27,16 @@ public class CompanyResponse {
 	
 	@JsonProperty("cover_image")
 	private String coverImage;
+	
+	private String introduction;
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -90,9 +102,18 @@ public class CompanyResponse {
 		this.coverImage = coverImage;
 	}
 
-	public CompanyResponse(String name, int scale, Set<UUID> businessIds, UUID cityId, UUID districtId, String address,
-			String logo, String coverImage) {
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
+	public CompanyResponse(UUID id, String name, int scale, Set<UUID> businessIds, UUID cityId, UUID districtId,
+			String address, String logo, String coverImage, String introduction) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.scale = scale;
 		this.businessIds = businessIds;
@@ -101,6 +122,7 @@ public class CompanyResponse {
 		this.address = address;
 		this.logo = logo;
 		this.coverImage = coverImage;
+		this.introduction = introduction;
 	}
 
 	public CompanyResponse() {

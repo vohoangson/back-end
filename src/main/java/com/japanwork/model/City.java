@@ -8,11 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "city")
 public class City {
@@ -21,9 +20,9 @@ public class City {
     @Column(name="id")
 	private UUID id;
 	
-	@OneToOne
-    @JoinColumn(name = "country_id")
-	private Country country;
+    @JsonProperty("country_code")
+    @Column(name="country_code")
+	private String countryCode;
 	
 	@Column(name="name_vi")
     private String vi;
@@ -53,13 +52,13 @@ public class City {
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
-	public Country getCountry() {
-		return country;
+
+	public String getCountryCode() {
+		return countryCode;
 	}
 
-	public void setCountry(Country country) {
-		this.country = country;
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 
 	public String getVi() {
@@ -111,11 +110,11 @@ public class City {
 		this.isDelete = isDelete;
 	}
 
-	public City(UUID id, Country country, String vi, String ja, String desc, Timestamp createDate, Timestamp updateDate,
-			boolean isDelete) {
+	public City(UUID id, String countryCode, String vi, String ja, String desc, Timestamp createDate,
+			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
-		this.country = country;
+		this.countryCode = countryCode;
 		this.vi = vi;
 		this.ja = ja;
 		this.desc = desc;

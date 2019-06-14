@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.ServerError;
 import com.japanwork.exception.UnauthorizedException;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
@@ -34,66 +35,78 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 	
-	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal){
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
-		Company company = new Company();
-		company.setUser(userService.findById(userPrincipal.getId()));
-		company.setName(companyRequest.getName());
-		company.setScale(companyRequest.getScale());
-		company.setBusinesses(Business.convertBusiness(companyRequest.getBusinessIds()));
-		company.setCity(new City(companyRequest.getCityId()));
-		company.setDistrict(new District(companyRequest.getDistrictId()));
-		company.setAddress(companyRequest.getAddress());
-		company.setCoverImageUrl(companyRequest.getCoverImage());
-		company.setLogoUrl(companyRequest.getLogo());
-		company.setIntroduction(companyRequest.getIntroduction());
-		company.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
-		company.setCreateDate(timestamp);
-		company.setUpdateDate(timestamp);
-		company.setDelete(false);
-		
-		Company result = companyRepository.save(company);
-		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
-		return response;
+	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
+		try {
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			
+			Company company = new Company();
+			company.setUser(userService.findById(userPrincipal.getId()));
+			company.setName(companyRequest.getName());
+			company.setScale(companyRequest.getScale());
+			company.setBusinesses(Business.listBusiness(companyRequest.getBusinessIds()));
+			company.setCity(new City(companyRequest.getCityId()));
+			company.setDistrict(new District(companyRequest.getDistrictId()));
+			company.setAddress(companyRequest.getAddress());
+			company.setCoverImageUrl(companyRequest.getCoverImage());
+			company.setLogoUrl(companyRequest.getLogo());
+			company.setIntroduction(companyRequest.getIntroduction());
+			company.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			company.setCreateDate(timestamp);
+			company.setUpdateDate(timestamp);
+			company.setDelete(false);
+			
+			Company result = companyRepository.save(company);
+			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
+			return response;
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);
+		}
 	}
 	
 	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) 
-			throws ResourceNotFoundException, UnauthorizedException{
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
-		Company company = new Company();
-		
-		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
-			company = companyRepository.findByIdAndIsDelete(id, false);
-			if(company == null) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throws ResourceNotFoundException, UnauthorizedException, ServerError{
+		try {
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			
+			Company company = new Company();
+			
+			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
+				company = companyRepository.findByIdAndIsDelete(id, false);
+				if(company == null) {
+					throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+				}
+				if(!company.getUser().getId().equals(userPrincipal.getId())) {
+					throw new UnauthorizedException(MessageConstant.ERROR_403);
+				}
+			} else {
+				company = companyRepository.findById(id)
+						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
 			}
-			if(!company.getUser().getId().equals(userPrincipal.getId())) {
-				throw new UnauthorizedException(MessageConstant.ERROR_403);
-			}
-		} else {
-			company = companyRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+	
+			company.setName(companyRequest.getName());
+			company.setScale(companyRequest.getScale());
+			company.setBusinesses(Business.listBusiness(companyRequest.getBusinessIds()));
+			company.setCity(new City(companyRequest.getCityId()));
+			company.setDistrict(new District(companyRequest.getDistrictId()));
+			company.setAddress(companyRequest.getAddress());
+			company.setCoverImageUrl(companyRequest.getCoverImage());
+			company.setLogoUrl(companyRequest.getLogo());
+			company.setIntroduction(companyRequest.getIntroduction());
+			company.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			company.setUpdateDate(timestamp);
+			
+			Company result = companyRepository.save(company);
+			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
+			return response;
+		} catch (ResourceNotFoundException e) {
+			throw e;
+		} catch (UnauthorizedException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);
 		}
-
-		company.setName(companyRequest.getName());
-		company.setScale(companyRequest.getScale());
-		company.setBusinesses(Business.convertBusiness(companyRequest.getBusinessIds()));
-		company.setCity(new City(companyRequest.getCityId()));
-		company.setDistrict(new District(companyRequest.getDistrictId()));
-		company.setAddress(companyRequest.getAddress());
-		company.setCoverImageUrl(companyRequest.getCoverImage());
-		company.setLogoUrl(companyRequest.getLogo());
-		company.setIntroduction(companyRequest.getIntroduction());
-		company.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
-		company.setUpdateDate(timestamp);
-		
-		Company result = companyRepository.save(company);
-		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
-		return response;
 	}
 	
 	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
@@ -153,14 +166,16 @@ public class CompanyService {
 	
 	private CompanyResponse convertCompanyResponse(Company company) {
 		CompanyResponse companyResponse = new CompanyResponse(
+				company.getId(),
 				company.getName(), 
 				company.getScale(), 
-				Business.convertBusinessIDs(company.getBusinesses()),
+				Business.listBusinessID(company.getBusinesses()),
 				company.getCity().getId(), 
 				company.getDistrict().getId(), 
 				company.getAddress(), 
 				company.getLogoUrl(), 
-				company.getCoverImageUrl());
+				company.getCoverImageUrl(),
+				company.getIntroduction());
 		return companyResponse;
 	}
 }

@@ -121,7 +121,7 @@ public class Business {
 		super();
 	}
 	
-	public static Set<Business> convertBusiness(Set<UUID> businessIds){
+	public static Set<Business> listBusiness(Set<UUID> businessIds){
 		Set<Business> businesses = new HashSet<>();
 		for (UUID id : businessIds) {
 			Business business = new Business(id);
@@ -130,7 +130,7 @@ public class Business {
 		return businesses;
 	}
 	
-	public static Set<UUID> convertBusinessIDs(Set<Business> businesses){
+	public static Set<UUID> listBusinessID(Set<Business> businesses){
 		Set<UUID> businessIds = new HashSet<>();
 		for (Business obj : businesses) {
 			businessIds.add(obj.getId());
