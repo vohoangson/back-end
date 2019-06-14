@@ -2,10 +2,7 @@ package com.japanwork.constant;
 
 public class UrlConstant {
 	//Error
-	public static final String URL_ERROR_404 = "/404";
 	public static final String URL_ERROR_403 = "/403";
-	public static final String URL_ERROR_401 = "/401";
-	public static final String URL_ERROR_400 = "/400";
 	
 	//Auth
 	public static final String URL_LOGIN = "/login";
@@ -25,7 +22,7 @@ public class UrlConstant {
 	public static final String URL_BUSINESS_ID = "/business/{id}";
 	public static final String URL_BUSINESS_UNDEL = "/business/undelete/{id}";
 	
-	//Business Type
+	//Languague Type
 	public static final String URL_LANGUAGUE_TYPE = "/languagues";
 	public static final String URL_LANGUAGUE_TYPE_ID = "/languagues/{id}";
 	public static final String URL_LANGUAGUE_TYPE_UNDEL = "/languagues/undelete/{id}";
@@ -59,6 +56,7 @@ public class UrlConstant {
 	//Company
 	public static final String URL_COMPANY = "/companies";
 	public static final String URL_COMPANY_ID = "/companies/{id}";
+	public static final String URL_COMPANY_ID_JOB = "/companies/{id}/jobs";
 	public static final String URL_COMPANY_UNDEL_ID = "/companies/undelete/{id}";
 	public static final String URL_COMPANY_DEL_ID = "/companies/delete/{id}";
 	

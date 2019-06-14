@@ -1,32 +1,26 @@
-package com.japanwork.payload.request;
+package com.japanwork.payload.response;
 
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JobRequest {
-	@NotNull(message = "company_required")
+public class JobResponse {
+	private UUID id;
+	
 	@JsonProperty("company_id")
 	private UUID companyId;
 	
-	@NotBlank(message = "name_job_required")
 	private String name;
-	
-	@NotNull(message = "businesses_required")
+
 	@JsonProperty("business_ids")
 	private Set<UUID> businessIds = new HashSet<>();
 	
-	@NotNull(message = "contract_required")
 	@JsonProperty("contract_id")
 	private UUID contractId;
 	
-	@NotNull(message = "level_required")
 	@JsonProperty("level_id")
 	private UUID levelId;
 	
@@ -45,15 +39,12 @@ public class JobRequest {
 	
 	private String desc;
 	
-	@NotNull(message = "city_required")
 	@JsonProperty("city_id")
 	private UUID cityId;
 	
-	@NotNull(message = "district_required")
 	@JsonProperty("district_id")
 	private UUID districtId;
 	
-	@NotBlank(message = "address_required")
 	private String address;
 	
     @JsonProperty("expiring_date")
@@ -65,8 +56,15 @@ public class JobRequest {
 	@JsonProperty("max_salary")
 	private float maxSalary;
 	
-	@NotBlank(message = "benefits_required")
-	private String benefits;
+	private String benefits;	
+	
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public UUID getCompanyId() {
 		return companyId;
@@ -201,6 +199,31 @@ public class JobRequest {
 	}
 
 	public void setBenefits(String benefits) {
+		this.benefits = benefits;
+	}
+
+	public JobResponse(UUID id, UUID companyId, String name, Set<UUID> businessIds, UUID contractId, UUID levelId,
+			int japaneseLevel, String requiredEducation, String requiredExperience, String requiredLanguage,
+			String desc, UUID cityId, UUID districtId, String address, Date applicationDeadline, float minSalary,
+			float maxSalary, String benefits) {
+		super();
+		this.id = id;
+		this.companyId = companyId;
+		this.name = name;
+		this.businessIds = businessIds;
+		this.contractId = contractId;
+		this.levelId = levelId;
+		this.japaneseLevel = japaneseLevel;
+		this.requiredEducation = requiredEducation;
+		this.requiredExperience = requiredExperience;
+		this.requiredLanguage = requiredLanguage;
+		this.desc = desc;
+		this.cityId = cityId;
+		this.districtId = districtId;
+		this.address = address;
+		this.applicationDeadline = applicationDeadline;
+		this.minSalary = minSalary;
+		this.maxSalary = maxSalary;
 		this.benefits = benefits;
 	}
 }

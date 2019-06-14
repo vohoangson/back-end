@@ -133,7 +133,7 @@ public class CompanyService {
 		return response;
 	}
 	
-	public boolean checkCompanyByUser(User user) throws ResourceNotFoundException{
+	public boolean checkCompanyByUser(User user){
 		Company company = companyRepository.findByUser(user);
 		if(company == null) {
 			return false;
@@ -162,6 +162,11 @@ public class CompanyService {
 	
 	public Company findById(UUID id) {
 		return companyRepository.findById(id).get();
+	}
+	
+	public Company findByUser(User user){
+		Company company = companyRepository.findByUser(user);
+		return company;
 	}
 	
 	private CompanyResponse convertCompanyResponse(Company company) {

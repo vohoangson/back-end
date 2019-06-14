@@ -226,4 +226,10 @@ public class Company {
 		this.updateDate = updateDate;
 		this.isDelete = isDelete;
 	}
+	
+	public Company(UUID id) {
+		super();
+		this.id = id;
+
+	}
 }

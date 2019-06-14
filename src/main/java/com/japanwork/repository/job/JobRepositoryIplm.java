@@ -182,4 +182,10 @@ public class JobRepositoryIplm implements JobRepository{
 		return findAllByCompany(company);
 	}
 
+	@Override
+	public Page<Job> findAllByCompanyIdAndIsDelete(Pageable page, UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findAllByCompanyIdAndIsDelete(page, id, isDelete);
+	}
+
 }

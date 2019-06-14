@@ -1,6 +1,8 @@
 package com.japanwork.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Experience;
+import com.japanwork.payload.response.ExperienceResponse;
 import com.japanwork.repository.experience.ExperienceRepository;
 
 @Service
@@ -18,6 +21,22 @@ public class ExperienceService {
 	public List<Experience> saveAll(List<Experience> experiences) {
 		List<Experience> result = experienceRepository.saveAll(experiences);		
 		return result;
+	}
+	
+	public Set<ExperienceResponse> listExperienceResponse(Set<Experience> experiences){
+		Set<ExperienceResponse> list = new HashSet<ExperienceResponse>();
+		for (Experience experience : experiences) {
+			ExperienceResponse experienceResponse = new ExperienceResponse();
+			experienceResponse.setOrganizaion(experience.getOrganizaion());
+			experienceResponse.setDescription(experience.getDescription());
+			experienceResponse.setLevelId(experience.getLevel().getId());
+			experienceResponse.setBusinessId(experience.getBusiness().getId());
+			experienceResponse.setStartDate(experience.getStartDate());
+			experienceResponse.setEndDate(experience.getEndDate());
+			
+			list.add(experienceResponse);
+		}
+		return list;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		

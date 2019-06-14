@@ -1,10 +1,10 @@
-package com.japanwork.payload.request;
+package com.japanwork.payload.response;
 
 import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AcademyRequest {
+public class AcademyResponse {
 	@JsonProperty("academy_center_name")
 	private String academyCenterName;
 	
@@ -69,6 +69,19 @@ public class AcademyRequest {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
-	
+
+	public AcademyResponse(String academyCenterName, String majorName, float grade, int gradeSystem, Date startDate,
+			Date endDate) {
+		super();
+		this.academyCenterName = academyCenterName;
+		this.majorName = majorName;
+		this.grade = grade;
+		this.gradeSystem = gradeSystem;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+	public AcademyResponse() {
+		super();
+	}
 }

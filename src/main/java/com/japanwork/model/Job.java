@@ -48,10 +48,6 @@ public class Job {
 	@ManyToOne
     @JoinColumn(name = "level_id")
     private Level level;
-    
-	@ManyToOne
-    @JoinColumn(name = "work_place_country_id")
-    private Country country;
 	
 	@ManyToOne
     @JoinColumn(name = "work_place_city_id")
@@ -161,14 +157,6 @@ public class Job {
 		this.level = level;
 	}
 	
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
-	}
-
 	public City getCity() {
 		return city;
 	}
@@ -299,7 +287,7 @@ public class Job {
 	}
 
 	public Job(UUID id, String name, Company company, Set<Business> businesses, Contract contract, Level level,
-			Country country, City city, District district, String address, String desc, String requiredEducation,
+			City city, District district, String address, String desc, String requiredEducation,
 			String requiredExperience, String requiredLanguage, String benefits, int japaneseLevelRequirement,
 			Date applicationDeadline, float minSalary, float maxSalary, String status, Timestamp createDate,
 			Timestamp updateDate, boolean isDelete) {
@@ -310,7 +298,6 @@ public class Job {
 		this.businesses = businesses;
 		this.contract = contract;
 		this.level = level;
-		this.country = country;
 		this.city = city;
 		this.district = district;
 		this.address = address;

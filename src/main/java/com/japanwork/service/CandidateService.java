@@ -377,7 +377,7 @@ public class CandidateService {
 		return response;
 	}
 	
-	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) {
+	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Candidate> pages = candidateRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
 			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
@@ -441,9 +441,9 @@ public class CandidateService {
 		}
 		
 		candidateResponse.setWishSalary(candidate.getWishSalary());
-		candidateResponse.setAcademyIds(Academy.listAcademyID(candidate.getAcademies()));
-		candidateResponse.setExperienceIds(Experience.listExperienceID(candidate.getExperiences()));
-		candidateResponse.setLanguageCertificateIds(LanguageCertificate.listLanguageCertificateID(candidate.getLanguageCertificates()));
+		candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
+		candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
+		candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
 		
 		return candidateResponse;
 	}

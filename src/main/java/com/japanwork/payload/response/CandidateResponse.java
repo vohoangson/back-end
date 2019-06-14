@@ -56,14 +56,12 @@ public class CandidateResponse {
     @JsonProperty("wish_salary")
     private float wishSalary;
     
-    @JsonProperty("academy_ids")
-	private Set<UUID> academyIds;
+	private Set<AcademyResponse> academies;
 
-    @JsonProperty("experience_ids")
-	private Set<UUID> experienceIds;
+	private Set<ExperienceResponse> experiences;
     
-    @JsonProperty("language_certificate_ids")
-	private Set<UUID> languageCertificateIds;
+    @JsonProperty("language_certificates")
+	private Set<LanguageCertificateResponse> languageCertificates;
 
 	public UUID getId() {
 		return id;
@@ -209,35 +207,36 @@ public class CandidateResponse {
 		this.wishSalary = wishSalary;
 	}
 
-	public Set<UUID> getAcademyIds() {
-		return academyIds;
+	public Set<AcademyResponse> getAcademies() {
+		return academies;
 	}
 
-	public void setAcademyIds(Set<UUID> academyIds) {
-		this.academyIds = academyIds;
+	public void setAcademies(Set<AcademyResponse> academies) {
+		this.academies = academies;
 	}
 
-	public Set<UUID> getExperienceIds() {
-		return experienceIds;
+	public Set<ExperienceResponse> getExperiences() {
+		return experiences;
 	}
 
-	public void setExperienceIds(Set<UUID> experienceIds) {
-		this.experienceIds = experienceIds;
+	public void setExperiences(Set<ExperienceResponse> experiences) {
+		this.experiences = experiences;
 	}
 
-	public Set<UUID> getLanguageCertificateIds() {
-		return languageCertificateIds;
+	public Set<LanguageCertificateResponse> getLanguageCertificates() {
+		return languageCertificates;
 	}
 
-	public void setLanguageCertificateIds(Set<UUID> languageCertificateIds) {
-		this.languageCertificateIds = languageCertificateIds;
+	public void setLanguageCertificates(Set<LanguageCertificateResponse> languageCertificates) {
+		this.languageCertificates = languageCertificates;
 	}
 
 	public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital,
 			UUID residentalCityId, UUID residentalDistrictId, String residentalAddres, String avatar,
 			String introduction, int japaneseLevel, UUID wishWorkingCityId, UUID wishWorkingDistrictId,
 			String wishWorkingAddress, UUID wishBusinessId, UUID wishLevelId, UUID wishContractId, float wishSalary,
-			Set<UUID> academyIds, Set<UUID> experienceIds, Set<UUID> languageCertificateIds) {
+			Set<AcademyResponse> academies, Set<ExperienceResponse> experiences,
+			Set<LanguageCertificateResponse> languageCertificates) {
 		super();
 		this.id = id;
 		this.fullName = fullName;
@@ -257,9 +256,9 @@ public class CandidateResponse {
 		this.wishLevelId = wishLevelId;
 		this.wishContractId = wishContractId;
 		this.wishSalary = wishSalary;
-		this.academyIds = academyIds;
-		this.experienceIds = experienceIds;
-		this.languageCertificateIds = languageCertificateIds;
+		this.academies = academies;
+		this.experiences = experiences;
+		this.languageCertificates = languageCertificates;
 	}
 
 	public CandidateResponse() {

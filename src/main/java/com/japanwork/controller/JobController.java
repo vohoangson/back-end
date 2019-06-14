@@ -31,8 +31,16 @@ public class JobController {
 	
 	@GetMapping(UrlConstant.URL_JOB)
 	@ResponseBody
-	public BaseDataMetaResponse listJob(@RequestParam(defaultValue = "1", name = "page") int page, @RequestParam(defaultValue = "25", name = "paging") int paging) {		
+	public BaseDataMetaResponse listJob(@RequestParam(defaultValue = "1", name = "page") int page, 
+			@RequestParam(defaultValue = "25", name = "paging") int paging) {		
 		return jobService.findAllByIsDelete(page, paging);
+	}
+	
+	@GetMapping(UrlConstant.URL_COMPANY_ID_JOB)
+	@ResponseBody
+	public BaseDataMetaResponse listJobByCompny(@RequestParam(defaultValue = "1", name = "page") int page, 
+			@RequestParam(defaultValue = "25", name = "paging") int paging, @PathVariable UUID id) {		
+		return jobService.findAllByCompanyIdAndIsDelete(page, paging, id);
 	}
 	
 	@PostMapping(UrlConstant.URL_JOB)

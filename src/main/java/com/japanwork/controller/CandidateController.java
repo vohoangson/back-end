@@ -43,7 +43,7 @@ public class CandidateController {
 	public BaseDataResponse createCandidatePersonal (@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
-			throw new BadRequestException(MessageConstant.CADIDATE_ALREADY);
+			throw new BadRequestException(MessageConstant.CADIDATE_ALREADY, MessageConstant.CADIDATE_ALREADY_MSG);
 		}
 		
 		return candidateService.savePersonal(candidatePersonalRequest, userPrincipal);

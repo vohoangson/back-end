@@ -5,11 +5,6 @@ public class MessageConstant {
 	public static final String INVALID_INPUT = "Invalid input!";
 	public static final String INVALID_INPUT_MSG = "Invalid input!";
 	
-	
-	public static final String ERROR_401 = "Unauthorized";
-	public static final String ERROR_403 = "You do not have permission to access this page!";
-	
-	public static final String CADIDATE_ALREADY = "Only one candidate can be created per account!";
 	public static final String TRANSLATOR_ALREADY = "Only one translator can be created per account!";
 	public static final String LOGOUT_SUCCESS = "Logout successfully";
 	
@@ -35,9 +30,12 @@ public class MessageConstant {
 	public static final String RESET_PASSWORD = "reset_password";
 	public static final String DELETE_USER_BY_EMAIL = "delete_user_by_email";
 	public static final String COMPANY_ALREADY = "only_one_company_created";
+	public static final String CADIDATE_ALREADY = "only_one_candidate_created";
 	
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
+	public static final String ERROR_401 = "unauthorized";
+	public static final String ERROR_403 = "forbidden_rror";
 	
 	//Message
 	public static final String LOGIN_FAIL_MSG = "Incorrect email or password";
@@ -56,13 +54,19 @@ public class MessageConstant {
 	public static final String COMPANY_ALREADY_MSG = "Only one company can be created per account!";
 	public static final String COMPANY_CREATE_FAIL = "Create company failed!";
 	public static final String COMPANY_UPDATE_FAIL = "Update company failed!";
+	public static final String CADIDATE_ALREADY_MSG = "Only one candidate can be created per account!";
 	public static final String CANDIDATE_CREATE_FAIL = "Create candidate failed!";
 	public static final String CANDIDATE_UPDATE_PERSONAL_FAIL = "Update candidate personal failed!";
 	public static final String CANDIDATE_UPDATE_WISH_FAIL = "Update candidate wish failed!";
 	public static final String CANDIDATE_ADD_EXPERIENCE_FAIL = "Create candidate experience failed!";
 	public static final String CANDIDATE_UPDATE_EXPERIENCE_FAIL = "Update candidate experience failed!";
+	public static final String JOB_CREATE_FAIL = "Create job failed!";
+	public static final String JOB_UPDATE_FAIL = "Update job failed!";
+	public static final String JOB_DELETE_FAIL = "Delete job failed!";
 	
 	
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
+	public static final String ERROR_401_MSG = "You do not have permission to access this page!";
+	public static final String ERROR_403_MSG = "Access Denied You don’t have permission to access!";
 }
