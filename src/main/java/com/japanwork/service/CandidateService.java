@@ -418,32 +418,40 @@ public class CandidateService {
 		candidateResponse.setIntroduction(candidate.getIntroduction());
 		candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
 		
-		if(candidate.getWishWorkingCity()!=null) {
+		if(candidate.getWishWorkingCity() != null) {
 			candidateResponse.setWishWorkingCityId(candidate.getWishWorkingCity().getId());
 		}
 		
-		if(candidate.getWishWorkingDistrict()!=null) {
+		if(candidate.getWishWorkingDistrict() != null) {
 			candidateResponse.setWishWorkingDistrictId(candidate.getWishWorkingDistrict().getId());
 		}
 		
 		candidateResponse.setWishWorkingAddress(candidate.getWishWorkingAddress());
 		
-		if(candidate.getWishBusiness()!=null) {
+		if(candidate.getWishBusiness() != null) {
 			candidateResponse.setWishBusinessId(candidate.getWishBusiness().getId());
 		}
 		
-		if(candidate.getWishLevel()!=null) {
+		if(candidate.getWishLevel() != null) {
 			candidateResponse.setWishLevelId(candidate.getWishLevel().getId());
 		}
 		
-		if(candidate.getWishContract()!=null) {
+		if(candidate.getWishContract() != null) {
 			candidateResponse.setWishContractId(candidate.getWishContract().getId());
 		}
 		
 		candidateResponse.setWishSalary(candidate.getWishSalary());
-		candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
-		candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
-		candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
+
+		if(candidate.getAcademies() != null) {
+			candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
+		}
+		
+		if(candidate.getExperiences() != null) {
+			candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
+		}
+		if(candidate.getLanguageCertificates() != null) {
+			candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
+		}
 		
 		return candidateResponse;
 	}
