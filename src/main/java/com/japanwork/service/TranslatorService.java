@@ -69,14 +69,14 @@ public class TranslatorService {
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_TRANSLATOR")) {
 			translator = translatorRepository.findByIdAndIsDelete(id, false);
 			if(translator == null) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+				throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 			}
 			if(!translator.getUser().getId().equals(userPrincipal.getId())) {
 				throw new UnauthorizedException(MessageConstant.ERROR_403);
 			}
 		} else {
 			translator = translatorRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		}
 
 		translator.setName(translatorRequest.getName());
@@ -100,7 +100,7 @@ public class TranslatorService {
 			throws ResourceNotFoundException{
 		Translator translator = translatorRepository.findByIdAndIsDelete(id, false);
 		if(translator == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(translator);	
@@ -116,7 +116,7 @@ public class TranslatorService {
 	
 	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Translator translator = translatorRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		translator.setDelete(isDel);
 		translatorRepository.save(translator);
 		

@@ -104,7 +104,7 @@ public class CandidateService {
 				candidate = this.findCandidateByIdAndIsDelete(id);
 			} else {
 				candidate = candidateRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			candidate.setFullName(candidatePersonalRequest.getFullName());
@@ -142,7 +142,7 @@ public class CandidateService {
 				candidate = this.findCandidateByIdAndIsDelete(id);
 			} else {
 				candidate = candidateRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			candidate.setWishWorkingCity(new City(candidateWishRequest.getWishWorkingCityId()));
@@ -335,7 +335,7 @@ public class CandidateService {
 	
 	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		candidate.setDelete(isDel);
 		candidateRepository.save(candidate);
 		Candidate result = candidateRepository.findByIdAndIsDelete(id, false);
@@ -347,7 +347,7 @@ public class CandidateService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
 		if(candidate == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(candidate));	
@@ -357,7 +357,7 @@ public class CandidateService {
 	public Candidate findCandidateByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
 		if(candidate == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		return candidate;
 	}

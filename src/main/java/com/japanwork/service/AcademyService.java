@@ -24,19 +24,22 @@ public class AcademyService {
 	}
 	
 	public Set<AcademyResponse> listAcademyResponse(Set<Academy> academies){
-		Set<AcademyResponse> list = new HashSet<AcademyResponse>();
-		for (Academy academy : academies) {
-			AcademyResponse academyResponse = new AcademyResponse();
-			academyResponse.setAcademyCenterName(academy.getAcademyCenterName());
-			academyResponse.setMajorName(academy.getMajorName());
-			academyResponse.setGrade(academy.getGrade());
-			academyResponse.setGradeSystem(academy.getGradeSystem());
-			academyResponse.setStartDate(academy.getStartDate());
-			academyResponse.setEndDate(academy.getEndDate());
-			
-			list.add(academyResponse);
+		if(academies != null) {
+			Set<AcademyResponse> list = new HashSet<AcademyResponse>();
+			for (Academy academy : academies) {
+				AcademyResponse academyResponse = new AcademyResponse();
+				academyResponse.setAcademyCenterName(academy.getAcademyCenterName());
+				academyResponse.setMajorName(academy.getMajorName());
+				academyResponse.setGrade(academy.getGrade());
+				academyResponse.setGradeSystem(academy.getGradeSystem());
+				academyResponse.setStartDate(academy.getStartDate());
+				academyResponse.setEndDate(academy.getEndDate());
+				
+				list.add(academyResponse);
+			}
+			return list;
 		}
-		return list;
+		return null;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		

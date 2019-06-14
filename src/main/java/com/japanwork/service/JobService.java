@@ -127,7 +127,7 @@ public class JobService {
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 				job = jobRepository.findByIdAndIsDelete(id, false);
 				if(job == null) {
-					throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
 				
 				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
@@ -135,7 +135,7 @@ public class JobService {
 				}
 			} else {
 				job = jobRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			job.setName(jobRequest.getName());
@@ -173,7 +173,7 @@ public class JobService {
 			throws ResourceNotFoundException, UnauthorizedException, ServerError{
 		try {
 			Job job = jobRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
@@ -198,7 +198,7 @@ public class JobService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Job job = jobRepository.findByIdAndIsDelete(id, false);
 		if(job == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}		
 		
 		BaseDataResponse response = new BaseDataResponse(convertJobResponse(job));

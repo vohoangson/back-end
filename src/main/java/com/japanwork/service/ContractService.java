@@ -29,7 +29,7 @@ public class ContractService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		Contract contract = contractRepository.findByIdAndIsDelete(id, false);
 		if(contract == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(contract);	

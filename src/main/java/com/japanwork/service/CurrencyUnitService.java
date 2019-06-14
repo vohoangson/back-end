@@ -48,7 +48,7 @@ public class CurrencyUnitService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		CurrencyUnit currencyUnit = currencyUnitRepository.findByIdAndIsDelete(id, false);
 		if(currencyUnit == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(currencyUnit);	

@@ -53,7 +53,7 @@ public class DistrictService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		District district = districtRepository.findByIdAndIsDelete(id, false);
 		if(district == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(district);	

@@ -41,7 +41,7 @@ public class BusinessService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		Business business = businessTypeRepository.findByIdAndIsDelete(id, false);
 		if(business == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(business);	

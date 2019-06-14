@@ -48,7 +48,7 @@ public class LanguageCertificateTypeService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndIsDelete(id, false);
 		if(languageCertificateType == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(languageCertificateType);	

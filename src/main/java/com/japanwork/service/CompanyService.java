@@ -75,14 +75,14 @@ public class CompanyService {
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 				company = companyRepository.findByIdAndIsDelete(id, false);
 				if(company == null) {
-					throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
 				if(!company.getUser().getId().equals(userPrincipal.getId())) {
 					throw new UnauthorizedException(MessageConstant.ERROR_403);
 				}
 			} else {
 				company = companyRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			company.setName(companyRequest.getName());
@@ -111,7 +111,7 @@ public class CompanyService {
 	
 	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Company company = companyRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		company.setDelete(isDel);
 		companyRepository.save(company);
 		Company result = companyRepository.findByIdAndIsDelete(id, false);
@@ -126,7 +126,7 @@ public class CompanyService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		if(company == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(company));	

@@ -30,7 +30,7 @@ public class LevelService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		Level level = levelRepository.findByIdAndIsDelete(id, false);
 		if(level == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(level);	

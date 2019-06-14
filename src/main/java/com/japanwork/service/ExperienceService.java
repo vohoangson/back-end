@@ -24,19 +24,22 @@ public class ExperienceService {
 	}
 	
 	public Set<ExperienceResponse> listExperienceResponse(Set<Experience> experiences){
-		Set<ExperienceResponse> list = new HashSet<ExperienceResponse>();
-		for (Experience experience : experiences) {
-			ExperienceResponse experienceResponse = new ExperienceResponse();
-			experienceResponse.setOrganizaion(experience.getOrganizaion());
-			experienceResponse.setDescription(experience.getDescription());
-			experienceResponse.setLevelId(experience.getLevel().getId());
-			experienceResponse.setBusinessId(experience.getBusiness().getId());
-			experienceResponse.setStartDate(experience.getStartDate());
-			experienceResponse.setEndDate(experience.getEndDate());
-			
-			list.add(experienceResponse);
+		if(experiences != null) {
+			Set<ExperienceResponse> list = new HashSet<ExperienceResponse>();
+			for (Experience experience : experiences) {
+				ExperienceResponse experienceResponse = new ExperienceResponse();
+				experienceResponse.setOrganizaion(experience.getOrganizaion());
+				experienceResponse.setDescription(experience.getDescription());
+				experienceResponse.setLevelId(experience.getLevel().getId());
+				experienceResponse.setBusinessId(experience.getBusiness().getId());
+				experienceResponse.setStartDate(experience.getStartDate());
+				experienceResponse.setEndDate(experience.getEndDate());
+				
+				list.add(experienceResponse);
+			}
+			return list;
 		}
-		return list;
+		return null;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		

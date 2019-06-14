@@ -29,7 +29,7 @@ public class CountryService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		Country country = countryRepository.findByIdAndIsDelete(id, false);
 		if(country == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(country);	

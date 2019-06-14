@@ -37,7 +37,7 @@ public class CityService {
 	public BaseDataResponse findByIdAndIsDelete(UUID id) {
 		City city = cityRepository.findByIdAndIsDelete(id, false);
 		if(city == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404);
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
 		BaseDataResponse response = new BaseDataResponse(city);	

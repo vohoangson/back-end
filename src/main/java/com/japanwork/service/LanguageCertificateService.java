@@ -24,17 +24,20 @@ public class LanguageCertificateService {
 	}
 	
 	public Set<LanguageCertificateResponse> listLanguageCertificateResponse(Set<LanguageCertificate> languageCertificates){
-		Set<LanguageCertificateResponse> list = new HashSet<LanguageCertificateResponse>();
-		for (LanguageCertificate languageCertificate : languageCertificates) {
-			LanguageCertificateResponse languageCertificateResponse = new LanguageCertificateResponse();
-			
-			languageCertificateResponse.setScore(languageCertificate.getScore());
-			languageCertificateResponse.setLanguageCertificateTypeId(languageCertificate.getLanguageCertificateType().getId());
-			languageCertificateResponse.setTakenDate(languageCertificate.getTakenDate());
-			
-			list.add(languageCertificateResponse);
+		if(languageCertificates != null) {
+			Set<LanguageCertificateResponse> list = new HashSet<LanguageCertificateResponse>();
+			for (LanguageCertificate languageCertificate : languageCertificates) {
+				LanguageCertificateResponse languageCertificateResponse = new LanguageCertificateResponse();
+				
+				languageCertificateResponse.setScore(languageCertificate.getScore());
+				languageCertificateResponse.setLanguageCertificateTypeId(languageCertificate.getLanguageCertificateType().getId());
+				languageCertificateResponse.setTakenDate(languageCertificate.getTakenDate());
+				
+				list.add(languageCertificateResponse);
+			}
+			return list;
 		}
-		return list;
+		return null;
 	}
 	
 	public void del(UUID id) throws ResourceNotFoundException{		
