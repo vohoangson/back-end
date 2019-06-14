@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.exception.UnauthorizedException;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.Company;
@@ -65,7 +65,7 @@ public class CompanyService {
 	}
 	
 	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) 
-			throws ResourceNotFoundException, UnauthorizedException, ServerError{
+			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
@@ -78,7 +78,7 @@ public class CompanyService {
 					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
 				if(!company.getUser().getId().equals(userPrincipal.getId())) {
-					throw new UnauthorizedException(MessageConstant.ERROR_403);
+					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			} else {
 				company = companyRepository.findById(id)
@@ -102,7 +102,7 @@ public class CompanyService {
 			return response;
 		} catch (ResourceNotFoundException e) {
 			throw e;
-		} catch (UnauthorizedException e) {
+		} catch (ForbiddenException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);

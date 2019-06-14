@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.exception.UnauthorizedException;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.Contract;
@@ -117,7 +117,7 @@ public class JobService {
 	}
 	
 	public BaseDataResponse update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal) 
-			throws ResourceNotFoundException, UnauthorizedException, ServerError{
+			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
@@ -131,7 +131,7 @@ public class JobService {
 				}
 				
 				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-					throw new UnauthorizedException(MessageConstant.ERROR_403);
+					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			} else {
 				job = jobRepository.findById(id)
@@ -162,7 +162,7 @@ public class JobService {
 			return response;
 		}catch (ResourceNotFoundException e) {
 			throw e;
-		}catch (UnauthorizedException e) {
+		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
 			throw new ServerError(MessageConstant.JOB_UPDATE_FAIL);
@@ -170,14 +170,14 @@ public class JobService {
 	}
 	
 	public BaseDataResponse isDel(UUID id, UserPrincipal userPrincipal, boolean isDel) 
-			throws ResourceNotFoundException, UnauthorizedException, ServerError{
+			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Job job = jobRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-					throw new UnauthorizedException(MessageConstant.ERROR_403);
+					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			}
 			
@@ -188,7 +188,7 @@ public class JobService {
 			return response;
 		}catch (ResourceNotFoundException e) {
 			throw e;
-		}catch (UnauthorizedException e) {
+		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
 			throw new ServerError(MessageConstant.JOB_DELETE_FAIL);

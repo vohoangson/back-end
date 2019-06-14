@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
-import com.japanwork.exception.UnauthorizedException;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.TranslatorRequest;
@@ -72,7 +72,7 @@ public class TranslatorService {
 				throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 			}
 			if(!translator.getUser().getId().equals(userPrincipal.getId())) {
-				throw new UnauthorizedException(MessageConstant.ERROR_403);
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		} else {
 			translator = translatorRepository.findById(id)

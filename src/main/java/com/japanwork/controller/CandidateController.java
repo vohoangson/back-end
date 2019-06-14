@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
-import com.japanwork.exception.UnauthorizedException;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Candidate;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
@@ -52,9 +52,9 @@ public class CandidateController {
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_PERSONAL)
 	@ResponseBody
 	public BaseDataResponse updateCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, 
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
 		if(!checkPermission(userPrincipal, id)) {
-			throw new UnauthorizedException(MessageConstant.ERROR_403);
+			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
 		return candidateService.updatePersonal(candidatePersonalRequest, id, userPrincipal);
 	}
@@ -62,9 +62,9 @@ public class CandidateController {
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_WISH)
 	@ResponseBody
 	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateWishRequest candidateWishRequest, 
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
 		if(!checkPermission(userPrincipal, id)) {
-			throw new UnauthorizedException(MessageConstant.ERROR_403);
+			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
 		return candidateService.updateWish(candidateWishRequest, id, userPrincipal);
 	}
@@ -72,9 +72,9 @@ public class CandidateController {
 	@PostMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
 	@ResponseBody
 	public BaseDataResponse createCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{	
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{	
 		if(!checkPermission(userPrincipal, id)) {
-			throw new UnauthorizedException(MessageConstant.ERROR_403);
+			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
 		return candidateService.createExperience(candidateExperienceRequest, id);
 	}
@@ -82,9 +82,9 @@ public class CandidateController {
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
 	@ResponseBody
 	public BaseDataResponse updateCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws UnauthorizedException{	
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{	
 		if(!checkPermission(userPrincipal, id)) {
-			throw new UnauthorizedException(MessageConstant.ERROR_403);
+			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
 		return candidateService.updateExperience(candidateExperienceRequest, id, userPrincipal);
 	}

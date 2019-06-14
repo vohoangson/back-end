@@ -13,7 +13,7 @@ public class Error403 {
 	@RequestMapping(value = "/403")
 	@ResponseBody
 	public BaseDataResponse error403() {
-		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.INVALID_INPUT, MessageConstant.ERROR_403);
+		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_403, MessageConstant.ERROR_403_MSG);
 		return new BaseDataResponse(baseMessageResponse);
 	}
 }

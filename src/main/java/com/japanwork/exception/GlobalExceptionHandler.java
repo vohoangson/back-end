@@ -40,9 +40,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(UnauthorizedException.class)
-	public ResponseEntity<?> unauthorizedException(UnauthorizedException ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_401, ex.getMessage());
+	@ExceptionHandler(ForbiddenException.class)
+	public ResponseEntity<?> forbiddenException(ForbiddenException ex, WebRequest request) {
+		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_403, ex.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 	
