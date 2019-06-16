@@ -92,7 +92,7 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	@Override
 	public <S extends Conversation> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return save(entity);
 	}
 
 	@Override
