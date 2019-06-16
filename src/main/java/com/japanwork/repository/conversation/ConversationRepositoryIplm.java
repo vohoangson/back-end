@@ -161,4 +161,10 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 		return false;
 	}
 
+	@Override
+	public Conversation findByIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByIdAndIsDelete(id, isDelete);
+	}
+
 }

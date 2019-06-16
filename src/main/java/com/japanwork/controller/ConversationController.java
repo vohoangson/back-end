@@ -1,10 +1,11 @@
 package com.japanwork.controller;
 
-import javax.validation.Valid;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,17 +24,16 @@ public class ConversationController {
 	
 	@PostMapping(UrlConstant.URL_CONVERSATION)
 	@ResponseBody
-	public BaseDataResponse createConversation(@Valid @RequestBody ConversationRequest conversationRequest, 
+	public BaseDataResponse createConversation(@RequestBody ConversationRequest conversationRequest, 
 			@CurrentUser UserPrincipal userPrincipal) {
 		
 		return conversationService.save(conversationRequest, userPrincipal);
 	}
 	
-	@PatchMapping(UrlConstant.URL_CONVERSATION)
+	@PatchMapping(UrlConstant.URL_CONVERSATION_ID)
 	@ResponseBody
-	public BaseDataResponse addCandidate(@Valid @RequestBody ConversationRequest conversationRequest, 
-			@CurrentUser UserPrincipal userPrincipal) {
+	public BaseDataResponse addCandidate(@RequestBody ConversationRequest conversationRequest, @PathVariable UUID id) {
 		
-		return conversationService.save(conversationRequest, userPrincipal);
+		return conversationService.update(conversationRequest, id);
 	}
 }
