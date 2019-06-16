@@ -11,6 +11,7 @@ import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
 import com.japanwork.payload.request.ConversationRequest;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.ConversationResponse;
 import com.japanwork.repository.conversation.ConversationRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -26,6 +27,12 @@ public class ConversationService {
 	@Autowired
 	private TranslatorService translatorService;
 	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private CandidateService candidateService;
+	
 	public BaseDataResponse save(ConversationRequest conversationRequest, UserPrincipal userPrincipal) {
 		Conversation conversation = new Conversation();
 		conversation.setTranslator(translatorService.findTranslatorByUser(userService.findById(userPrincipal.getId())));
@@ -38,7 +45,7 @@ public class ConversationService {
 		
 		Conversation result = conversationRepository.save(conversation);
 		
-		return new BaseDataResponse(result);
+		return new BaseDataResponse(convertTranslatorResponse(result));
 	}
 	
 	public BaseDataResponse update(ConversationRequest conversationRequest, UUID id) throws BadRequestException{
@@ -60,6 +67,15 @@ public class ConversationService {
 		
 		Conversation result = conversationRepository.save(conversation);
 		
-		return new BaseDataResponse(result);
+		return new BaseDataResponse(convertTranslatorResponse(result));
+	}
+	
+	public ConversationResponse convertTranslatorResponse(Conversation conversation) {
+		ConversationResponse conversationResponse = new ConversationResponse(
+				conversation.getId(),
+				companyService.convertCompanyResponse(conversation.getCompany()), 
+				candidateService.convertCandiateResponse(conversation.getCandidate()),
+				translatorService.convertTranslatorResponse(conversation.getTranslator()));
+		return conversationResponse;
 	}
 }

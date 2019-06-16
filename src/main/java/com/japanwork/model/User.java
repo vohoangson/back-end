@@ -53,6 +53,10 @@ public class User {
     
     private String role;
     
+    @JsonProperty("property_id")
+    @Column(name="property_id")
+    private UUID propertyId;
+    
     @JsonIgnore
     @Column(name="create_date")
     private Timestamp createDate;
@@ -133,6 +137,14 @@ public class User {
 		this.role = role;
 	}
 	
+	public UUID getPropertyId() {
+		return propertyId;
+	}
+
+	public void setPropertyId(UUID propertyId) {
+		this.propertyId = propertyId;
+	}
+
 	public Timestamp getCreateDate() {
 		return createDate;
 	}
@@ -171,24 +183,42 @@ public class User {
 		this.role = role;
 	}
 
-	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
-			@NotNull AuthProvider provider, String providerId, String role, Timestamp createDate,
-			Timestamp updateDate, boolean isDelete) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.isEnabled = isEnabled;
-		this.password = password;
-		this.provider = provider;
-		this.providerId = providerId;
-		this.role = role;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
-	}
+//	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
+//			@NotNull AuthProvider provider, String providerId, String role, Timestamp createDate,
+//			Timestamp updateDate, boolean isDelete) {
+//		super();
+//		this.id = id;
+//		this.name = name;
+//		this.email = email;
+//		this.isEnabled = isEnabled;
+//		this.password = password;
+//		this.provider = provider;
+//		this.providerId = providerId;
+//		this.role = role;
+//		this.createDate = createDate;
+//		this.updateDate = updateDate;
+//		this.isDelete = isDelete;
+//	}
 	
 	public User() {
 		super();
 	}
+
+	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
+		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Timestamp createDate,
+		Timestamp updateDate, boolean isDelete) {
+	super();
+	this.id = id;
+	this.name = name;
+	this.email = email;
+	this.isEnabled = isEnabled;
+	this.password = password;
+	this.provider = provider;
+	this.providerId = providerId;
+	this.role = role;
+	this.propertyId = propertyId;
+	this.createDate = createDate;
+	this.updateDate = updateDate;
+	this.isDelete = isDelete;
+}
 }

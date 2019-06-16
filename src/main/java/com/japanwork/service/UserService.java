@@ -53,7 +53,6 @@ import com.japanwork.repository.job.JobRepository;
 import com.japanwork.repository.language_certificate.LanguageCertificateRepository;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
-import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 
 @Service
@@ -149,6 +148,7 @@ public class UserService {
 	        user.setProvider(AuthProvider.local);
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
+	        user.setProviderId(null);
 	        user.setCreateDate(timestamp);
 	        user.setUpdateDate(timestamp);
 	        user.setDelete(false);
@@ -218,7 +218,17 @@ public class UserService {
 		}
 	}
 	
-	public BaseMessageResponse changePassword(@CurrentUser UserPrincipal userPrincipal, 
+	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{
+		try {
+			User user = userRepository.findByIdAndIsDelete(userId, false);
+			user.setPropertyId(propertyId);
+			userRepository.save(user);
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.CHANGE_PROPERTY_ID_FAIL_MSG);
+		}
+	}
+	
+	public BaseMessageResponse changePassword(UserPrincipal userPrincipal, 
 			ChangePasswordRequest changePasswordRequest) throws ServerError, BadRequestException{
 		try {
 			boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());

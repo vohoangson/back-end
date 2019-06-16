@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ForbiddenException;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.TranslatorRequest;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.TranslatorResponse;
 import com.japanwork.repository.translator.TranslatorRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -54,7 +55,7 @@ public class TranslatorService {
 		translator.setDelete(false);
 		
 		Translator result = translatorRepository.save(translator);
-		BaseDataResponse response = new BaseDataResponse(result);		
+		BaseDataResponse response = new BaseDataResponse(convertTranslatorResponse(result));		
 		return response;
 	}
 	
@@ -90,7 +91,7 @@ public class TranslatorService {
 		translator.setUpdateDate(timestamp);
 		
 		Translator result = translatorRepository.save(translator);
-		BaseDataResponse response = new BaseDataResponse(result);		
+		BaseDataResponse response = new BaseDataResponse(convertTranslatorResponse(result));		
 		return response;
 	}
 	
@@ -101,7 +102,7 @@ public class TranslatorService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		BaseDataResponse response = new BaseDataResponse(translator);	
+		BaseDataResponse response = new BaseDataResponse(convertTranslatorResponse(translator));	
 		return response;
 	}
 	
@@ -119,11 +120,26 @@ public class TranslatorService {
 		translatorRepository.save(translator);
 		
 		Translator result = translatorRepository.findByIdAndIsDelete(id, false);
-		return new BaseDataResponse(result);
+		return new BaseDataResponse(convertTranslatorResponse(result));
 	}
 	
 	public Translator findTranslatorByUser(User user){
 		Translator translator = translatorRepository.findByUser(user);
 		return translator;
+	}
+	
+	public TranslatorResponse convertTranslatorResponse(Translator translator) {
+		TranslatorResponse translatorResponse = new TranslatorResponse(
+				translator.getId(),
+				translator.getName(), 
+				translator.getGender(),
+				translator.getDateOfBirth(),
+				translator.getCity().getId(), 
+				translator.getDistrict().getId(), 
+				translator.getAddress(),
+				translator.getIntroduction(), 
+				translator.getAvatar(), 
+				translator.getJapaneseLevel());
+		return translatorResponse;
 	}
 }

@@ -47,6 +47,7 @@ public class MessageConstant {
 	public static final String RESET_FORGET_PASSWORD_SUCCESS = "We have just sent you an email to confirm the provision of a new password. Please check the mailbox!";
 	public static final String RESET_PASSWORD_FAIL_MSG = "Reset password failed!";
 	public static final String RESET_PASSWORD_SUCCESS = "Reset password successfully!";
+	public static final String CHANGE_PROPERTY_ID_FAIL_MSG = "Change property id failed!";
 	public static final String REGISTER_SUCCESS = "User registered successfully!";
 	public static final String REGISTER_FAIL = "User registered failed!";
 	public static final String DELETE_USER_BY_EMAIL_FAIL = "Delete user by email failed!";

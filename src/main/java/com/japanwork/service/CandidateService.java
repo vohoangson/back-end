@@ -403,7 +403,7 @@ public class CandidateService {
 		languageCertificateService.del(id);
 	}
 	
-	private CandidateResponse convertCandiateResponse(Candidate candidate) {
+	public CandidateResponse convertCandiateResponse(Candidate candidate) {
 		CandidateResponse candidateResponse = new CandidateResponse();
 		
 		candidateResponse.setId(candidate.getId());

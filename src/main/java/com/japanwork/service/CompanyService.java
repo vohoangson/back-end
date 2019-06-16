@@ -57,6 +57,7 @@ public class CompanyService {
 			company.setDelete(false);
 			
 			Company result = companyRepository.save(company);
+			userService.changePropertyId(userPrincipal.getId(), result.getId());
 			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
 			return response;
 		} catch (Exception e) {
