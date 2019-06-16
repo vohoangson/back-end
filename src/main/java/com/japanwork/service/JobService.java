@@ -87,7 +87,7 @@ public class JobService {
 			
 			Job job = new Job();
 			job.setName(jobRequest.getName());
-			job.setCompany(companyService.findByUser(userService.findById(userPrincipal.getId())));
+			job.setCompany(companyService.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false));
 			job.setBusinesses(Business.listBusiness(jobRequest.getBusinessIds()));
 			job.setContract(new Contract(jobRequest.getContractId()));
 			job.setLevel(new Level(jobRequest.getLevelId()));

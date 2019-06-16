@@ -391,6 +391,11 @@ public class Candidate {
 		this.isDelete = isDelete;
 	}
 
+	public Candidate(UUID id) {
+		super();
+		this.id = id;
+	}
+	
 	public Candidate() {
 		super();
 	}

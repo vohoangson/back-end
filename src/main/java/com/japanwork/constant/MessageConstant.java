@@ -63,6 +63,8 @@ public class MessageConstant {
 	public static final String JOB_CREATE_FAIL = "Create job failed!";
 	public static final String JOB_UPDATE_FAIL = "Update job failed!";
 	public static final String JOB_DELETE_FAIL = "Delete job failed!";
+	public static final String CREATE_COMPANY_TRANSLATE_FAIL = "Create company translation failed!";
+	public static final String UPDATE_COMPANY_TRANSLATE_FAIL = "Update company translation failed!";
 	
 	
 	public static final String ERROR_404_MSG = "Page not found!";

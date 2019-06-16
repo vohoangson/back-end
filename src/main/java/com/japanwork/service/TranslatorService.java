@@ -43,7 +43,6 @@ public class TranslatorService {
 		translator.setName(translatorRequest.getName());
 		translator.setDateOfBirth(translatorRequest.getDateOfBirth());
 		translator.setGender(translatorRequest.getGender());
-		translator.setCountry(translatorRequest.getCountry());
 		translator.setCity(translatorRequest.getCity());
 		translator.setDistrict(translatorRequest.getDistrict());
 		translator.setAddress(translatorRequest.getAddress());
@@ -82,7 +81,6 @@ public class TranslatorService {
 		translator.setName(translatorRequest.getName());
 		translator.setDateOfBirth(translatorRequest.getDateOfBirth());
 		translator.setGender(translatorRequest.getGender());
-		translator.setCountry(translatorRequest.getCountry());
 		translator.setCity(translatorRequest.getCity());
 		translator.setDistrict(translatorRequest.getDistrict());
 		translator.setAddress(translatorRequest.getAddress());
@@ -122,5 +120,10 @@ public class TranslatorService {
 		
 		Translator result = translatorRepository.findByIdAndIsDelete(id, false);
 		return new BaseDataResponse(result);
+	}
+	
+	public Translator findTranslatorByUser(User user){
+		Translator translator = translatorRepository.findByUser(user);
+		return translator;
 	}
 }

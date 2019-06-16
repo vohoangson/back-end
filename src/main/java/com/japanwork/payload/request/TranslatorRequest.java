@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.City;
-import com.japanwork.model.Country;
 import com.japanwork.model.District;
 
 public class TranslatorRequest {
@@ -23,8 +22,6 @@ public class TranslatorRequest {
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
 	
-	@NotNull(message = "country_required")
-	private Country country;
 	@NotNull(message = "city_required")
 	private City city;
 	@NotNull(message = "district_required")
@@ -58,12 +55,6 @@ public class TranslatorRequest {
 	}
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
-	}
-	public Country getCountry() {
-		return country;
-	}
-	public void setCountry(Country country) {
-		this.country = country;
 	}
 	public City getCity() {
 		return city;

@@ -8,7 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,17 +24,24 @@ public class CompanyTranslation {
     @Column(name="id")
 	private UUID id;
     
-    @Column(name="company_id")
-    private UUID companyId;
+	@ManyToOne
+    @JoinColumn(name="company_id")
+    @Where(clause = "is_delete = false")
+    private Company company;
     
-    @Column(name="translator_id")
-    private UUID translator_id;
+    @ManyToOne
+    @JoinColumn(name="translator_id")
+    @Where(clause = "is_delete = false")
+    private Translator translator;
     
 	@Column(name="name")
     private String name;
     
-    @Column(name="description")
-    private String description;
+    @Column(name="introduction")
+    private String introduction;
+    
+    @Column(name="address")
+    private String address;
     
     @Column(name="status")
     private int status;
@@ -55,20 +66,20 @@ public class CompanyTranslation {
 		this.id = id;
 	}
 
-	public UUID getCompanyId() {
-		return companyId;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setCompanyId(UUID companyId) {
-		this.companyId = companyId;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
-	public UUID getTranslator_id() {
-		return translator_id;
+	public Translator getTranslator() {
+		return translator;
 	}
 
-	public void setTranslator_id(UUID translator_id) {
-		this.translator_id = translator_id;
+	public void setTranslator(Translator translator) {
+		this.translator = translator;
 	}
 
 	public String getName() {
@@ -79,12 +90,20 @@ public class CompanyTranslation {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getIntroduction() {
+		return introduction;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public int getStatus() {
@@ -111,7 +130,6 @@ public class CompanyTranslation {
 		this.updateDate = updateDate;
 	}
 
-	@JsonIgnore
 	public boolean isDelete() {
 		return isDelete;
 	}
@@ -120,14 +138,15 @@ public class CompanyTranslation {
 		this.isDelete = isDelete;
 	}
 
-	public CompanyTranslation(UUID id, UUID companyId, UUID translator_id, String name, String description, int status,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	public CompanyTranslation(UUID id, Company company, Translator translator, String name, String introduction,
+			String address, int status, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
-		this.companyId = companyId;
-		this.translator_id = translator_id;
+		this.company = company;
+		this.translator = translator;
 		this.name = name;
-		this.description = description;
+		this.introduction = introduction;
+		this.address = address;
 		this.status = status;
 		this.createDate = createDate;
 		this.updateDate = updateDate;

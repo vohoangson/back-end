@@ -60,6 +60,12 @@ public class CompanyController {
 		return companyService.findByIdAndIsDelete(id);
 	}
 	
+	@GetMapping(UrlConstant.URL_MY_COMPANY)
+	@ResponseBody
+	public BaseDataResponse myCompany(@CurrentUser UserPrincipal userPrincipal){		
+		return companyService.myCompany(userPrincipal);
+	}
+	
 	@PatchMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
 	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, 

@@ -133,8 +133,18 @@ public class CompanyService {
 		return response;
 	}
 	
+	public BaseDataResponse myCompany(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+		Company company = this.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
+		if(company == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+		
+		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(company));	
+		return response;
+	}
+	
 	public boolean checkCompanyByUser(User user){
-		Company company = companyRepository.findByUser(user);
+		Company company = companyRepository.findByUserAndIsDelete(user, false);
 		if(company == null) {
 			return false;
 		}
@@ -162,6 +172,11 @@ public class CompanyService {
 	
 	public Company findById(UUID id) {
 		return companyRepository.findById(id).get();
+	}
+	
+	public Company findByUserAndIsDelete(User user, boolean isDelete){
+		Company company = companyRepository.findByUserAndIsDelete(user, isDelete);
+		return company;
 	}
 	
 	public Company findByUser(User user){

@@ -13,6 +13,7 @@ import com.japanwork.model.User;
 public interface CompanyRepository extends JpaRepository<Company, UUID>{
 	public Company findByIdAndIsDelete(UUID id, boolean isDelete);
 	public List<Company> findAllByIsDelete(boolean isDelete);
-	public Page<Company> findAllByIsDelete(Pageable page,boolean isDelete);
+	public Page<Company> findAllByIsDelete(Pageable page, boolean isDelete);
+	public Company findByUserAndIsDelete(User user, boolean isDelete);
 	public Company findByUser(User user);
 }

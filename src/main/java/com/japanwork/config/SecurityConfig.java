@@ -155,6 +155,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 	.antMatchers(HttpMethod.DELETE,
                     		UrlConstant.URL_JOB_ID
                     		).hasAnyRole("ADMIN","COMPANY")
+                	.antMatchers(HttpMethod.POST,
+                    		UrlConstant.URL_COMPANY_TS)
+                        	.hasAnyRole("TRANSLATOR","ADMIN")
+                        .antMatchers(HttpMethod.PATCH,
+                    		UrlConstant.URL_COMPANY_TS_ID)
+                        	.hasAnyRole("TRANSLATOR","ADMIN")
                     .antMatchers(HttpMethod.DELETE,
                 		UrlConstant.URL_COMPANY_ID,
                 		UrlConstant.URL_CANDIDATE_ID

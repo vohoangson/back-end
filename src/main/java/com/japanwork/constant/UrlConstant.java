@@ -56,9 +56,16 @@ public class UrlConstant {
 	//Company
 	public static final String URL_COMPANY = "/companies";
 	public static final String URL_COMPANY_ID = "/companies/{id}";
+	public static final String URL_MY_COMPANY = "/my_company";
 	public static final String URL_COMPANY_ID_JOB = "/companies/{id}/jobs";
 	public static final String URL_COMPANY_UNDEL_ID = "/companies/undelete/{id}";
 	public static final String URL_COMPANY_DEL_ID = "/companies/delete/{id}";
+	public static final String URL_COMPANY_TS = "/vn/companies";
+	public static final String URL_COMPANY_TS_ID = "/vn/companies/{id}";
+	public static final String URL_COMPANY_TS_ID_JOB = "/vn/companies/{id}/jobs";
+	public static final String URL_COMPANY_TS_UNDEL_ID = "/vn/companies/undelete/{id}";
+	public static final String URL_COMPANY_TS_DEL_ID = "/vn/companies/delete/{id}";
+	
 	
 	//Job
 	public static final String URL_JOB = "/jobs";
@@ -99,4 +106,8 @@ public class UrlConstant {
 	public static final String URL_TRANSLATOR_ID = "/translators/{id}";
 	public static final String URL_TRANSLATOR_UNDEL_ID = "/translators/undelete/{id}";
 	public static final String URL_TRANSLATOR_DEL_ID = "/translators/delete/{id}";
+	
+	//Conversation
+	public static final String URL_CONVERSATION = "/conversations";
+	public static final String URL_CONVERSATION_ID = "/conversations/{id}";
 }

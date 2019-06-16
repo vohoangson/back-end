@@ -41,10 +41,6 @@ public class Translator {
     private Date dateOfBirth;
     
     @ManyToOne
-    @JoinColumn(name = "country_id")
-    private Country country;
-    
-    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
@@ -114,14 +110,6 @@ public class Translator {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
-	}
-
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
 	}
 
 	public City getCity() {
@@ -199,7 +187,7 @@ public class Translator {
 	public Translator() {
 		super();
 	}
-	public Translator(UUID id, User user, String name, String gender, Date dateOfBirth, Country country, City city,
+	public Translator(UUID id, User user, String name, String gender, Date dateOfBirth, City city,
 			District district, String address, String introduction, String avatar, int japaneseLevel,
 			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
@@ -208,7 +196,6 @@ public class Translator {
 		this.name = name;
 		this.gender = gender;
 		this.dateOfBirth = dateOfBirth;
-		this.country = country;
 		this.city = city;
 		this.district = district;
 		this.address = address;
@@ -220,5 +207,8 @@ public class Translator {
 		this.isDelete = isDelete;
 	}    
 	
-	
+	public Translator(UUID id) {
+		super();
+		this.id = id;
+	}
 }

@@ -177,14 +177,20 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Company findByUser(User user) {
+	public Company findByUserAndIsDelete(User user, boolean isDelete) {
 		// TODO Auto-generated method stub
-		return findByUser(user);
+		return findByUserAndIsDelete(user, isDelete);
 	}
 	
 	@Override
 	public Page<Company> findAllByIsDelete(Pageable pageable, boolean isDelete) {
 		// TODO Auto-generated method stub
 		return findAllByIsDelete(pageable, isDelete);
+	}
+
+	@Override
+	public Company findByUser(User user) {
+		// TODO Auto-generated method stub
+		return findByUser(user);
 	}
 }
