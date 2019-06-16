@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class JobResponse {
 	private UUID id;
 	
+	@JsonProperty("company")
 	private CompanyResponse companyResponse;
 	
 	private String name;
