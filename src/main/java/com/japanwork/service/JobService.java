@@ -208,7 +208,7 @@ public class JobService {
 	private JobResponse convertJobResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
 				job.getId(),
-				job.getCompany(), job.getName(), Business.listBusinessID(job.getBusinesses()), 
+				companyService.convertCompanyResponse(job.getCompany()), job.getName(), Business.listBusinessID(job.getBusinesses()), 
 				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
 				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
 				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 

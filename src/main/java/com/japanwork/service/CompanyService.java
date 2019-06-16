@@ -184,7 +184,7 @@ public class CompanyService {
 		return company;
 	}
 	
-	private CompanyResponse convertCompanyResponse(Company company) {
+	public CompanyResponse convertCompanyResponse(Company company) {
 		CompanyResponse companyResponse = new CompanyResponse(
 				company.getId(),
 				company.getName(), 

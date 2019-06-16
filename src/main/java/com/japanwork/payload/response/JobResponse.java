@@ -6,12 +6,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.Company;
 
 public class JobResponse {
 	private UUID id;
 	
-	private Company company;
+	private CompanyResponse companyResponse;
 	
 	private String name;
 
@@ -66,12 +65,12 @@ public class JobResponse {
 		this.id = id;
 	}
 
-	public Company getCompany() {
-		return company;
+	public CompanyResponse getCompanyResponse() {
+		return companyResponse;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setCompanyResponse(CompanyResponse companyResponse) {
+		this.companyResponse = companyResponse;
 	}
 
 	public String getName() {
@@ -202,13 +201,13 @@ public class JobResponse {
 		this.benefits = benefits;
 	}
 
-	public JobResponse(UUID id, Company company, String name, Set<UUID> businessIds, UUID contractId, UUID levelId,
+	public JobResponse(UUID id, CompanyResponse companyResponse, String name, Set<UUID> businessIds, UUID contractId, UUID levelId,
 			int japaneseLevel, String requiredEducation, String requiredExperience, String requiredLanguage,
 			String desc, UUID cityId, UUID districtId, String address, Date applicationDeadline, float minSalary,
 			float maxSalary, String benefits) {
 		super();
 		this.id = id;
-		this.company = company;
+		this.companyResponse = companyResponse;
 		this.name = name;
 		this.businessIds = businessIds;
 		this.contractId = contractId;
