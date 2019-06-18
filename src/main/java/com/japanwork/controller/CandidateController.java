@@ -102,6 +102,12 @@ public class CandidateController {
 		return candidateService.findByIdAndIsDelete(id);
 	}
 	
+	@GetMapping(UrlConstant.URL_MY_CANDIDATE)
+	@ResponseBody
+	public BaseDataResponse myCandidate(@CurrentUser UserPrincipal userPrincipal){		
+		return candidateService.myCandidate(userPrincipal);
+	}
+	
 	@DeleteMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		

@@ -134,6 +134,11 @@ public class CompanyService {
 		return response;
 	}
 	
+	public Company findByIdAndIsDel(UUID id){
+		Company company = companyRepository.findByIdAndIsDelete(id, false);
+		return company;
+	}
+	
 	public BaseDataResponse myCompany(UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Company company = this.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
 		if(company == null) {

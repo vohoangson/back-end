@@ -84,6 +84,7 @@ public class UrlConstant {
 	
 	//CANDIDATE
 	public static final String URL_CANDIDATE = "/candidates";
+	public static final String URL_MY_CANDIDATE = "/candidates/my-candidate";
 	public static final String URL_CANDIDATE_ID = "/candidates/{id}";
 	public static final String URL_CANDIDATE_UNDEL = "/candidates/undelete/{id}";
 	

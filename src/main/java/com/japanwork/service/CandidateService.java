@@ -85,6 +85,7 @@ public class CandidateService {
 			candidate.setDelete(false);
 			
 			Candidate result = candidateRepository.save(candidate);
+			userService.changePropertyId(userPrincipal.getId(), result.getId());
 			BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(result));		
 			return response;
 		} catch (Exception e) {
@@ -346,6 +347,16 @@ public class CandidateService {
 	
 	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+		if(candidate == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+		
+		BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(candidate));	
+		return response;
+	}
+	
+	public BaseDataResponse myCandidate(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+		Candidate candidate = candidateRepository.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}

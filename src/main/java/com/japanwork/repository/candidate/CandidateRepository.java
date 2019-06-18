@@ -15,4 +15,5 @@ public interface CandidateRepository extends JpaRepository<Candidate, UUID>{
 	public List<Candidate> findAllByIsDelete(boolean isDelete);
 	public Candidate findByUser(User user);
 	public Page<Candidate> findAllByIsDelete(Pageable page,boolean isDelete);
+	public Candidate findByUserAndIsDelete(User user, boolean isDelete);
 }

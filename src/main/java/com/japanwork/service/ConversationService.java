@@ -1,5 +1,7 @@
 package com.japanwork.service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +38,21 @@ public class ConversationService {
 	private CandidateService candidateService;
 	
 	public BaseDataResponse save(ConversationRequest conversationRequest, UserPrincipal userPrincipal) {
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		
 		Conversation conversation = new Conversation();
 		conversation.setTranslator(translatorService.findTranslatorByUser(userService.findById(userPrincipal.getId())));
 		if(conversationRequest.getCandidateId() != null) {
-			conversation.setCandidate(new Candidate(conversationRequest.getCandidateId()));
+			Candidate candidate = candidateService.findCandidateByIdAndIsDelete(conversationRequest.getCandidateId());
+			conversation.setCandidate(candidate);
 		}
 		if(conversationRequest.getCompanyId() != null) {
-			conversation.setCompany(new Company(conversationRequest.getCompanyId()));
+			Company company = companyService.findByIdAndIsDel(conversationRequest.getCompanyId());
+			conversation.setCompany(company);
 		}
+		conversation.setCreateAt(timestamp);
+		conversation.setDelete(false);
 		
 		Conversation result = conversationRepository.save(conversation);
 		

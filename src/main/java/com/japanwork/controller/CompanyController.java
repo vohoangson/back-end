@@ -56,7 +56,7 @@ public class CompanyController {
 	
 	@GetMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){		
+	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){	
 		return companyService.findByIdAndIsDelete(id);
 	}
 	
