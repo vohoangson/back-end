@@ -106,7 +106,7 @@ public class CompanyService {
 		} catch (ForbiddenException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);
+			throw new ServerError(MessageConstant.COMPANY_UPDATE_FAIL);
 		}
 	}
 	

@@ -165,4 +165,10 @@ public class ForgetPasswordRepositoryIplm implements ForgetPasswordRepository{
 		return findByUserId(id);
 	}
 
+	@Override
+	public ForgetPassword findByUserIdAndCode(UUID id, String code) {
+		// TODO Auto-generated method stub
+		return findByUserIdAndCode(id, code);
+	}
+
 }

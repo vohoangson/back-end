@@ -294,6 +294,12 @@ public class UserService {
 				throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST, 
 						MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST_MSG);
 			} else {
+				ForgetPassword forgetPassword = forgetPasswordRepository.findByUserIdAndCode(user.getId(), 
+						resetPasswordRequest.getCode());
+				if(forgetPassword == null) {
+					throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_INCORRECT_CODE, 
+							MessageConstant.RESET_FORGET_PASSWORD_INCORRECT_CODE_MSG);
+				}
 				forgetPasswordRepository.delete(forgetPasswordRepository.findByUserId(user.getId()));
 				
 				user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));	

@@ -11,6 +11,8 @@ import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
 import com.japanwork.payload.request.ConversationRequest;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.CandidateResponse;
+import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.payload.response.ConversationResponse;
 import com.japanwork.repository.conversation.ConversationRepository;
 import com.japanwork.security.UserPrincipal;
@@ -71,10 +73,21 @@ public class ConversationService {
 	}
 	
 	public ConversationResponse convertTranslatorResponse(Conversation conversation) {
+		CompanyResponse companyResponse = null;
+		if(conversation.getCompany() != null) {
+			companyResponse = companyService.convertCompanyResponse(conversation.getCompany());
+		}
+		
+		CandidateResponse candidateResponse = null;
+		
+		if(conversation.getCandidate() != null) {
+			candidateResponse = candidateService.convertCandiateResponse(conversation.getCandidate());
+		}
+		
 		ConversationResponse conversationResponse = new ConversationResponse(
 				conversation.getId(),
-				companyService.convertCompanyResponse(conversation.getCompany()), 
-				candidateService.convertCandiateResponse(conversation.getCandidate()),
+				companyResponse, 
+				candidateResponse,
 				translatorService.convertTranslatorResponse(conversation.getTranslator()));
 		return conversationResponse;
 	}

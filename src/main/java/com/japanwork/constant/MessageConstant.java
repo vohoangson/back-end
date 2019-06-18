@@ -26,6 +26,7 @@ public class MessageConstant {
 	public static final String CHANGE_PASSWORD_NOT_CORRECT = "old_password_not_correct";
 	public static final String CHANGE_PASSWORD = "change_password";
 	public static final String RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST = "email_does_not_exist";
+	public static final String RESET_FORGET_PASSWORD_INCORRECT_CODE = "incorrect_code";
 	public static final String FORGET_PASSWORD = "forget_password";
 	public static final String RESET_PASSWORD = "reset_password";
 	public static final String DELETE_USER_BY_EMAIL = "delete_user_by_email";
@@ -35,15 +36,16 @@ public class MessageConstant {
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
 	public static final String ERROR_401 = "unauthorized";
-	public static final String ERROR_403 = "forbidden_rror";
+	public static final String ERROR_403 = "forbidden_error";
 	
 	//Message
-	public static final String LOGIN_FAIL_MSG = "Incorrect email or password";
+	public static final String LOGIN_FAIL_MSG = "Incorrect email or password!";
 	public static final String EMAIL_ALREADY_MSG = "Email address already in use.";
 	public static final String CHANGE_PASSWORD_FAIL_MSG = "Change password failed!";
 	public static final String CHANGE_PASSWORD_NOT_CORRECT_MSG = "Old password is not correct!";
 	public static final String CHANGE_PASSWORD_SUCCESS = "Change password successfully!";
 	public static final String RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST_MSG = "Email does not exist!";
+	public static final String RESET_FORGET_PASSWORD_INCORRECT_CODE_MSG = "Incorrect code reset password!";
 	public static final String RESET_FORGET_PASSWORD_SUCCESS = "We have just sent you an email to confirm the provision of a new password. Please check the mailbox!";
 	public static final String RESET_PASSWORD_FAIL_MSG = "Reset password failed!";
 	public static final String RESET_PASSWORD_SUCCESS = "Reset password successfully!";

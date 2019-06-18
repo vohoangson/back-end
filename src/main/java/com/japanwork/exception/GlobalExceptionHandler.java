@@ -55,10 +55,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
 	public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
 	  MethodArgumentTypeMismatchException ex, WebRequest request) {
+		String code = "invalid_" + ex.getName() + "_format";
 	    String msg = 
 	      ex.getName() + " should be of type " + ex.getRequiredType().getName();
 	 
-	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, msg);
+	    BaseErrorResponse error = new BaseErrorResponse(code, msg);
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 	

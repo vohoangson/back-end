@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CandidatePersonalRequest {	
-	@NotBlank(message = "Full name is required!")
+	@NotBlank(message = "full_name_required")
 	@JsonProperty("full_name")
 	private String fullName;
 	

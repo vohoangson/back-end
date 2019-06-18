@@ -8,4 +8,5 @@ import com.japanwork.model.ForgetPassword;
 
 public interface ForgetPasswordRepository extends JpaRepository<ForgetPassword, UUID>{
 	public ForgetPassword findByUserId(UUID id);
+	public ForgetPassword findByUserIdAndCode(UUID id, String code);
 }
