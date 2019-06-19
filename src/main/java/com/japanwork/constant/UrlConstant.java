@@ -111,4 +111,5 @@ public class UrlConstant {
 	//Conversation
 	public static final String URL_CONVERSATION = "/conversations";
 	public static final String URL_CONVERSATION_ID = "/conversations/{id}";
+	public static final String URL_MY_CONVERSATION = "/my-conversations";
 }

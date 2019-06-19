@@ -29,7 +29,7 @@ public class ExperienceService {
 			for (Experience experience : experiences) {
 				ExperienceResponse experienceResponse = new ExperienceResponse();
 				experienceResponse.setOrganizaion(experience.getOrganizaion());
-				experienceResponse.setDescription(experience.getDescription());
+				experienceResponse.setDesc(experience.getDesc());
 				experienceResponse.setLevelId(experience.getLevel().getId());
 				experienceResponse.setBusinessId(experience.getBusiness().getId());
 				experienceResponse.setStartDate(experience.getStartDate());

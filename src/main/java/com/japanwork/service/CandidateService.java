@@ -205,7 +205,7 @@ public class CandidateService {
 					
 					experience.setCandidateId(id);
 					experience.setOrganizaion(experienceRequest.getOrganizaion());
-					experience.setDescription(experienceRequest.getDescription());
+					experience.setDesc(experienceRequest.getDesc());
 					experience.setLevel(new Level(experienceRequest.getLevelId()));
 					experience.setBusiness(new Business(experienceRequest.getBusinessId()));
 					experience.setStartDate(experienceRequest.getStartDate());
@@ -289,7 +289,7 @@ public class CandidateService {
 					
 					experience.setCandidateId(id);
 					experience.setOrganizaion(experienceRequest.getOrganizaion());
-					experience.setDescription(experienceRequest.getDescription());
+					experience.setDesc(experienceRequest.getDesc());
 					experience.setLevel(new Level(experienceRequest.getLevelId()));
 					experience.setBusiness(new Business(experienceRequest.getBusinessId()));
 					experience.setStartDate(experienceRequest.getStartDate());

@@ -167,4 +167,22 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 		return findByIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public List<Conversation> findByTranslatorIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByTranslatorIdAndIsDelete(id, isDelete);
+	}
+
+	@Override
+	public List<Conversation> findByCompanyIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByCompanyIdAndIsDelete(id, isDelete);
+	}
+
+	@Override
+	public List<Conversation> findByCandidateIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByCandidateIdAndIsDelete(id,isDelete);
+	}
+
 }

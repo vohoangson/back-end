@@ -32,7 +32,7 @@ public class Experience {
 	private String organizaion;
 	
 	@Column(name="description")
-	private String description;
+	private String desc;
 	
 	@ManyToOne
     @JoinColumn(name = "level_id")
@@ -86,12 +86,12 @@ public class Experience {
 		this.organizaion = organizaion;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDesc(String description) {
+		this.desc = description;
 	}
 
 	public Level getLevel() {
@@ -151,13 +151,13 @@ public class Experience {
 		this.isDelete = isDelete;
 	}
 
-	public Experience(UUID id, UUID candidateId, String organizaion, String description, Level level, Business business,
+	public Experience(UUID id, UUID candidateId, String organizaion, String desc, Level level, Business business,
 			Date startDate, Date endDate, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;
 		this.candidateId = candidateId;
 		this.organizaion = organizaion;
-		this.description = description;
+		this.desc = desc;
 		this.level = level;
 		this.business = business;
 		this.startDate = startDate;

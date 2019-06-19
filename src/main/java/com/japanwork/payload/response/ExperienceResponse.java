@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ExperienceResponse {
 	private String organizaion;
 	
-	private String description;
+	private String desc;
 	
 	@JsonProperty("level_id")
 	private UUID levelId;
@@ -30,12 +30,12 @@ public class ExperienceResponse {
 		this.organizaion = organizaion;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public UUID getLevelId() {
@@ -70,11 +70,11 @@ public class ExperienceResponse {
 		this.endDate = endDate;
 	}
 
-	public ExperienceResponse(String organizaion, String description, UUID levelId, UUID businessId, Date startDate,
+	public ExperienceResponse(String organizaion, String desc, UUID levelId, UUID businessId, Date startDate,
 			Date endDate) {
 		super();
 		this.organizaion = organizaion;
-		this.description = description;
+		this.desc = desc;
 		this.levelId = levelId;
 		this.businessId = businessId;
 		this.startDate = startDate;

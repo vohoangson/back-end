@@ -1,7 +1,9 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,13 +83,38 @@ public class ConversationService {
 		return new BaseDataResponse(convertTranslatorResponse(result));
 	}
 	
+	public BaseDataResponse listConversationByUser(UserPrincipal userPrincipal, int page, int paging) {
+		UUID idUser = userPrincipal.getId();
+		String role = userService.findById(idUser).getRole();
+		List<Conversation> list = new ArrayList<Conversation>();
+		if(role.equals("TRANSLATOR")) {
+			list = conversationRepository.findByTranslatorIdAndIsDelete(idUser, false);
+		}
+		
+		if(role.equals("COMPANY")) {
+			list = conversationRepository.findByCompanyIdAndIsDelete(idUser, false);
+		}
+		
+		if(role.equals("CANDIDATE")) {
+			list = conversationRepository.findByCandidateIdAndIsDelete(idUser, false);
+		}
+		
+		List<ConversationResponse> listConversationResponse = new ArrayList<ConversationResponse>();
+		if(list != null) {
+			for (Conversation conversation : list) {
+				listConversationResponse.add(convertTranslatorResponse(conversation));
+			}
+		}
+		return new BaseDataResponse(listConversationResponse);
+	}
+	
 	public ConversationResponse convertTranslatorResponse(Conversation conversation) {
-		CompanyResponse companyResponse = null;
+		CompanyResponse companyResponse = new CompanyResponse();
 		if(conversation.getCompany() != null) {
 			companyResponse = companyService.convertCompanyResponse(conversation.getCompany());
 		}
 		
-		CandidateResponse candidateResponse = null;
+		CandidateResponse candidateResponse = new CandidateResponse();
 		
 		if(conversation.getCandidate() != null) {
 			candidateResponse = candidateService.convertCandiateResponse(conversation.getCandidate());
