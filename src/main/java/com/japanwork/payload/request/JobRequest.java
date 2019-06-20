@@ -10,11 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JobRequest {
-	@NotNull(message = "company_required")
-	@JsonProperty("company_id")
-	private UUID companyId;
-	
+public class JobRequest {	
 	@NotBlank(message = "name_job_required")
 	private String name;
 	
@@ -67,14 +63,6 @@ public class JobRequest {
 	
 	@NotBlank(message = "benefits_required")
 	private String benefits;
-
-	public UUID getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(UUID companyId) {
-		this.companyId = companyId;
-	}
 
 	public String getName() {
 		return name;

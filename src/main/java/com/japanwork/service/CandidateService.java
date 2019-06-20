@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
@@ -78,7 +79,7 @@ public class CandidateService {
 			candidate.setAvatar(candidatePersonalRequest.getAvatar());
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
-			candidate.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(1);
 			candidate.setCreateDate(timestamp);
 			candidate.setUpdateDate(timestamp);
@@ -118,7 +119,7 @@ public class CandidateService {
 			candidate.setAvatar(candidatePersonalRequest.getAvatar());
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
-			candidate.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setUpdateDate(timestamp);
 			
 			Candidate result = candidateRepository.save(candidate);
@@ -153,7 +154,7 @@ public class CandidateService {
 			candidate.setWishLevel(new Level(candidateWishRequest.getWishLevelId()));
 			candidate.setWishContract(new Contract(candidateWishRequest.getWishContractId()));
 			candidate.setWishSalary(candidateWishRequest.getWishSalary());
-			candidate.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(2);
 			candidate.setUpdateDate(timestamp);
 			

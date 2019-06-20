@@ -13,7 +13,6 @@ import com.japanwork.config.AppProperties;
 @EnableWebMvc
 @EnableConfigurationProperties(AppProperties.class)
 public class JapanWorkApplication {
-
 	public static void main(String[] args) {		
 		ApplicationContext ctx = SpringApplication.run(JapanWorkApplication.class, args);
 

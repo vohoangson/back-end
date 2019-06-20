@@ -120,7 +120,7 @@ public class Candidate {
 	private Set<LanguageCertificate> languageCertificates;
     
     @Column(name="status")
-    private String status;
+    private int status;
 
     @Column(name="status_info")
     private int statusInfo;
@@ -312,12 +312,12 @@ public class Candidate {
 	public void setLanguageCertificates(Set<LanguageCertificate> languageCertificates) {
 		this.languageCertificates = languageCertificates;
 	}
-
-	public String getStatus() {
+	
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
@@ -359,7 +359,7 @@ public class Candidate {
 			String avatar, String introduction, int japaneseLevel, City wishWorkingCity,
 			District wishWorkingDistrict, String wishWorkingAddress, Business wishBusiness, Level wishLevel,
 			Contract wishContract, float wishSalary, Set<Academy> academies, Set<Experience> experiences,
-			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createDate,
+			Set<LanguageCertificate> languageCertificates, int status, int statusInfo, Timestamp createDate,
 			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;

@@ -9,11 +9,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.exception.BadRequestException;
-import com.japanwork.model.Candidate;
-import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
-import com.japanwork.payload.request.ConversationRequest;
+import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.payload.response.CompanyResponse;
@@ -39,48 +36,80 @@ public class ConversationService {
 	@Autowired
 	private CandidateService candidateService;
 	
-	public BaseDataResponse save(ConversationRequest conversationRequest, UserPrincipal userPrincipal) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
+	@Autowired
+	private JobApplicationService jobApplicationService;
+	
+	public BaseDataResponse createConversationAll(UUID id) {		
+		JobApplication jobApplication = jobApplicationService.findByJobIdAndIsDelete(id);
 		
-		Conversation conversation = new Conversation();
-		conversation.setTranslator(translatorService.findTranslatorByUser(userService.findById(userPrincipal.getId())));
-		if(conversationRequest.getCandidateId() != null) {
-			Candidate candidate = candidateService.findCandidateByIdAndIsDelete(conversationRequest.getCandidateId());
-			conversation.setCandidate(candidate);
+		if(jobApplication.getAllConversation() == null) {
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			
+			Conversation conversation = new Conversation();
+			conversation.setTranslator(jobApplication.getTranslator());
+			conversation.setCandidate(jobApplication.getCandidate());
+			conversation.setCompany(jobApplication.getJob().getCompany());
+			conversation.setCreateAt(timestamp);
+			conversation.setDelete(false);
+			
+			Conversation result = conversationRepository.save(conversation);
+			
+			jobApplication.setAllConversation(result);
+			jobApplicationService.save(jobApplication);
+			
+			return new BaseDataResponse(convertTranslatorResponse(result));
 		}
-		if(conversationRequest.getCompanyId() != null) {
-			Company company = companyService.findByIdAndIsDel(conversationRequest.getCompanyId());
-			conversation.setCompany(company);
-		}
-		conversation.setCreateAt(timestamp);
-		conversation.setDelete(false);
 		
-		Conversation result = conversationRepository.save(conversation);
-		
-		return new BaseDataResponse(convertTranslatorResponse(result));
+		return new BaseDataResponse(convertTranslatorResponse(jobApplication.getAllConversation()));
 	}
 	
-	public BaseDataResponse update(ConversationRequest conversationRequest, UUID id) throws BadRequestException{
-		Conversation conversation = conversationRepository.findByIdAndIsDelete(id, false);
+	public BaseDataResponse createConversationSupportCandidate(UUID id) {		
+		JobApplication jobApplication = jobApplicationService.findByJobIdAndIsDelete(id);
 		
-		if(conversationRequest.getCandidateId() != null) {
-			if(conversation.getCandidate() != null) {
-				throw new BadRequestException("1231","123");
-			}
-			conversation.setCandidate(new Candidate(conversationRequest.getCandidateId()));
-		}
-		if(conversationRequest.getCompanyId() != null) {
+		if(jobApplication.getCandidateSupportConversaion() == null) {
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
 			
-			if(conversation.getCompany() != null) {
-				throw new BadRequestException("123","123");
-			}
-			conversation.setCompany(new Company(conversationRequest.getCompanyId()));
+			Conversation conversation = new Conversation();
+			conversation.setTranslator(jobApplication.getTranslator());
+			conversation.setCandidate(jobApplication.getCandidate());
+			conversation.setCreateAt(timestamp);
+			conversation.setDelete(false);
+			
+			Conversation result = conversationRepository.save(conversation);
+			
+			jobApplication.setCandidateSupportConversaion(conversation);
+			jobApplicationService.save(jobApplication);
+			
+			return new BaseDataResponse(convertTranslatorResponse(result));
 		}
 		
-		Conversation result = conversationRepository.save(conversation);
+		return new BaseDataResponse(convertTranslatorResponse(jobApplication.getCandidateSupportConversaion()));
+	}
+	
+	public BaseDataResponse createConversationSupportCompany(UUID id) {		
+		JobApplication jobApplication = jobApplicationService.findByJobIdAndIsDelete(id);
 		
-		return new BaseDataResponse(convertTranslatorResponse(result));
+		if(jobApplication.getCompanySupportConversation() == null) {
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			
+			Conversation conversation = new Conversation();
+			
+			conversation.setTranslator(jobApplication.getTranslator());
+			conversation.setCompany(jobApplication.getJob().getCompany());
+			conversation.setCreateAt(timestamp);
+			conversation.setDelete(false);
+			
+			Conversation result = conversationRepository.save(conversation);
+			
+			jobApplication.setCompanySupportConversation(conversation);
+			jobApplicationService.save(jobApplication);
+			
+			return new BaseDataResponse(convertTranslatorResponse(result));
+		}
+		return new BaseDataResponse(convertTranslatorResponse(jobApplication.getCompanySupportConversation()));
 	}
 	
 	public BaseDataResponse listConversationByUser(UserPrincipal userPrincipal, int page, int paging) {

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
@@ -51,7 +52,7 @@ public class CompanyService {
 			company.setCoverImageUrl(companyRequest.getCoverImage());
 			company.setLogoUrl(companyRequest.getLogo());
 			company.setIntroduction(companyRequest.getIntroduction());
-			company.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			company.setCreateDate(timestamp);
 			company.setUpdateDate(timestamp);
 			company.setDelete(false);
@@ -95,7 +96,7 @@ public class CompanyService {
 			company.setCoverImageUrl(companyRequest.getCoverImage());
 			company.setLogoUrl(companyRequest.getLogo());
 			company.setIntroduction(companyRequest.getIntroduction());
-			company.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			company.setUpdateDate(timestamp);
 			
 			Company result = companyRepository.save(company);

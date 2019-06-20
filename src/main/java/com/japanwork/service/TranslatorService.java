@@ -128,6 +128,11 @@ public class TranslatorService {
 		return translator;
 	}
 	
+	public Translator findTranslatorByIdAndIsDelete(UUID id, boolean isDel){
+		Translator translator = translatorRepository.findByIdAndIsDelete(id, isDel);
+		return translator;
+	}
+	
 	public TranslatorResponse convertTranslatorResponse(Translator translator) {
 		TranslatorResponse translatorResponse = new TranslatorResponse(
 				translator.getId(),

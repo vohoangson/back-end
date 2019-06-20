@@ -15,9 +15,7 @@ public class MessageConstant {
 	public static final String UN_DELETE = "UnDelete";
 	public static final String UN_DEL_SUCCESS = "Successfully";
 	public static final String UN_DEL_FAIL = "Fail";
-	public static final String DELETE_FILE_AWS = "Delete file on Amazon Web Service:";
-	public static final String STATUS_TRANSLATE_UNTRANSLATE  = "untranslated";
-	
+	public static final String DELETE_FILE_AWS = "Delete file on Amazon Web Service:";	
 	
 	
 	public static final String LOGIN_FAIL = "invalid_user_or_password";

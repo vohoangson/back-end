@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
@@ -103,7 +104,7 @@ public class JobService {
 			job.setApplicationDeadline(jobRequest.getApplicationDeadline());
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
-			job.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);		
+			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);		
 			job.setCreateDate(timestamp);
 			job.setUpdateDate(timestamp);
 			job.setDelete(false);
@@ -154,7 +155,7 @@ public class JobService {
 			job.setApplicationDeadline(jobRequest.getApplicationDeadline());
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
-			job.setStatus(MessageConstant.STATUS_TRANSLATE_UNTRANSLATE);
+			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			job.setUpdateDate(timestamp);
 			
 			Job result = jobRepository.save(job);		
