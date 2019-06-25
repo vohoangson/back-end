@@ -41,7 +41,7 @@ public class ConversationService {
 	private JobApplicationService jobApplicationService;
 	
 	@Transactional
-	public BaseDataResponse createConversationAll(UUID id) {		
+	public Conversation createConversationAll(UUID id) {		
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
 		
 		if(jobApplication.getAllConversation() == null) {
@@ -60,10 +60,10 @@ public class ConversationService {
 			jobApplication.setAllConversation(result);
 			jobApplicationService.save(jobApplication);
 			
-			return new BaseDataResponse(convertConversationResponse(result));
+			return result;
 		}
 		
-		return new BaseDataResponse(convertConversationResponse(jobApplication.getAllConversation()));
+		return jobApplication.getAllConversation();
 	}
 	
 	public BaseDataResponse createConversationSupportCandidate(UUID id) {		
