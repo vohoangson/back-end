@@ -92,7 +92,7 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	@Override
 	public <S extends Notification> S save(S entity) {
 		// TODO Auto-generated method stub
-		return null;
+		return save(entity);
 	}
 
 	@Override
@@ -161,6 +161,9 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 		return false;
 	}
 
-	
-
+	@Override
+	public Page<Notification> findByConversationIdAndIsDelete(Pageable page, UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByConversationIdAndIsDelete(page, id, isDelete);
+	}
 }

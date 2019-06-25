@@ -73,9 +73,16 @@ public class UrlConstant {
 	public static final String URL_JOB_UNDEL = "/jobs/undelete/{id}";
 	
 	//Conversation
-	public static final String URL_JOB_ID_CONVERSATION_ALL = "/jobs/{id}/conversation-all";
-	public static final String URL_JOB_ID_CONVERSATION_CANDIDATE = "/jobs/{id}/conversation-support-candidate";
-	public static final String URL_JOB_ID_CONVERSATION_COMPANY = "/jobs/{id}/conversation-support-company";
+	public static final String URL_JOB_APPLICATION_ID_CONVERSATION= "/job-applications/{id}/conversations";
+	public static final String URL_JOB_APPLICATION_ID_CONVERSATION_ALL = "/job-applications/{id}/conversation-all";
+	public static final String URL_JOB_APPLICATION_ID_CONVERSATION_CANDIDATE = "/job-applications/{id}/conversation-support-candidate";
+	public static final String URL_JOB_APPLICATION_ID_CONVERSATION_COMPANY = "/job-applications/{id}/conversation-support-company";
+	
+	//Conversation
+	public static final String URL_CONVERSATION_ID= "/conversations/{id}";
+//		public static final String URL_CONVERSATION_ID_NOTIFICATION = "/job-applications/{id}/conversation-all";
+//		public static final String URL_CONVERSATION_ID = "/job-applications/{id}/conversation-support-candidate";
+//		public static final String URL_CONVERSATION_ID = "/job-applications/{id}/conversation-support-company";
 	
 	//Contract
 	public static final String URL_CONTRACT = "/contracts";

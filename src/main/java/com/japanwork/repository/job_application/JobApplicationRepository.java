@@ -8,4 +8,5 @@ import com.japanwork.model.JobApplication;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication, UUID>{
 	public JobApplication findByJobIdAndIsDelete(UUID id, boolean isDelete);
+	public JobApplication findByIdAndIsDelete(UUID id, boolean isDelete);
 }

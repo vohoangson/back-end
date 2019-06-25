@@ -5,19 +5,19 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "notification")
 public class Notification {
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private long id;
 	
@@ -25,18 +25,22 @@ public class Notification {
     @JoinColumn(name = "conversation_id")
 	private Conversation conversation;
 	
-	@JsonProperty("sender_id")
+	@Column(name = "sender_id")
 	private UUID senderId;
 	
+	@Column(name = "content")
+	private String content;
+	
+	@Column(name = "title")
 	private String title;
 	
-	@JsonProperty("notification_type")
+	@Column(name = "notification_type")
 	private int notificationType;
 	
-	@JsonIgnore
+	@Column(name = "create_at")
 	private Timestamp createAt;
 	
-	@JsonIgnore
+	@Column(name = "is_delete")
 	private boolean isDelete;
 
 	public long getId() {
@@ -63,6 +67,14 @@ public class Notification {
 		this.senderId = senderId;
 	}
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -87,7 +99,6 @@ public class Notification {
 		this.createAt = createAt;
 	}
 
-	@JsonIgnore
 	public boolean isDelete() {
 		return isDelete;
 	}
@@ -96,12 +107,13 @@ public class Notification {
 		this.isDelete = isDelete;
 	}
 
-	public Notification(long id, Conversation conversation, UUID senderId, String title, int notificationType,
-			Timestamp createAt, boolean isDelete) {
+	public Notification(long id, Conversation conversation, UUID senderId, String content, String title,
+			int notificationType, Timestamp createAt, boolean isDelete) {
 		super();
 		this.id = id;
 		this.conversation = conversation;
 		this.senderId = senderId;
+		this.content = content;
 		this.title = title;
 		this.notificationType = notificationType;
 		this.createAt = createAt;

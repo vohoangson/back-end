@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.Conversation;
 import com.japanwork.model.JobApplication;
@@ -39,8 +40,9 @@ public class ConversationService {
 	@Autowired
 	private JobApplicationService jobApplicationService;
 	
+	@Transactional
 	public BaseDataResponse createConversationAll(UUID id) {		
-		JobApplication jobApplication = jobApplicationService.findByJobIdAndIsDelete(id);
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
 		
 		if(jobApplication.getAllConversation() == null) {
 			Date date = new Date();
@@ -58,14 +60,14 @@ public class ConversationService {
 			jobApplication.setAllConversation(result);
 			jobApplicationService.save(jobApplication);
 			
-			return new BaseDataResponse(convertTranslatorResponse(result));
+			return new BaseDataResponse(convertConversationResponse(result));
 		}
 		
-		return new BaseDataResponse(convertTranslatorResponse(jobApplication.getAllConversation()));
+		return new BaseDataResponse(convertConversationResponse(jobApplication.getAllConversation()));
 	}
 	
 	public BaseDataResponse createConversationSupportCandidate(UUID id) {		
-		JobApplication jobApplication = jobApplicationService.findByJobIdAndIsDelete(id);
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
 		
 		if(jobApplication.getCandidateSupportConversaion() == null) {
 			Date date = new Date();
@@ -82,14 +84,14 @@ public class ConversationService {
 			jobApplication.setCandidateSupportConversaion(conversation);
 			jobApplicationService.save(jobApplication);
 			
-			return new BaseDataResponse(convertTranslatorResponse(result));
+			return new BaseDataResponse(convertConversationResponse(result));
 		}
 		
-		return new BaseDataResponse(convertTranslatorResponse(jobApplication.getCandidateSupportConversaion()));
+		return new BaseDataResponse(convertConversationResponse(jobApplication.getCandidateSupportConversaion()));
 	}
 	
 	public BaseDataResponse createConversationSupportCompany(UUID id) {		
-		JobApplication jobApplication = jobApplicationService.findByJobIdAndIsDelete(id);
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
 		
 		if(jobApplication.getCompanySupportConversation() == null) {
 			Date date = new Date();
@@ -107,37 +109,51 @@ public class ConversationService {
 			jobApplication.setCompanySupportConversation(conversation);
 			jobApplicationService.save(jobApplication);
 			
-			return new BaseDataResponse(convertTranslatorResponse(result));
+			return new BaseDataResponse(convertConversationResponse(result));
 		}
-		return new BaseDataResponse(convertTranslatorResponse(jobApplication.getCompanySupportConversation()));
+		return new BaseDataResponse(convertConversationResponse(jobApplication.getCompanySupportConversation()));
 	}
 	
-	public BaseDataResponse listConversationByUser(UserPrincipal userPrincipal, int page, int paging) {
+	public BaseDataResponse listConversationByUser(UserPrincipal userPrincipal, UUID id) {
 		UUID idUser = userPrincipal.getId();
 		String role = userService.findById(idUser).getRole();
 		List<Conversation> list = new ArrayList<Conversation>();
-		if(role.equals("TRANSLATOR")) {
-			list = conversationRepository.findByTranslatorIdAndIsDelete(idUser, false);
+		
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+		
+		if(jobApplication.getAllConversation() != null) {
+			list.add(jobApplication.getAllConversation());
+		}
+			
+		if(role.equals("ROLE_TRANSLATOR") || role.equals("ROLE_COMPANY")) {
+			
+			if(jobApplication.getCompanySupportConversation() != null) {
+				jobApplication.getCompanySupportConversation().setCandidate(null);
+				list.add(jobApplication.getCompanySupportConversation());
+			}
 		}
 		
-		if(role.equals("COMPANY")) {
-			list = conversationRepository.findByCompanyIdAndIsDelete(idUser, false);
-		}
-		
-		if(role.equals("CANDIDATE")) {
-			list = conversationRepository.findByCandidateIdAndIsDelete(idUser, false);
+		if(role.equals("ROLE_TRANSLATOR") || role.equals("ROLE_CANDIDATE")) {
+			jobApplication.getCandidateSupportConversaion().getCompany();
+			if(jobApplication.getCandidateSupportConversaion() != null) {
+				list.add(jobApplication.getCandidateSupportConversaion());
+			}
 		}
 		
 		List<ConversationResponse> listConversationResponse = new ArrayList<ConversationResponse>();
 		if(list != null) {
 			for (Conversation conversation : list) {
-				listConversationResponse.add(convertTranslatorResponse(conversation));
+				listConversationResponse.add(convertConversationResponse(conversation));
 			}
 		}
 		return new BaseDataResponse(listConversationResponse);
 	}
 	
-	public ConversationResponse convertTranslatorResponse(Conversation conversation) {
+	public Conversation findByIdAndIsDelete(UUID id, boolean isDel) {
+		return conversationRepository.findByIdAndIsDelete(id, isDel);
+	}
+	
+	public ConversationResponse convertConversationResponse(Conversation conversation) {
 		CompanyResponse companyResponse = new CompanyResponse();
 		if(conversation.getCompany() != null) {
 			companyResponse = companyService.convertCompanyResponse(conversation.getCompany());

@@ -167,4 +167,10 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 		return findByJobIdAndIsDelete(id, isDelete);
 	}
 
+	@Override
+	public JobApplication findByIdAndIsDelete(UUID id, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByIdAndIsDelete(id, isDelete);
+	}
+
 }

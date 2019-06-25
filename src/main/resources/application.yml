@@ -72,4 +72,9 @@ amazonProperties:
 server:
     servlet:
         context-path: /api  
-    port: 8080    
+    port: 8000    
+rabbitmq:
+    image: rabbitmq:management
+    ports:
+        - "5672:5672"
+        - "15672:15672"
