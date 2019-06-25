@@ -31,8 +31,10 @@ public class ConversationController {
 	@SendTo("/topic/javainuse")
 	public BaseDataResponse createConversationAll(@PathVariable UUID id, @Payload WebSocketChatMessage webSocketChatMessage,
 			SimpMessageHeaderAccessor headerAccessor) {
+		System.out.println("1234");
 		headerAccessor.getSessionAttributes().put("username", webSocketChatMessage.getSender());
 		Conversation conversation = conversationService.createConversationAll(id);
+		System.out.println("5678");
 		//return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
 		return new BaseDataResponse(webSocketChatMessage);
 	}
