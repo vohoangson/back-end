@@ -48,6 +48,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(ServerError.class)
 	public ResponseEntity<?> serverError(ServerError ex, WebRequest request) {
+		System.out.println(ex.getMessage());
 		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, ex.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
