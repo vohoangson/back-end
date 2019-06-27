@@ -4,9 +4,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.Conversation;
-import com.japanwork.model.WebSocketChatMessage;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
@@ -25,18 +23,16 @@ public class ConversationController {
 	@Autowired
 	private ConversationService conversationService;
 	
-//	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL)
-//	@ResponseBody
+	@Autowired
+    private SimpMessageSendingOperations messagingTemplate;
+
 	@MessageMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL)
-	@SendTo("/topic/javainuse")
-	public BaseDataResponse createConversationAll(@PathVariable UUID id, @Payload WebSocketChatMessage webSocketChatMessage,
+	public BaseDataResponse createConversationAll(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, 
 			SimpMessageHeaderAccessor headerAccessor) {
-		System.out.println("1234");
-		headerAccessor.getSessionAttributes().put("username", webSocketChatMessage.getSender());
 		Conversation conversation = conversationService.createConversationAll(id);
-		System.out.println("5678");
-		//return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
-		return new BaseDataResponse(webSocketChatMessage);
+		headerAccessor.getSessionAttributes().put("username", userPrincipal.getId());
+		messagingTemplate.convertAndSend(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL, conversation);
+		return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_CANDIDATE)

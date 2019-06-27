@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,9 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.Contract;
@@ -23,6 +26,7 @@ import com.japanwork.model.District;
 import com.japanwork.model.Job;
 import com.japanwork.model.Level;
 import com.japanwork.model.PageInfo;
+import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
@@ -32,6 +36,9 @@ import com.japanwork.security.UserPrincipal;
 
 @Service
 public class JobService {
+	@PersistenceContext 
+	private EntityManager entityManager;
+	
 	@Autowired
 	private JobRepository jobRepository;
 	
@@ -41,15 +48,148 @@ public class JobService {
 	@Autowired
 	private UserService userService;
 	
-	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws IllegalArgumentException{
+	public BaseDataMetaResponse findAllByIsDelete(JobFilterRequest jobFilterRequest, int page, int paging) 
+			throws IllegalArgumentException{
 		try {
-			Page<Job> pages = jobRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
-			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+			String sql = "SELECT j FROM Job j INNER JOIN  j.company c INNER JOIN j.businesses b INNER JOIN j.contract con INNER JOIN j.level lev INNER JOIN j.city city ";
+			if(jobFilterRequest != null) {
+				sql += "WHERE ";
+				boolean check = false;
+				if(!jobFilterRequest.getJobName().isEmpty()) {
+					sql += " j.name LIKE '%"+jobFilterRequest.getJobName()+"%' ";
+					check = true;
+				}
+				if(!jobFilterRequest.getCompanyName().isEmpty()) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					sql += "c.name LIKE '%"+jobFilterRequest.getCompanyName()+"%' ";
+				}
+				if(jobFilterRequest.getBusinessIds().size() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getBusinessIds());
+					if(list.size() == 1) {
+						sql += "b.id = '"+ list.get(0) +"' ";
+					}
+					
+					if(list.size() > 1) {
+						sql += "( b.id = '"+ list.get(0) +"' ";
+						for(int i = 1; i< list.size(); i++) {
+							sql += " OR b.id = '"+ list.get(i) +"' ";
+						}
+						sql +=" ) ";
+					}
+				}
+				
+				if(jobFilterRequest.getContractIds().size() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getContractIds());
+					if(list.size() == 1) {
+						sql += "con.id = '"+ list.get(0) +"' ";
+					}
+					
+					if(list.size() > 1) {
+						sql += "( con.id = '"+ list.get(0) +"' ";
+						for(int i = 1; i< list.size(); i++) {
+							sql += " OR con.id = '"+ list.get(i) +"' ";
+						}
+						sql +=" ) ";
+					}
+				}
+				if(jobFilterRequest.getLevelIds().size() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getLevelIds());
+					if(list.size() == 1) {
+						sql += "lev.id = '"+ list.get(0) +"' ";
+					}
+					
+					if(list.size() > 1) {
+						sql += "( lev.id = '"+ list.get(0) +"' ";
+						for(int i = 1; i< list.size(); i++) {
+							sql += " OR lev.id = '"+ list.get(i) +"' ";
+						}
+						sql +=" ) ";
+					}
+				}
+				if(jobFilterRequest.getCityIds().size() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getCityIds());
+					if(list.size() == 1) {
+						sql += "city.id = '"+ list.get(0) +"' ";
+					}
+					
+					if(list.size() > 1) {
+						sql += "( city.id = '"+ list.get(0) +"' ";
+						for(int i = 1; i< list.size(); i++) {
+							sql += " OR city.id = '"+ list.get(i) +"' ";
+						}
+						sql +=" ) ";
+					}
+				}
+				
+				if(jobFilterRequest.getMinSalary() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					
+					sql += " (j.min_salary > " + jobFilterRequest.getMinSalary();
+					sql += " OR j.max_salary > " + jobFilterRequest.getMinSalary()+")";
+				}
+				
+				if(jobFilterRequest.getMinSalary() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					
+					sql += " (j.min_salary > " + jobFilterRequest.getMinSalary();
+					sql += " OR j.max_salary > " + jobFilterRequest.getMinSalary()+")";
+				}
+				
+				if(jobFilterRequest.getMinSalary() > 0) {
+					if(check) {
+						sql += " AND ";
+					} else {
+						check = true;
+					}
+					
+					sql += " j.create_date >= " + jobFilterRequest.getPostTime();
+				}
+			}
+			
+			long totalElements = entityManager.createQuery(sql, Job.class).getResultList().size();
+			int totalPage = (int) totalElements / paging;
+			
+			sql += " limit " + paging +" offset " + ((page-1)*paging + 1);
+			List<Job> pages = (List<Job>)entityManager.createQuery(sql, Job.class).getResultList();
+			
+			PageInfo pageInfo = new PageInfo(page, totalPage, totalElements);
 			
 			List<JobResponse> list = new ArrayList<JobResponse>();
 			
-			if(pages.getContent().size() > 0) {
-				for (Job job : pages.getContent()) {
+			if(pages.size() > 0) {
+				for (Job job : pages) {
 					list.add(convertJobResponse(job));
 				}
 			}

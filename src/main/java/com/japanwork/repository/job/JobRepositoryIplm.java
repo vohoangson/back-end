@@ -13,7 +13,7 @@ import com.japanwork.model.Company;
 import com.japanwork.model.Job;
 
 public class JobRepositoryIplm implements JobRepository{
-
+	
 	@Override
 	public List<Job> findAll() {
 		// TODO Auto-generated method stub
@@ -170,11 +170,15 @@ public class JobRepositoryIplm implements JobRepository{
 		return findAllByIsDelete(isDelete);
 	}
 
-	@Override
-	public Page<Job> findAllByIsDelete(Pageable page, boolean isDelete) {
-		// TODO Auto-generated method stub
-		return findAllByIsDelete(page, isDelete);
-	}
+//	@Override
+//	public List<Job> listJob(JobFilterRequest jobFilterRequest, int page, int paging, boolean isDelete) {
+//		List<Job> list = entityManager.createQuery(
+//			    "SELECT j FROM job j WHERE j.name LIKE :jobName")
+//			    .setParameter("jobName", "2")
+//			    .setMaxResults(10)
+//			    .getResultList();
+//		return list;
+//	}
 
 	@Override
 	public List<Job> findAllByCompany(Company company) {

@@ -1,3 +1,7 @@
+server:
+    servlet:
+        context-path: /api  
+    port: 8080    
 spring:
     datasource:
         url: jdbc:postgresql://103.81.84.160/japanwork
@@ -69,10 +73,6 @@ amazonProperties:
   accessKey: AKIAXNXIB2BRHJTCC54U
   secretKey: 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
   bucketName: amazon.japanwork 
-server:
-    servlet:
-        context-path: /api  
-    port: 8080    
 rabbitmq:
     image: rabbitmq:management
     ports:
