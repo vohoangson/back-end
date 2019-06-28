@@ -56,7 +56,10 @@ public class JobService {
 			if((totalElements % paging) > 0) {
 				totalPage ++;
 			}
-			List<Job> pages = jobRepository.filterJob(jobFilterRequest, totalPage, paging, false);
+			if(totalPage == 0) {
+				totalPage = 1;
+			}
+			List<Job> pages = jobRepository.filterJob(jobFilterRequest, page, paging, false);
 			
 			PageInfo pageInfo = new PageInfo(page, totalPage, totalElements);
 			

@@ -1,5 +1,6 @@
 package com.japanwork.repository.job;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -279,7 +280,12 @@ public class JobRepositoryIplm implements JobRepository{
 			
 			if(!jobFilterRequest.getPostTime().isEmpty()) {
 				sql.append(" AND ");
-				sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobFilterRequest.getPostTime()) + "'");
+				try {
+					sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		List<Job> list = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).setFirstResult((page-1)*paging)
@@ -372,7 +378,12 @@ public class JobRepositoryIplm implements JobRepository{
 			
 			if(!jobFilterRequest.getPostTime().isEmpty()) {
 				sql.append(" AND ");
-				sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobFilterRequest.getPostTime()) + "'");
+				try {
+					sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		List<Job> list = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).getResultList();
