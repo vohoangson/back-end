@@ -64,7 +64,7 @@ public class PageInfo {
 		if(currentPage == totalPage) {
 			this.nextPage = totalPage;
 		} else {
-			this.nextPage = totalPage;
+			this.nextPage = currentPage + 1;
 		}
 		this.totalPage = totalPage;
 		this.totalCount = totalCount;
