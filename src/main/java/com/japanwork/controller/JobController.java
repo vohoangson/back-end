@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
@@ -32,8 +33,26 @@ public class JobController {
 	
 	@GetMapping(UrlConstant.URL_JOB)
 	@ResponseBody
-	public BaseDataMetaResponse listJob(@RequestBody JobFilterRequest jobFilterRequest, @RequestParam(defaultValue = "1", name = "page") int page, 
-			@RequestParam(defaultValue = "25", name = "paging") int paging) {		
+	public BaseDataMetaResponse listJob(@RequestParam(defaultValue = "1", name = "page") int page, 
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(defaultValue = "", name = "job_name") String jobName,
+			@RequestParam(defaultValue = "", name = "company_name") String companyName,
+			@RequestParam(defaultValue = "", name = "business_ids") String businessIds,
+			@RequestParam(defaultValue = "", name = "contract_ids") String contractIds,
+			@RequestParam(defaultValue = "", name = "level_ids") String levelIds,
+			@RequestParam(defaultValue = "", name = "city_ids") String cityIds,
+			@RequestParam(defaultValue = "0", name = "min_salary") int minSalary,
+			@RequestParam(defaultValue = "", name = "post_time") String postTime) {	
+		
+		JobFilterRequest jobFilterRequest = new JobFilterRequest();
+		jobFilterRequest.setJobName(jobName);
+		jobFilterRequest.setCompanyName(companyName);
+		jobFilterRequest.setBusinessIds(CommonFunction.listParam(businessIds));
+		jobFilterRequest.setCityIds(CommonFunction.listParam(cityIds));
+		jobFilterRequest.setContractIds(CommonFunction.listParam(contractIds));
+		jobFilterRequest.setLevelIds(CommonFunction.listParam(levelIds));
+		jobFilterRequest.setMinSalary(minSalary);
+		jobFilterRequest.setPostTime(postTime);
 		return jobService.findAllByIsDelete(jobFilterRequest, page, paging);
 	}
 	

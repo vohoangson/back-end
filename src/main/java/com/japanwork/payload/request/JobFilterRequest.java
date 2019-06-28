@@ -1,36 +1,23 @@
 package com.japanwork.payload.request;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 public class JobFilterRequest {
-	@JsonProperty("job_name")
 	private String jobName;
 	
-	@JsonProperty("company_name")
 	private String companyName;
 	
-	@JsonProperty("business_ids")
-	private Set<UUID> businessIds = new HashSet<>();
+	private List<String> businessIds;
 	
-	@JsonProperty("contract_ids")
-	private Set<UUID> contractIds = new HashSet<>();
+	private List<String> contractIds;
 	
-	@JsonProperty("level_ids")
-	private Set<UUID> levelIds = new HashSet<>();
+	private List<String> levelIds;
 	
-	@JsonProperty("city_ids")
-	private Set<UUID> cityIds = new HashSet<>();
-	
-	@JsonProperty("min_salary")
+	private List<String> cityIds;
+
 	private int minSalary;
 	
-	@JsonProperty("post_time")
-	private Date postTime;
+	private String postTime;
 
 	public String getJobName() {
 		return jobName;
@@ -44,39 +31,35 @@ public class JobFilterRequest {
 		return companyName;
 	}
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-	public Set<UUID> getBusinessIds() {
+	public List<String> getBusinessIds() {
 		return businessIds;
 	}
 
-	public void setBusinessIds(Set<UUID> businessIds) {
+	public void setBusinessIds(List<String> businessIds) {
 		this.businessIds = businessIds;
 	}
 
-	public Set<UUID> getContractIds() {
+	public List<String> getContractIds() {
 		return contractIds;
 	}
 
-	public void setContractIds(Set<UUID> contractIds) {
+	public void setContractIds(List<String> contractIds) {
 		this.contractIds = contractIds;
 	}
 
-	public Set<UUID> getLevelIds() {
+	public List<String> getLevelIds() {
 		return levelIds;
 	}
 
-	public void setLevelIds(Set<UUID> levelIds) {
+	public void setLevelIds(List<String> levelIds) {
 		this.levelIds = levelIds;
 	}
 
-	public Set<UUID> getCityIds() {
+	public List<String> getCityIds() {
 		return cityIds;
 	}
 
-	public void setCityIds(Set<UUID> cityIds) {
+	public void setCityIds(List<String> cityIds) {
 		this.cityIds = cityIds;
 	}
 
@@ -88,11 +71,15 @@ public class JobFilterRequest {
 		this.minSalary = minSalary;
 	}
 
-	public Date getPostTime() {
+	public String getPostTime() {
 		return postTime;
 	}
 
-	public void setPostTime(Date postTime) {
+	public void setPostTime(String postTime) {
 		this.postTime = postTime;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 }

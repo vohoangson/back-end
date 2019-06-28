@@ -205,83 +205,79 @@ public class JobRepositoryIplm implements JobRepository{
 		sql.append("	WHERE ");
 		sql.append("	j.isDelete = " + isDelete +" ");
 		if(jobFilterRequest != null) {
-			if(jobFilterRequest.getJobName() != null) {
+			if(!jobFilterRequest.getJobName().isEmpty()) {
 				sql.append(" AND ");
 				sql.append(" j.name LIKE '%" + jobFilterRequest.getJobName() + "%' ");
 			}
-			if(jobFilterRequest.getCompanyName() != null) {
+			if(!jobFilterRequest.getCompanyName().isEmpty()) {
 				sql.append(" AND ");
 				sql.append("c.name LIKE '%" + jobFilterRequest.getCompanyName() + "%' ");
 			}
-			if(!jobFilterRequest.getBusinessIds().isEmpty()) {
+			if(jobFilterRequest.getBusinessIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getBusinessIds());
-				if(list.size() == 1) {
-					sql.append("b.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getBusinessIds().size() == 1) {
+					sql.append("b.id = '" + jobFilterRequest.getBusinessIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( b.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR b.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getBusinessIds().size() > 1) {
+					sql.append("( b.id = '" + jobFilterRequest.getBusinessIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getBusinessIds().size(); i++) {
+						sql.append(" OR b.id = '" + jobFilterRequest.getBusinessIds().get(i) + "' ");
 					}
 					sql.append(" )");
 				}
 			}
 			
-			if(!jobFilterRequest.getContractIds().isEmpty()) {
+			if(jobFilterRequest.getContractIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getContractIds());
-				if(list.size() == 1) {
-					sql.append("con.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getContractIds().size() == 1) {
+					sql.append("con.id = '" + jobFilterRequest.getContractIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( con.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR con.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getContractIds().size() > 1) {
+					sql.append("( con.id = '" + jobFilterRequest.getContractIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getContractIds().size(); i++) {
+						sql.append(" OR con.id = '" + jobFilterRequest.getContractIds().get(i) + "' ");
 					}
 					sql.append(" ) ");
 				}
 			}
-			if(!jobFilterRequest.getLevelIds().isEmpty()) {
+			if(jobFilterRequest.getLevelIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getLevelIds());
-				if(list.size() == 1) {
-					sql.append("lev.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getLevelIds().size() == 1) {
+					sql.append("lev.id = '" + jobFilterRequest.getLevelIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( lev.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR lev.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getLevelIds().size() > 1) {
+					sql.append("( lev.id = '" + jobFilterRequest.getLevelIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getLevelIds().size(); i++) {
+						sql.append(" OR lev.id = '" + jobFilterRequest.getLevelIds().get(i) + "' ");
 					}
 					sql.append(" ) ");
 				}
 			}
-			if(!jobFilterRequest.getCityIds().isEmpty()) {
+			if(jobFilterRequest.getCityIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getCityIds());
-				if(list.size() == 1) {
-					sql.append("city.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getCityIds().size() == 1) {
+					sql.append("city.id = '" + jobFilterRequest.getCityIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( city.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR city.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getCityIds().size() > 1) {
+					sql.append("( city.id = '" + jobFilterRequest.getCityIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getCityIds().size(); i++) {
+						sql.append(" OR city.id = '" + jobFilterRequest.getCityIds().get(i) + "' ");
 					}
 					sql.append(" ) ");
 				}
 			}
 			
-			if(jobFilterRequest.getMinSalary() > 0) {
+			if(jobFilterRequest.getMinSalary() != 0) {
 				sql.append(" AND ");
 				sql.append(" (j.minSalary > " + jobFilterRequest.getMinSalary());
 				sql.append(" OR j.maxSalary > " + jobFilterRequest.getMinSalary() + ")");
 			}
 			
-			if(jobFilterRequest.getPostTime() != null) {
+			if(!jobFilterRequest.getPostTime().isEmpty()) {
 				sql.append(" AND ");
 				sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobFilterRequest.getPostTime()) + "'");
 			}
@@ -302,83 +298,79 @@ public class JobRepositoryIplm implements JobRepository{
 		sql.append("	WHERE ");
 		sql.append("	j.isDelete = " + isDelete +" ");
 		if(jobFilterRequest != null) {
-			if(jobFilterRequest.getJobName() != null) {
+			if(!jobFilterRequest.getJobName().isEmpty()) {
 				sql.append(" AND ");
 				sql.append(" j.name LIKE '%" + jobFilterRequest.getJobName() + "%' ");
 			}
-			if(jobFilterRequest.getCompanyName() != null) {
+			if(!jobFilterRequest.getCompanyName().isEmpty()) {
 				sql.append(" AND ");
 				sql.append("c.name LIKE '%" + jobFilterRequest.getCompanyName() + "%' ");
 			}
-			if(!jobFilterRequest.getBusinessIds().isEmpty()) {
+			if(jobFilterRequest.getBusinessIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getBusinessIds());
-				if(list.size() == 1) {
-					sql.append("b.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getBusinessIds().size() == 1) {
+					sql.append("b.id = '" + jobFilterRequest.getBusinessIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( b.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR b.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getBusinessIds().size() > 1) {
+					sql.append("( b.id = '" + jobFilterRequest.getBusinessIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getBusinessIds().size(); i++) {
+						sql.append(" OR b.id = '" + jobFilterRequest.getBusinessIds().get(i) + "' ");
 					}
 					sql.append(" )");
 				}
 			}
 			
-			if(!jobFilterRequest.getContractIds().isEmpty()) {
+			if(jobFilterRequest.getContractIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getContractIds());
-				if(list.size() == 1) {
-					sql.append("con.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getContractIds().size() == 1) {
+					sql.append("con.id = '" + jobFilterRequest.getContractIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( con.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR con.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getContractIds().size() > 1) {
+					sql.append("( con.id = '" + jobFilterRequest.getContractIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getContractIds().size(); i++) {
+						sql.append(" OR con.id = '" + jobFilterRequest.getContractIds().get(i) + "' ");
 					}
 					sql.append(" ) ");
 				}
 			}
-			if(!jobFilterRequest.getLevelIds().isEmpty()) {
+			if(jobFilterRequest.getLevelIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getLevelIds());
-				if(list.size() == 1) {
-					sql.append("lev.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getLevelIds().size() == 1) {
+					sql.append("lev.id = '" + jobFilterRequest.getLevelIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( lev.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR lev.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getLevelIds().size() > 1) {
+					sql.append("( lev.id = '" + jobFilterRequest.getLevelIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getLevelIds().size(); i++) {
+						sql.append(" OR lev.id = '" + jobFilterRequest.getLevelIds().get(i) + "' ");
 					}
 					sql.append(" ) ");
 				}
 			}
-			if(!jobFilterRequest.getCityIds().isEmpty()) {
+			if(jobFilterRequest.getCityIds() != null) {
 				sql.append(" AND ");
-				List<UUID> list = new ArrayList<UUID>(jobFilterRequest.getCityIds());
-				if(list.size() == 1) {
-					sql.append("city.id = '" + list.get(0) + "' ");
+				if(jobFilterRequest.getCityIds().size() == 1) {
+					sql.append("city.id = '" + jobFilterRequest.getCityIds().get(0) + "' ");
 				}
 				
-				if(list.size() > 1) {
-					sql.append("( city.id = '" + list.get(0) + "' ");
-					for(int i = 1; i< list.size(); i++) {
-						sql.append(" OR city.id = '" + list.get(i) + "' ");
+				if(jobFilterRequest.getCityIds().size() > 1) {
+					sql.append("( city.id = '" + jobFilterRequest.getCityIds().get(0) + "' ");
+					for(int i = 1; i< jobFilterRequest.getCityIds().size(); i++) {
+						sql.append(" OR city.id = '" + jobFilterRequest.getCityIds().get(i) + "' ");
 					}
 					sql.append(" ) ");
 				}
 			}
 			
-			if(jobFilterRequest.getMinSalary() > 0) {
+			if(jobFilterRequest.getMinSalary() != 0) {
 				sql.append(" AND ");
 				sql.append(" (j.minSalary > " + jobFilterRequest.getMinSalary());
 				sql.append(" OR j.maxSalary > " + jobFilterRequest.getMinSalary() + ")");
 			}
 			
-			if(jobFilterRequest.getPostTime() != null) {
+			if(!jobFilterRequest.getPostTime().isEmpty()) {
 				sql.append(" AND ");
 				sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(jobFilterRequest.getPostTime()) + "'");
 			}
