@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.EmailConstants;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
@@ -261,7 +262,7 @@ public class UserService {
 					forgetPasswordRepository.delete(fp);
 				}
 				
-				String code = generateCode();
+				String code = CommonFunction.generateCode(6);
 				
 				Date date = new Date();
 				Timestamp timestamp = new Timestamp(date.getTime());
@@ -317,15 +318,6 @@ public class UserService {
 	
 	private User findUserByEmail(String email) {
 		return userRepository.findByEmail(email).get();
-	}
-	
-	private String generateCode() {	 
-	    List<CharacterRule> rules = Arrays.asList(new CharacterRule(EnglishCharacterData.UpperCase, 1),
-				new CharacterRule(EnglishCharacterData.LowerCase, 1));
-
-		PasswordGenerator generator = new PasswordGenerator();
-		String code = generator.generatePassword(6, rules);
-		return code;
 	}
 	
 	private void sendEmail(String to, String subject, String content) {

@@ -3,6 +3,11 @@ package com.japanwork.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.ResourceNotFoundException;
@@ -36,7 +42,12 @@ import com.japanwork.service.UserService;
 
 @RestController
 public class AuthController {
+	private RabbitAdmin rabbitAdmin;
 
+	@Autowired 
+	private ConnectionFactory connectionFactory;
+	
+	
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -130,5 +141,22 @@ public class AuthController {
     @PostMapping(value = UrlConstant.URL_USER_RESET_PASSWORD)
     public BaseMessageResponse resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
     	return userService.resetPassword(resetPasswordRequest);    
+    }
+    
+    @GetMapping(value = UrlConstant.URL_NOTIFICATIONS_ENDPOINT)
+    public BaseDataResponse websocket(@CurrentUser UserPrincipal userPrincipal) {
+    	rabbitAdmin = new RabbitAdmin(connectionFactory);
+    	String exchangeName = "notifications/"+userPrincipal.getId();
+    	String queueName = CommonFunction.generateCode(8);
+        rabbitAdmin.declareExchange(new DirectExchange(exchangeName));
+        rabbitAdmin.declareQueue(new Queue(queueName, false, false, true));
+        rabbitAdmin.declareBinding(
+            new Binding(
+        		queueName,
+                Binding.DestinationType.QUEUE,
+                exchangeName,
+                ""+userPrincipal.getId(),
+                null));
+        return new BaseDataResponse(queueName);
     }
 }

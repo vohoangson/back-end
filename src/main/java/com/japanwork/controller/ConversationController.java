@@ -3,9 +3,6 @@ package com.japanwork.controller;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,16 +19,10 @@ import com.japanwork.service.ConversationService;
 public class ConversationController {
 	@Autowired
 	private ConversationService conversationService;
-	
-	@Autowired
-    private SimpMessageSendingOperations messagingTemplate;
 
-	@MessageMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL)
-	public BaseDataResponse createConversationAll(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, 
-			SimpMessageHeaderAccessor headerAccessor) {
+	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL)
+	public BaseDataResponse createConversationAll(@PathVariable UUID id) {
 		Conversation conversation = conversationService.createConversationAll(id);
-		headerAccessor.getSessionAttributes().put("username", userPrincipal.getId());
-		messagingTemplate.convertAndSend(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL, conversation);
 		return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
 	}
 	

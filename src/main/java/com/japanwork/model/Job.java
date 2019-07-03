@@ -2,8 +2,6 @@ package com.japanwork.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -12,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -35,11 +31,9 @@ public class Job {
     @JoinColumn(name = "company_id")
     private Company company;
     
-	@ManyToMany
-    @JoinTable(name = "job_business", 
-      joinColumns = { @JoinColumn(name = "job_id") }, 
-      inverseJoinColumns = {@JoinColumn(name = "business_id") })
-    private Set<Business> businesses = new HashSet<>();
+	@ManyToOne
+	@JoinColumn(name = "business_id")
+    private Business businesses;
 	
 	@ManyToOne
     @JoinColumn(name = "contract_type_id")
@@ -132,12 +126,12 @@ public class Job {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
-	public Set<Business> getBusinesses() {
+
+	public Business getBusinesses() {
 		return businesses;
 	}
 
-	public void setBusinesses(Set<Business> businesses) {
+	public void setBusinesses(Business businesses) {
 		this.businesses = businesses;
 	}
 
@@ -286,7 +280,7 @@ public class Job {
 		this.isDelete = isDelete;
 	}
 
-	public Job(UUID id, String name, Company company, Set<Business> businesses, Contract contract, Level level,
+	public Job(UUID id, String name, Company company, Business businesses, Contract contract, Level level,
 			City city, District district, String address, String desc, String requiredEducation,
 			String requiredExperience, String requiredLanguage, String benefits, int japaneseLevelRequirement,
 			Date applicationDeadline, float minSalary, float maxSalary, int status, Timestamp createDate,

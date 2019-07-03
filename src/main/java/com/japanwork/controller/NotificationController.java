@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,9 @@ import com.japanwork.service.NotificationService;
 
 @Controller
 public class NotificationController {
-
+	@Autowired 
+	private RabbitTemplate rabbitTemplate;
+	
 	@Autowired
 	private NotificationService notificationService;
 	
@@ -31,7 +34,9 @@ public class NotificationController {
 	@ResponseBody
 	public BaseDataResponse addNotification(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
 			@Valid @RequestBody NotificationRequest notificationRequest) {
-		return notificationService.addNotification(userPrincipal, id, notificationRequest);
+		BaseDataResponse response = notificationService.addNotification(userPrincipal, id, notificationRequest);
+		rabbitTemplate.convertAndSend("notifications/"+userPrincipal.getId(), ""+userPrincipal.getId(), response);
+		return response;
 	}
 	
 	@GetMapping(UrlConstant.URL_CONVERSATION_ID)

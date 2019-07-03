@@ -1,10 +1,14 @@
 package com.japanwork.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,5 +34,14 @@ public class CommonFunction {
 			return listParam;
 		}
 		return null;
+	}
+	
+	public static String generateCode(int lenght) {	 
+	    List<CharacterRule> rules = Arrays.asList(new CharacterRule(EnglishCharacterData.UpperCase, 1),
+				new CharacterRule(EnglishCharacterData.LowerCase, 1));
+
+		PasswordGenerator generator = new PasswordGenerator();
+		String code = generator.generatePassword(lenght, rules);
+		return code;
 	}
 }

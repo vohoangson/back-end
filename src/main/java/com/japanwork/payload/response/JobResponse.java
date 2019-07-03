@@ -2,8 +2,6 @@ package com.japanwork.payload.response;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,8 +14,8 @@ public class JobResponse {
 	
 	private String name;
 
-	@JsonProperty("business_ids")
-	private Set<UUID> businessIds = new HashSet<>();
+	@JsonProperty("business_id")
+	private UUID businessId;
 	
 	@JsonProperty("contract_id")
 	private UUID contractId;
@@ -86,12 +84,12 @@ public class JobResponse {
 		this.name = name;
 	}
 
-	public Set<UUID> getBusinessIds() {
-		return businessIds;
+	public UUID getBusinessId() {
+		return businessId;
 	}
 
-	public void setBusinessIds(Set<UUID> businessIds) {
-		this.businessIds = businessIds;
+	public void setBusinessId(UUID businessId) {
+		this.businessId = businessId;
 	}
 
 	public UUID getContractId() {
@@ -214,7 +212,7 @@ public class JobResponse {
 		this.createDate = createDate;
 	}
 
-	public JobResponse(UUID id, CompanyResponse companyResponse, String name, Set<UUID> businessIds, UUID contractId,
+	public JobResponse(UUID id, CompanyResponse companyResponse, String name, UUID businessId, UUID contractId,
 			UUID levelId, int japaneseLevel, String requiredEducation, String requiredExperience,
 			String requiredLanguage, String desc, UUID cityId, UUID districtId, String address,
 			Date applicationDeadline, float minSalary, float maxSalary, String benefits, Timestamp createDate) {
@@ -222,7 +220,7 @@ public class JobResponse {
 		this.id = id;
 		this.companyResponse = companyResponse;
 		this.name = name;
-		this.businessIds = businessIds;
+		this.businessId = businessId;
 		this.contractId = contractId;
 		this.levelId = levelId;
 		this.japaneseLevel = japaneseLevel;

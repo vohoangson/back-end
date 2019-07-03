@@ -15,8 +15,8 @@ public class JobRequest {
 	private String name;
 	
 	@NotNull(message = "businesses_required")
-	@JsonProperty("business_ids")
-	private Set<UUID> businessIds = new HashSet<>();
+	@JsonProperty("business_id")
+	private UUID businessId;
 	
 	@NotNull(message = "contract_required")
 	@JsonProperty("contract_id")
@@ -71,13 +71,13 @@ public class JobRequest {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public Set<UUID> getBusinessIds() {
-		return businessIds;
+	
+	public UUID getBusinessId() {
+		return businessId;
 	}
 
-	public void setBusinessIds(Set<UUID> businessIds) {
-		this.businessIds = businessIds;
+	public void setBusinessId(UUID businessId) {
+		this.businessId = businessId;
 	}
 
 	public UUID getContractId() {

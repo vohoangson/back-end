@@ -204,7 +204,7 @@ public class JobService {
 			Job job = new Job();
 			job.setName(jobRequest.getName());
 			job.setCompany(companyService.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false));
-			job.setBusinesses(Business.listBusiness(jobRequest.getBusinessIds()));
+			job.setBusinesses(new Business(jobRequest.getBusinessId()));
 			job.setContract(new Contract(jobRequest.getContractId()));
 			job.setLevel(new Level(jobRequest.getLevelId()));
 			job.setCity(new City(jobRequest.getCityId()));
@@ -255,7 +255,7 @@ public class JobService {
 			}
 	
 			job.setName(jobRequest.getName());
-			job.setBusinesses(Business.listBusiness(jobRequest.getBusinessIds()));
+			job.setBusinesses(new Business(jobRequest.getBusinessId()));
 			job.setContract(new Contract(jobRequest.getContractId()));
 			job.setLevel(new Level(jobRequest.getLevelId()));
 			job.setCity(new City(jobRequest.getCityId()));
@@ -324,7 +324,7 @@ public class JobService {
 	private JobResponse convertJobResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
 				job.getId(),
-				companyService.convertCompanyResponse(job.getCompany()), job.getName(), Business.listBusinessID(job.getBusinesses()), 
+				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getId(), 
 				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
 				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
 				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 
