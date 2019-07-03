@@ -42,14 +42,14 @@ public class NotificationController {
 		BaseDataResponse response = notificationService.addNotification(userPrincipal, id, notificationRequest);
 		Conversation conversation = conversationService.findByIdAndIsDelete(id, false);
 		if(conversation.getCandidate() != null) {
-			rabbitTemplate.convertAndSend("notifications/"+conversation.getCandidate().getId(), ""+conversation.getCandidate().getId(), response);
+			rabbitTemplate.convertAndSend("notifications/"+conversation.getCandidate().getUser().getId(), ""+conversation.getCandidate().getUser().getId(), response);
 		}
 		
 		if(conversation.getCompany() != null) {
-			rabbitTemplate.convertAndSend("notifications/"+conversation.getCompany().getId(), ""+conversation.getCompany().getId(), response);
+			rabbitTemplate.convertAndSend("notifications/"+conversation.getCompany().getUser().getId(), ""+conversation.getCompany().getUser().getId(), response);
 		}
 		
-		rabbitTemplate.convertAndSend("notifications/"+conversation.getTranslator().getId(), ""+conversation.getTranslator().getId(), response);
+		rabbitTemplate.convertAndSend("notifications/"+conversation.getTranslator().getUser().getId(), ""+conversation.getTranslator().getUser().getId(), response);
 		return response;
 	}
 	
