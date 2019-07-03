@@ -89,7 +89,7 @@ public class Job {
     private float maxSalary;
     
     @Column(name="status")
-    private int status;
+    private String status;
     
     @JsonIgnore
     @Column(name="create_date")
@@ -247,11 +247,11 @@ public class Job {
 		this.maxSalary = maxSalary;
 	}
 
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -283,7 +283,7 @@ public class Job {
 	public Job(UUID id, String name, Company company, Business businesses, Contract contract, Level level,
 			City city, District district, String address, String desc, String requiredEducation,
 			String requiredExperience, String requiredLanguage, String benefits, int japaneseLevelRequirement,
-			Date applicationDeadline, float minSalary, float maxSalary, int status, Timestamp createDate,
+			Date applicationDeadline, float minSalary, float maxSalary, String status, Timestamp createDate,
 			Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;

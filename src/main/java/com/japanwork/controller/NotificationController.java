@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.Conversation;
 import com.japanwork.payload.request.NotificationRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.service.ConversationService;
 import com.japanwork.service.NotificationService;
 
 @Controller
@@ -30,12 +32,24 @@ public class NotificationController {
 	@Autowired
 	private NotificationService notificationService;
 	
+	@Autowired
+	private ConversationService conversationService;
+	
 	@PostMapping(UrlConstant.URL_CONVERSATION_ID)
 	@ResponseBody
 	public BaseDataResponse addNotification(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
 			@Valid @RequestBody NotificationRequest notificationRequest) {
 		BaseDataResponse response = notificationService.addNotification(userPrincipal, id, notificationRequest);
-		rabbitTemplate.convertAndSend("notifications/"+userPrincipal.getId(), ""+userPrincipal.getId(), response);
+		Conversation conversation = conversationService.findByIdAndIsDelete(id, false);
+		if(conversation.getCandidate() != null) {
+			rabbitTemplate.convertAndSend("notifications/"+conversation.getCandidate().getId(), ""+conversation.getCandidate().getId(), response);
+		}
+		
+		if(conversation.getCompany() != null) {
+			rabbitTemplate.convertAndSend("notifications/"+conversation.getCompany().getId(), ""+conversation.getCompany().getId(), response);
+		}
+		
+		rabbitTemplate.convertAndSend("notifications/"+conversation.getTranslator().getId(), ""+conversation.getTranslator().getId(), response);
 		return response;
 	}
 	

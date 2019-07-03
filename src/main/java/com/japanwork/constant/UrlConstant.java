@@ -16,7 +16,7 @@ public class UrlConstant {
 	public static final String URL_DELETE_ACCOUNT = "/user/delete";
 	public static final String URL_CONFIRM_ACCOUNT = "/confirm-account";
 	public static final String URL_RESEND_REGISTRATION_TOKEN = "/resend-registration";	
-	public static final String URL_NOTIFICATIONS_ENDPOINT = "/notifications/enpoint";
+	public static final String URL_NOTIFICATIONS_ENDPOINT = "/notifications/endpoint";
 	
 	//Business Type
 	public static final String URL_BUSINESS = "/businesses";

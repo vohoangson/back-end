@@ -67,7 +67,7 @@ public class Company {
     private String introduction;
     
     @Column(name="status")
-    private int status;
+    private String status;
     
     @JsonIgnore
     @Column(name="create_date")
@@ -169,11 +169,11 @@ public class Company {
 		this.introduction = introduction;
 	}
 	
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -207,7 +207,7 @@ public class Company {
 	}
 
 	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city,
-			District district, String address, String logoUrl, String coverImageUrl, String introduction, int status,
+			District district, String address, String logoUrl, String coverImageUrl, String introduction, String status,
 			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
 		super();
 		this.id = id;

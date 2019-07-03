@@ -2,17 +2,17 @@ package com.japanwork.constant;
 
 public class CommonConstant {
 	public interface StatusTranslate {
-        int UNTRANSLATED = 1;
-        int TRANSLATING = 2;
-        int TRANSLATION_COMPLETED = 3;
-        int TRANSLATION_NOT_COMPLETED = 4;
+        String UNTRANSLATED = "UNTRANSLATED";
+        String TRANSLATING = "TRANSLATING";
+        String TRANSLATION_COMPLETED = "TRANSLATION_COMPLETED";
+        String TRANSLATION_NOT_COMPLETED = "TRANSLATION_NOT_COMPLETED";
     }
 	
 	public interface StatusApplyJob {
-        int WAITING_FOR_COMPANY_APPROVE = 1;
-        int WAITING_FOR_TRANSLATOR_JOIN = 2;
-        int ON_GOING = 3;
-        int APPLICATION_SUCCEED = 4;
-        int APPLICATION_CANCELED = 5;
+		String WAITING_FOR_COMPANY_APPROVE = "WAITING_FOR_COMPANY_APPROVE";
+		String WAITING_FOR_TRANSLATOR_JOIN = "WAITING_FOR_TRANSLATOR_JOIN";
+		String ON_GOING = "ON_GOING";
+		String APPLICATION_SUCCEED = "APPLICATION_SUCCEED";
+		String APPLICATION_CANCELED = "APPLICATION_CANCELED";
     }
 }

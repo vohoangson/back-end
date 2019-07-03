@@ -117,7 +117,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
                 		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
                 		UrlConstant.URL_AMW_UPLOAD_FILE,
-                		UrlConstant.URL_AMW_DELETE_FILE)
+                		UrlConstant.URL_AMW_DELETE_FILE,
+                		UrlConstant.URL_NOTIFICATIONS_ENDPOINT)
                         .permitAll()
                     .antMatchers(HttpMethod.GET, 
                 		UrlConstant.URL_COMPANY, 
