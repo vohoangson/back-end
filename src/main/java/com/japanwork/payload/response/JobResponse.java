@@ -1,6 +1,7 @@
 package com.japanwork.payload.response;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -56,7 +57,10 @@ public class JobResponse {
 	@JsonProperty("max_salary")
 	private float maxSalary;
 	
-	private String benefits;	
+	private String benefits;
+	
+	@JsonProperty("create_date")
+	private Timestamp createDate;
 	
 	public UUID getId() {
 		return id;
@@ -202,10 +206,18 @@ public class JobResponse {
 		this.benefits = benefits;
 	}
 
-	public JobResponse(UUID id, CompanyResponse companyResponse, String name, Set<UUID> businessIds, UUID contractId, UUID levelId,
-			int japaneseLevel, String requiredEducation, String requiredExperience, String requiredLanguage,
-			String desc, UUID cityId, UUID districtId, String address, Date applicationDeadline, float minSalary,
-			float maxSalary, String benefits) {
+	public Timestamp getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Timestamp createDate) {
+		this.createDate = createDate;
+	}
+
+	public JobResponse(UUID id, CompanyResponse companyResponse, String name, Set<UUID> businessIds, UUID contractId,
+			UUID levelId, int japaneseLevel, String requiredEducation, String requiredExperience,
+			String requiredLanguage, String desc, UUID cityId, UUID districtId, String address,
+			Date applicationDeadline, float minSalary, float maxSalary, String benefits, Timestamp createDate) {
 		super();
 		this.id = id;
 		this.companyResponse = companyResponse;
@@ -225,5 +237,6 @@ public class JobResponse {
 		this.minSalary = minSalary;
 		this.maxSalary = maxSalary;
 		this.benefits = benefits;
+		this.createDate = createDate;
 	}
 }
