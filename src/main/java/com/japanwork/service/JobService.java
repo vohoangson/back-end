@@ -328,7 +328,7 @@ public class JobService {
 				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
 				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
 				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 
-				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits());
+				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreateDate());
 		return jobResponse;
 	}
 }
