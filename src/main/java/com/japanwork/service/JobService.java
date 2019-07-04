@@ -144,6 +144,7 @@ public class JobService {
 						e.printStackTrace();
 					}
 				}
+				sql.append(" ORDER BY j.createDate DESC ");
 			}
 			
 			List<Job> pages = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).setFirstResult((page-1)*paging)

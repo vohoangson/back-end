@@ -14,6 +14,7 @@ import com.japanwork.util.CookieUtils;
 public class HttpCookieOAuth2AuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
     public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+    public static String ROLE_OAUTH2;
     private static final int cookieExpireSeconds = 180;
 
     @Override
@@ -24,7 +25,8 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
     }
 
     @Override
-    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
+    public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, 
+    		HttpServletRequest request, HttpServletResponse response) {
         if (authorizationRequest == null) {
             CookieUtils.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
             CookieUtils.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
@@ -32,12 +34,8 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
         }
 
         CookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtils.serialize(authorizationRequest), cookieExpireSeconds);
-        CookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_OAUTH2_LOGIN, cookieExpireSeconds);
-        
-//        String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-//        if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
-//            CookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieExpireSeconds);
-//        }
+        CookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_OAUTH2_LOGIN+"?role="+request.getParameter("role"), cookieExpireSeconds);
+        ROLE_OAUTH2 = request.getParameter("role");
     }
 
     @Override

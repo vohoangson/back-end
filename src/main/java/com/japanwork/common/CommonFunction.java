@@ -44,4 +44,14 @@ public class CommonFunction {
 		String code = generator.generatePassword(lenght, rules);
 		return code;
 	}
+	
+	public static boolean checkRole(String role) {
+		if(!role.isEmpty()) {
+			if(!role.equalsIgnoreCase("COMPANY") && !role.equalsIgnoreCase("CANDIDATE") 
+					&& !role.equalsIgnoreCase("TRANSLATOR") && !role.equalsIgnoreCase("ADMIN")) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

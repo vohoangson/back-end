@@ -39,7 +39,6 @@ import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.request.ExperienceRequest;
 import com.japanwork.payload.request.LanguageCertificateRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.security.UserPrincipal;
@@ -61,7 +60,7 @@ public class CandidateService {
 	@Autowired
 	private LanguageCertificateService languageCertificateService;
 	
-	public BaseDataResponse savePersonal(CandidatePersonalRequest candidatePersonalRequest, UserPrincipal userPrincipal)
+	public Candidate savePersonal(CandidatePersonalRequest candidatePersonalRequest, UserPrincipal userPrincipal)
 			throws ServerError{
 		try {
 			Date date = new Date();
@@ -87,14 +86,13 @@ public class CandidateService {
 			
 			Candidate result = candidateRepository.save(candidate);
 			userService.changePropertyId(userPrincipal.getId(), result.getId());
-			BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(result));		
-			return response;
+			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CANDIDATE_CREATE_FAIL);
 		}
 	}
 	
-	public BaseDataResponse updatePersonal(CandidatePersonalRequest candidatePersonalRequest, UUID id, 
+	public Candidate updatePersonal(CandidatePersonalRequest candidatePersonalRequest, UUID id, 
 			UserPrincipal userPrincipal) throws ResourceNotFoundException, ServerError{
 			try {
 			Date date = new Date();
@@ -103,7 +101,7 @@ public class CandidateService {
 			Candidate candidate = new Candidate();
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
-				candidate = this.findCandidateByIdAndIsDelete(id);
+				candidate = this.findByIdAndIsDelete(id);
 			} else {
 				candidate = candidateRepository.findById(id)
 						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
@@ -122,9 +120,8 @@ public class CandidateService {
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setUpdateDate(timestamp);
 			
-			Candidate result = candidateRepository.save(candidate);
-			BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(result));		
-			return response;
+			Candidate result = candidateRepository.save(candidate);	
+			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
@@ -132,7 +129,7 @@ public class CandidateService {
 		}
 	}
 	
-	public BaseDataResponse updateWish(CandidateWishRequest candidateWishRequest, UUID id,UserPrincipal userPrincipal) 
+	public Candidate updateWish(CandidateWishRequest candidateWishRequest, UUID id,UserPrincipal userPrincipal) 
 			throws ResourceNotFoundException, ServerError{
 		try {
 			Date date = new Date();
@@ -141,7 +138,7 @@ public class CandidateService {
 			Candidate candidate = new Candidate();
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
-				candidate = this.findCandidateByIdAndIsDelete(id);
+				candidate = this.findByIdAndIsDelete(id);
 			} else {
 				candidate = candidateRepository.findById(id)
 						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
@@ -158,9 +155,8 @@ public class CandidateService {
 			candidate.setStatusInfo(2);
 			candidate.setUpdateDate(timestamp);
 			
-			Candidate result = candidateRepository.save(candidate);
-			BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(result));		
-			return response;
+			Candidate result = candidateRepository.save(candidate);	
+			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
@@ -169,90 +165,7 @@ public class CandidateService {
 	}
 	
 	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
-	public BaseDataResponse createExperience(CandidateExperienceRequest candidateExperienceRequest, UUID id) 
-			throws ResourceNotFoundException, ServerError{		
-		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
-			
-			if(!candidateExperienceRequest.getAcademies().isEmpty()) {
-				List<Academy> listAcademy = new ArrayList<>();
-				for (AcademyRequest academyRequest : candidateExperienceRequest.getAcademies()) {
-					Academy academy = new Academy();
-					
-					academy.setCandidateId(id);
-					academy.setAcademyCenterName(academyRequest.getAcademyCenterName());
-					academy.setMajorName(academyRequest.getMajorName());
-					academy.setGrade(academyRequest.getGrade());
-					academy.setGradeSystem(academyRequest.getGradeSystem());
-					academy.setStartDate(academyRequest.getStartDate());
-					academy.setEndDate(academyRequest.getEndDate());
-					academy.setCreateDate(timestamp);
-					academy.setUpdateDate(timestamp);
-					academy.setDelete(false);
-					
-					listAcademy.add(academy);
-				}
-				Set<Academy> result = new HashSet<Academy>(academyService.saveAll(listAcademy));
-				candidate.setAcademies(result);
-			}
-			
-			if(!candidateExperienceRequest.getExperiences().isEmpty()) {
-				List<Experience> listExperience = new ArrayList<>();
-				for (ExperienceRequest experienceRequest : candidateExperienceRequest.getExperiences()) {
-					Experience experience = new Experience();
-					
-					experience.setCandidateId(id);
-					experience.setOrganizaion(experienceRequest.getOrganizaion());
-					experience.setDesc(experienceRequest.getDesc());
-					experience.setLevel(new Level(experienceRequest.getLevelId()));
-					experience.setBusiness(new Business(experienceRequest.getBusinessId()));
-					experience.setStartDate(experienceRequest.getStartDate());
-					experience.setEndDate(experienceRequest.getEndDate());
-					experience.setCreateDate(timestamp);
-					experience.setUpdateDate(timestamp);
-					experience.setDelete(false);
-					
-					listExperience.add(experience);
-				}
-				
-				Set<Experience> result = new HashSet<Experience>(experienceService.saveAll(listExperience));
-				candidate.setExperiences(result);
-			}
-			
-			if(!candidateExperienceRequest.getLanguageCertificates().isEmpty()) {
-				List<LanguageCertificate> listLanguageCertificate = new ArrayList<>();
-				for (LanguageCertificateRequest languageCertificateRequest : candidateExperienceRequest.getLanguageCertificates()) {
-					LanguageCertificate languageCertificate = new LanguageCertificate();
-	
-					languageCertificate.setCandidateId(id);
-					languageCertificate.setScore(languageCertificateRequest.getScore());
-					languageCertificate.setLanguageCertificateType(new LanguageCertificateType(languageCertificateRequest.getLanguageCertificateTypeId()));
-					languageCertificate.setTakenDate(languageCertificateRequest.getTakenDate());
-					languageCertificate.setCreateDate(timestamp);
-					languageCertificate.setUpdateDate(timestamp);
-					languageCertificate.setDelete(false);
-					
-					listLanguageCertificate.add(languageCertificate);
-				}
-				
-				Set<LanguageCertificate> result = new HashSet<LanguageCertificate>(languageCertificateService.saveAll(listLanguageCertificate));
-				candidate.setLanguageCertificates(result);
-			}
-			
-			BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(candidate));		
-			return response;
-		} catch (ResourceNotFoundException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServerError(MessageConstant.CANDIDATE_ADD_EXPERIENCE_FAIL);
-		}
-	}
-	
-	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
-	public BaseDataResponse updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public Candidate updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		try {	
 			this.deleteExperiencer(id);
 		
@@ -325,9 +238,8 @@ public class CandidateService {
 				Set<LanguageCertificate> result = new HashSet<LanguageCertificate>(languageCertificateService.saveAll(listLanguageCertificate));
 				candidate.setLanguageCertificates(result);
 			}
-			
-			BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(candidate));		
-			return response;
+				
+			return candidate;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
@@ -335,42 +247,30 @@ public class CandidateService {
 		}
 	}
 	
-	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
+	public Candidate isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		candidate.setDelete(isDel);
 		candidateRepository.save(candidate);
-		Candidate result = candidateRepository.findByIdAndIsDelete(id, false);
-		
-		BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(result));	
-		return response;
+		Candidate result = candidateRepository.findByIdAndIsDelete(id, false);	
+		return result;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
+	public Candidate findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(candidate));	
-		return response;
+			
+		return candidate;
 	}
 	
-	public BaseDataResponse myCandidate(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public Candidate myCandidate(UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(convertCandiateResponse(candidate));	
-		return response;
-	}
-	
-	public Candidate findCandidateByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
-		if(candidate == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
+			
 		return candidate;
 	}
 	
@@ -382,11 +282,9 @@ public class CandidateService {
 		 return true;
 	}
 	
-	public BaseDataResponse findAllByIsDelete() {
+	public List<Candidate> findAllByIsDelete() {
 		List<Candidate> listCandidate = candidateRepository.findAllByIsDelete(false);
-		
-		BaseDataResponse response = new BaseDataResponse(listCandidate);
-		return response;
+		return listCandidate;
 	}
 	
 	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{

@@ -1,5 +1,7 @@
 package com.japanwork.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.Business;
 import com.japanwork.payload.request.BusinessRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.BusinessService;
@@ -23,12 +26,14 @@ public class BusinessTypeController {
 	@GetMapping(UrlConstant.URL_BUSINESS)
 	@ResponseBody
 	public BaseDataResponse listBusiness() {
-		return businessTypeService.findAllByIsDelete();
+		List<Business> list = businessTypeService.findAllByIsDelete();
+		return new BaseDataResponse(list);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_BUSINESS)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody BusinessRequest businessTypeRequest) {		
-		return businessTypeService.save(businessTypeRequest);
+	public BaseDataResponse create(@Valid @RequestBody BusinessRequest businessTypeRequest) {
+		Business business = businessTypeService.save(businessTypeRequest);
+		return new BaseDataResponse(business);
 	}
 }

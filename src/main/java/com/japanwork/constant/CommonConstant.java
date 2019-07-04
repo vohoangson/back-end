@@ -15,4 +15,11 @@ public class CommonConstant {
 		String APPLICATION_SUCCEED = "APPLICATION_SUCCEED";
 		String APPLICATION_CANCELED = "APPLICATION_CANCELED";
     }
+	
+	public interface Role {
+		String COMPANY = "ROLE_COMPANY";
+		String CANDIDATE = "ROLE_CANDIDATE";
+		String ADMIN = "ROLE_ADMIN";
+		String TRANSLATOR = "ROLE_TRANSLATOR";
+    }
 }

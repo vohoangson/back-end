@@ -45,8 +45,8 @@ public class CandidateController {
 		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
 			throw new BadRequestException(MessageConstant.CADIDATE_ALREADY, MessageConstant.CADIDATE_ALREADY_MSG);
 		}
-		
-		return candidateService.savePersonal(candidatePersonalRequest, userPrincipal);
+		Candidate candidate = candidateService.savePersonal(candidatePersonalRequest, userPrincipal);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_PERSONAL)
@@ -56,7 +56,8 @@ public class CandidateController {
 		if(!checkPermission(userPrincipal, id)) {
 			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
-		return candidateService.updatePersonal(candidatePersonalRequest, id, userPrincipal);
+		Candidate candidate = candidateService.updatePersonal(candidatePersonalRequest, id, userPrincipal);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_WISH)
@@ -66,17 +67,9 @@ public class CandidateController {
 		if(!checkPermission(userPrincipal, id)) {
 			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
-		return candidateService.updateWish(candidateWishRequest, id, userPrincipal);
-	}
-	
-	@PostMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
-	@ResponseBody
-	public BaseDataResponse createCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{	
-		if(!checkPermission(userPrincipal, id)) {
-			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
-		}
-		return candidateService.createExperience(candidateExperienceRequest, id);
+		
+		Candidate candidate = candidateService.updateWish(candidateWishRequest, id, userPrincipal);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
@@ -86,7 +79,8 @@ public class CandidateController {
 		if(!checkPermission(userPrincipal, id)) {
 			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
-		return candidateService.updateExperience(candidateExperienceRequest, id, userPrincipal);
+		Candidate candidate = candidateService.updateExperience(candidateExperienceRequest, id, userPrincipal);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE)
@@ -99,30 +93,34 @@ public class CandidateController {
 	@GetMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse findCadidateByIdAndIsDelete(@PathVariable UUID id){		
-		return candidateService.findByIdAndIsDelete(id);
+		Candidate candidate = candidateService.findByIdAndIsDelete(id);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@GetMapping(UrlConstant.URL_MY_CANDIDATE)
 	@ResponseBody
 	public BaseDataResponse myCandidate(@CurrentUser UserPrincipal userPrincipal){		
-		return candidateService.myCandidate(userPrincipal);
+		Candidate candidate = candidateService.myCandidate(userPrincipal);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@DeleteMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		return candidateService.isDel(id, true);
+		Candidate candidate = candidateService.isDel(id, true);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		return candidateService.isDel(id, false);
+		Candidate candidate = candidateService.isDel(id, false);
+		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
 	private boolean checkPermission(UserPrincipal userPrincipal, UUID id) {
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CANDIDATE")) {		
-			Candidate candidate = candidateService.findCandidateByIdAndIsDelete(id);
+			Candidate candidate = candidateService.findByIdAndIsDelete(id);
 			if(!candidate.getUser().getId().equals(userPrincipal.getId())) {
 				return false;
 			}

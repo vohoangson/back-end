@@ -12,7 +12,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Business;
 import com.japanwork.payload.request.BusinessRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.business_type.BusinessTypeRepository;
 
 @Service
@@ -20,7 +19,7 @@ public class BusinessService {
 	@Autowired
 	private BusinessTypeRepository businessTypeRepository;
 	
-	public BaseDataResponse save(BusinessRequest businessTypeRequest) {
+	public Business save(BusinessRequest businessTypeRequest) {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
@@ -33,24 +32,20 @@ public class BusinessService {
 		businessType.setUpdateDate(timestamp);
 		businessType.setDelete(false);
 		
-		Business result = businessTypeRepository.save(businessType);
-		BaseDataResponse response = new BaseDataResponse(result);	
-		return response;
+		Business result = businessTypeRepository.save(businessType);	
+		return result;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+	public Business findByIdAndIsDelete(UUID id) {
 		Business business = businessTypeRepository.findByIdAndIsDelete(id, false);
 		if(business == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(business);	
-		return response;
+		return business;
 	}
 	
-	public BaseDataResponse findAllByIsDelete() {
+	public List<Business> findAllByIsDelete() {
 		List<Business> list = businessTypeRepository.findAllByIsDelete(false);
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+		return list;
 	} 
 }
