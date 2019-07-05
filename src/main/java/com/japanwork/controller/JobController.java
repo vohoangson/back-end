@@ -1,10 +1,13 @@
 package com.japanwork.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.Job;
+import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.JobResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.JobService;
@@ -59,38 +65,55 @@ public class JobController {
 	@GetMapping(UrlConstant.URL_COMPANY_ID_JOB)
 	@ResponseBody
 	public BaseDataMetaResponse listJobByCompny(@RequestParam(defaultValue = "1", name = "page") int page, 
-			@RequestParam(defaultValue = "25", name = "paging") int paging, @PathVariable UUID id) {		
-		return jobService.findAllByCompanyIdAndIsDelete(page, paging, id);
+			@RequestParam(defaultValue = "25", name = "paging") int paging, @PathVariable UUID id) {
+		Page<Job> pages = jobService.findAllByCompanyIdAndIsDelete(page, paging, id);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		
+		List<JobResponse> list = new ArrayList<JobResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (Job job : pages.getContent()) {
+				list.add(jobService.convertJobResponse(job));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	
 	@PostMapping(UrlConstant.URL_JOB)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody JobRequest jobRequest, @CurrentUser UserPrincipal userPrincipal) {		
-		return jobService.save(jobRequest, userPrincipal);
+		Job job = jobService.save(jobRequest, userPrincipal);
+		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
 	public BaseDataResponse findJobByIdAndIsDelete(@PathVariable UUID id){		
-		return jobService.findByIdAndIsDelete(id);
+		Job job = jobService.findByIdAndIsDelete(id);
+		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 	
 	@PatchMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
 	public BaseDataResponse update(@Valid @RequestBody JobRequest jobRequest, @PathVariable UUID id, 
 			@CurrentUser UserPrincipal userPrincipal) {		
-		return jobService.update(jobRequest, id, userPrincipal);
+		Job job = jobService.update(jobRequest, id, userPrincipal);
+		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 	
 	@DeleteMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return jobService.isDel(id, userPrincipal, true);
+		Job job = jobService.isDel(id, userPrincipal, true);
+		return new BaseDataResponse(jobService.convertJobResponse(job));
+		
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		return jobService.isDel(id, userPrincipal, false);
+		Job job = jobService.isDel(id, userPrincipal, false);
+		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 }

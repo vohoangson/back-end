@@ -2,10 +2,11 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.MessageConstant;
@@ -14,7 +15,6 @@ import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.TranslatorRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.TranslatorResponse;
 import com.japanwork.repository.translator.TranslatorRepository;
 import com.japanwork.security.UserPrincipal;
@@ -35,7 +35,7 @@ public class TranslatorService {
 		return true;
 	}
 	
-	public BaseDataResponse save(TranslatorRequest translatorRequest, UserPrincipal userPrincipal) {
+	public Translator save(TranslatorRequest translatorRequest, UserPrincipal userPrincipal) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -54,12 +54,11 @@ public class TranslatorService {
 		translator.setUpdateDate(timestamp);
 		translator.setDelete(false);
 		
-		Translator result = translatorRepository.save(translator);
-		BaseDataResponse response = new BaseDataResponse(convertTranslatorResponse(result));		
-		return response;
+		Translator result = translatorRepository.save(translator);		
+		return result;
 	}
 	
-	public BaseDataResponse update(TranslatorRequest translatorRequest, UUID id, UserPrincipal userPrincipal) 
+	public Translator update(TranslatorRequest translatorRequest, UUID id, UserPrincipal userPrincipal) 
 			throws ResourceNotFoundException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
@@ -90,37 +89,36 @@ public class TranslatorService {
 		translator.setJapaneseLevel(translatorRequest.getJapaneseLevel());
 		translator.setUpdateDate(timestamp);
 		
-		Translator result = translatorRepository.save(translator);
-		BaseDataResponse response = new BaseDataResponse(convertTranslatorResponse(result));		
-		return response;
+		Translator result = translatorRepository.save(translator);		
+		return result;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) 
+	public Translator findByIdAndIsDelete(UUID id) 
 			throws ResourceNotFoundException{
 		Translator translator = translatorRepository.findByIdAndIsDelete(id, false);
 		if(translator == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}	
+		return translator;
+	}
+	
+	public Page<Translator> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
+		try {
+			Page<Translator> pages = translatorRepository.findAllByIsDelete(PageRequest.of(page-1, paging),false);
+			return pages;
+		} catch (IllegalArgumentException e) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(convertTranslatorResponse(translator));	
-		return response;
 	}
 	
-	public BaseDataResponse findAllByIsDelete(){
-		List<Translator> translators = translatorRepository.findAllByIsDelete(false);
-
-		BaseDataResponse response = new BaseDataResponse(translators);	
-		return response;
-	}
-	
-	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
+	public Translator isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Translator translator = translatorRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		translator.setDelete(isDel);
 		translatorRepository.save(translator);
 		
 		Translator result = translatorRepository.findByIdAndIsDelete(id, false);
-		return new BaseDataResponse(convertTranslatorResponse(result));
+		return result;
 	}
 	
 	public Translator findTranslatorByUser(User user){

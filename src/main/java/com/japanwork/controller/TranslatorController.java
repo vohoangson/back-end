@@ -1,10 +1,13 @@
 package com.japanwork.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +15,18 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.PageInfo;
+import com.japanwork.model.Translator;
 import com.japanwork.payload.request.TranslatorRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.TranslatorResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.TranslatorService;
@@ -40,37 +48,54 @@ public class TranslatorController {
 			throw new BadRequestException(MessageConstant.TRANSLATOR_ALREADY);
 		}
 		
-		return translatorService.save(translatorRequest, userPrincipal);
+		Translator translator = translatorService.save(translatorRequest, userPrincipal);
+		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
-	public BaseDataResponse listTranslator (){
-		return translatorService.findAllByIsDelete();
+	public BaseDataMetaResponse listTranslator (@RequestParam(defaultValue = "1", name = "page") int page, 
+			@RequestParam(defaultValue = "25", name = "paging") int paging){
+		Page<Translator> pages = translatorService.findAllByIsDelete(page, paging);
+		
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<TranslatorResponse> list = new ArrayList<TranslatorResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (Translator translator : pages.getContent()) {
+				list.add(translatorService.convertTranslatorResponse(translator));
+			}
+		}
+		
+		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	
 	@PatchMapping(UrlConstant.URL_TRANSLATOR_ID)
 	@ResponseBody
 	public BaseDataResponse updateTranslator(@Valid @RequestBody TranslatorRequest translatorRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		return translatorService.update(translatorRequest, id, userPrincipal);
+		Translator translator = translatorService.update(translatorRequest, id, userPrincipal);
+		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATOR_ID)
 	@ResponseBody
 	public BaseDataResponse findTranslatorByIdAndIsDelete(@PathVariable UUID id){		
-		return translatorService.findByIdAndIsDelete(id);
+		Translator translator = translatorService.findByIdAndIsDelete(id);
+		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
 	@DeleteMapping(UrlConstant.URL_TRANSLATOR_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		return translatorService.isDel(id, true);
+		Translator translator = translatorService.isDel(id, true);
+		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATOR_UNDEL_ID)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		return translatorService.isDel(id, false);
+		Translator translator = translatorService.isDel(id, false);
+		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 }

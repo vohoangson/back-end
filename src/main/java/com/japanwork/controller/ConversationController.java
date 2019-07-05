@@ -1,5 +1,7 @@
 package com.japanwork.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.Conversation;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.ConversationResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.ConversationService;
@@ -29,20 +32,27 @@ public class ConversationController {
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_CANDIDATE)
 	@ResponseBody
 	public BaseDataResponse createConversationSupportCandidate(@PathVariable UUID id) {
-		
-		return conversationService.createConversationSupportCandidate(id);
+		Conversation conversation = conversationService.createConversationSupportCandidate(id);
+		return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_COMPANY)
 	@ResponseBody
 	public BaseDataResponse createConversationSupportCompany(@PathVariable UUID id) {
-		
-		return conversationService.createConversationSupportCompany(id);
+		Conversation conversation =  conversationService.createConversationSupportCompany(id);
+		return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION)
 	@ResponseBody
 	public BaseDataResponse listConversationByUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id) {
-		return conversationService.listConversationByUser(userPrincipal, id);
+		List<Conversation> list = conversationService.listConversationByUser(userPrincipal, id);
+		List<ConversationResponse> listConversationResponse = new ArrayList<ConversationResponse>();
+		if(list != null) {
+			for (Conversation conversation : list) {
+				listConversationResponse.add(conversationService.convertConversationResponse(conversation));
+			}
+		}
+		return new BaseDataResponse(listConversationResponse);
 	}
 }

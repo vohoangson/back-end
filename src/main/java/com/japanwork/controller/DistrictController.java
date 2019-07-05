@@ -1,5 +1,6 @@
 package com.japanwork.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.District;
 import com.japanwork.payload.request.DistrictRequest;
 import com.japanwork.payload.request.ListDistrictRequest;
 import com.japanwork.payload.response.BaseDataResponse;
@@ -26,24 +28,28 @@ public class DistrictController {
 	@GetMapping(UrlConstant.URL_DISTRICT)
 	@ResponseBody
 	public BaseDataResponse listDistrict() {
-		return districtService.findAllByIsDelete();
+		List<District> list = districtService.findAllByIsDelete();
+		return new BaseDataResponse(list);
 	}
 	
 	@GetMapping(UrlConstant.URL_DISTRICTS_ID)
 	@ResponseBody
 	public BaseDataResponse listDistrictByCity(@PathVariable UUID id) {
-		return districtService.findAllByCityIdAndIsDelete(id);
+		List<District> list = districtService.findAllByCityIdAndIsDelete(id);
+		return new BaseDataResponse(list);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_DISTRICT)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody DistrictRequest districtRequest) {		
-		return districtService.save(districtRequest);
+		District district = districtService.save(districtRequest);
+		return new BaseDataResponse(district);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_DISTRICTS)
 	@ResponseBody
 	public BaseDataResponse createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {		
-		return districtService.saves(listDistrictRequest);
+		List<District> list =  districtService.saves(listDistrictRequest);
+		return new BaseDataResponse(list);
 	}
 }

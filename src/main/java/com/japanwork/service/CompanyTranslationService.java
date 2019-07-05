@@ -12,13 +12,9 @@ import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.Business;
-import com.japanwork.model.City;
 import com.japanwork.model.Company;
 import com.japanwork.model.CompanyTranslation;
-import com.japanwork.model.District;
-import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.request.CompanyTranslationRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company_tranlation.CompanyTranlationRepository;
 import com.japanwork.security.UserPrincipal;
@@ -37,7 +33,7 @@ public class CompanyTranslationService {
 	@Autowired
 	private TranslatorService translatorService;
 	
-	public BaseDataResponse save(CompanyTranslationRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
+	public CompanyTranslation save(CompanyTranslationRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
@@ -53,15 +49,14 @@ public class CompanyTranslationService {
 			company.setUpdateDate(timestamp);
 			company.setDelete(false);
 			
-			CompanyTranslation result = companyTranlationRepository.save(company);
-			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
-			return response;
+			CompanyTranslation result = companyTranlationRepository.save(company);		
+			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CREATE_COMPANY_TRANSLATE_FAIL);
 		}
 	}
 	
-	public BaseDataResponse update(CompanyTranslationRequest companyTranslationRequest, UUID id, UserPrincipal userPrincipal) 
+	public CompanyTranslation update(CompanyTranslationRequest companyTranslationRequest, UUID id, UserPrincipal userPrincipal) 
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
@@ -88,9 +83,8 @@ public class CompanyTranslationService {
 			company.setStatus(1);
 			company.setUpdateDate(timestamp);
 			
-			CompanyTranslation result = companyTranlationRepository.save(company);
-			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));			
-			return response;
+			CompanyTranslation result = companyTranlationRepository.save(company);			
+			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (ForbiddenException e) {
@@ -100,7 +94,7 @@ public class CompanyTranslationService {
 		}
 	}
 	
-	private CompanyResponse convertCompanyResponse(CompanyTranslation companyTranslation) {
+	public CompanyResponse convertCompanyResponse(CompanyTranslation companyTranslation) {
 		Company company = companyService.findById(companyTranslation.getCompany().getId());
 		CompanyResponse companyResponse = new CompanyResponse(
 				company.getId(),

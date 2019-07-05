@@ -30,7 +30,6 @@ import com.japanwork.model.Experience;
 import com.japanwork.model.LanguageCertificate;
 import com.japanwork.model.LanguageCertificateType;
 import com.japanwork.model.Level;
-import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.AcademyRequest;
 import com.japanwork.payload.request.CandidateExperienceRequest;
@@ -38,7 +37,6 @@ import com.japanwork.payload.request.CandidatePersonalRequest;
 import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.request.ExperienceRequest;
 import com.japanwork.payload.request.LanguageCertificateRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.security.UserPrincipal;
@@ -287,21 +285,10 @@ public class CandidateService {
 		return listCandidate;
 	}
 	
-	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
+	public Page<Candidate> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Candidate> pages = candidateRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
-			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-			
-			List<CandidateResponse> list = new ArrayList<CandidateResponse>();
-			
-			if(pages.getContent().size() > 0) {
-				for (Candidate candidate : pages.getContent()) {
-					list.add(convertCandiateResponse(candidate));
-				}
-			}
-			
-			BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
-			return response;
+			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}

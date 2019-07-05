@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.Conversation;
 import com.japanwork.model.JobApplication;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.payload.response.ConversationResponse;
@@ -66,7 +65,7 @@ public class ConversationService {
 		return jobApplication.getAllConversation();
 	}
 	
-	public BaseDataResponse createConversationSupportCandidate(UUID id) {		
+	public Conversation createConversationSupportCandidate(UUID id) {		
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
 		
 		if(jobApplication.getCandidateSupportConversaion() == null) {
@@ -84,13 +83,13 @@ public class ConversationService {
 			jobApplication.setCandidateSupportConversaion(conversation);
 			jobApplicationService.save(jobApplication);
 			
-			return new BaseDataResponse(convertConversationResponse(result));
+			return result;
 		}
 		
-		return new BaseDataResponse(convertConversationResponse(jobApplication.getCandidateSupportConversaion()));
+		return jobApplication.getCandidateSupportConversaion();
 	}
 	
-	public BaseDataResponse createConversationSupportCompany(UUID id) {		
+	public Conversation createConversationSupportCompany(UUID id) {		
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
 		
 		if(jobApplication.getCompanySupportConversation() == null) {
@@ -109,12 +108,12 @@ public class ConversationService {
 			jobApplication.setCompanySupportConversation(conversation);
 			jobApplicationService.save(jobApplication);
 			
-			return new BaseDataResponse(convertConversationResponse(result));
+			return result;
 		}
-		return new BaseDataResponse(convertConversationResponse(jobApplication.getCompanySupportConversation()));
+		return jobApplication.getCompanySupportConversation();
 	}
 	
-	public BaseDataResponse listConversationByUser(UserPrincipal userPrincipal, UUID id) {
+	public List<Conversation> listConversationByUser(UserPrincipal userPrincipal, UUID id) {
 		UUID idUser = userPrincipal.getId();
 		String role = userService.findById(idUser).getRole();
 		List<Conversation> list = new ArrayList<Conversation>();
@@ -146,7 +145,7 @@ public class ConversationService {
 				listConversationResponse.add(convertConversationResponse(conversation));
 			}
 		}
-		return new BaseDataResponse(listConversationResponse);
+		return list;
 	}
 	
 	public Conversation findByIdAndIsDelete(UUID id, boolean isDel) {

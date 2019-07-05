@@ -12,7 +12,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.LanguageCertificateType;
 import com.japanwork.payload.request.LanguageCertificateTypeRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.language_certificate_type.LanguageCertificateTypeRepository;
 
 @Service
@@ -20,7 +19,7 @@ public class LanguageCertificateTypeService {
 	@Autowired
 	private LanguageCertificateTypeRepository languageCertificateTypeRepository;
 	
-	public BaseDataResponse save(LanguageCertificateTypeRequest languageCertificateTypeRequest) {
+	public LanguageCertificateType save(LanguageCertificateTypeRequest languageCertificateTypeRequest) {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
@@ -34,24 +33,19 @@ public class LanguageCertificateTypeService {
 		LanguageCertificateType.setDelete(false);
 		
 		LanguageCertificateType result = languageCertificateTypeRepository.save(LanguageCertificateType);
-		BaseDataResponse response = new BaseDataResponse(result);	
-		return response;
+		return result;
 	}
 	
-	public BaseDataResponse findAllByIsDelete() {
+	public List<LanguageCertificateType> findAllByIsDelete() {
 		List<LanguageCertificateType> list = languageCertificateTypeRepository.findAllByIsDelete(false);
-		
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+		return list;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+	public LanguageCertificateType findByIdAndIsDelete(UUID id) {
 		LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndIsDelete(id, false);
 		if(languageCertificateType == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
-		
-		BaseDataResponse response = new BaseDataResponse(languageCertificateType);	
-		return response;
+		}	
+		return languageCertificateType;
 	}
 }

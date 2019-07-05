@@ -14,7 +14,6 @@ import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.District;
 import com.japanwork.payload.request.DistrictRequest;
 import com.japanwork.payload.request.ListDistrictRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.district.DistrictRepository;
 
 @Service
@@ -22,7 +21,7 @@ public class DistrictService {
 	@Autowired
 	private DistrictRepository districtRepository;
 	
-	public BaseDataResponse save(DistrictRequest districtRequest) {
+	public District save(DistrictRequest districtRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -36,31 +35,26 @@ public class DistrictService {
 		district.setDelete(false);
 		
 		District result = districtRepository.save(district);
-		BaseDataResponse response = new BaseDataResponse(result);
-		return response;
+		return result;
 	}
 	
-	public BaseDataResponse findAllByIsDelete() {
+	public List<District> findAllByIsDelete() {
 		List<District> list = districtRepository.findAllByIsDelete(false);
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+		return list;
 	}
-	public BaseDataResponse findAllByCityIdAndIsDelete(UUID id){
+	public List<District> findAllByCityIdAndIsDelete(UUID id){
 		List<District> list = districtRepository.findAllByCityIdAndIsDelete(id, false);
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+		return list;
 	}
-	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+	public District findByIdAndIsDelete(UUID id) {
 		District district = districtRepository.findByIdAndIsDelete(id, false);
 		if(district == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(district);	
-		return response;
+		return district;
 	}
 	
-	public BaseDataResponse saves(ListDistrictRequest listDistrictRequest) {
+	public List<District> saves(ListDistrictRequest listDistrictRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		List<District> listDistrict = new ArrayList<>();
@@ -78,8 +72,6 @@ public class DistrictService {
 			listDistrict.add(obj);
 		}
 		List<District> result = districtRepository.saveAll(listDistrict);
-		BaseDataResponse response = new BaseDataResponse(result);
-		
-		return response;
+		return result;
 	}
 }

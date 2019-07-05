@@ -31,7 +31,6 @@ import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.UserPrincipal;
@@ -140,7 +139,6 @@ public class JobService {
 					try {
 						sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -177,27 +175,16 @@ public class JobService {
 		}
 	}
 	
-	public BaseDataMetaResponse findAllByCompanyIdAndIsDelete(int page, int paging, UUID id) throws IllegalArgumentException{
+	public Page<Job> findAllByCompanyIdAndIsDelete(int page, int paging, UUID id) throws IllegalArgumentException{
 		try {
 			Page<Job> pages = jobRepository.findAllByCompanyIdAndIsDelete(PageRequest.of(page-1, paging), id, false);
-			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-			
-			List<JobResponse> list = new ArrayList<JobResponse>();
-			
-			if(pages.getContent().size() > 0) {
-				for (Job job : pages.getContent()) {
-					list.add(convertJobResponse(job));
-				}
-			}
-			
-			BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
-			return response;
+			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 	}
 	
-	public BaseDataResponse save(JobRequest jobRequest, UserPrincipal userPrincipal) throws ServerError{
+	public Job save(JobRequest jobRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
@@ -225,15 +212,14 @@ public class JobService {
 			job.setUpdateDate(timestamp);
 			job.setDelete(false);
 			
-			Job result = jobRepository.save(job);
-			BaseDataResponse response = new BaseDataResponse(convertJobResponse(result));		
-			return response;
+			Job result = jobRepository.save(job);		
+			return result;
 		}catch (Exception e) {
 			throw new ServerError(MessageConstant.JOB_CREATE_FAIL);
 		}
 	}
 	
-	public BaseDataResponse update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal) 
+	public Job update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal) 
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
@@ -275,8 +261,7 @@ public class JobService {
 			job.setUpdateDate(timestamp);
 			
 			Job result = jobRepository.save(job);		
-			BaseDataResponse response = new BaseDataResponse(convertJobResponse(result));		
-			return response;
+			return result;
 		}catch (ResourceNotFoundException e) {
 			throw e;
 		}catch (ForbiddenException e) {
@@ -286,7 +271,7 @@ public class JobService {
 		}
 	}
 	
-	public BaseDataResponse isDel(UUID id, UserPrincipal userPrincipal, boolean isDel) 
+	public Job isDel(UUID id, UserPrincipal userPrincipal, boolean isDel) 
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Job job = jobRepository.findById(id)
@@ -301,8 +286,7 @@ public class JobService {
 			job.setDelete(isDel);
 			jobRepository.save(job);
 			Job result = jobRepository.findByIdAndIsDelete(id, false);
-			BaseDataResponse response = new BaseDataResponse(convertJobResponse(result));
-			return response;
+			return result;
 		}catch (ResourceNotFoundException e) {
 			throw e;
 		}catch (ForbiddenException e) {
@@ -312,17 +296,15 @@ public class JobService {
 		}
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
+	public Job findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Job job = jobRepository.findByIdAndIsDelete(id, false);
 		if(job == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}		
-		
-		BaseDataResponse response = new BaseDataResponse(convertJobResponse(job));
-		return response;
+		}	
+		return job;
 	}
 	
-	private JobResponse convertJobResponse(Job job) {
+	public JobResponse convertJobResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
 				job.getId(),
 				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getId(), 

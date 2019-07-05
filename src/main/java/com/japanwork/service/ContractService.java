@@ -12,7 +12,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Contract;
 import com.japanwork.payload.request.ContractRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.contract.ContractRepository;
 
 @Service
@@ -20,23 +19,20 @@ public class ContractService {
 	@Autowired
 	private ContractRepository contractRepository;
 	
-	public BaseDataResponse findAllByIsDelete() {
+	public List<Contract> findAllByIsDelete() {
 		List<Contract> list = contractRepository.findAllByIsDelete(false);
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+		return list;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+	public Contract findByIdAndIsDelete(UUID id) {
 		Contract contract = contractRepository.findByIdAndIsDelete(id, false);
 		if(contract == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(contract);	
-		return response;
+		return contract;
 	}
 	
-	public BaseDataResponse save(ContractRequest contractRequest) {
+	public Contract save(ContractRequest contractRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -49,8 +45,7 @@ public class ContractService {
 		contract.setDelete(false);
 		
 		Contract result = contractRepository.save(contract);
-		BaseDataResponse response = new BaseDataResponse(result);
 		
-		return response;
+		return result;
 	}
 }

@@ -1,5 +1,7 @@
 package com.japanwork.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.LanguageCertificateType;
 import com.japanwork.payload.request.LanguageCertificateTypeRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.LanguageCertificateTypeService;
@@ -23,12 +26,14 @@ public class LanguageCertificateTypeController {
 	@GetMapping(UrlConstant.URL_LANGUAGUE_TYPE)
 	@ResponseBody
 	public BaseDataResponse listLanguageCertificateType() {
-		return languageCertificateTypeService.findAllByIsDelete();
+		List<LanguageCertificateType> list = languageCertificateTypeService.findAllByIsDelete();
+		return new BaseDataResponse(list);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_LANGUAGUE_TYPE)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody LanguageCertificateTypeRequest languageCertificateTypeRequest) {		
-		return languageCertificateTypeService.save(languageCertificateTypeRequest);
+		LanguageCertificateType obj = languageCertificateTypeService.save(languageCertificateTypeRequest);
+		return new BaseDataResponse(obj);
 	}
 }

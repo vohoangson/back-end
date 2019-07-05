@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.service.AmazonService;
 
 @RestController
@@ -22,11 +23,13 @@ public class FileHandlerController {
 
     @PostMapping(UrlConstant.URL_AMW_UPLOAD_FILE)
     public BaseDataResponse uploadFile(@RequestPart(value = "file") MultipartFile file, HttpServletResponse httpServletResponse){
-        return this.amazonService.uploadFile(file, httpServletResponse);
+        String url = amazonService.uploadFile(file, httpServletResponse);
+        return new BaseDataResponse(url);
     }
 
     @DeleteMapping(UrlConstant.URL_AMW_DELETE_FILE)
     public BaseDataResponse deleteFile(@RequestParam("url") String fileUrl, HttpServletResponse httpServletResponse) {
-        return this.amazonService.deleteFileFromS3Bucket(fileUrl, httpServletResponse);
+    	BaseMessageResponse baseMessageResponse = amazonService.deleteFileFromS3Bucket(fileUrl, httpServletResponse);
+    	return new BaseDataResponse(baseMessageResponse);
     }
 }

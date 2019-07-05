@@ -1,10 +1,13 @@
 package com.japanwork.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +23,13 @@ import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Candidate;
+import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
 import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CandidateService;
@@ -86,8 +91,20 @@ public class CandidateController {
 	@GetMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
 	public BaseDataMetaResponse listCandidate(@RequestParam(defaultValue = "1", name = "page") int page,
-			@RequestParam(defaultValue = "25", name = "paging") int paging){		
-		return candidateService.findAllByIsDelete(page, paging);
+			@RequestParam(defaultValue = "25", name = "paging") int paging){	
+		Page<Candidate> pages = candidateService.findAllByIsDelete(page, paging);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		
+		List<CandidateResponse> list = new ArrayList<CandidateResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (Candidate candidate : pages.getContent()) {
+				list.add(candidateService.convertCandiateResponse(candidate));
+			}
+		}
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
+		return response;
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_ID)

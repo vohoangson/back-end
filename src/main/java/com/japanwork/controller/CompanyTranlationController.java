@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.CompanyTranslation;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.request.CompanyTranslationRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
@@ -37,13 +38,15 @@ public class CompanyTranlationController {
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, 
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{		
-		return companyTranslationService.save(companyTranslationRequest, userPrincipal);
+		CompanyTranslation companyTranslation = companyTranslationService.save(companyTranslationRequest, userPrincipal);
+		return new BaseDataResponse(companyTranslationService.convertCompanyResponse(companyTranslation));
 	}
 	
 	@PatchMapping(UrlConstant.URL_COMPANY_TS_ID)
 	@ResponseBody
 	public BaseDataResponse update(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, @PathVariable UUID id, 
 			@CurrentUser UserPrincipal userPrincipal){		
-		return companyTranslationService.update(companyTranslationRequest, id, userPrincipal);
+		CompanyTranslation companyTranslation = companyTranslationService.update(companyTranslationRequest, id, userPrincipal);
+		return new BaseDataResponse(companyTranslationService.convertCompanyResponse(companyTranslation));
 	}
 }

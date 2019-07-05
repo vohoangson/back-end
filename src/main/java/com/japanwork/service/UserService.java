@@ -2,18 +2,13 @@ package com.japanwork.service;
 
 import java.net.URI;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
-import org.passay.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -117,12 +112,11 @@ public class UserService {
         return TOKEN_VALID;
     }
 	
-	public BaseDataResponse getUser(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public User getUser(UserPrincipal userPrincipal) throws ResourceNotFoundException{
         User user = userRepository.findById(userPrincipal.getId())
         		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
         user.setRole(user.getRole().replaceAll("ROLE_", ""));
-        BaseDataResponse response = new BaseDataResponse(user);
-        return response;
+        return user;
     }
 	
 	public boolean existsByEmail(String email) {

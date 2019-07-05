@@ -175,9 +175,9 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public List<Translator> findAllByIsDelete(boolean isDelete) {
+	public Page<Translator> findAllByIsDelete(Pageable page, boolean isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByIsDelete(page, isDelete);
 	}
 
 }

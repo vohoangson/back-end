@@ -1,5 +1,7 @@
 package com.japanwork.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.City;
 import com.japanwork.payload.request.CityRequest;
 import com.japanwork.payload.request.ListCityRequest;
 import com.japanwork.payload.response.BaseDataResponse;
@@ -25,24 +28,28 @@ public class CityController {
 	@GetMapping(UrlConstant.URL_CITY)
 	@ResponseBody
 	public BaseDataResponse listCity() {
-		return cityService.findAllByIsDelete();
+		List<City> list = cityService.findAllByIsDelete();
+		return new BaseDataResponse(list);
 	}
 	
 	@GetMapping(UrlConstant.URL_CITIES_ID)
 	@ResponseBody
 	public BaseDataResponse listCityByCountry(@PathVariable String code) {
-		return cityService.listCityByCountry(code);
+		List<City> list = cityService.listCityByCountry(code);
+		return new BaseDataResponse(list);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_CITY)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody CityRequest cityRequest) {		
-		return cityService.save(cityRequest);
+		City city = cityService.save(cityRequest);
+		return new BaseDataResponse(city);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_CITIES)
 	@ResponseBody
 	public BaseDataResponse createList(@Valid @RequestBody ListCityRequest listCityRequest) {		
-		return cityService.saves(listCityRequest);
+		List<City> list =  cityService.saves(listCityRequest);
+		return new BaseDataResponse(list);
 	}
 }

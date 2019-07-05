@@ -12,7 +12,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Level;
 import com.japanwork.payload.request.LevelRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.level.LevelRepository;
 
 @Service
@@ -20,24 +19,20 @@ public class LevelService {
 	@Autowired
 	private LevelRepository levelRepository;
 	
-	public BaseDataResponse findAllByIsDelete() {
+	public List<Level> findAllByIsDelete() {
 		List<Level> list = levelRepository.findAllByIsDelete(false);
-		
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+		return list;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+	public Level findByIdAndIsDelete(UUID id) {
 		Level level = levelRepository.findByIdAndIsDelete(id, false);
 		if(level == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(level);	
-		return response;
+		return level;
 	}
 	
-	public BaseDataResponse save(LevelRequest levelRequest) {
+	public Level save(LevelRequest levelRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -50,8 +45,7 @@ public class LevelService {
 		level.setDelete(false);
 		
 		Level result = levelRepository.save(level);
-		BaseDataResponse response = new BaseDataResponse(result);
 		
-		return response;
+		return result;
 	}
 }

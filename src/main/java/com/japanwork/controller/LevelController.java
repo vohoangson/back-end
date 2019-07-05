@@ -1,5 +1,7 @@
 package com.japanwork.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.Level;
 import com.japanwork.payload.request.LevelRequest;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.LevelService;
@@ -22,12 +25,14 @@ public class LevelController {
 	@GetMapping(UrlConstant.URL_LEVEL)
 	@ResponseBody
 	public BaseDataResponse listLevel() {
-		return levelService.findAllByIsDelete();
+		List<Level> list = levelService.findAllByIsDelete();
+		return new BaseDataResponse(list);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_LEVEL)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody LevelRequest levelRequest) {		
-		return levelService.save(levelRequest);
+		Level level = levelService.save(levelRequest);
+		return new BaseDataResponse(level);
 	}
 }

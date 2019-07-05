@@ -14,7 +14,6 @@ import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.City;
 import com.japanwork.payload.request.CityRequest;
 import com.japanwork.payload.request.ListCityRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.repository.city.CityRepository;
 
 @Service
@@ -22,29 +21,25 @@ public class CityService {
 	@Autowired
 	private CityRepository cityRepository;
 	
-	public BaseDataResponse findAllByIsDelete() {
-		List<City> list = cityRepository.findAllByIsDelete(false);		
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+	public List<City> findAllByIsDelete() {
+		List<City> list = cityRepository.findAllByIsDelete(false);
+		return list;
 	}
 	
-	public BaseDataResponse listCityByCountry(String code) {
-		List<City> list = cityRepository.findAllByCountryCodeAndIsDelete(code, false);		
-		BaseDataResponse response = new BaseDataResponse(list);	
-		return response;
+	public List<City> listCityByCountry(String code) {
+		List<City> list = cityRepository.findAllByCountryCodeAndIsDelete(code, false);
+		return list;
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) {
+	public City findByIdAndIsDelete(UUID id) {
 		City city = cityRepository.findByIdAndIsDelete(id, false);
 		if(city == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(city);	
-		return response;
+		return city;
 	}
 	
-	public BaseDataResponse save(CityRequest cityRequest) {
+	public City save(CityRequest cityRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
@@ -58,12 +53,11 @@ public class CityService {
 		city.setDelete(false);
 		
 		City result = cityRepository.save(city);
-		BaseDataResponse response = new BaseDataResponse(result);
 		
-		return response;
+		return result;
 	}
 	
-	public BaseDataResponse saves(ListCityRequest listCityRequest) {
+	public List<City> saves(ListCityRequest listCityRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		List<City> listCity = new ArrayList<>();
@@ -81,8 +75,7 @@ public class CityService {
 			listCity.add(obj);
 		}
 		List<City> result = cityRepository.saveAll(listCity);
-		BaseDataResponse response = new BaseDataResponse(result);
 		
-		return response;
+		return result;
 	}
 }

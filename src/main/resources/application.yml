@@ -65,6 +65,7 @@ app:
     # We're not using cookies because they won't work well in mobile clients.
     authorizedRedirectUris:
       - http://jwork.club/oauth2/login
+      - http://localhost:8080/oauth2/login
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
 amazonProperties:

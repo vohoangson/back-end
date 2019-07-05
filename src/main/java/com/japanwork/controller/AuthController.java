@@ -26,6 +26,7 @@ import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.ChangePasswordRequest;
 import com.japanwork.payload.request.LoginRequest;
 import com.japanwork.payload.request.MailForgetPasswordRequest;
@@ -117,14 +118,24 @@ public class AuthController {
     	        
     }
     
+//    @GetMapping(value = UrlConstant.URL_OAUTH2_LOGIN)
+//    public RedirectView oauth2LoginRedirect(@RequestParam("token") String token, @RequestParam("error") String error) {
+//    	if(!token.isEmpty()) {
+//	  		return new RedirectView("http://datvo.io/login?access_token="+token+"&token_type=Bearer&expires_in=3600");
+//	  	}else{
+//	  		return new RedirectView("http://datvo.io/login?error="+error);
+//	  	}
+//	}
+    
     @GetMapping(value = UrlConstant.URL_DELETE_ACCOUNT)
     public BaseMessageResponse deleteUserByEmail(@RequestParam("email") String email) {
     	return userService.deleteUserByEmail(email);    
     }
     
     @GetMapping(value = UrlConstant.URL_USER)
-    public BaseDataResponse getUser(@CurrentUser UserPrincipal userPrincipal) {
-    	return userService.getUser(userPrincipal);    
+    public BaseDataResponse getUser(@CurrentUser UserPrincipal userPrincipal) {    	
+    	User user = userService.getUser(userPrincipal);    
+    	return new BaseDataResponse(user);
     }
     
     @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)

@@ -1,9 +1,7 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +11,15 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
 import com.japanwork.model.Company;
 import com.japanwork.model.District;
-import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.security.UserPrincipal;
@@ -36,7 +31,7 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 	
-	public BaseDataResponse save(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
+	public Company save(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
@@ -58,15 +53,14 @@ public class CompanyService {
 			company.setDelete(false);
 			
 			Company result = companyRepository.save(company);
-			userService.changePropertyId(userPrincipal.getId(), result.getId());
-			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
-			return response;
+			userService.changePropertyId(userPrincipal.getId(), result.getId());		
+			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);
 		}
 	}
 	
-	public BaseDataResponse update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) 
+	public Company update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) 
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
@@ -99,9 +93,8 @@ public class CompanyService {
 			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			company.setUpdateDate(timestamp);
 			
-			Company result = companyRepository.save(company);
-			BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));		
-			return response;
+			Company result = companyRepository.save(company);		
+			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (ForbiddenException e) {
@@ -111,43 +104,33 @@ public class CompanyService {
 		}
 	}
 	
-	public BaseDataResponse isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
+	public Company isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
 		Company company = companyRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		company.setDelete(isDel);
 		companyRepository.save(company);
-		Company result = companyRepository.findByIdAndIsDelete(id, false);
-		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(result));	
-		return response;
+		Company result = companyRepository.findByIdAndIsDelete(id, false);	
+		return result;
 	}
 	
 	public void del(Company company){
 		companyRepository.delete(company);
 	}
 	
-	public BaseDataResponse findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
+	public Company findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		if(company == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(company));	
-		return response;
-	}
-	
-	public Company findByIdAndIsDel(UUID id){
-		Company company = companyRepository.findByIdAndIsDelete(id, false);
 		return company;
 	}
 	
-	public BaseDataResponse myCompany(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public Company myCompany(UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Company company = this.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
 		if(company == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
-		
-		BaseDataResponse response = new BaseDataResponse(convertCompanyResponse(company));	
-		return response;
+		return company;
 	}
 	
 	public boolean checkCompanyByUser(User user){
@@ -158,20 +141,10 @@ public class CompanyService {
 		 return true;
 	}
 	
-	public BaseDataMetaResponse findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
+	public Page<Company> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Company> pages = companyRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
-			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-			List<CompanyResponse> list = new ArrayList<CompanyResponse>();
-			
-			if(pages.getContent().size() > 0) {
-				for (Company company : pages.getContent()) {
-					list.add(convertCompanyResponse(company));
-				}
-			}
-			
-			BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
-			return response;
+			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}

@@ -23,7 +23,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.BadRequestException;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 
 @Component
@@ -44,7 +43,7 @@ public class AmazonService {
         this.awsS3AudioBucket = awsS3AudioBucket;
     }
     
-    public BaseDataResponse uploadFile(MultipartFile multipartFile,HttpServletResponse httpServletResponse) 
+    public String uploadFile(MultipartFile multipartFile,HttpServletResponse httpServletResponse) 
     		throws BadRequestException{
         String fileUrl = "";
         try {
@@ -67,8 +66,7 @@ public class AmazonService {
            e.printStackTrace();
         }
         
-        BaseDataResponse response = new BaseDataResponse(fileUrl);
-        return response;
+        return fileUrl;
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -88,12 +86,11 @@ public class AmazonService {
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
-    public BaseDataResponse deleteFileFromS3Bucket(String fileUrl, HttpServletResponse httpServletResponse) {
+    public BaseMessageResponse deleteFileFromS3Bucket(String fileUrl, HttpServletResponse httpServletResponse) {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
         amazonS3.deleteObject(new DeleteObjectRequest(this.awsS3AudioBucket, fileName));
         BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.DELETE_FILE_AWS, MessageConstant.DEL_SUCCESS);
-        BaseDataResponse response = new BaseDataResponse(baseMessageResponse);
-        return response;
+        return baseMessageResponse;
     }
 
 }
