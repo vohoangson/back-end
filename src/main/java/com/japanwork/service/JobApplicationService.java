@@ -23,9 +23,6 @@ public class JobApplicationService {
 	@Autowired
 	private TranslatorService translatorService;
 	
-	@Autowired
-	private ConversationService conversationService;
-	
 	public JobApplication findByJobIdAndIsDelete(UUID id) {
 		return jobApplicationRepository.findByJobIdAndIsDelete(id, false);
 	}
@@ -47,9 +44,9 @@ public class JobApplicationService {
 		ob.setSubmitApplicationAt(jobApplication.getSubmitApplicationAt());
 		ob.setApproveApplicationAt(jobApplication.getApproveApplicationAt());
 		ob.setRejectApplicationAt(jobApplication.getRejectApplicationAt());
-		ob.setCandidateSupportConversaion(conversationService.convertConversationResponse(jobApplication.getCandidateSupportConversaion()));
-		ob.setCompanySupportConversation(conversationService.convertConversationResponse(jobApplication.getCompanySupportConversation()));
-		ob.setAllConversation(conversationService.convertConversationResponse(jobApplication.getAllConversation()));
+		ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getId());
+		ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getId());
+		ob.setAllConversation(jobApplication.getAllConversation().getId());
 		ob.setApplicationSucceedAt(jobApplication.getApplicationSucceedAt());
 		ob.setCancelReason(jobApplication.getCancelReason());
 		ob.setUserCancel(jobApplication.getUserCancel());

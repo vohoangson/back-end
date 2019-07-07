@@ -23,14 +23,14 @@ public class JobApplicationResponse {
     @JsonProperty("reject_application_at")
     private Timestamp rejectApplicationAt;
     
-    @JsonProperty("candidate_support_conversaion")
-    private ConversationResponse candidateSupportConversaion;
+    @JsonProperty("candidate_support_conversaion_id")
+    private UUID candidateSupportConversaionId;
     
-    @JsonProperty("company_support_conversation")
-    private ConversationResponse companySupportConversation;
+    @JsonProperty("company_support_conversation_id")
+    private UUID companySupportConversationId;
     
     @JsonProperty("all_conversation_id")
-    private ConversationResponse allConversation;
+    private UUID allConversation;
     
     @JsonProperty("application_succeed_at")
     private Timestamp applicationSucceedAt;
@@ -103,27 +103,27 @@ public class JobApplicationResponse {
 		this.rejectApplicationAt = rejectApplicationAt;
 	}
 
-	public ConversationResponse getCandidateSupportConversaion() {
-		return candidateSupportConversaion;
+	public UUID getCandidateSupportConversaionId() {
+		return candidateSupportConversaionId;
 	}
 
-	public void setCandidateSupportConversaion(ConversationResponse candidateSupportConversaion) {
-		this.candidateSupportConversaion = candidateSupportConversaion;
+	public void setCandidateSupportConversaionId(UUID candidateSupportConversaionId) {
+		this.candidateSupportConversaionId = candidateSupportConversaionId;
 	}
 
-	public ConversationResponse getCompanySupportConversation() {
-		return companySupportConversation;
+	public UUID getCompanySupportConversationId() {
+		return companySupportConversationId;
 	}
 
-	public void setCompanySupportConversation(ConversationResponse companySupportConversation) {
-		this.companySupportConversation = companySupportConversation;
+	public void setCompanySupportConversationId(UUID companySupportConversationId) {
+		this.companySupportConversationId = companySupportConversationId;
 	}
 
-	public ConversationResponse getAllConversation() {
+	public UUID getAllConversation() {
 		return allConversation;
 	}
 
-	public void setAllConversation(ConversationResponse allConversation) {
+	public void setAllConversation(UUID allConversation) {
 		this.allConversation = allConversation;
 	}
 
@@ -169,9 +169,8 @@ public class JobApplicationResponse {
 
 	public JobApplicationResponse(UUID id, JobResponse job, CandidateResponse candidate, TranslatorResponse translator,
 			Timestamp submitApplicationAt, Timestamp approveApplicationAt, Timestamp rejectApplicationAt,
-			ConversationResponse candidateSupportConversaion, ConversationResponse companySupportConversation,
-			ConversationResponse allConversation, Timestamp applicationSucceedAt, String cancelReason, int userCancel,
-			Timestamp cancelAt, int status) {
+			UUID candidateSupportConversaionId, UUID companySupportConversationId, UUID allConversation,
+			Timestamp applicationSucceedAt, String cancelReason, int userCancel, Timestamp cancelAt, int status) {
 		super();
 		this.id = id;
 		this.job = job;
@@ -180,8 +179,8 @@ public class JobApplicationResponse {
 		this.submitApplicationAt = submitApplicationAt;
 		this.approveApplicationAt = approveApplicationAt;
 		this.rejectApplicationAt = rejectApplicationAt;
-		this.candidateSupportConversaion = candidateSupportConversaion;
-		this.companySupportConversation = companySupportConversation;
+		this.candidateSupportConversaionId = candidateSupportConversaionId;
+		this.companySupportConversationId = companySupportConversationId;
 		this.allConversation = allConversation;
 		this.applicationSucceedAt = applicationSucceedAt;
 		this.cancelReason = cancelReason;
