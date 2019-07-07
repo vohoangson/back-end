@@ -53,12 +53,13 @@ public class JobService {
 			throws IllegalArgumentException{
 		try {	
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT DISTINCT j FROM Job j ");
+			sql.append("SELECT DISTINCT j ");
+			sql.append("    FROM Job j ");
 			sql.append("	INNER JOIN  j.company c ");
 			sql.append("	INNER JOIN j.businesses b ");
 			sql.append("	INNER JOIN j.contract con ");
 			sql.append("	INNER JOIN j.level lev ");
-			sql.append("	INNER JOIN j.city city ");
+			sql.append("	INNER JOIN j.city city ");			
 			sql.append("	WHERE ");
 			sql.append("	j.isDelete = " + false +" ");
 			if(jobFilterRequest != null) {
@@ -142,7 +143,7 @@ public class JobService {
 						e.printStackTrace();
 					}
 				}
-				sql.append(" ORDER BY j.createDate DESC ");
+				sql.append(" ORDER BY j.createDate ASC ");
 			}
 			
 			List<Job> pages = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).setFirstResult((page-1)*paging)

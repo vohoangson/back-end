@@ -130,7 +130,7 @@ public class CandidateController {
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_UNDEL)
 	@ResponseBody
-	public BaseDataResponse unDel(@PathVariable UUID id) {		
+	public BaseDataResponse favoriteJob(@PathVariable UUID id) {		
 		Candidate candidate = candidateService.isDel(id, false);
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}

@@ -116,4 +116,6 @@ public class JobController {
 		Job job = jobService.isDel(id, userPrincipal, false);
 		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
+	
+	
 }

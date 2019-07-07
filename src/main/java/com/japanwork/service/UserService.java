@@ -181,6 +181,10 @@ public class UserService {
 	public User findById(UUID id) {
 		return userRepository.findById(id).get();
 	}
+		
+	public User findByIdAndIsDelete(UUID id) {
+		return userRepository.findByIdAndIsDelete(id, false);
+	}
 	
 	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
 	public BaseMessageResponse deleteUserByEmail(String email)  throws ServerError{
