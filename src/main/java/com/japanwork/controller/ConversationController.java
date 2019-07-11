@@ -24,6 +24,7 @@ public class ConversationController {
 	private ConversationService conversationService;
 
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL)
+	@ResponseBody
 	public BaseDataResponse createConversationAll(@PathVariable UUID id) {
 		Conversation conversation = conversationService.createConversationAll(id);
 		return new BaseDataResponse(conversationService.convertConversationResponse(conversation));
