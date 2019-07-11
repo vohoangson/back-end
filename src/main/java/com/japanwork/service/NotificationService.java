@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,7 @@ public class NotificationService {
 	public Page<Notification> listNotification(UUID id, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Notification> pages = notificationRepository.findByConversationIdAndIsDelete(
-					PageRequest.of(page-1, paging), id, false);
+					PageRequest.of(page-1, paging, Sort.by("createAt").descending()), id, false);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
