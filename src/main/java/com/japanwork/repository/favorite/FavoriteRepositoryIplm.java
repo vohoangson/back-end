@@ -11,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.model.Candidate;
 import com.japanwork.model.Favorite;
+import com.japanwork.model.Job;
 
 @Repository
 @Transactional
@@ -159,6 +161,13 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	public <S extends Favorite> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Favorite findByJobAndCandidateAndFavoriteTypeAndIsDelete(Job job, Candidate candidate, String favoriteType,
+			boolean isDel) {
+		// TODO Auto-generated method stub
+		return findByJobAndCandidateAndFavoriteTypeAndIsDelete(job, candidate, favoriteType, isDel);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,13 @@ public class FavoriteController {
 	@ResponseBody
 	public BaseDataResponse canidateFavoriteJob(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
 		String status = favoriteService.canidateFavoriteJob(id, userPrincipal);
+		return new BaseDataResponse(status);
+	}
+	
+	@DeleteMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE_ID)
+	@ResponseBody
+	public BaseDataResponse canidateUnFavoriteJob(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+		String status = favoriteService.canidateUnFavoriteJob(id, userPrincipal);
 		return new BaseDataResponse(status);
 	}
 	

@@ -41,7 +41,7 @@ public class CompanyController {
 	private UserService userService;
 	
 	
-	@GetMapping(UrlConstant.URL_COMPANY)
+	@GetMapping("/companies")
 	@ResponseBody
 	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page, 
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {

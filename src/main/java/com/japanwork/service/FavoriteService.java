@@ -36,6 +36,22 @@ public class FavoriteService {
 	@PersistenceContext 
 	private EntityManager entityManager;
 	
+	public String canidateUnFavoriteJob(UUID id, UserPrincipal userPrincipal) {
+		try {
+			Job job = jobService.findByIdAndIsDelete(id);
+			Candidate candidate = candidateService.myCandidate(userPrincipal);
+			
+			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndIsDelete(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, false);
+			favorite.setDelete(true);
+			
+			favoriteRepository.save(favorite);
+			
+			return "Success";
+		} catch (Exception e) {
+			return "Faile";
+		}		
+	}
+	
 	public String canidateFavoriteJob(UUID id, UserPrincipal userPrincipal) {
 		try {
 			Date date = new Date();
