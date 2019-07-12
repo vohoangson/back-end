@@ -55,14 +55,14 @@ public class NotificationService {
 		Conversation conversation = conversationService.findByIdAndIsDelete(id, false);
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE.replace("ROLE_", ""))) {
 			senderId = candidateService.myCandidate(userPrincipal).getId();
-			if(conversation.getCandidate().getId().equals(senderId)) {
+			if(!conversation.getCandidate().getId().equals(senderId)) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		}
 		
 		if(user.getRole().equals(CommonConstant.Role.COMPANY.replace("ROLE_", ""))) {
 			senderId = companyService.myCompany(userPrincipal).getId();
-			if(conversation.getCompany().getId().equals(senderId)) {
+			if(!conversation.getCompany().getId().equals(senderId)) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 			
@@ -70,7 +70,7 @@ public class NotificationService {
 		
 		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR.replace("ROLE_", ""))) {
 			senderId = translatorService.myTranslator(userPrincipal).getId();
-			if(conversation.getTranslator().getId().equals(senderId)) {
+			if(!conversation.getTranslator().getId().equals(senderId)) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		}
