@@ -11,9 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.model.Candidate;
 import com.japanwork.model.Notification;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.NotificationRequest;
 import com.japanwork.payload.response.NotificationResponse;
 import com.japanwork.repository.notification.NotificationRepository;
@@ -27,14 +30,40 @@ public class NotificationService {
 	@Autowired
 	private ConversationService conversationService;
 	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private CandidateService candidateService;
+	
+	@Autowired
+	private TranslatorService translatorService;
+	
 	@Transactional
 	public Notification addNotification(UserPrincipal userPrincipal, UUID id, 
 			NotificationRequest notificationRequest) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
+		UUID senderId = null;
+		User user = userService.getUser(userPrincipal);
+		if(user.getRole().equals(CommonConstant.Role.CANDIDATE.replace("ROLE_", ""))) {
+			senderId = candidateService.myCandidate(userPrincipal).getId();
+		}
+		
+		if(user.getRole().equals(CommonConstant.Role.COMPANY.replace("ROLE_", ""))) {
+			senderId = companyService.myCompany(userPrincipal).getId();
+		}
+		
+		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR.replace("ROLE_", ""))) {
+			senderId = translatorService.myTranslator(userPrincipal).getId();
+		}
+		
 		Notification notification = new Notification();
-		notification.setSenderId(userPrincipal.getId());
+		notification.setSenderId(senderId);
 		notification.setConversation(conversationService.findByIdAndIsDelete(id, false));
 		notification.setCreateAt(timestamp);
 		notification.setContent(notificationRequest.getContent());

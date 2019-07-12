@@ -46,9 +46,9 @@ public class FavoriteService {
 			
 			favoriteRepository.save(favorite);
 			
-			return "Success";
+			return "true";
 		} catch (Exception e) {
-			return "Faile";
+			return "false";
 		}		
 	}
 	
@@ -70,9 +70,9 @@ public class FavoriteService {
 			
 			favoriteRepository.save(favorite);
 			
-			return "Success";
+			return "true";
 		} catch (Exception e) {
-			return "Faile";
+			return "false";
 		}		
 	}
 	

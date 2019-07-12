@@ -180,4 +180,10 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 		return findAllByIsDelete(page, isDelete);
 	}
 
+	@Override
+	public Translator findByUserAndIsDelete(User user, boolean isDelete) {
+		// TODO Auto-generated method stub
+		return findByUserAndIsDelete(user, isDelete);
+	}
+
 }

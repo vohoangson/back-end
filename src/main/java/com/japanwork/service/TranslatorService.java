@@ -93,6 +93,14 @@ public class TranslatorService {
 		return result;
 	}
 	
+	public Translator myTranslator(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+		Translator translator = translatorRepository.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
+		if(translator == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+		return translator;
+	}
+	
 	public Translator findByIdAndIsDelete(UUID id) 
 			throws ResourceNotFoundException{
 		Translator translator = translatorRepository.findByIdAndIsDelete(id, false);
