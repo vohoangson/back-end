@@ -13,8 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
-import com.japanwork.model.Candidate;
+import com.japanwork.model.Conversation;
 import com.japanwork.model.Notification;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.NotificationRequest;
@@ -44,22 +45,34 @@ public class NotificationService {
 	
 	@Transactional
 	public Notification addNotification(UserPrincipal userPrincipal, UUID id, 
-			NotificationRequest notificationRequest) {
+			NotificationRequest notificationRequest) throws ForbiddenException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		UUID senderId = null;
 		User user = userService.getUser(userPrincipal);
+		
+		Conversation conversation = conversationService.findByIdAndIsDelete(id, false);
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE.replace("ROLE_", ""))) {
 			senderId = candidateService.myCandidate(userPrincipal).getId();
+			if(conversation.getCandidate().getId().equals(senderId)) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
 		}
 		
 		if(user.getRole().equals(CommonConstant.Role.COMPANY.replace("ROLE_", ""))) {
 			senderId = companyService.myCompany(userPrincipal).getId();
+			if(conversation.getCompany().getId().equals(senderId)) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
+			
 		}
 		
 		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR.replace("ROLE_", ""))) {
 			senderId = translatorService.myTranslator(userPrincipal).getId();
+			if(conversation.getTranslator().getId().equals(senderId)) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
 		}
 		
 		Notification notification = new Notification();

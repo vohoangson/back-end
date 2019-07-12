@@ -54,23 +54,28 @@ public class FavoriteService {
 	
 	public String canidateFavoriteJob(UUID id, UserPrincipal userPrincipal) {
 		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Favorite favorite = new Favorite();
-			
-			favorite.setCandidate(candidateService.myCandidate(userPrincipal));
-			
-			Job job = jobService.findByIdAndIsDelete(id);
-			favorite.setJob(job);
-			
-			favorite.setFavoriteType(CommonConstant.FavoriteType.CANDIDATE_JOB);
-			favorite.setCreateAt(timestamp);
-			favorite.setDelete(false);
-			
-			favoriteRepository.save(favorite);
-			
-			return "true";
+			Job obj = findFavoriteJob(userPrincipal, id);
+			if(obj == null) {
+				Date date = new Date();
+				Timestamp timestamp = new Timestamp(date.getTime());
+				
+				Favorite favorite = new Favorite();
+				
+				favorite.setCandidate(candidateService.myCandidate(userPrincipal));
+				
+				Job job = jobService.findByIdAndIsDelete(id);
+				favorite.setJob(job);
+				
+				favorite.setFavoriteType(CommonConstant.FavoriteType.CANDIDATE_JOB);
+				favorite.setCreateAt(timestamp);
+				favorite.setDelete(false);
+				
+				favoriteRepository.save(favorite);
+				
+				return "true";
+			} else {
+				return "false";
+			}
 		} catch (Exception e) {
 			return "false";
 		}		
@@ -95,5 +100,30 @@ public class FavoriteService {
 		}
 		List<Job> list = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).getResultList();
 		return list;
+	}
+	
+	public Job findFavoriteJob(UserPrincipal userPrincipal, UUID id) {
+		User user = userService.findByIdAndIsDelete(userPrincipal.getId());
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("SELECT DISTINCT j ");
+		sql.append("    FROM Job j ");
+		sql.append("	INNER JOIN Favorite fa ");	
+		sql.append("	ON fa.job.id = j.id ");
+		sql.append("	WHERE ");
+		sql.append("	j.isDelete = " + false + " ");
+		sql.append("	AND j.id = '" + id + "' ");
+		sql.append("	AND fa.isDelete = " + false + " ");
+		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
+			Candidate candidate = candidateService.myCandidate(userPrincipal);
+			sql.append("	AND fa.candidate.id = '" + candidate.getId() + "' ");
+			sql.append("	AND fa.favoriteType = '" + CommonConstant.FavoriteType.CANDIDATE_JOB + "' ");
+		}
+		List<Job> list = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).getResultList();
+		if(list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 }
