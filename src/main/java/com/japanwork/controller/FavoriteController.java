@@ -52,6 +52,6 @@ public class FavoriteController {
 		for (Job job : list) {
 			listJobResponses.add(jobService.convertJobResponse(job));
 		}
-		return new BaseDataResponse(list);
+		return new BaseDataResponse(listJobResponses);
 	}
 }
