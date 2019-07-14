@@ -115,7 +115,6 @@ public class UserService {
 	public User getUser(UserPrincipal userPrincipal) throws ResourceNotFoundException{
         User user = userRepository.findById(userPrincipal.getId())
         		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-        user.setRole(user.getRole().replaceAll("ROLE_", ""));
         return user;
     }
 	

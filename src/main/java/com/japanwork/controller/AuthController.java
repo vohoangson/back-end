@@ -134,7 +134,8 @@ public class AuthController {
     
     @GetMapping(value = UrlConstant.URL_USER)
     public BaseDataResponse getUser(@CurrentUser UserPrincipal userPrincipal) {    	
-    	User user = userService.getUser(userPrincipal);    
+    	User user = userService.getUser(userPrincipal);
+    	user.setRole(user.getRole().replaceAll("ROLE_", ""));
     	return new BaseDataResponse(user);
     }
     
