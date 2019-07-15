@@ -26,6 +26,7 @@ import com.japanwork.model.Translator;
 import com.japanwork.payload.request.TranslatorRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.TranslatorResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
@@ -45,7 +46,7 @@ public class TranslatorController {
 	public BaseDataResponse createTranslator (@Valid @RequestBody TranslatorRequest translatorRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		if(translatorService.checkTranslatorByUser(userService.findById(userPrincipal.getId()))) {
-			throw new BadRequestException(MessageConstant.TRANSLATOR_ALREADY);
+			throw new BadRequestException(MessageConstant.TRANSLATOR_ALREADY, MessageConstant.TRANSLATOR_ALREADY_MSG);
 		}
 		
 		Translator translator = translatorService.save(translatorRequest, userPrincipal);
@@ -85,11 +86,19 @@ public class TranslatorController {
 		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
+	@GetMapping(UrlConstant.URL_MY_TRANSLATOR)
+	@ResponseBody
+	public BaseDataResponse myTranslator(@CurrentUser UserPrincipal userPrincipal){		
+		Translator translator = translatorService.myTranslator(userPrincipal);
+		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+	}
+	
 	@DeleteMapping(UrlConstant.URL_TRANSLATOR_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		Translator translator = translatorService.isDel(id, true);
-		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+		translatorService.isDel(id, true);
+		BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.TRANSLATOR_DELETE_SUCCESS, MessageConstant.TRANSLATOR_DELETE_SUCCESS_MSG);
+		return new BaseDataResponse(deleteResponse);
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATOR_UNDEL_ID)

@@ -41,7 +41,7 @@ public class CompanyController {
 	private UserService userService;
 	
 	
-	@GetMapping("/companies")
+	@GetMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page, 
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
@@ -95,9 +95,10 @@ public class CompanyController {
 	
 	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse isDel(@PathVariable UUID id) {		
-		Company company = companyService.isDel(id, true);
-		return new BaseDataResponse(companyService.convertCompanyResponse(company));
+	public BaseDataResponse isDel(@PathVariable UUID id) {	
+		companyService.isDel(id, true);
+		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.COMPANY_DELETE_SUCCESS, MessageConstant.COMPANY_DELETE_SUCCESS_MSG);
+		return new BaseDataResponse(baseMessageResponse);
 	}
 	
 	@GetMapping(UrlConstant.URL_COMPANY_UNDEL_ID)

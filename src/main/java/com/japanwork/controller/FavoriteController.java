@@ -33,15 +33,13 @@ public class FavoriteController {
 	@PostMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE_ID)
 	@ResponseBody
 	public BaseDataResponse canidateFavoriteJob(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		String status = favoriteService.canidateFavoriteJob(id, userPrincipal);
-		return new BaseDataResponse(status);
+		return new BaseDataResponse(favoriteService.canidateFavoriteJob(id, userPrincipal));
 	}
 	
 	@DeleteMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE_ID)
 	@ResponseBody
 	public BaseDataResponse canidateUnFavoriteJob(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		String status = favoriteService.canidateUnFavoriteJob(id, userPrincipal);
-		return new BaseDataResponse(status);
+		return new BaseDataResponse(favoriteService.canidateUnFavoriteJob(id, userPrincipal));
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE)

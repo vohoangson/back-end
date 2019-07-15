@@ -29,6 +29,7 @@ import com.japanwork.payload.request.CandidatePersonalRequest;
 import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
@@ -48,7 +49,7 @@ public class CandidateController {
 	public BaseDataResponse createCandidatePersonal (@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
-			throw new BadRequestException(MessageConstant.CADIDATE_ALREADY, MessageConstant.CADIDATE_ALREADY_MSG);
+			throw new BadRequestException(MessageConstant.CANDIDATE_ALREADY, MessageConstant.CADIDATE_ALREADY_MSG);
 		}
 		Candidate candidate = candidateService.savePersonal(candidatePersonalRequest, userPrincipal);
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
@@ -124,8 +125,9 @@ public class CandidateController {
 	@DeleteMapping(UrlConstant.URL_CANDIDATE_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {		
-		Candidate candidate = candidateService.isDel(id, true);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+		candidateService.isDel(id, true);
+		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.CANDIDATE_DELETE_SUCCESS, MessageConstant.CANDIDATE_DELETE_SUCCESS_MSG);
+		return new BaseDataResponse(baseMessageResponse);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_UNDEL)

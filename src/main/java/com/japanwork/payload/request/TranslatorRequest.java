@@ -1,6 +1,7 @@
 package com.japanwork.payload.request;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -8,8 +9,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.City;
-import com.japanwork.model.District;
 
 public class TranslatorRequest {
 	@NotBlank(message = "name_translator_required")
@@ -23,9 +22,11 @@ public class TranslatorRequest {
 	private Date dateOfBirth;
 	
 	@NotNull(message = "city_required")
-	private City city;
+	@JsonProperty("city_id")
+	private UUID cityId;
 	@NotNull(message = "district_required")
-	private District district;
+	@JsonProperty("district_id")
+	private UUID districtId;
 	@NotBlank(message = "address_required")
 	private String address;
 	private String introduction;
@@ -56,17 +57,17 @@ public class TranslatorRequest {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	public City getCity() {
-		return city;
+	public UUID getCityId() {
+		return cityId;
 	}
-	public void setCity(City city) {
-		this.city = city;
+	public void setCityId(UUID cityId) {
+		this.cityId = cityId;
 	}
-	public District getDistrict() {
-		return district;
+	public UUID getDistrictId() {
+		return districtId;
 	}
-	public void setDistrict(District district) {
-		this.district = district;
+	public void setDistrictId(UUID districtId) {
+		this.districtId = districtId;
 	}
 	public String getAddress() {
 		return address;

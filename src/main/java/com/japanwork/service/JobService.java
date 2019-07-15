@@ -293,7 +293,12 @@ public class JobService {
 		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
-			throw new ServerError(MessageConstant.JOB_DELETE_FAIL);
+			if(isDel) {
+				throw new ServerError(MessageConstant.JOB_DELETE_FAIL);
+			} else {
+				throw new ServerError(MessageConstant.JOB_UN_DELETE_FAIL);
+			}
+			
 		}
 	}
 	

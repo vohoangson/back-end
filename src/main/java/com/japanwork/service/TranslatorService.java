@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.ServerError;
+import com.japanwork.model.City;
+import com.japanwork.model.District;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.TranslatorRequest;
@@ -44,8 +47,8 @@ public class TranslatorService {
 		translator.setName(translatorRequest.getName());
 		translator.setDateOfBirth(translatorRequest.getDateOfBirth());
 		translator.setGender(translatorRequest.getGender());
-		translator.setCity(translatorRequest.getCity());
-		translator.setDistrict(translatorRequest.getDistrict());
+		translator.setCity(new City(translatorRequest.getCityId()));
+		translator.setDistrict(new District(translatorRequest.getDistrictId()));
 		translator.setAddress(translatorRequest.getAddress());
 		translator.setAvatar(translatorRequest.getAvatar());
 		translator.setIntroduction(translatorRequest.getIntroduction());
@@ -81,8 +84,8 @@ public class TranslatorService {
 		translator.setName(translatorRequest.getName());
 		translator.setDateOfBirth(translatorRequest.getDateOfBirth());
 		translator.setGender(translatorRequest.getGender());
-		translator.setCity(translatorRequest.getCity());
-		translator.setDistrict(translatorRequest.getDistrict());
+		translator.setCity(new City(translatorRequest.getCityId()));
+		translator.setDistrict(new District(translatorRequest.getDistrictId()));
 		translator.setAddress(translatorRequest.getAddress());
 		translator.setAvatar(translatorRequest.getAvatar());
 		translator.setIntroduction(translatorRequest.getIntroduction());
@@ -120,6 +123,7 @@ public class TranslatorService {
 	}
 	
 	public Translator isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
+		try {
 		Translator translator = translatorRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 		translator.setDelete(isDel);
@@ -127,6 +131,16 @@ public class TranslatorService {
 		
 		Translator result = translatorRepository.findByIdAndIsDelete(id, false);
 		return result;
+		} catch (ResourceNotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			if(isDel) {
+				throw new ServerError(MessageConstant.TRANSLATOR_DELETE_FAIL);
+			} else {
+				throw new ServerError(MessageConstant.TRANSLATOR_UN_DELETE_FAIL);
+			}
+			
+		}
 	}
 	
 	public Translator findTranslatorByUser(User user){

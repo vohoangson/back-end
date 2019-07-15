@@ -5,9 +5,6 @@ public class MessageConstant {
 	public static final String INVALID_INPUT = "Invalid input!";
 	public static final String INVALID_INPUT_MSG = "Invalid input!";
 	
-	public static final String TRANSLATOR_ALREADY = "Only one translator can be created per account!";
-	public static final String LOGOUT_SUCCESS = "Logout successfully";
-	
 	
 	public static final String DELETE = "Delete";
 	public static final String DEL_SUCCESS = "Successfully";
@@ -29,7 +26,14 @@ public class MessageConstant {
 	public static final String RESET_PASSWORD = "reset_password";
 	public static final String DELETE_USER_BY_EMAIL = "delete_user_by_email";
 	public static final String COMPANY_ALREADY = "only_one_company_created";
-	public static final String CADIDATE_ALREADY = "only_one_candidate_created";
+	public static final String COMPANY_DELETE_SUCCESS = "delete_company_success";
+	public static final String CANDIDATE_ALREADY = "only_one_candidate_created";
+	public static final String TRANSLATOR_ALREADY = "only_one_translator_created";
+	public static final String TRANSLATOR_DELETE_SUCCESS = "delete_translator_success";
+	public static final String JOB_DELETE_SUCCESS = "delete_job_success";
+	public static final String CANDIDATE_DELETE_SUCCESS = "delete_candidate_success";
+	public static final String CANDIDATE_FAVORITE_JOB_SUCCESS = "candidate_favorite_job_success";
+	public static final String CANDIDATE_UN_FAVORITE_JOB_SUCCESS = "candidate_unfavorite_job_success";
 	
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
@@ -53,6 +57,9 @@ public class MessageConstant {
 	public static final String DELETE_USER_BY_EMAIL_FAIL = "Delete user by email failed!";
 	public static final String DELETE_USER_BY_EMAIL_SUCCESS = "Delete user by email successfilly!";
 	public static final String COMPANY_ALREADY_MSG = "Only one company can be created per account!";
+	public static final String COMPANY_DELETE_SUCCESS_MSG = "Delete company success!";
+	public static final String COMPANY_DELETE_FAIL_MSG = "Delete company failed!";
+	public static final String COMPANY_UN_DELETE_FAIL_MSG = "Undelete company failed!";
 	public static final String COMPANY_CREATE_FAIL = "Create company failed!";
 	public static final String COMPANY_UPDATE_FAIL = "Update company failed!";
 	public static final String CADIDATE_ALREADY_MSG = "Only one candidate can be created per account!";
@@ -61,12 +68,24 @@ public class MessageConstant {
 	public static final String CANDIDATE_UPDATE_WISH_FAIL = "Update candidate wish failed!";
 	public static final String CANDIDATE_ADD_EXPERIENCE_FAIL = "Create candidate experience failed!";
 	public static final String CANDIDATE_UPDATE_EXPERIENCE_FAIL = "Update candidate experience failed!";
+	public static final String CANDIDATE_DELETE_SUCCESS_MSG = "Delete job success!";
+	public static final String CANDIDATE_DELETE_FAIL = "Delete job failed!";
+	public static final String CANDIDATE_UN_DELETE_FAIL = "Undelete job failed!";
+	public static final String TRANSLATOR_ALREADY_MSG = "Only one translator can be created per account!";
+	public static final String TRANSLATOR_DELETE_SUCCESS_MSG = "Delete translator success!";
+	public static final String TRANSLATOR_DELETE_FAIL = "Delete translator failed!";
+	public static final String TRANSLATOR_UN_DELETE_FAIL = "Undelete translator failed!";
 	public static final String JOB_CREATE_FAIL = "Create job failed!";
 	public static final String JOB_UPDATE_FAIL = "Update job failed!";
+	public static final String JOB_DELETE_SUCCESS_MSG = "Delete job success!";
 	public static final String JOB_DELETE_FAIL = "Delete job failed!";
+	public static final String JOB_UN_DELETE_FAIL = "Undelete job failed!";
 	public static final String CREATE_COMPANY_TRANSLATE_FAIL = "Create company translation failed!";
 	public static final String UPDATE_COMPANY_TRANSLATE_FAIL = "Update company translation failed!";
-	
+	public static final String CANDIDATE_FAVORITE_JOB_SUCCESS_MSG = "Candidate favorite job success!";
+	public static final String CANDIDATE_UN_FAVORITE_JOB_SUCCESS_MSG = "Candidate unfavorite job success!";
+	public static final String CANDIDATE_FAVORITE_JOB_FAIL = "Candidate favorite job failed!";
+	public static final String CANDIDATE_UN_FAVORITE_JOB_FAIL = "Candidate unfavorite job failed!";
 	
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";

@@ -12,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
+import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ServerError;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Favorite;
 import com.japanwork.model.Job;
 import com.japanwork.model.User;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.favorite.FavoriteRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -36,7 +39,7 @@ public class FavoriteService {
 	@PersistenceContext 
 	private EntityManager entityManager;
 	
-	public String canidateUnFavoriteJob(UUID id, UserPrincipal userPrincipal) {
+	public BaseMessageResponse canidateUnFavoriteJob(UUID id, UserPrincipal userPrincipal) {
 		try {
 			Job job = jobService.findByIdAndIsDelete(id);
 			Candidate candidate = candidateService.myCandidate(userPrincipal);
@@ -45,14 +48,17 @@ public class FavoriteService {
 			favorite.setDelete(true);
 			
 			favoriteRepository.save(favorite);
-			
-			return "true";
+			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
+															MessageConstant.CANDIDATE_UN_FAVORITE_JOB_SUCCESS, 
+															MessageConstant.CANDIDATE_UN_FAVORITE_JOB_SUCCESS_MSG
+															);
+			return baseMessageResponse;
 		} catch (Exception e) {
-			return "false";
+			throw new ServerError(MessageConstant.CANDIDATE_UN_FAVORITE_JOB_FAIL);
 		}		
 	}
 	
-	public String canidateFavoriteJob(UUID id, UserPrincipal userPrincipal) {
+	public BaseMessageResponse canidateFavoriteJob(UUID id, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Job obj = findFavoriteJob(userPrincipal, id);
 			if(obj == null) {
@@ -71,13 +77,15 @@ public class FavoriteService {
 				favorite.setDelete(false);
 				
 				favoriteRepository.save(favorite);
-				
-				return "true";
+				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
+																MessageConstant.CANDIDATE_FAVORITE_JOB_SUCCESS, 
+																MessageConstant.CANDIDATE_FAVORITE_JOB_SUCCESS_MSG);
+				return baseMessageResponse;
 			} else {
-				return "false";
+				throw new ServerError(MessageConstant.CANDIDATE_FAVORITE_JOB_FAIL);
 			}
 		} catch (Exception e) {
-			return "false";
+			throw new ServerError(MessageConstant.CANDIDATE_FAVORITE_JOB_FAIL);
 		}		
 	}
 	

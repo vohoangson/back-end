@@ -245,13 +245,25 @@ public class CandidateService {
 		}
 	}
 	
-	public Candidate isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-		candidate.setDelete(isDel);
-		candidateRepository.save(candidate);
-		Candidate result = candidateRepository.findByIdAndIsDelete(id, false);	
-		return result;
+	public Candidate isDel(UUID id, boolean isDel) throws ResourceNotFoundException, ServerError{
+		try {
+			Candidate candidate = candidateRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			candidate.setDelete(isDel);
+			candidateRepository.save(candidate);
+			Candidate result = candidateRepository.findByIdAndIsDelete(id, false);	
+			return result;
+		} catch (ResourceNotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			if(isDel) {
+				throw new ServerError(MessageConstant.CANDIDATE_DELETE_FAIL);
+			} else {
+				throw new ServerError(MessageConstant.CANDIDATE_UN_DELETE_FAIL);
+			}
+			
+		}
+		
 	}
 	
 	public Candidate findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{

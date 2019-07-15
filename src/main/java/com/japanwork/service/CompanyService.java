@@ -104,13 +104,24 @@ public class CompanyService {
 		}
 	}
 	
-	public Company isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
-		Company company = companyRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-		company.setDelete(isDel);
-		companyRepository.save(company);
-		Company result = companyRepository.findByIdAndIsDelete(id, false);	
-		return result;
+	public Company isDel(UUID id, boolean isDel) throws ResourceNotFoundException, ServerError{
+		try {
+			Company company = companyRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			company.setDelete(isDel);
+			companyRepository.save(company);
+			Company result = companyRepository.findByIdAndIsDelete(id, false);	
+			return result;
+		} catch (ResourceNotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			if(isDel) {
+				throw new ServerError(MessageConstant.COMPANY_DELETE_FAIL_MSG);
+			} else {
+				throw new ServerError(MessageConstant.COMPANY_UN_DELETE_FAIL_MSG);
+			}
+			
+		}
 	}
 	
 	public void del(Company company){

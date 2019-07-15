@@ -123,6 +123,7 @@ public class UrlConstant {
 	//Translator
 	public static final String URL_TRANSLATOR = "/translators";
 	public static final String URL_TRANSLATOR_ID = "/translators/{id}";
+	public static final String URL_MY_TRANSLATOR = "/translators/my-translator";
 	public static final String URL_TRANSLATOR_UNDEL_ID = "/translators/undelete/{id}";
 	public static final String URL_TRANSLATOR_DEL_ID = "/translators/delete/{id}";
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.Job;
 import com.japanwork.model.PageInfo;
@@ -26,6 +27,7 @@ import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
@@ -105,8 +107,9 @@ public class JobController {
 	@DeleteMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		Job job = jobService.isDel(id, userPrincipal, true);
-		return new BaseDataResponse(jobService.convertJobResponse(job));
+		jobService.isDel(id, userPrincipal, true);
+		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.JOB_DELETE_SUCCESS, MessageConstant.JOB_DELETE_SUCCESS_MSG);
+		return new BaseDataResponse(baseMessageResponse);
 		
 	}
 	

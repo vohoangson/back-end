@@ -1,8 +1,6 @@
 package com.japanwork.payload.request;
 
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
@@ -31,7 +29,6 @@ public class JobRequest {
 	
 	@JsonProperty("required_education")
 	private String requiredEducation;
-	
 	
 	@JsonProperty("required_experience")
 	private String requiredExperience;

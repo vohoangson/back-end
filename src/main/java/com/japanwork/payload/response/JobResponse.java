@@ -60,9 +60,6 @@ public class JobResponse {
 	@JsonProperty("create_date")
 	private Timestamp createDate;
 	
-	@JsonProperty("favorite_date")
-	private Timestamp favoriteDate;
-	
 	public UUID getId() {
 		return id;
 	}
@@ -215,42 +212,6 @@ public class JobResponse {
 		this.createDate = createDate;
 	}
 	
-	public Timestamp getFavoriteDate() {
-		return favoriteDate;
-	}
-
-	public void setFavoriteDate(Timestamp favoriteDate) {
-		this.favoriteDate = favoriteDate;
-	}
-
-	public JobResponse(UUID id, CompanyResponse companyResponse, String name, UUID businessId, UUID contractId,
-			UUID levelId, int japaneseLevel, String requiredEducation, String requiredExperience,
-			String requiredLanguage, String desc, UUID cityId, UUID districtId, String address,
-			Date applicationDeadline, float minSalary, float maxSalary, String benefits, Timestamp createDate,
-			Timestamp favoriteDate) {
-		super();
-		this.id = id;
-		this.companyResponse = companyResponse;
-		this.name = name;
-		this.businessId = businessId;
-		this.contractId = contractId;
-		this.levelId = levelId;
-		this.japaneseLevel = japaneseLevel;
-		this.requiredEducation = requiredEducation;
-		this.requiredExperience = requiredExperience;
-		this.requiredLanguage = requiredLanguage;
-		this.desc = desc;
-		this.cityId = cityId;
-		this.districtId = districtId;
-		this.address = address;
-		this.applicationDeadline = applicationDeadline;
-		this.minSalary = minSalary;
-		this.maxSalary = maxSalary;
-		this.benefits = benefits;
-		this.createDate = createDate;
-		this.favoriteDate = favoriteDate;
-	}
-
 	public JobResponse(UUID id, CompanyResponse companyResponse, String name, UUID businessId, UUID contractId,
 			UUID levelId, int japaneseLevel, String requiredEducation, String requiredExperience,
 			String requiredLanguage, String desc, UUID cityId, UUID districtId, String address,
