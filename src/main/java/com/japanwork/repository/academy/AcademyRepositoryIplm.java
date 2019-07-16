@@ -45,7 +45,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -57,13 +57,13 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteInBatch(Iterable<Academy> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -163,9 +163,9 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public Academy findByIdAndDeletedAt(UUID id, Timestamp deleteAt) {
+	public Academy findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndDeletedAt(id, deleteAt);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override

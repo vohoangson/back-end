@@ -1,5 +1,6 @@
 package com.japanwork.repository.city;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public class CityRepositoryIplm implements CityRepository{
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -56,13 +57,13 @@ public class CityRepositoryIplm implements CityRepository{
 	@Override
 	public void deleteInBatch(Iterable<City> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -116,25 +117,25 @@ public class CityRepositoryIplm implements CityRepository{
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(City entity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends City> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -162,21 +163,21 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public City findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public City findByIdAndDeletedAt(UUID id, boolean deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id,isDelete);
+		return findByIdAndDeletedAt(id,deletedAt);
 	}
 
 	@Override
-	public List<City> findAllByIsDelete(boolean isDelete) {
+	public List<City> findAllByDeletedAt(boolean deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
-	public List<City> findAllByCountryCodeAndIsDelete(String code, boolean isDelete) {
+	public List<City> findAllByCountryCodeAndDeletedAt(String code, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByCountryCodeAndIsDelete(code, isDelete);
+		return findAllByCountryCodeAndDeletedAt(code, deletedAt);
 	}
-	
+
 }

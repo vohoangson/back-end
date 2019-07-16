@@ -45,7 +45,7 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -57,13 +57,13 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	@Override
 	public void deleteInBatch(Iterable<Business> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -117,25 +117,25 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(Business entity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends Business> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -163,15 +163,15 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public Business findByIdAndDeleteAt(UUID id, Timestamp deleteAt) {
+	public Business findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndDeleteAt(id, deleteAt);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<Business> findAllByDeleteAt(Timestamp deleteAt) {
+	public List<Business> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByDeleteAt(deleteAt);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 }
