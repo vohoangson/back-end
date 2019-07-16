@@ -1,5 +1,6 @@
 package com.japanwork.repository.business_type;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,15 +163,15 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public Business findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Business findByIdAndDeleteAt(UUID id, Timestamp deleteAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeleteAt(id, deleteAt);
 	}
 
 	@Override
-	public List<Business> findAllByIsDelete(boolean isDelete) {
+	public List<Business> findAllByDeleteAt(Timestamp deleteAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeleteAt(deleteAt);
 	}
 
 }

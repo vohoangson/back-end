@@ -78,12 +78,12 @@ public class CandidateService {
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(1);
-			candidate.setCreateDate(timestamp);
-			candidate.setUpdateDate(timestamp);
-			candidate.setDelete(false);
+			candidate.setCreatedAt(timestamp);
+			candidate.setUpdatedAt(timestamp);
+			candidate.setDeletedAt(null);
 			
 			Candidate result = candidateRepository.save(candidate);
-			userService.changePropertyId(userPrincipal.getId(), result.getId());
+			userService.changePropertyId(userPrincipal.getId(), result.getUid());
 			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CANDIDATE_CREATE_FAIL);
@@ -116,7 +116,7 @@ public class CandidateService {
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			candidate.setUpdateDate(timestamp);
+			candidate.setUpdatedAt(timestamp);
 			
 			Candidate result = candidateRepository.save(candidate);	
 			return result;
@@ -151,7 +151,7 @@ public class CandidateService {
 			candidate.setWishSalary(candidateWishRequest.getWishSalary());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(2);
-			candidate.setUpdateDate(timestamp);
+			candidate.setUpdatedAt(timestamp);
 			
 			Candidate result = candidateRepository.save(candidate);	
 			return result;
@@ -184,9 +184,9 @@ public class CandidateService {
 					academy.setGradeSystem(academyRequest.getGradeSystem());
 					academy.setStartDate(academyRequest.getStartDate());
 					academy.setEndDate(academyRequest.getEndDate());
-					academy.setCreateDate(timestamp);
-					academy.setUpdateDate(timestamp);
-					academy.setDelete(false);
+					academy.setCreatedAt(timestamp);
+					academy.setUpdatedAt(timestamp);
+					academy.setDeletedAt(null);
 					
 					listAcademy.add(academy);
 				}
@@ -206,9 +206,9 @@ public class CandidateService {
 					experience.setBusiness(new Business(experienceRequest.getBusinessId()));
 					experience.setStartDate(experienceRequest.getStartDate());
 					experience.setEndDate(experienceRequest.getEndDate());
-					experience.setCreateDate(timestamp);
-					experience.setUpdateDate(timestamp);
-					experience.setDelete(false);
+					experience.setCreatedAt(timestamp);
+					experience.setUpdatedAt(timestamp);
+					experience.setDeletedAt(null);
 					
 					listExperience.add(experience);
 				}
@@ -226,9 +226,9 @@ public class CandidateService {
 					languageCertificate.setScore(languageCertificateRequest.getScore());
 					languageCertificate.setLanguageCertificateType(new LanguageCertificateType(languageCertificateRequest.getLanguageCertificateTypeId()));
 					languageCertificate.setTakenDate(languageCertificateRequest.getTakenDate());
-					languageCertificate.setCreateDate(timestamp);
-					languageCertificate.setUpdateDate(timestamp);
-					languageCertificate.setDelete(false);
+					languageCertificate.setCreatedAt(timestamp);
+					languageCertificate.setUpdatedAt(timestamp);
+					languageCertificate.setDeletedAt(null);
 					
 					listLanguageCertificate.add(languageCertificate);
 				}
@@ -245,18 +245,18 @@ public class CandidateService {
 		}
 	}
 	
-	public Candidate isDel(UUID id, boolean isDel) throws ResourceNotFoundException, ServerError{
+	public Candidate isDel(UUID id, Timestamp time) throws ResourceNotFoundException, ServerError{
 		try {
 			Candidate candidate = candidateRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-			candidate.setDelete(isDel);
+			candidate.setDeletedAt(time);
 			candidateRepository.save(candidate);
 			Candidate result = candidateRepository.findByIdAndIsDelete(id, false);	
 			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
-			if(isDel) {
+			if(time != null) {
 				throw new ServerError(MessageConstant.CANDIDATE_DELETE_FAIL);
 			} else {
 				throw new ServerError(MessageConstant.CANDIDATE_UN_DELETE_FAIL);
@@ -315,38 +315,38 @@ public class CandidateService {
 	public CandidateResponse convertCandiateResponse(Candidate candidate) {
 		CandidateResponse candidateResponse = new CandidateResponse();
 		
-		candidateResponse.setId(candidate.getId());
+		candidateResponse.setId(candidate.getUid());
 		candidateResponse.setFullName(candidate.getFullName());
 		candidateResponse.setDateOfBirth(candidate.getDateOfBirth());
 		candidateResponse.setGender(candidate.getGender());
 		candidateResponse.setMarital(candidate.getMarital());
-		candidateResponse.setResidentalCityId(candidate.getResidentalCity().getId());
-		candidateResponse.setResidentalDistrictId(candidate.getResidentalDistrict().getId());
+		candidateResponse.setResidentalCityId(candidate.getResidentalCity().getUid());
+		candidateResponse.setResidentalDistrictId(candidate.getResidentalDistrict().getUid());
 		candidateResponse.setResidentalAddres(candidate.getResidentalAddres());
 		candidateResponse.setAvatar(candidate.getAvatar());
 		candidateResponse.setIntroduction(candidate.getIntroduction());
 		candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
 		
 		if(candidate.getWishWorkingCity() != null) {
-			candidateResponse.setWishWorkingCityId(candidate.getWishWorkingCity().getId());
+			candidateResponse.setWishWorkingCityId(candidate.getWishWorkingCity().getUid());
 		}
 		
 		if(candidate.getWishWorkingDistrict() != null) {
-			candidateResponse.setWishWorkingDistrictId(candidate.getWishWorkingDistrict().getId());
+			candidateResponse.setWishWorkingDistrictId(candidate.getWishWorkingDistrict().getUid());
 		}
 		
 		candidateResponse.setWishWorkingAddress(candidate.getWishWorkingAddress());
 		
 		if(candidate.getWishBusiness() != null) {
-			candidateResponse.setWishBusinessId(candidate.getWishBusiness().getId());
+			candidateResponse.setWishBusinessId(candidate.getWishBusiness().getUid());
 		}
 		
 		if(candidate.getWishLevel() != null) {
-			candidateResponse.setWishLevelId(candidate.getWishLevel().getId());
+			candidateResponse.setWishLevelId(candidate.getWishLevel().getUid());
 		}
 		
 		if(candidate.getWishContract() != null) {
-			candidateResponse.setWishContractId(candidate.getWishContract().getId());
+			candidateResponse.setWishContractId(candidate.getWishContract().getUid());
 		}
 		
 		candidateResponse.setWishSalary(candidate.getWishSalary());

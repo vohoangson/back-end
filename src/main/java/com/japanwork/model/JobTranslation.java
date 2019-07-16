@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -14,9 +15,13 @@ import javax.persistence.Table;
 @Table(name="job_translation")
 public class JobTranslation {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-	private UUID id;
+	private BigInteger id;
+	
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="uid")
+	private UUID uid;
 	
 	@Column(name="job_id")
     private UUID jobId;
@@ -39,21 +44,29 @@ public class JobTranslation {
     @Column(name="status")
     private int status;
     
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
-	public UUID getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(BigInteger id) {
 		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
 	public UUID getJobId() {
@@ -112,35 +125,35 @@ public class JobTranslation {
 		this.status = status;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public boolean getIsDelete() {
-		return isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setIsDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
-	public JobTranslation(UUID id, UUID jobId, UUID translatorId, String name, String description,
-			String skillRequirement, String benefit, int status, Timestamp createDate, Timestamp updateDate,
-			boolean isDelete) {
-		super();
+	public JobTranslation(BigInteger id, UUID uid, UUID jobId, UUID translatorId, String name, String description,
+			String skillRequirement, String benefit, int status, Timestamp createdAt, Timestamp updatedAt,
+			Timestamp deletedAt) {
 		this.id = id;
+		this.uid = uid;
 		this.jobId = jobId;
 		this.translatorId = translatorId;
 		this.name = name;
@@ -148,12 +161,15 @@ public class JobTranslation {
 		this.skillRequirement = skillRequirement;
 		this.benefit = benefit;
 		this.status = status;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
+	}
+
+	public JobTranslation(UUID uid) {
+		this.uid = uid;
 	}
 
 	public JobTranslation() {
-		super();
 	}
 }

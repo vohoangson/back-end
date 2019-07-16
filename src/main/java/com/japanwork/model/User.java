@@ -2,6 +2,7 @@ package com.japanwork.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -24,9 +25,13 @@ import javax.validation.constraints.NotNull;
 public class User {
 	@JsonIgnore
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private BigInteger id;
     
+	@JsonIgnore
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID uid;
+	
     @Column(nullable = false)
     private String name;
 
@@ -58,26 +63,35 @@ public class User {
     private UUID propertyId;
     
     @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="creatde_at")
+    private Timestamp createdAt;
     
     @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
     @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
     
-    public UUID getId() {
-        return id;
-    }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public BigInteger getId() {
+		return id;
+	}
 
-    public String getName() {
+	public void setId(BigInteger id) {
+		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
+	}
+
+	public String getName() {
         return name;
     }
 
@@ -145,35 +159,33 @@ public class User {
 		this.propertyId = propertyId;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
-	}
-	
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public User(UUID uid, String name, @Email String email, Boolean isEnabled, String password,
 			@NotNull AuthProvider provider, String providerId, String role) {
-		super();
-		this.id = id;
+		this.uid = uid;
 		this.name = name;
 		this.email = email;
 		this.isEnabled = isEnabled;
@@ -201,24 +213,25 @@ public class User {
 //	}
 	
 	public User() {
-		super();
 	}
 
-	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
-		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Timestamp createDate,
-		Timestamp updateDate, boolean isDelete) {
-	super();
-	this.id = id;
-	this.name = name;
-	this.email = email;
-	this.isEnabled = isEnabled;
-	this.password = password;
-	this.provider = provider;
-	this.providerId = providerId;
-	this.role = role;
-	this.propertyId = propertyId;
-	this.createDate = createDate;
-	this.updateDate = updateDate;
-	this.isDelete = isDelete;
-}
+	public User(BigInteger id, UUID uid, String name, @Email String email, Boolean isEnabled, String password,
+			@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Timestamp createdAt,
+			Timestamp updatedAt, Timestamp deletedAt) {
+		this.id = id;
+		this.uid = uid;
+		this.name = name;
+		this.email = email;
+		this.isEnabled = isEnabled;
+		this.password = password;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.role = role;
+		this.propertyId = propertyId;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
+	}
+
+	
 }

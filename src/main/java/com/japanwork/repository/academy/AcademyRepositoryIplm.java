@@ -1,5 +1,6 @@
 package com.japanwork.repository.academy;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,9 +163,9 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public Academy findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Academy findByIdAndDeletedAt(UUID id, Timestamp deleteAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deleteAt);
 	}
 
 	@Override

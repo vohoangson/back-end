@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -13,18 +14,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name="experience")
 public class Experience {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-	private UUID id;
+	private BigInteger id;
 	
-	@JsonIgnore
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="uid")
+	private UUID uid;
+	
     @Column(name = "candidate_id")
 	private UUID candidateId;
 	
@@ -42,32 +43,35 @@ public class Experience {
     @JoinColumn(name = "business_id")
 	private Business business;
 	
-	@JsonProperty("start_date")
 	@Column(name="start_date")
 	private Date startDate;
 	
-	@JsonProperty("end_date")
 	@Column(name="end_date")
 	private Date endDate;
 	
-	@JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
-
-	public UUID getId() {
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
+	
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(BigInteger id) {
 		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
 	public UUID getCandidateId() {
@@ -90,8 +94,8 @@ public class Experience {
 		return desc;
 	}
 
-	public void setDesc(String description) {
-		this.desc = description;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public Level getLevel() {
@@ -126,35 +130,35 @@ public class Experience {
 		this.endDate = endDate;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
-	public Experience(UUID id, UUID candidateId, String organizaion, String desc, Level level, Business business,
-			Date startDate, Date endDate, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
-		super();
+	public Experience(BigInteger id, UUID uid, UUID candidateId, String organizaion, String desc, Level level,
+			Business business, Date startDate, Date endDate, Timestamp createdAt, Timestamp updatedAt,
+			Timestamp deletedAt) {
 		this.id = id;
+		this.uid = uid;
 		this.candidateId = candidateId;
 		this.organizaion = organizaion;
 		this.desc = desc;
@@ -162,17 +166,15 @@ public class Experience {
 		this.business = business;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
-	}
-
-	public Experience(UUID id) {
-		super();
-		this.id = id;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 	
+	public Experience(UUID uid) {
+		this.uid = uid;
+	}
+
 	public Experience() {
-		super();
 	}
 }

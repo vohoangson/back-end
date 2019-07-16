@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -18,18 +19,18 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name="candidate")
 public class Candidate {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-	private UUID id;
+	private BigInteger id;
 	
-	@JsonIgnore
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="uid")
+	private UUID uid;
+	
 	@OneToOne
     @JoinColumn(name = "user_id")
 	private User user;
@@ -37,7 +38,6 @@ public class Candidate {
 	@Column(name="name")
 	private String fullName;
 	
-	@JsonProperty("date_of_birth")
 	@Column(name="dob")
 	private Date dateOfBirth;
 	
@@ -47,17 +47,14 @@ public class Candidate {
 	@Column(name="marital")
 	private String marital;
 	
-	@JsonProperty("residental_city")
 	@ManyToOne
     @JoinColumn(name = "residental_city_id")
     private City residentalCity;
 
-	@JsonProperty("residental_district")
     @ManyToOne
     @JoinColumn(name = "residental_district_id")   
     private District residentalDistrict;
     
-	@JsonProperty("residental_address")
     @Column(name="residental_address")
     private String residentalAddres;
     
@@ -67,46 +64,38 @@ public class Candidate {
     @Column(name="introduction")
     private String introduction;
     
-    @JsonProperty("japanese_level")
     @Column(name="japanese_level")
     private int japaneseLevel;
     
-    @JsonProperty("wish_working_city")
     @ManyToOne
-    @JoinColumn(name = "wish_working_city_id")
+    @JoinColumn(name = "expected_working_city_id")
     private City wishWorkingCity;
 
-    @JsonProperty("wish_working_district")
     @ManyToOne
-    @JoinColumn(name = "wish_working_district_id")   
+    @JoinColumn(name = "expected_working_district_id")   
     private District wishWorkingDistrict;
     
-    @JsonProperty("wish_working_address")
-    @Column(name="wish_working_address")
+    @Column(name="expectedworking_address")
     private String wishWorkingAddress;
     
-    @JsonProperty("wish_business")
     @ManyToOne
-    @JoinColumn(name="wish_business_type_id")
+    @JoinColumn(name="expected_business_type_id", referencedColumnName = "uid")
     private Business wishBusiness;
     
-    @JsonProperty("wish_level")
     @ManyToOne
-    @JoinColumn(name="wish_level_id")
+    @JoinColumn(name="expected_level_id")
     private Level wishLevel;
     
-    @JsonProperty("wish_contract")
     @ManyToOne
-    @JoinColumn(name="wish_contract_type_id")
+    @JoinColumn(name="expected_contract_type_id")
     private Contract wishContract;
 
-    @JsonProperty("wish_salary")
-    @Column(name="wish_salary")
+    @Column(name="expected_salary")
     private float wishSalary;
     
     @OneToMany
     @JoinColumn(name="candidate_id")
-    @Where(clause = "is_delete = false")
+    @Where(clause = "deleted_at = null")
 	private Set<Academy> academies;
 
     @OneToMany
@@ -125,24 +114,29 @@ public class Candidate {
     @Column(name="status_info")
     private int statusInfo;
     
-    @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_ad")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
-    
-	public UUID getId() {
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
+
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(BigInteger id) {
 		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
 	public User getUser() {
@@ -160,7 +154,7 @@ public class Candidate {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	
+
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
@@ -184,7 +178,7 @@ public class Candidate {
 	public void setMarital(String marital) {
 		this.marital = marital;
 	}
-	
+
 	public City getResidentalCity() {
 		return residentalCity;
 	}
@@ -312,7 +306,7 @@ public class Candidate {
 	public void setLanguageCertificates(Set<LanguageCertificate> languageCertificates) {
 		this.languageCertificates = languageCertificates;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -329,40 +323,38 @@ public class Candidate {
 		this.statusInfo = statusInfo;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
-
-	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital, 
-			City residentalCity, District residentalDistrict, String residentalAddres,
-			String avatar, String introduction, int japaneseLevel, City wishWorkingCity,
-			District wishWorkingDistrict, String wishWorkingAddress, Business wishBusiness, Level wishLevel,
-			Contract wishContract, float wishSalary, Set<Academy> academies, Set<Experience> experiences,
-			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createDate,
-			Timestamp updateDate, boolean isDelete) {
-		super();
+	
+	public Candidate(BigInteger id, UUID uid, User user, String fullName, Date dateOfBirth, String gender, String marital,
+			City residentalCity, District residentalDistrict, String residentalAddres, String avatar,
+			String introduction, int japaneseLevel, City wishWorkingCity, District wishWorkingDistrict,
+			String wishWorkingAddress, Business wishBusiness, Level wishLevel, Contract wishContract, float wishSalary,
+			Set<Academy> academies, Set<Experience> experiences, Set<LanguageCertificate> languageCertificates,
+			String status, int statusInfo, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
+		this.uid = uid;
 		this.user = user;
 		this.fullName = fullName;
 		this.dateOfBirth = dateOfBirth;
@@ -386,17 +378,15 @@ public class Candidate {
 		this.languageCertificates = languageCertificates;
 		this.status = status;
 		this.statusInfo = statusInfo;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
-	public Candidate(UUID id) {
-		super();
-		this.id = id;
+	public Candidate(UUID uid) {
+		this.uid = uid;
 	}
 	
 	public Candidate() {
-		super();
 	}
 }

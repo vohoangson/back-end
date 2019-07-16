@@ -37,11 +37,14 @@ public class Notification {
 	@Column(name = "notification_type")
 	private int notificationType;
 	
-	@Column(name = "create_at")
-	private Timestamp createAt;
+	@Column(name = "created_at")
+	private Timestamp createdAt;
 	
-	@Column(name = "is_delete")
-	private boolean isDelete;
+	@Column(name = "updated_at")
+	private Timestamp updatedAt;
+	
+	@Column(name = "deleted_at")
+	private Timestamp deletedAt;
 
 	public long getId() {
 		return id;
@@ -91,24 +94,36 @@ public class Notification {
 		this.notificationType = notificationType;
 	}
 
-	public Timestamp getCreateAt() {
-		return createAt;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateAt(Timestamp createAt) {
-		this.createAt = createAt;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public boolean isDelete() {
-		return isDelete;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Timestamp getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public void setDelete(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	public Notification(long id, Conversation conversation, UUID senderId, String content, String title,
-			int notificationType, Timestamp createAt, boolean isDelete) {
+			int notificationType, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		super();
 		this.id = id;
 		this.conversation = conversation;
@@ -116,8 +131,9 @@ public class Notification {
 		this.content = content;
 		this.title = title;
 		this.notificationType = notificationType;
-		this.createAt = createAt;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Notification() {

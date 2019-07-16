@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,18 +17,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name="company")
 public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-	private UUID id;
+	private BigInteger id;
+	
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="uid")
+	private UUID uid;
     
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -55,11 +56,9 @@ public class Company {
     @Column(name="address")
     private String address;
     
-    @JsonProperty("logo")
     @Column(name="logo_url")
     private String logoUrl;
     
-    @JsonProperty("cover_image_url")
     @Column(name="cover_image_url")
     private String coverImageUrl;
     
@@ -69,24 +68,29 @@ public class Company {
     @Column(name="status")
     private String status;
     
-    @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
-	public UUID getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(BigInteger id) {
 		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
 	public User getUser() {
@@ -168,7 +172,7 @@ public class Company {
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -177,40 +181,35 @@ public class Company {
 		this.status = status;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-	
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
-	}
-	
-	public Company() {
-		super();
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city,
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public Company(BigInteger id, UUID uid, User user, String name, Set<Business> businesses, int scale, City city,
 			District district, String address, String logoUrl, String coverImageUrl, String introduction, String status,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
-		super();
+			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
+		this.uid = uid;
 		this.user = user;
 		this.name = name;
 		this.businesses = businesses;
@@ -222,14 +221,15 @@ public class Company {
 		this.coverImageUrl = coverImageUrl;
 		this.introduction = introduction;
 		this.status = status;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
-	
-	public Company(UUID id) {
-		super();
-		this.id = id;
 
+	public Company(UUID uid) {
+		this.uid = uid;
+	}
+
+	public Company() {
 	}
 }

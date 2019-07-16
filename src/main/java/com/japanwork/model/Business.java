@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,9 +19,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "business_type")
 public class Business {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private UUID id;
+    private BigInteger id;
+    
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="uid")
+    private UUID uid;
     
     @Column(name="name_vi")
     private String vi;
@@ -32,22 +37,22 @@ public class Business {
     private String desc;
     
     @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createAt;
     
     @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updateAt;
     
     @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deleteAt;
 
-	public UUID getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 
@@ -73,52 +78,58 @@ public class Business {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
-	}
+	}	
 	
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public UUID getUid() {
+		return uid;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
-	public Business(UUID id, String vi, String ja, String desc, Timestamp createDate, Timestamp updateDate,
-			boolean isDelete) {
+	public Timestamp getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Timestamp createAt) {
+		this.createAt = createAt;
+	}
+
+	public Timestamp getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(Timestamp updateAt) {
+		this.updateAt = updateAt;
+	}
+
+	public Timestamp isDeleteAt() {
+		return deleteAt;
+	}
+
+	public void setDeleteAt(Timestamp deleteAt) {
+		this.deleteAt = deleteAt;
+	}
+
+	public Business(BigInteger id, UUID uid, String vi, String ja, String desc, Timestamp createAt, Timestamp updateAt,
+			Timestamp deleteAt) {
 		super();
 		this.id = id;
+		this.uid = uid;
 		this.vi = vi;
 		this.ja = ja;
 		this.desc = desc;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createAt = createAt;
+		this.updateAt = updateAt;
+		this.deleteAt = deleteAt;
 	}
 
-	public Business(UUID id) {
-		super();
-		this.id = id;
+	public Business(UUID uid) {
+		this.uid = uid;
 	}
 	
 	public Business() {
-		super();
 	}
 	
 	public static Set<Business> listBusiness(Set<UUID> businessIds){
@@ -133,7 +144,7 @@ public class Business {
 	public static Set<UUID> listBusinessID(Set<Business> businesses){
 		Set<UUID> businessIds = new HashSet<>();
 		for (Business obj : businesses) {
-			businessIds.add(obj.getId());
+			businessIds.add(obj.getUid());
 		}
 		return businessIds;
 	}

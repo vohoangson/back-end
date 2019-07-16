@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -19,10 +21,15 @@ import javax.persistence.Table;
 public class VerificationToken {
 	private static final int EXPIRATION = 60*1;
 
-    @Id
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private BigInteger id;
+	
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="token_id")
-    private UUID id;
+    private UUID uid;
+    
     @Column(name="token")
     private String token;
 
@@ -33,8 +40,8 @@ public class VerificationToken {
     @Column(name="expiry_date")
     private Date expiryDate;
     
-    @Column(name="is_delete")
-    private boolean isDelete = false;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt = null;
     
     public VerificationToken() {
         super();
@@ -54,36 +61,56 @@ public class VerificationToken {
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(final String token) {
-        this.token = token;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(final User user) {
-        this.user = user;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(final Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
     
-    private Date calculateExpiryDate(final int expiryTimeInMinutes) {
+    public BigInteger getId() {
+		return id;
+	}
+
+	public void setId(BigInteger id) {
+		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
+	public Timestamp getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	private Date calculateExpiryDate(final int expiryTimeInMinutes) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(new Date().getTime());
         cal.add(Calendar.MINUTE, expiryTimeInMinutes);

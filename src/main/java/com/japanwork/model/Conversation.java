@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -12,15 +13,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "conversation")
 public class Conversation {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-	private UUID id;
+	private BigInteger id;
+	
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="uid")
+	private UUID uid;
 	
 	@OneToOne
     @JoinColumn(name = "company_id")
@@ -34,18 +37,29 @@ public class Conversation {
     @JoinColumn(name = "translator_id")
 	private Translator translator;
 	
-	@JsonIgnore
-	private Timestamp createAt;
+	@Column(name="created_at")
+	private Timestamp createdAt;
 	
-	@JsonIgnore
-	private boolean isDelete;
+	@Column(name="updated_at")
+	private Timestamp updatedAt;
+	
+	@Column(name="deleted_at")
+	private Timestamp deletedAt;
 
-	public UUID getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(BigInteger id) {
 		this.id = id;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
 	public Company getCompany() {
@@ -72,35 +86,42 @@ public class Conversation {
 		this.translator = translator;
 	}
 
-	public Timestamp getCreateAt() {
-		return createAt;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateAt(Timestamp createAt) {
-		this.createAt = createAt;
-	}
-	
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public Conversation(UUID id, Company company, Candidate candidate, Translator translator, Timestamp createAt,
-			boolean isDelete) {
-		super();
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Timestamp getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public Conversation(BigInteger id, UUID uid, Company company, Candidate candidate, Translator translator,
+			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
+		this.uid = uid;
 		this.company = company;
 		this.candidate = candidate;
 		this.translator = translator;
-		this.createAt = createAt;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Conversation() {
-		super();
-	}	
+	}
 }

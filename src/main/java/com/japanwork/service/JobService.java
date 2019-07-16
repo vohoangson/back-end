@@ -313,7 +313,7 @@ public class JobService {
 	public JobResponse convertJobResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
 				job.getId(),
-				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getId(), 
+				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getUid(), 
 				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
 				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
 				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 
