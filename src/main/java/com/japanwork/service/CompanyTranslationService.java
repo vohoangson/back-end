@@ -45,9 +45,9 @@ public class CompanyTranslationService {
 			company.setAddress(companyRequest.getAddress());
 			company.setIntroduction(companyRequest.getIntroduction());
 			company.setStatus(1);
-			company.setCreateDate(timestamp);
-			company.setUpdateDate(timestamp);
-			company.setDelete(false);
+			company.setCreatedAt(timestamp);
+			company.setUpdatedAt(timestamp);
+			company.setDeletedAt(null);
 			
 			CompanyTranslation result = companyTranlationRepository.save(company);		
 			return result;
@@ -65,23 +65,23 @@ public class CompanyTranslationService {
 			CompanyTranslation company = new CompanyTranslation();
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_TRANSLATOR")) {
-				company = companyTranlationRepository.findByIdAndIsDelete(id, false);
+				company = companyTranlationRepository.findByUidAndDeletedAt(id, null);
 				if(company == null) {
 					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
-				if(!(company.getTranslator()).getUser().getId().equals(userPrincipal.getId())) {
+				if(!(company.getTranslator()).getUser().getUid().equals(userPrincipal.getId())) {
 					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			} else {
-				company = companyTranlationRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+				company = companyTranlationRepository.findByUid(id);
+//						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			company.setName(companyTranslationRequest.getName());
 			company.setAddress(companyTranslationRequest.getAddress());
 			company.setIntroduction(companyTranslationRequest.getIntroduction());
 			company.setStatus(1);
-			company.setUpdateDate(timestamp);
+			company.setUpdatedAt(timestamp);
 			
 			CompanyTranslation result = companyTranlationRepository.save(company);			
 			return result;
@@ -95,14 +95,14 @@ public class CompanyTranslationService {
 	}
 	
 	public CompanyResponse convertCompanyResponse(CompanyTranslation companyTranslation) {
-		Company company = companyService.findById(companyTranslation.getCompany().getId());
+		Company company = companyService.findById(companyTranslation.getCompany().getUid());
 		CompanyResponse companyResponse = new CompanyResponse(
-				company.getId(),
+				company.getUid(),
 				companyTranslation.getName(), 
 				company.getScale(), 
 				Business.listBusinessID(company.getBusinesses()),
-				company.getCity().getId(), 
-				company.getDistrict().getId(), 
+				company.getCity().getUid(), 
+				company.getDistrict().getUid(), 
 				companyTranslation.getAddress(), 
 				company.getLogoUrl(), 
 				company.getCoverImageUrl(),

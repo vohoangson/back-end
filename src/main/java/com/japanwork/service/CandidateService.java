@@ -101,8 +101,8 @@ public class CandidateService {
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
 				candidate = this.findByIdAndIsDelete(id);
 			} else {
-				candidate = candidateRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+				candidate = candidateRepository.findByUid(id);
+//						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			candidate.setFullName(candidatePersonalRequest.getFullName());
@@ -138,8 +138,8 @@ public class CandidateService {
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
 				candidate = this.findByIdAndIsDelete(id);
 			} else {
-				candidate = candidateRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+				candidate = candidateRepository.findByUid(id);
+//						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			candidate.setWishWorkingCity(new City(candidateWishRequest.getWishWorkingCityId()));
@@ -170,7 +170,7 @@ public class CandidateService {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
 			
-			Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+			Candidate candidate = candidateRepository.findByUidAndDeletedAt(id, null);
 			
 			if(!candidateExperienceRequest.getAcademies().isEmpty()) {
 				List<Academy> listAcademy = new ArrayList<>();
@@ -247,11 +247,11 @@ public class CandidateService {
 	
 	public Candidate isDel(UUID id, Timestamp time) throws ResourceNotFoundException, ServerError{
 		try {
-			Candidate candidate = candidateRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			Candidate candidate = candidateRepository.findByUid(id);
+//					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			candidate.setDeletedAt(time);
 			candidateRepository.save(candidate);
-			Candidate result = candidateRepository.findByIdAndIsDelete(id, false);	
+			Candidate result = candidateRepository.findByUidAndDeletedAt(id, null);	
 			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
@@ -267,7 +267,7 @@ public class CandidateService {
 	}
 	
 	public Candidate findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+		Candidate candidate = candidateRepository.findByUidAndDeletedAt(id, null);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -276,7 +276,7 @@ public class CandidateService {
 	}
 	
 	public Candidate myCandidate(UserPrincipal userPrincipal) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
+		Candidate candidate = candidateRepository.findByUserAndDeletedAt(userService.findById(userPrincipal.getId()), null);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -293,13 +293,13 @@ public class CandidateService {
 	}
 	
 	public List<Candidate> findAllByIsDelete() {
-		List<Candidate> listCandidate = candidateRepository.findAllByIsDelete(false);
+		List<Candidate> listCandidate = candidateRepository.findAllByDeletedAt(null);
 		return listCandidate;
 	}
 	
 	public Page<Candidate> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
-			Page<Candidate> pages = candidateRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+			Page<Candidate> pages = candidateRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);

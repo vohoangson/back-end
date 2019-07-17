@@ -1,5 +1,7 @@
 package com.japanwork.repository.city;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public List<City> findAllById(Iterable<UUID> ids) {
+	public List<City> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public City getOne(UUID id) {
+	public City getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public Optional<City> findById(UUID id) {
+	public Optional<City> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,21 +164,21 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public City findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public City findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id,isDelete);
+		return findByUidAndDeletedAt(id,isDelete);
 	}
 
 	@Override
-	public List<City> findAllByIsDelete(boolean isDelete) {
+	public List<City> findAllByDeletedAt(Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(isDelete);
 	}
 
 	@Override
-	public List<City> findAllByCountryCodeAndIsDelete(String code, boolean isDelete) {
+	public List<City> findAllByCountryCodeAndDeletedAt(String code, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByCountryCodeAndIsDelete(code, isDelete);
+		return findAllByCountryCodeAndDeletedAt(code, isDelete);
 	}
 	
 }

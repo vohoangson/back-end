@@ -33,7 +33,7 @@ public class LanguageCertificate {
     private int score;
     
     @ManyToOne
-    @JoinColumn(name = "language_certificate_type_id")
+    @JoinColumn(name = "language_certificate_type_id", referencedColumnName = "uid")
     private LanguageCertificateType languageCertificateType;
     
     @Column(name="taken_date")

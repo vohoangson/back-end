@@ -1,5 +1,6 @@
 package com.japanwork.repository.candidate;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public List<Candidate> findAllById(Iterable<UUID> ids) {
+	public List<Candidate> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -68,7 +69,7 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Candidate getOne(UUID id) {
+	public Candidate getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -98,13 +99,13 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Optional<Candidate> findById(UUID id) {
+	public Optional<Candidate> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -116,7 +117,7 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -164,15 +165,15 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Candidate findByIdAndDeleteAt(UUID id, Timestamp deletedAt) {
+	public Candidate findByUidAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndDeleteAt(id, deletedAt);
+		return findByUidAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<Candidate> findAllByDeleteAt(Timestamp deletedAt) {
+	public List<Candidate> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByDeleteAt(deletedAt);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
@@ -182,15 +183,21 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Page<Candidate> findAllByDeleteAt(Pageable page, Timestamp deletedAt) {
+	public Page<Candidate> findAllByDeletedAt(Pageable page, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByDeleteAt(page, deletedAt);
+		return findAllByDeletedAt(page, deletedAt);
 	}
 
 	@Override
-	public Candidate findByUserAndDeleteAt(User user, Timestamp deletedAt) {
+	public Candidate findByUserAndDeletedAt(User user, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByUserAndDeleteAt(user, deletedAt);
+		return findByUserAndDeletedAt(user, deletedAt);
+	}
+
+	@Override
+	public Candidate findByUid(UUID id) {
+		// TODO Auto-generated method stub
+		return findByUid(id);
 	}
 	
 }

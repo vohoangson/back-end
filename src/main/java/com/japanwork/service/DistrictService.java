@@ -30,24 +30,24 @@ public class DistrictService {
 		district.setJa(districtRequest.getJa());
 		district.setVi(districtRequest.getVi());
 		district.setDesc(districtRequest.getDesc());
-		district.setCreateDate(timestamp);
-		district.setUpdateDate(timestamp);
-		district.setDelete(false);
+		district.setCreatedAt(timestamp);
+		district.setUpdatedAt(timestamp);
+		district.setDeletedAt(null);
 		
 		District result = districtRepository.save(district);
 		return result;
 	}
 	
 	public List<District> findAllByIsDelete() {
-		List<District> list = districtRepository.findAllByIsDelete(false);
+		List<District> list = districtRepository.findAllByDeletedAt(null);
 		return list;
 	}
 	public List<District> findAllByCityIdAndIsDelete(UUID id){
-		List<District> list = districtRepository.findAllByCityIdAndIsDelete(id, false);
+		List<District> list = districtRepository.findAllByCityUidAndDeletedAt(id, null);
 		return list;
 	}
 	public District findByIdAndIsDelete(UUID id) {
-		District district = districtRepository.findByIdAndIsDelete(id, false);
+		District district = districtRepository.findByUidAndDeletedAt(id, null);
 		if(district == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -65,9 +65,9 @@ public class DistrictService {
 			obj.setJa(districtRequest.getJa());
 			obj.setVi(districtRequest.getVi());
 			obj.setDesc(districtRequest.getDesc());
-			obj.setCreateDate(timestamp);
-			obj.setUpdateDate(timestamp);
-			obj.setDelete(false);
+			obj.setCreatedAt(timestamp);
+			obj.setUpdatedAt(timestamp);
+			obj.setDeletedAt(null);
 			
 			listDistrict.add(obj);
 		}

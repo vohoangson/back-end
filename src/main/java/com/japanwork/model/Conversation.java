@@ -26,15 +26,15 @@ public class Conversation {
 	private UUID uid;
 	
 	@OneToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", referencedColumnName = "uid")
 	private Company company;
 	
 	@OneToOne
-    @JoinColumn(name = "candidate_id")
+    @JoinColumn(name = "candidate_id", referencedColumnName = "uid")
 	private Candidate candidate;
 	
 	@OneToOne
-    @JoinColumn(name = "translator_id")
+    @JoinColumn(name = "translator_id", referencedColumnName = "uid")
 	private Translator translator;
 	
 	@Column(name="created_at")

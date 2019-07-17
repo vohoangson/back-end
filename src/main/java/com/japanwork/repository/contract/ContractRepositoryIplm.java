@@ -1,5 +1,7 @@
 package com.japanwork.repository.contract;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class ContractRepositoryIplm implements ContractRepository{
 	}
 
 	@Override
-	public List<Contract> findAllById(Iterable<UUID> ids) {
+	public List<Contract> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class ContractRepositoryIplm implements ContractRepository{
 	}
 
 	@Override
-	public Contract getOne(UUID id) {
+	public Contract getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class ContractRepositoryIplm implements ContractRepository{
 	}
 
 	@Override
-	public Optional<Contract> findById(UUID id) {
+	public Optional<Contract> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class ContractRepositoryIplm implements ContractRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,15 +164,15 @@ public class ContractRepositoryIplm implements ContractRepository{
 	}
 
 	@Override
-	public Contract findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Contract findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 	@Override
-	public List<Contract> findAllByIsDelete(boolean isDelete) {
+	public List<Contract> findAllByDeletedAt(Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(isDelete);
 	}
 
 }

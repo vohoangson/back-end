@@ -44,8 +44,10 @@ public class FavoriteService {
 			Job job = jobService.findByIdAndIsDelete(id);
 			Candidate candidate = candidateService.myCandidate(userPrincipal);
 			
-			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndIsDelete(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, false);
-			favorite.setDelete(true);
+			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndDeletedAt(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, null);
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			favorite.setDeletedAt(timestamp);
 			
 			favoriteRepository.save(favorite);
 			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
@@ -73,8 +75,8 @@ public class FavoriteService {
 				favorite.setJob(job);
 				
 				favorite.setFavoriteType(CommonConstant.FavoriteType.CANDIDATE_JOB);
-				favorite.setCreateAt(timestamp);
-				favorite.setDelete(false);
+				favorite.setCreatedAt(timestamp);
+				favorite.setDeletedAt(null);
 				
 				favoriteRepository.save(favorite);
 				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(

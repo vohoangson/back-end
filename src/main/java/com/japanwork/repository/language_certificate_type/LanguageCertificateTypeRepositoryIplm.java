@@ -1,5 +1,7 @@
 package com.japanwork.repository.language_certificate_type;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,7 +31,7 @@ public class LanguageCertificateTypeRepositoryIplm implements LanguageCertificat
 	}
 
 	@Override
-	public List<LanguageCertificateType> findAllById(Iterable<UUID> ids) {
+	public List<LanguageCertificateType> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,7 +67,7 @@ public class LanguageCertificateTypeRepositoryIplm implements LanguageCertificat
 	}
 
 	@Override
-	public LanguageCertificateType getOne(UUID id) {
+	public LanguageCertificateType getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -95,13 +97,13 @@ public class LanguageCertificateTypeRepositoryIplm implements LanguageCertificat
 	}
 
 	@Override
-	public Optional<LanguageCertificateType> findById(UUID id) {
+	public Optional<LanguageCertificateType> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -113,7 +115,7 @@ public class LanguageCertificateTypeRepositoryIplm implements LanguageCertificat
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -161,15 +163,15 @@ public class LanguageCertificateTypeRepositoryIplm implements LanguageCertificat
 	}
 
 	@Override
-	public LanguageCertificateType findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public LanguageCertificateType findByUidAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<LanguageCertificateType> findAllByIsDelete(boolean isDelete) {
+	public List<LanguageCertificateType> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 }

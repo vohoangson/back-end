@@ -178,7 +178,7 @@ public class JobService {
 	
 	public Page<Job> findAllByCompanyIdAndIsDelete(int page, int paging, UUID id) throws IllegalArgumentException{
 		try {
-			Page<Job> pages = jobRepository.findAllByCompanyIdAndIsDelete(PageRequest.of(page-1, paging), id, false);
+			Page<Job> pages = jobRepository.findAllByCompanyUidAndDeletedAt(PageRequest.of(page-1, paging), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
@@ -192,7 +192,7 @@ public class JobService {
 			
 			Job job = new Job();
 			job.setName(jobRequest.getName());
-			job.setCompany(companyService.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false));
+			job.setCompany(companyService.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), null));
 			job.setBusinesses(new Business(jobRequest.getBusinessId()));
 			job.setContract(new Contract(jobRequest.getContractId()));
 			job.setLevel(new Level(jobRequest.getLevelId()));
@@ -209,9 +209,9 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);		
-			job.setCreateDate(timestamp);
-			job.setUpdateDate(timestamp);
-			job.setDelete(false);
+			job.setCreatedAt(timestamp);
+			job.setUpdatedAt(timestamp);
+			job.setDeletedAt(null);
 			
 			Job result = jobRepository.save(job);		
 			return result;
@@ -229,17 +229,18 @@ public class JobService {
 			Job job = new Job();
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
-				job = jobRepository.findByIdAndIsDelete(id, false);
+				job = jobRepository.findByUidAndDeletedAt(id, null);
 				if(job == null) {
 					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
 				
-				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+				if(!(job.getCompany()).getUser().getUid().equals(userPrincipal.getId())) {
 					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			} else {
-				job = jobRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+				//update them
+				job = jobRepository.findByUidAndDeletedAt(id, null);
+						//.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
 			job.setName(jobRequest.getName());
@@ -259,7 +260,7 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			job.setUpdateDate(timestamp);
+			job.setUpdatedAt(timestamp);
 			
 			Job result = jobRepository.save(job);		
 			return result;
@@ -272,28 +273,28 @@ public class JobService {
 		}
 	}
 	
-	public Job isDel(UUID id, UserPrincipal userPrincipal, boolean isDel) 
+	public Job isDel(UUID id, UserPrincipal userPrincipal, Timestamp deleteAt) 
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
-			Job job = jobRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			Job job = jobRepository.findByUidAndDeletedAt(id, null);
+//					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
-				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+				if(!(job.getCompany()).getUser().getUid().equals(userPrincipal.getId())) {
 					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			}
 			
-			job.setDelete(isDel);
+			job.setDeletedAt(deleteAt);
 			jobRepository.save(job);
-			Job result = jobRepository.findByIdAndIsDelete(id, false);
+			Job result = jobRepository.findByUidAndDeletedAt(id, null);
 			return result;
 		}catch (ResourceNotFoundException e) {
 			throw e;
 		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
-			if(isDel) {
+			if(deleteAt != null) {
 				throw new ServerError(MessageConstant.JOB_DELETE_FAIL);
 			} else {
 				throw new ServerError(MessageConstant.JOB_UN_DELETE_FAIL);
@@ -303,7 +304,7 @@ public class JobService {
 	}
 	
 	public Job findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Job job = jobRepository.findByIdAndIsDelete(id, false);
+		Job job = jobRepository.findByUidAndDeletedAt(id, null);
 		if(job == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}	
@@ -312,12 +313,12 @@ public class JobService {
 	
 	public JobResponse convertJobResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
-				job.getId(),
+				job.getUid(),
 				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getUid(), 
-				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
+				job.getContract().getUid(), job.getLevel().getUid(), job.getJapaneseLevelRequirement(), 
 				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
-				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 
-				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreateDate());
+				job.getDesc(), job.getCity().getUid(), job.getDistrict().getUid(), job.getAddress(), 
+				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreatedAt());
 		return jobResponse;
 	}
 }

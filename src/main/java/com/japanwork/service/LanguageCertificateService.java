@@ -30,7 +30,7 @@ public class LanguageCertificateService {
 				LanguageCertificateResponse languageCertificateResponse = new LanguageCertificateResponse();
 				
 				languageCertificateResponse.setScore(languageCertificate.getScore());
-				languageCertificateResponse.setLanguageCertificateTypeId(languageCertificate.getLanguageCertificateType().getId());
+				languageCertificateResponse.setLanguageCertificateTypeId(languageCertificate.getLanguageCertificateType().getUid());
 				languageCertificateResponse.setTakenDate(languageCertificate.getTakenDate());
 				
 				list.add(languageCertificateResponse);

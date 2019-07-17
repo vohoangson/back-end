@@ -38,15 +38,15 @@ public class Business {
     
     @JsonIgnore
     @Column(name="created_at")
-    private Timestamp createAt;
+    private Timestamp createdAt;
     
     @JsonIgnore
     @Column(name="updated_at")
-    private Timestamp updateAt;
+    private Timestamp updatedAt;
     
     @JsonIgnore
     @Column(name="deleted_at")
-    private Timestamp deleteAt;
+    private Timestamp deletedAt;
 
 	public BigInteger getId() {
 		return id;
@@ -88,41 +88,43 @@ public class Business {
 		this.uid = uid;
 	}
 
-	public Timestamp getCreateAt() {
-		return createAt;
+	
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateAt(Timestamp createAt) {
-		this.createAt = createAt;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateAt() {
-		return updateAt;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateAt(Timestamp updateAt) {
-		this.updateAt = updateAt;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public Timestamp isDeleteAt() {
-		return deleteAt;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDeleteAt(Timestamp deleteAt) {
-		this.deleteAt = deleteAt;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
-	public Business(BigInteger id, UUID uid, String vi, String ja, String desc, Timestamp createAt, Timestamp updateAt,
-			Timestamp deleteAt) {
+	public Business(BigInteger id, UUID uid, String vi, String ja, String desc, Timestamp createdAt,
+			Timestamp updatedAt, Timestamp deletedAt) {
 		super();
 		this.id = id;
 		this.uid = uid;
 		this.vi = vi;
 		this.ja = ja;
 		this.desc = desc;
-		this.createAt = createAt;
-		this.updateAt = updateAt;
-		this.deleteAt = deleteAt;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Business(UUID uid) {

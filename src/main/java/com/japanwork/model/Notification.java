@@ -22,7 +22,7 @@ public class Notification {
 	private long id;
 	
 	@OneToOne
-    @JoinColumn(name = "conversation_id")
+    @JoinColumn(name = "conversation_id", referencedColumnName = "uid")
 	private Conversation conversation;
 	
 	@Column(name = "sender_id")

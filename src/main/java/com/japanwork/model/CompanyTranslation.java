@@ -28,12 +28,12 @@ public class CompanyTranslation {
 	private UUID uid;
     
 	@ManyToOne
-    @JoinColumn(name="company_id")
+    @JoinColumn(name="company_id", referencedColumnName = "uid")
     @Where(clause = "delete_at = null")
     private Company company;
     
     @ManyToOne
-    @JoinColumn(name="translator_id")
+    @JoinColumn(name="translator_id", referencedColumnName = "uid")
     @Where(clause = "delete_at = null")
     private Translator translator;
     

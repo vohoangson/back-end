@@ -1,5 +1,7 @@
 package com.japanwork.repository.district;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public List<District> findAllById(Iterable<UUID> ids) {
+	public List<District> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public District getOne(UUID id) {
+	public District getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public Optional<District> findById(UUID id) {
+	public Optional<District> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,21 +164,21 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public District findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public District findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 	@Override
-	public List<District> findAllByIsDelete(boolean isDelete) {
+	public List<District> findAllByDeletedAt(Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(isDelete);
 	}
 
 	@Override
-	public List<District> findAllByCityIdAndIsDelete(UUID id, boolean isDelete) {
+	public List<District> findAllByCityUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByCityIdAndIsDelete(id, isDelete);
+		return findAllByCityUidAndDeletedAt(id, isDelete);
 	}
 
 }

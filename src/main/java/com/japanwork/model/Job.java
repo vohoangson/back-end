@@ -30,27 +30,27 @@ public class Job {
     private String name;
     
 	@ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", referencedColumnName = "uid")
     private Company company;
     
 	@ManyToOne
-	@JoinColumn(name = "business_id")
+	@JoinColumn(name = "business_id", referencedColumnName = "uid")
     private Business businesses;
 	
 	@ManyToOne
-    @JoinColumn(name = "contract_type_id")
+    @JoinColumn(name = "contract_type_id", referencedColumnName = "uid")
     private Contract contract;
     
 	@ManyToOne
-    @JoinColumn(name = "level_id")
+    @JoinColumn(name = "level_id", referencedColumnName = "uid")
     private Level level;
 	
 	@ManyToOne
-    @JoinColumn(name = "work_place_city_id")
+    @JoinColumn(name = "work_place_city_id", referencedColumnName = "uid")
     private City city;
     
 	@ManyToOne
-    @JoinColumn(name = "work_place_district_id")
+    @JoinColumn(name = "work_place_district_id", referencedColumnName = "uid")
     private District district;
     
     @Column(name="work_place_address")

@@ -1,5 +1,7 @@
 package com.japanwork.repository.job_application;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public List<JobApplication> findAllById(Iterable<UUID> ids) {
+	public List<JobApplication> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public JobApplication getOne(UUID id) {
+	public JobApplication getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public Optional<JobApplication> findById(UUID id) {
+	public Optional<JobApplication> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,15 +164,15 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public JobApplication findByJobIdAndIsDelete(UUID id, boolean isDelete) {
+	public JobApplication findByJobIdAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByJobIdAndIsDelete(id, isDelete);
+		return findByJobIdAndDeletedAt(id, isDelete);
 	}
 
 	@Override
-	public JobApplication findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public JobApplication findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 }

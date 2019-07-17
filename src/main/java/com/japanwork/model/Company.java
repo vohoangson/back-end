@@ -30,7 +30,7 @@ public class Company {
 	private UUID uid;
     
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
     
     @Column(name="name")
@@ -38,19 +38,19 @@ public class Company {
     
     @ManyToMany
     @JoinTable(name = "company_business", 
-      joinColumns = { @JoinColumn(name = "company_id") }, 
-      inverseJoinColumns = {@JoinColumn(name = "business_id") })
+      joinColumns = { @JoinColumn(name = "company_id", referencedColumnName = "uid") }, 
+      inverseJoinColumns = {@JoinColumn(name = "business_id", referencedColumnName = "uid") })
     private Set<Business> businesses = new HashSet<>();
     
     @Column(name="scale")
     private int scale;
     
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", referencedColumnName = "uid")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "district_id")   
+    @JoinColumn(name = "district_id", referencedColumnName = "uid")   
     private District district;
     
     @Column(name="address")

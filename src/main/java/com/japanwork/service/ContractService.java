@@ -20,12 +20,12 @@ public class ContractService {
 	private ContractRepository contractRepository;
 	
 	public List<Contract> findAllByIsDelete() {
-		List<Contract> list = contractRepository.findAllByIsDelete(false);
+		List<Contract> list = contractRepository.findAllByDeletedAt(null);
 		return list;
 	}
 	
 	public Contract findByIdAndIsDelete(UUID id) {
-		Contract contract = contractRepository.findByIdAndIsDelete(id, false);
+		Contract contract = contractRepository.findByUidAndDeletedAt(id, null);
 		if(contract == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -40,9 +40,9 @@ public class ContractService {
 		contract.setJa(contractRequest.getJa());
 		contract.setVi(contractRequest.getVi());
 		contract.setDesc(contractRequest.getDesc());
-		contract.setCreateDate(timestamp);
-		contract.setUpdateDate(timestamp);
-		contract.setDelete(false);
+		contract.setCreatedAt(timestamp);
+		contract.setUpdatedAt(timestamp);
+		contract.setDeletedAt(null);
 		
 		Contract result = contractRepository.save(contract);
 		

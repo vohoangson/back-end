@@ -53,9 +53,9 @@ public class TranslatorService {
 		translator.setAvatar(translatorRequest.getAvatar());
 		translator.setIntroduction(translatorRequest.getIntroduction());
 		translator.setJapaneseLevel(translatorRequest.getJapaneseLevel());
-		translator.setCreateDate(timestamp);
-		translator.setUpdateDate(timestamp);
-		translator.setDelete(false);
+		translator.setCreatedAt(timestamp);
+		translator.setUpdatedAt(timestamp);
+		translator.setDeletedAt(null);
 		
 		Translator result = translatorRepository.save(translator);		
 		return result;
@@ -69,16 +69,18 @@ public class TranslatorService {
 		Translator translator = new Translator();
 		
 		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_TRANSLATOR")) {
-			translator = translatorRepository.findByIdAndIsDelete(id, false);
+			translator = translatorRepository.findByUidAndDeletedAt(id, null);
 			if(translator == null) {
 				throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 			}
-			if(!translator.getUser().getId().equals(userPrincipal.getId())) {
+			if(!translator.getUser().getUid().equals(userPrincipal.getId())) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		} else {
-			translator = translatorRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			translator = translatorRepository.findByUid(id);
+			if(!translator.getUser().getUid().equals(userPrincipal.getId())) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
 		}
 
 		translator.setName(translatorRequest.getName());
@@ -90,14 +92,14 @@ public class TranslatorService {
 		translator.setAvatar(translatorRequest.getAvatar());
 		translator.setIntroduction(translatorRequest.getIntroduction());
 		translator.setJapaneseLevel(translatorRequest.getJapaneseLevel());
-		translator.setUpdateDate(timestamp);
+		translator.setUpdatedAt(timestamp);
 		
 		Translator result = translatorRepository.save(translator);		
 		return result;
 	}
 	
 	public Translator myTranslator(UserPrincipal userPrincipal) throws ResourceNotFoundException{
-		Translator translator = translatorRepository.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
+		Translator translator = translatorRepository.findByUserAndDeletedAt(userService.findById(userPrincipal.getId()), null);
 		if(translator == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -106,7 +108,7 @@ public class TranslatorService {
 	
 	public Translator findByIdAndIsDelete(UUID id) 
 			throws ResourceNotFoundException{
-		Translator translator = translatorRepository.findByIdAndIsDelete(id, false);
+		Translator translator = translatorRepository.findByUidAndDeletedAt(id, null);
 		if(translator == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}	
@@ -115,26 +117,28 @@ public class TranslatorService {
 	
 	public Page<Translator> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
-			Page<Translator> pages = translatorRepository.findAllByIsDelete(PageRequest.of(page-1, paging),false);
+			Page<Translator> pages = translatorRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 	}
 	
-	public Translator isDel(UUID id, boolean isDel) throws ResourceNotFoundException{
+	public Translator isDel(UUID id, Timestamp deletedAt) throws ResourceNotFoundException{
 		try {
-		Translator translator = translatorRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-		translator.setDelete(isDel);
+		Translator translator = translatorRepository.findByUid(id);
+		if(translator == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}	
+		translator.setDeletedAt(deletedAt);
 		translatorRepository.save(translator);
 		
-		Translator result = translatorRepository.findByIdAndIsDelete(id, false);
+		Translator result = translatorRepository.findByUidAndDeletedAt(id, null);
 		return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
-			if(isDel) {
+			if(deletedAt != null) {
 				throw new ServerError(MessageConstant.TRANSLATOR_DELETE_FAIL);
 			} else {
 				throw new ServerError(MessageConstant.TRANSLATOR_UN_DELETE_FAIL);
@@ -148,19 +152,19 @@ public class TranslatorService {
 		return translator;
 	}
 	
-	public Translator findTranslatorByIdAndIsDelete(UUID id, boolean isDel){
-		Translator translator = translatorRepository.findByIdAndIsDelete(id, isDel);
+	public Translator findTranslatorByIdAndIsDelete(UUID id, Timestamp deletedAt){
+		Translator translator = translatorRepository.findByUidAndDeletedAt(id, deletedAt);
 		return translator;
 	}
 	
 	public TranslatorResponse convertTranslatorResponse(Translator translator) {
 		TranslatorResponse translatorResponse = new TranslatorResponse(
-				translator.getId(),
+				translator.getUid(),
 				translator.getName(), 
 				translator.getGender(),
 				translator.getDateOfBirth(),
-				translator.getCity().getId(), 
-				translator.getDistrict().getId(), 
+				translator.getCity().getUid(), 
+				translator.getDistrict().getUid(), 
 				translator.getAddress(),
 				translator.getIntroduction(), 
 				translator.getAvatar(), 

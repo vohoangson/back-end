@@ -1,5 +1,7 @@
 package com.japanwork.repository.translator;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +33,7 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public List<Translator> findAllById(Iterable<UUID> ids) {
+	public List<Translator> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,7 +69,7 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public Translator getOne(UUID id) {
+	public Translator getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,13 +99,13 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public Optional<Translator> findById(UUID id) {
+	public Optional<Translator> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -115,7 +117,7 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -169,21 +171,27 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public Translator findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Translator findByUserAndDeletedAt(User user, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUserAndDeletedAt(user, deletedAt);
 	}
 
 	@Override
-	public Page<Translator> findAllByIsDelete(Pageable page, boolean isDelete) {
+	public Translator findByUidAndDeletedAt(UUID uid, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(page, isDelete);
+		return findByUidAndDeletedAt(uid, deletedAt);
 	}
 
 	@Override
-	public Translator findByUserAndIsDelete(User user, boolean isDelete) {
+	public Translator findByUid(UUID uid) {
 		// TODO Auto-generated method stub
-		return findByUserAndIsDelete(user, isDelete);
+		return findByUid(uid);
+	}
+
+	@Override
+	public Page<Translator> findAllByDeletedAt(Pageable page, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByDeletedAt(page, deletedAt);
 	}
 
 }

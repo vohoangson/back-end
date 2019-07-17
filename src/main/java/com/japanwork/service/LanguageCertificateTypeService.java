@@ -28,21 +28,21 @@ public class LanguageCertificateTypeService {
 		LanguageCertificateType.setJa(languageCertificateTypeRequest.getJa());
 		LanguageCertificateType.setVi(languageCertificateTypeRequest.getVi());
 		LanguageCertificateType.setDesc(languageCertificateTypeRequest.getDesc());
-		LanguageCertificateType.setCreateDate(timestamp);
-		LanguageCertificateType.setUpdateDate(timestamp);
-		LanguageCertificateType.setDelete(false);
+		LanguageCertificateType.setCreatedAt(timestamp);
+		LanguageCertificateType.setUpdatedAt(timestamp);
+		LanguageCertificateType.setDeletedAt(null);
 		
 		LanguageCertificateType result = languageCertificateTypeRepository.save(LanguageCertificateType);
 		return result;
 	}
 	
 	public List<LanguageCertificateType> findAllByIsDelete() {
-		List<LanguageCertificateType> list = languageCertificateTypeRepository.findAllByIsDelete(false);
+		List<LanguageCertificateType> list = languageCertificateTypeRepository.findAllByDeletedAt(null);
 		return list;
 	}
 	
 	public LanguageCertificateType findByIdAndIsDelete(UUID id) {
-		LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndIsDelete(id, false);
+		LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByUidAndDeletedAt(id, null);
 		if(languageCertificateType == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}	

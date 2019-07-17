@@ -1,5 +1,7 @@
 package com.japanwork.repository.notification;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public List<Notification> findAllById(Iterable<UUID> ids) {
+	public List<Notification> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public Notification getOne(UUID id) {
+	public Notification getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public Optional<Notification> findById(UUID id) {
+	public Optional<Notification> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,8 +164,8 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public Page<Notification> findByConversationIdAndIsDelete(Pageable page, UUID id, boolean isDelete) {
+	public Page<Notification> findByConversationUidAndDeletedAt(Pageable page, UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByConversationIdAndIsDelete(page, id, isDelete);
+		return findByConversationUidAndDeletedAt(page, id, isDelete);
 	}
 }

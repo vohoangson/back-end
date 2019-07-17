@@ -1,5 +1,7 @@
 package com.japanwork.repository.user;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +45,7 @@ public class UserRepositoryIplm implements UserRepository{
 	}
 
 	@Override
-	public List<User> findAllById(Iterable<UUID> ids) {
+	public List<User> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -79,7 +81,7 @@ public class UserRepositoryIplm implements UserRepository{
 	}
 
 	@Override
-	public User getOne(UUID id) {
+	public User getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -109,13 +111,13 @@ public class UserRepositoryIplm implements UserRepository{
 	}
 
 	@Override
-	public Optional<User> findById(UUID id) {
+	public Optional<User> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return existsById(id);
 	}
@@ -127,7 +129,7 @@ public class UserRepositoryIplm implements UserRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -175,8 +177,14 @@ public class UserRepositoryIplm implements UserRepository{
 	}
 
 	@Override
-	public User findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public User findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
+	}
+
+	@Override
+	public User findByUid(UUID uid) {
+		// TODO Auto-generated method stub
+		return findByUid(uid);
 	}	
 }

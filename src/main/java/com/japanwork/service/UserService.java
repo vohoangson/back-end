@@ -24,7 +24,6 @@ import com.japanwork.constant.EmailConstants;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
-import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.Candidate;
@@ -112,9 +111,8 @@ public class UserService {
         return TOKEN_VALID;
     }
 	
-	public User getUser(UserPrincipal userPrincipal) throws ResourceNotFoundException{
-        User user = userRepository.findById(userPrincipal.getId())
-        		.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+	public User getUser(UserPrincipal userPrincipal){
+        User user = userRepository.findByUidAndDeletedAt(userPrincipal.getId(), null);
         return user;
     }
 	
@@ -143,9 +141,9 @@ public class UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
 	        user.setProviderId(null);
-	        user.setCreateDate(timestamp);
-	        user.setUpdateDate(timestamp);
-	        user.setDelete(false);
+	        user.setCreatedAt(timestamp);
+	        user.setUpdatedAt(timestamp);
+	        user.setDeletedAt(null);
 	        User result = userRepository.save(user);
 	        
 	        final VerificationToken newToken = this.generateNewVerificationToken(user);
@@ -178,11 +176,11 @@ public class UserService {
 	}
 	
 	public User findById(UUID id) {
-		return userRepository.findById(id).get();
+		return userRepository.findByUid(id);
 	}
 		
 	public User findByIdAndIsDelete(UUID id) {
-		return userRepository.findByIdAndIsDelete(id, false);
+		return userRepository.findByUidAndDeletedAt(id, null);
 	}
 	
 	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
@@ -199,13 +197,13 @@ public class UserService {
 				
 				Candidate candidate = candidateRepository.findByUser(user);
 				if(candidate != null) {
-					academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getId()));
-					experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getId()));
-					languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getId()));
+					academyRepository.deleteAll(academyRepository.findByCandidateId(candidate.getUid()));
+					experienceRepository.deleteAll(experienceRepository.findByCandidateId(candidate.getUid()));
+					languageCertificateRepository.deleteAll(languageCertificateRepository.findByCandidateId(candidate.getUid()));
 					candidateRepository.delete(candidate);
 				}
 				
-				tokenRepository.delete(tokenRepository.findByUserId(user.getId()));
+				tokenRepository.delete(tokenRepository.findByUserUid(user.getUid()));
 				userRepository.delete(user);
 			}
 			
@@ -218,7 +216,7 @@ public class UserService {
 	
 	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{
 		try {
-			User user = userRepository.findByIdAndIsDelete(userId, false);
+			User user = userRepository.findByUidAndDeletedAt(userId, null);
 			user.setPropertyId(propertyId);
 			userRepository.save(user);
 		} catch (Exception e) {
@@ -231,7 +229,7 @@ public class UserService {
 		try {
 			boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());
 			if(checkOldPassword) {
-				User user = userRepository.findByIdAndIsDelete(userPrincipal.getId(), false);
+				User user = userRepository.findByUidAndDeletedAt(userPrincipal.getId(), null);
 				user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
 				
 				userRepository.save(user);
@@ -254,7 +252,7 @@ public class UserService {
 			if(user == null) {
 				throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST, MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST_MSG);
 			} else {
-				ForgetPassword fp = forgetPasswordRepository.findByUserId(user.getId());
+				ForgetPassword fp = forgetPasswordRepository.findByUserUid(user.getUid());
 				if(fp != null) {
 					forgetPasswordRepository.delete(fp);
 				}
@@ -292,13 +290,13 @@ public class UserService {
 				throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST, 
 						MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST_MSG);
 			} else {
-				ForgetPassword forgetPassword = forgetPasswordRepository.findByUserIdAndCode(user.getId(), 
+				ForgetPassword forgetPassword = forgetPasswordRepository.findByUserUidAndCode(user.getUid(), 
 						resetPasswordRequest.getCode());
 				if(forgetPassword == null) {
 					throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_INCORRECT_CODE, 
 							MessageConstant.RESET_FORGET_PASSWORD_INCORRECT_CODE_MSG);
 				}
-				forgetPasswordRepository.delete(forgetPasswordRepository.findByUserId(user.getId()));
+				forgetPasswordRepository.delete(forgetPasswordRepository.findByUserUid(user.getUid()));
 				
 				user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));	
 				userRepository.save(user);

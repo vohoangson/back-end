@@ -32,7 +32,7 @@ public class Candidate {
 	private UUID uid;
 	
 	@OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "uid")
 	private User user;
 	
 	@Column(name="name")
@@ -48,11 +48,11 @@ public class Candidate {
 	private String marital;
 	
 	@ManyToOne
-    @JoinColumn(name = "residental_city_id")
+    @JoinColumn(name = "residental_city_id", referencedColumnName = "uid")
     private City residentalCity;
 
     @ManyToOne
-    @JoinColumn(name = "residental_district_id")   
+    @JoinColumn(name = "residental_district_id", referencedColumnName = "uid")   
     private District residentalDistrict;
     
     @Column(name="residental_address")
@@ -68,11 +68,11 @@ public class Candidate {
     private int japaneseLevel;
     
     @ManyToOne
-    @JoinColumn(name = "expected_working_city_id")
+    @JoinColumn(name = "expected_working_city_id", referencedColumnName = "uid")
     private City wishWorkingCity;
 
     @ManyToOne
-    @JoinColumn(name = "expected_working_district_id")   
+    @JoinColumn(name = "expected_working_district_id", referencedColumnName = "uid")   
     private District wishWorkingDistrict;
     
     @Column(name="expectedworking_address")
@@ -83,28 +83,28 @@ public class Candidate {
     private Business wishBusiness;
     
     @ManyToOne
-    @JoinColumn(name="expected_level_id")
+    @JoinColumn(name="expected_level_id", referencedColumnName = "uid")
     private Level wishLevel;
     
     @ManyToOne
-    @JoinColumn(name="expected_contract_type_id")
+    @JoinColumn(name="expected_contract_type_id", referencedColumnName = "uid")
     private Contract wishContract;
 
     @Column(name="expected_salary")
     private float wishSalary;
     
     @OneToMany
-    @JoinColumn(name="candidate_id")
+    @JoinColumn(name="candidate_id", referencedColumnName = "uid")
     @Where(clause = "deleted_at = null")
 	private Set<Academy> academies;
 
     @OneToMany
-    @JoinColumn(name="candidate_id")
+    @JoinColumn(name="candidate_id", referencedColumnName = "uid")
     @Where(clause = "is_delete = false")
 	private Set<Experience> experiences;
     
     @OneToMany
-    @JoinColumn(name="candidate_id")
+    @JoinColumn(name="candidate_id", referencedColumnName = "uid")
     @Where(clause = "is_delete = false")
 	private Set<LanguageCertificate> languageCertificates;
     

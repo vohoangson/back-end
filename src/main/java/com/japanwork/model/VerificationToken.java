@@ -34,7 +34,7 @@ public class VerificationToken {
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
+    @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "uid")
     private User user;
 
     @Column(name="expiry_date")

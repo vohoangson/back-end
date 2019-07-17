@@ -17,8 +17,11 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("/user/me")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id ::"+ userPrincipal.getId()));
+    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) throws ResourceNotFoundException{
+    	User user = userRepository.findByUid(userPrincipal.getId());
+    	if(user == null) {
+    		throw new ResourceNotFoundException("User not found for this id ::"+ userPrincipal.getId());
+    	}
+        return user;
     }
 }

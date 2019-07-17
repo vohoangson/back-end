@@ -36,11 +36,11 @@ public class Experience {
 	private String desc;
 	
 	@ManyToOne
-    @JoinColumn(name = "level_id")
+    @JoinColumn(name = "level_id", referencedColumnName = "uid")
 	private Level level;
 	
 	@ManyToOne
-    @JoinColumn(name = "business_id")
+    @JoinColumn(name = "business_id", referencedColumnName = "uid")
 	private Business business;
 	
 	@Column(name="start_date")

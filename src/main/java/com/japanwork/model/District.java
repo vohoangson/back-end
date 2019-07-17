@@ -28,7 +28,7 @@ public class District {
 	private UUID uid;
 	
 	@OneToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", referencedColumnName = "uid")
 	private City city;
 	
 	@Column(name="name_vi")

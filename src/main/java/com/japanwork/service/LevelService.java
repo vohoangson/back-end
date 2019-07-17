@@ -20,12 +20,12 @@ public class LevelService {
 	private LevelRepository levelRepository;
 	
 	public List<Level> findAllByIsDelete() {
-		List<Level> list = levelRepository.findAllByIsDelete(false);
+		List<Level> list = levelRepository.findAllByDeletedAt(null);
 		return list;
 	}
 	
 	public Level findByIdAndIsDelete(UUID id) {
-		Level level = levelRepository.findByIdAndIsDelete(id, false);
+		Level level = levelRepository.findByUidAndDeletedAt(id, null);
 		if(level == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -40,9 +40,9 @@ public class LevelService {
 		level.setJa(levelRequest.getJa());
 		level.setVi(levelRequest.getVi());
 		level.setDesc(levelRequest.getDesc());
-		level.setCreateDate(timestamp);
-		level.setUpdateDate(timestamp);
-		level.setDelete(false);
+		level.setCreatedAt(timestamp);
+		level.setUpdatedAt(timestamp);
+		level.setDeletedAt(null);
 		
 		Level result = levelRepository.save(level);
 		

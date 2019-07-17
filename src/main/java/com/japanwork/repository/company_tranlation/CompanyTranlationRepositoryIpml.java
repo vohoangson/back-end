@@ -1,5 +1,7 @@
 package com.japanwork.repository.company_tranlation;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +28,7 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	}
 
 	@Override
-	public List<CompanyTranslation> findAllById(Iterable<UUID> ids) {
+	public List<CompanyTranslation> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -62,7 +64,7 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	}
 
 	@Override
-	public CompanyTranslation getOne(UUID id) {
+	public CompanyTranslation getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -92,13 +94,13 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	}
 
 	@Override
-	public Optional<CompanyTranslation> findById(UUID id) {
+	public Optional<CompanyTranslation> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -110,7 +112,7 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -158,9 +160,15 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	}
 
 	@Override
-	public CompanyTranslation findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public CompanyTranslation findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
+	}
+
+	@Override
+	public CompanyTranslation findByUid(UUID uid) {
+		// TODO Auto-generated method stub
+		return findByUid(uid);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.japanwork.repository.academy;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public List<Academy> findAllById(Iterable<UUID> ids) {
+	public List<Academy> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,7 +68,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public Academy getOne(UUID id) {
+	public Academy getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,13 +98,13 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public Optional<Academy> findById(UUID id) {
+	public Optional<Academy> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -115,7 +116,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -163,9 +164,9 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	}
 
 	@Override
-	public Academy findByIdAndDeletedAt(UUID id, Timestamp deleteAt) {
+	public Academy findByUidAndDeletedAt(UUID id, Timestamp deleteAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndDeletedAt(id, deleteAt);
+		return findByUidAndDeletedAt(id, deleteAt);
 	}
 
 	@Override

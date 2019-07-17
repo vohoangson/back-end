@@ -1,6 +1,8 @@
 package com.japanwork.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -96,7 +98,9 @@ public class CompanyController {
 	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
 	public BaseDataResponse isDel(@PathVariable UUID id) {	
-		companyService.isDel(id, true);
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		companyService.isDel(id, timestamp);
 		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.COMPANY_DELETE_SUCCESS, MessageConstant.COMPANY_DELETE_SUCCESS_MSG);
 		return new BaseDataResponse(baseMessageResponse);
 	}
@@ -104,7 +108,7 @@ public class CompanyController {
 	@GetMapping(UrlConstant.URL_COMPANY_UNDEL_ID)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		Company company =  companyService.isDel(id, false);
+		Company company =  companyService.isDel(id, null);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
 	

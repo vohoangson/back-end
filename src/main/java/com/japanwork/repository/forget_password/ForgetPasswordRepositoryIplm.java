@@ -1,5 +1,6 @@
 package com.japanwork.repository.forget_password;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class ForgetPasswordRepositoryIplm implements ForgetPasswordRepository{
 	}
 
 	@Override
-	public List<ForgetPassword> findAllById(Iterable<UUID> ids) {
+	public List<ForgetPassword> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -64,7 +65,7 @@ public class ForgetPasswordRepositoryIplm implements ForgetPasswordRepository{
 	}
 
 	@Override
-	public ForgetPassword getOne(UUID id) {
+	public ForgetPassword getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -94,13 +95,13 @@ public class ForgetPasswordRepositoryIplm implements ForgetPasswordRepository{
 	}
 
 	@Override
-	public Optional<ForgetPassword> findById(UUID id) {
+	public Optional<ForgetPassword> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -112,7 +113,7 @@ public class ForgetPasswordRepositoryIplm implements ForgetPasswordRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -160,15 +161,15 @@ public class ForgetPasswordRepositoryIplm implements ForgetPasswordRepository{
 	}
 
 	@Override
-	public ForgetPassword findByUserId(UUID id) {
+	public ForgetPassword findByUserUid(UUID id) {
 		// TODO Auto-generated method stub
-		return findByUserId(id);
+		return findByUserUid(id);
 	}
 
 	@Override
-	public ForgetPassword findByUserIdAndCode(UUID id, String code) {
+	public ForgetPassword findByUserUidAndCode(UUID id, String code) {
 		// TODO Auto-generated method stub
-		return findByUserIdAndCode(id, code);
+		return findByUserUidAndCode(id, code);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.japanwork.repository.level;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +28,7 @@ public class LevelRepositoryIplm implements LevelRepository{
 	}
 
 	@Override
-	public List<Level> findAllById(Iterable<UUID> ids) {
+	public List<Level> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -62,7 +64,7 @@ public class LevelRepositoryIplm implements LevelRepository{
 	}
 
 	@Override
-	public Level getOne(UUID id) {
+	public Level getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -92,13 +94,13 @@ public class LevelRepositoryIplm implements LevelRepository{
 	}
 
 	@Override
-	public Optional<Level> findById(UUID id) {
+	public Optional<Level> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -110,7 +112,7 @@ public class LevelRepositoryIplm implements LevelRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -158,14 +160,14 @@ public class LevelRepositoryIplm implements LevelRepository{
 	}
 
 	@Override
-	public Level findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Level findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 	@Override
-	public List<Level> findAllByIsDelete(boolean isDelete) {
+	public List<Level> findAllByDeletedAt(Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(isDelete);
 	}
 }

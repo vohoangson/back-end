@@ -24,11 +24,11 @@ public class JobApplicationService {
 	private TranslatorService translatorService;
 	
 	public JobApplication findByJobIdAndIsDelete(UUID id) {
-		return jobApplicationRepository.findByJobIdAndIsDelete(id, false);
+		return jobApplicationRepository.findByJobIdAndDeletedAt(id, null);
 	}
 	
 	public JobApplication findByIdAndIsDelete(UUID id) {
-		return jobApplicationRepository.findByIdAndIsDelete(id, false);
+		return jobApplicationRepository.findByUidAndDeletedAt(id, null);
 	}
 	
 	public JobApplication save(JobApplication jobApplication) {
@@ -37,16 +37,16 @@ public class JobApplicationService {
 	
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication) {
 		JobApplicationResponse ob = new JobApplicationResponse();
-		ob.setId(jobApplication.getId());
+		ob.setId(jobApplication.getUid());
 		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
 		ob.setCandidate(candidateService.convertCandiateResponse(jobApplication.getCandidate()));
 		ob.setTranslator(translatorService.convertTranslatorResponse(jobApplication.getTranslator()));
 		ob.setSubmitApplicationAt(jobApplication.getSubmitApplicationAt());
 		ob.setApproveApplicationAt(jobApplication.getApproveApplicationAt());
 		ob.setRejectApplicationAt(jobApplication.getRejectApplicationAt());
-		ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getId());
-		ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getId());
-		ob.setAllConversation(jobApplication.getAllConversation().getId());
+		ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getUid());
+		ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getUid());
+		ob.setAllConversation(jobApplication.getAllConversation().getUid());
 		ob.setApplicationSucceedAt(jobApplication.getApplicationSucceedAt());
 		ob.setCancelReason(jobApplication.getCancelReason());
 		ob.setUserCancel(jobApplication.getUserCancel());

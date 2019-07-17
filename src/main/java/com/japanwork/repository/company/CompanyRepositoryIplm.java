@@ -1,5 +1,7 @@
 package com.japanwork.repository.company;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +37,7 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public List<Company> findAllById(Iterable<UUID> ids) {
+	public List<Company> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -71,7 +73,7 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Company getOne(UUID id) {
+	public Company getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -101,13 +103,13 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Optional<Company> findById(UUID id) {
+	public Optional<Company> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -119,7 +121,7 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -167,30 +169,36 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Company findByIdAndIsDelete(UUID id, boolean isDelete) {
-		return findByIdAndIsDelete(id, isDelete) ;
+	public Company findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
+		return findByUidAndDeletedAt(id, isDelete) ;
 	}
 
 	@Override
-	public List<Company> findAllByIsDelete(boolean isDelete) {
-		return findAllByIsDelete(isDelete);
+	public List<Company> findAllByDeletedAt(Timestamp isDelete) {
+		return findAllByDeletedAt(isDelete);
 	}
 
 	@Override
-	public Company findByUserAndIsDelete(User user, boolean isDelete) {
+	public Company findByUserAndDeletedAt(User user, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByUserAndIsDelete(user, isDelete);
+		return findByUserAndDeletedAt(user, isDelete);
 	}
 	
 	@Override
-	public Page<Company> findAllByIsDelete(Pageable pageable, boolean isDelete) {
+	public Page<Company> findAllByDeletedAt(Pageable pageable, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(pageable, isDelete);
+		return findAllByDeletedAt(pageable, isDelete);
 	}
 
 	@Override
 	public Company findByUser(User user) {
 		// TODO Auto-generated method stub
 		return findByUser(user);
+	}
+
+	@Override
+	public Company findByUid(UUID uid) {
+		// TODO Auto-generated method stub
+		return findByUid(uid);
 	}
 }

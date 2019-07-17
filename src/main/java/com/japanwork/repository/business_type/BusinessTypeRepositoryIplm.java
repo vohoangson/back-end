@@ -1,5 +1,6 @@
 package com.japanwork.repository.business_type;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public List<Business> findAllById(Iterable<UUID> ids) {
+	public List<Business> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,7 +68,7 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public Business getOne(UUID id) {
+	public Business getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,13 +98,13 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public Optional<Business> findById(UUID id) {
+	public Optional<Business> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return findById(id);
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -115,7 +116,7 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -163,15 +164,15 @@ public class BusinessTypeRepositoryIplm implements BusinessTypeRepository{
 	}
 
 	@Override
-	public Business findByIdAndDeleteAt(UUID id, Timestamp deleteAt) {
+	public Business findByUidAndDeletedAt(UUID id, Timestamp deleteAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndDeleteAt(id, deleteAt);
+		return findByUidAndDeletedAt(id, deleteAt);
 	}
 
 	@Override
-	public List<Business> findAllByDeleteAt(Timestamp deleteAt) {
+	public List<Business> findAllByDeletedAt(Timestamp deleteAt) {
 		// TODO Auto-generated method stub
-		return findAllByDeleteAt(deleteAt);
+		return findAllByDeletedAt(deleteAt);
 	}
 
 }

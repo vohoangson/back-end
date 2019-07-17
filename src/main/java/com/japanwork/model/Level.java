@@ -44,7 +44,7 @@ public class Level {
     
     @JsonIgnore
     @Column(name="deleted_at")
-    private Timestamp deletedAT;
+    private Timestamp deletedAt;
 
 	public BigInteger getId() {
 		return id;
@@ -102,16 +102,16 @@ public class Level {
 		this.updatedAt = updatedAt;
 	}
 
-	public Timestamp getDeletedAT() {
-		return deletedAT;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDeletedAT(Timestamp deletedAT) {
-		this.deletedAT = deletedAT;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	public Level(BigInteger id, UUID uid, String vi, String ja, String desc, Timestamp createdAt, Timestamp updatedAt,
-			Timestamp deletedAT) {
+			Timestamp deletedAt) {
 		this.id = id;
 		this.uid = uid;
 		this.vi = vi;
@@ -119,7 +119,7 @@ public class Level {
 		this.desc = desc;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.deletedAT = deletedAT;
+		this.deletedAt = deletedAt;
 	}
 
 	public Level(UUID uid) {

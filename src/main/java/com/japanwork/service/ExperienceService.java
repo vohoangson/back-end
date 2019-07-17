@@ -30,7 +30,7 @@ public class ExperienceService {
 				ExperienceResponse experienceResponse = new ExperienceResponse();
 				experienceResponse.setOrganizaion(experience.getOrganizaion());
 				experienceResponse.setDesc(experience.getDesc());
-				experienceResponse.setLevelId(experience.getLevel().getId());
+				experienceResponse.setLevelId(experience.getLevel().getUid());
 				experienceResponse.setBusinessId(experience.getBusiness().getUid());
 				experienceResponse.setStartDate(experience.getStartDate());
 				experienceResponse.setEndDate(experience.getEndDate());

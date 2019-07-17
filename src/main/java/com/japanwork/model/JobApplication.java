@@ -26,15 +26,15 @@ public class JobApplication {
 	private UUID uid;
 	
     @OneToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", referencedColumnName = "uid")
     private Job job;
     
     @OneToOne
-    @JoinColumn(name = "candidate_id")
+    @JoinColumn(name = "candidate_id", referencedColumnName = "uid")
     private Candidate candidate;
     
     @OneToOne
-    @JoinColumn(name = "translator_id")
+    @JoinColumn(name = "translator_id", referencedColumnName = "uid")
     private Translator translator;
     
     @Column(name="submit_application_at")
@@ -47,15 +47,15 @@ public class JobApplication {
     private Timestamp rejectApplicationAt;
     
     @OneToOne
-    @JoinColumn(name="candidate_support_conversaion_id")
+    @JoinColumn(name="candidate_support_conversaion_id", referencedColumnName = "uid")
     private Conversation candidateSupportConversaion;
     
     @OneToOne
-    @JoinColumn(name="company_support_conversation_id")
+    @JoinColumn(name="company_support_conversation_id", referencedColumnName = "uid")
     private Conversation companySupportConversation;
     
     @OneToOne
-    @JoinColumn(name="all_conversation_id")
+    @JoinColumn(name="all_conversation_id", referencedColumnName = "uid")
     private Conversation allConversation;
     
     @Column(name="application_succeed_at")

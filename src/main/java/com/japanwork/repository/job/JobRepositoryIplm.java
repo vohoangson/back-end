@@ -1,5 +1,7 @@
 package com.japanwork.repository.job;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +33,7 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public List<Job> findAllById(Iterable<UUID> ids) {
+	public List<Job> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,7 +69,7 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public Job getOne(UUID id) {
+	public Job getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -97,13 +99,13 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public Optional<Job> findById(UUID id) {
+	public Optional<Job> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -115,7 +117,7 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -163,15 +165,15 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public Job findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Job findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 	@Override
-	public List<Job> findAllByIsDelete(boolean isDelete) {
+	public List<Job> findAllByDeletedAt(Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(isDelete);
 	}
 
 	@Override
@@ -181,8 +183,8 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public Page<Job> findAllByCompanyIdAndIsDelete(Pageable page, UUID id, boolean isDelete) {
+	public Page<Job> findAllByCompanyUidAndDeletedAt(Pageable page, UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByCompanyIdAndIsDelete(page, id, isDelete);
+		return findAllByCompanyUidAndDeletedAt(page, id, isDelete);
 	}
 }

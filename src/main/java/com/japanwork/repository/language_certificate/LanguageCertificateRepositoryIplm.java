@@ -1,5 +1,7 @@
 package com.japanwork.repository.language_certificate;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public List<LanguageCertificate> findAllById(Iterable<UUID> ids) {
+	public List<LanguageCertificate> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public LanguageCertificate getOne(UUID id) {
+	public LanguageCertificate getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public Optional<LanguageCertificate> findById(UUID id) {
+	public Optional<LanguageCertificate> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,9 +164,9 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public LanguageCertificate findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public LanguageCertificate findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 	@Override

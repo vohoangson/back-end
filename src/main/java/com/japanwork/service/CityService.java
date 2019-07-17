@@ -22,17 +22,17 @@ public class CityService {
 	private CityRepository cityRepository;
 	
 	public List<City> findAllByIsDelete() {
-		List<City> list = cityRepository.findAllByIsDelete(false);
+		List<City> list = cityRepository.findAllByDeletedAt(null);
 		return list;
 	}
 	
 	public List<City> listCityByCountry(String code) {
-		List<City> list = cityRepository.findAllByCountryCodeAndIsDelete(code, false);
+		List<City> list = cityRepository.findAllByCountryCodeAndDeletedAt(code, null);
 		return list;
 	}
 	
 	public City findByIdAndIsDelete(UUID id) {
-		City city = cityRepository.findByIdAndIsDelete(id, false);
+		City city = cityRepository.findByUidAndDeletedAt(id, null);
 		if(city == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -48,9 +48,9 @@ public class CityService {
 		city.setJa(cityRequest.getJa());
 		city.setVi(cityRequest.getVi());
 		city.setDesc(cityRequest.getDesc());
-		city.setCreateDate(timestamp);
-		city.setUpdateDate(timestamp);
-		city.setDelete(false);
+		city.setCreatedAt(timestamp);
+		city.setUpdatedAt(timestamp);
+		city.setDeletedAt(null);
 		
 		City result = cityRepository.save(city);
 		
@@ -68,9 +68,9 @@ public class CityService {
 			obj.setJa(cityRequest.getJa());
 			obj.setVi(cityRequest.getVi());
 			obj.setDesc(cityRequest.getDesc());
-			obj.setCreateDate(timestamp);
-			obj.setUpdateDate(timestamp);
-			obj.setDelete(false);
+			obj.setCreatedAt(timestamp);
+			obj.setUpdatedAt(timestamp);
+			obj.setDeletedAt(null);
 			
 			listCity.add(obj);
 		}

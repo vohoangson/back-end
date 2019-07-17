@@ -1,5 +1,7 @@
 package com.japanwork.repository.conversation;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	}
 
 	@Override
-	public List<Conversation> findAllById(Iterable<UUID> ids) {
+	public List<Conversation> findAllById(Iterable<BigInteger> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +68,7 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	}
 
 	@Override
-	public Conversation getOne(UUID id) {
+	public Conversation getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -96,13 +98,13 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	}
 
 	@Override
-	public Optional<Conversation> findById(UUID id) {
+	public Optional<Conversation> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -114,7 +116,7 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -162,9 +164,9 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	}
 
 	@Override
-	public Conversation findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Conversation findByUidAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByUidAndDeletedAt(id, isDelete);
 	}
 
 }

@@ -41,11 +41,11 @@ public class Translator {
     private Date dateOfBirth;
     
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", referencedColumnName = "uid")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "district_id")   
+    @JoinColumn(name = "district_id", referencedColumnName = "uid")   
     private District district;
     
     @Column(name="address")

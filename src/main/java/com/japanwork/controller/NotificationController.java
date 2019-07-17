@@ -47,7 +47,7 @@ public class NotificationController {
 			@Valid @RequestBody NotificationRequest notificationRequest) {
 		Notification notification =  notificationService.addNotification(userPrincipal, id, notificationRequest);
 		BaseDataResponse response = new BaseDataResponse(notificationService.converNotificationResponse(notification));
-		Conversation conversation = conversationService.findByIdAndIsDelete(id, false);
+		Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 		if(conversation.getCandidate() != null) {
 			rabbitTemplate.convertAndSend("notifications/"+conversation.getCandidate().getUser().getId(), ""+conversation.getCandidate().getUser().getId(), response);
 		}

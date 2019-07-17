@@ -1,8 +1,9 @@
 package com.japanwork.repository.favorite;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	}
 
 	@Override
-	public List<Favorite> findAllById(Iterable<UUID> ids) {
+	public List<Favorite> findAllById(Iterable<BigInteger	> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -68,7 +69,7 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	}
 
 	@Override
-	public Favorite getOne(UUID id) {
+	public Favorite getOne(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -98,13 +99,13 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	}
 
 	@Override
-	public Optional<Favorite> findById(UUID id) {
+	public Optional<Favorite> findById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean existsById(UUID id) {
+	public boolean existsById(BigInteger id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -116,7 +117,7 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	}
 
 	@Override
-	public void deleteById(UUID id) {
+	public void deleteById(BigInteger id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -164,10 +165,10 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	}
 
 	@Override
-	public Favorite findByJobAndCandidateAndFavoriteTypeAndIsDelete(Job job, Candidate candidate, String favoriteType,
-			boolean isDel) {
+	public Favorite findByJobAndCandidateAndFavoriteTypeAndDeletedAt(Job job, Candidate candidate, String favoriteType,
+			Timestamp isDel) {
 		// TODO Auto-generated method stub
-		return findByJobAndCandidateAndFavoriteTypeAndIsDelete(job, candidate, favoriteType, isDel);
+		return findByJobAndCandidateAndFavoriteTypeAndDeletedAt(job, candidate, favoriteType, isDel);
 	}
 
 }
