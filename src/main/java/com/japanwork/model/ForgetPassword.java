@@ -28,7 +28,8 @@ public class ForgetPassword {
     @JoinColumn(nullable = false, name = "user_id")
 	private User user;
 	
-	private Timestamp create_date;
+	@Column(name="created_at")
+	private Timestamp createdAt;
 	
 	public UUID getId() {
 		return id;
@@ -54,23 +55,22 @@ public class ForgetPassword {
 		this.user = user;
 	}
 
-	public Timestamp getCreate_date() {
-		return create_date;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreate_date(Timestamp create_date) {
-		this.create_date = create_date;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public ForgetPassword(UUID id, String code, User user, Timestamp create_date) {
-		super();
+	public ForgetPassword(UUID id, String code, User user, Timestamp createdAt) {
 		this.id = id;
 		this.code = code;
 		this.user = user;
-		this.create_date = create_date;
+		this.createdAt = createdAt;
 	}
 
 	public ForgetPassword() {
-		super();
+		
 	}
 }

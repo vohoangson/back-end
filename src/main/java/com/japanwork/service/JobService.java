@@ -61,7 +61,7 @@ public class JobService {
 			sql.append("	INNER JOIN j.level lev ");
 			sql.append("	INNER JOIN j.city city ");			
 			sql.append("	WHERE ");
-			sql.append("	j.isDelete = " + false +" ");
+			sql.append("	j.deletedAt is null ");
 			if(jobFilterRequest != null) {
 				if(!jobFilterRequest.getJobName().isEmpty()) {
 					sql.append(" AND ");
@@ -138,12 +138,12 @@ public class JobService {
 				if(!jobFilterRequest.getPostTime().isEmpty()) {
 					sql.append(" AND ");
 					try {
-						sql.append(" j.createDate >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
+						sql.append(" j.createdAt >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
 				}
-				sql.append(" ORDER BY j.createDate ASC ");
+				sql.append(" ORDER BY j.createdAt ASC ");
 			}
 			
 			List<Job> pages = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).setFirstResult((page-1)*paging)
@@ -178,7 +178,7 @@ public class JobService {
 	
 	public Page<Job> findAllByCompanyIdAndIsDelete(int page, int paging, UUID id) throws IllegalArgumentException{
 		try {
-			Page<Job> pages = jobRepository.findAllByCompanyIdAndIsDelete(PageRequest.of(page-1, paging), id, false);
+			Page<Job> pages = jobRepository.findAllByCompanyIdAndDeletedAt(PageRequest.of(page-1, paging), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
@@ -209,9 +209,9 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);		
-			job.setCreateDate(timestamp);
-			job.setUpdateDate(timestamp);
-			job.setDelete(false);
+			job.setCreatedAt(timestamp);
+			job.setUpdatedAt(timestamp);
+			job.setDeletedAt(null);
 			
 			Job result = jobRepository.save(job);		
 			return result;
@@ -229,7 +229,7 @@ public class JobService {
 			Job job = new Job();
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
-				job = jobRepository.findByIdAndIsDelete(id, false);
+				job = jobRepository.findByIdAndDeletedAt(id, null);
 				if(job == null) {
 					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
@@ -259,7 +259,7 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			job.setUpdateDate(timestamp);
+			job.setUpdatedAt(timestamp);
 			
 			Job result = jobRepository.save(job);		
 			return result;
@@ -272,7 +272,7 @@ public class JobService {
 		}
 	}
 	
-	public Job isDel(UUID id, UserPrincipal userPrincipal, boolean isDel) 
+	public Job isDel(UUID id, UserPrincipal userPrincipal, Timestamp deletedAt) 
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Job job = jobRepository.findById(id)
@@ -284,16 +284,16 @@ public class JobService {
 				}
 			}
 			
-			job.setDelete(isDel);
+			job.setDeletedAt(deletedAt);
 			jobRepository.save(job);
-			Job result = jobRepository.findByIdAndIsDelete(id, false);
+			Job result = jobRepository.findByIdAndDeletedAt(id, null);
 			return result;
 		}catch (ResourceNotFoundException e) {
 			throw e;
 		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
-			if(isDel) {
+			if(deletedAt != null) {
 				throw new ServerError(MessageConstant.JOB_DELETE_FAIL);
 			} else {
 				throw new ServerError(MessageConstant.JOB_UN_DELETE_FAIL);
@@ -303,7 +303,7 @@ public class JobService {
 	}
 	
 	public Job findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Job job = jobRepository.findByIdAndIsDelete(id, false);
+		Job job = jobRepository.findByIdAndDeletedAt(id, null);
 		if(job == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}	
@@ -317,7 +317,7 @@ public class JobService {
 				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
 				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
 				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 
-				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreateDate());
+				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreatedAt());
 		return jobResponse;
 	}
 }

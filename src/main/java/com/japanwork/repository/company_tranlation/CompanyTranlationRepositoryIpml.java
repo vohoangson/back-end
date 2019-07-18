@@ -1,5 +1,6 @@
 package com.japanwork.repository.company_tranlation;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -158,9 +159,9 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	}
 
 	@Override
-	public CompanyTranslation findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public CompanyTranslation findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 }

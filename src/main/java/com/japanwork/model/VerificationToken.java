@@ -1,5 +1,6 @@
 package com.japanwork.model;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -33,8 +34,14 @@ public class VerificationToken {
     @Column(name="expiry_date")
     private Date expiryDate;
     
-    @Column(name="is_delete")
-    private boolean isDelete = false;
+    @Column(name="created_at")
+    private Timestamp createdAt;
+    
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
+    
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
     
     public VerificationToken() {
         super();

@@ -14,8 +14,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name="company_translation")
 public class CompanyTranslation {
@@ -46,17 +44,14 @@ public class CompanyTranslation {
     @Column(name="status")
     private int status;
     
-    @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -114,33 +109,32 @@ public class CompanyTranslation {
 		this.status = status;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public boolean isDelete() {
-		return isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	public CompanyTranslation(UUID id, Company company, Translator translator, String name, String introduction,
-			String address, int status, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
-		super();
+			String address, int status, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.company = company;
 		this.translator = translator;
@@ -148,12 +142,12 @@ public class CompanyTranslation {
 		this.introduction = introduction;
 		this.address = address;
 		this.status = status;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public CompanyTranslation() {
-		super();
+
 	}
 }

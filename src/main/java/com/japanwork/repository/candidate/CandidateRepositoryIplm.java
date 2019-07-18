@@ -1,5 +1,6 @@
 package com.japanwork.repository.candidate;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -163,15 +164,15 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Candidate findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Candidate findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<Candidate> findAllByIsDelete(boolean isDelete) {
+	public List<Candidate> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
@@ -181,15 +182,15 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Page<Candidate> findAllByIsDelete(Pageable page, boolean isDelete) {
+	public Page<Candidate> findAllByDeletedAt(Pageable page, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(page, isDelete);
+		return findAllByDeletedAt(page, deletedAt);
 	}
 
 	@Override
-	public Candidate findByUserAndIsDelete(User user, boolean isDelete) {
+	public Candidate findByUserAndDeletedAt(User user, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByUserAndIsDelete(user, isDelete);
+		return findByUserAndDeletedAt(user, deletedAt);
 	}
 	
 }

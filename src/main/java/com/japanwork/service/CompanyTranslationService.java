@@ -45,9 +45,9 @@ public class CompanyTranslationService {
 			company.setAddress(companyRequest.getAddress());
 			company.setIntroduction(companyRequest.getIntroduction());
 			company.setStatus(1);
-			company.setCreateDate(timestamp);
-			company.setUpdateDate(timestamp);
-			company.setDelete(false);
+			company.setCreatedAt(timestamp);
+			company.setUpdatedAt(timestamp);
+			company.setDeletedAt(null);
 			
 			CompanyTranslation result = companyTranlationRepository.save(company);		
 			return result;
@@ -65,7 +65,7 @@ public class CompanyTranslationService {
 			CompanyTranslation company = new CompanyTranslation();
 			
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_TRANSLATOR")) {
-				company = companyTranlationRepository.findByIdAndIsDelete(id, false);
+				company = companyTranlationRepository.findByIdAndDeletedAt(id, null);
 				if(company == null) {
 					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
@@ -81,7 +81,7 @@ public class CompanyTranslationService {
 			company.setAddress(companyTranslationRequest.getAddress());
 			company.setIntroduction(companyTranslationRequest.getIntroduction());
 			company.setStatus(1);
-			company.setUpdateDate(timestamp);
+			company.setUpdatedAt(timestamp);
 			
 			CompanyTranslation result = companyTranlationRepository.save(company);			
 			return result;

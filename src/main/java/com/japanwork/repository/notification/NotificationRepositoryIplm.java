@@ -1,5 +1,6 @@
 package com.japanwork.repository.notification;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,8 +163,8 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public Page<Notification> findByConversationIdAndIsDelete(Pageable page, UUID id, boolean isDelete) {
+	public Page<Notification> findByConversationIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByConversationIdAndIsDelete(page, id, isDelete);
+		return findByConversationIdAndDeletedAt(page, id, deletedAt);
 	}
 }

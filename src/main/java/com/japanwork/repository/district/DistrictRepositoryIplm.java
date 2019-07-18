@@ -1,5 +1,6 @@
 package com.japanwork.repository.district;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,21 +163,21 @@ public class DistrictRepositoryIplm implements DistrictRepository{
 	}
 
 	@Override
-	public District findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public District findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<District> findAllByIsDelete(boolean isDelete) {
+	public List<District> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
-	public List<District> findAllByCityIdAndIsDelete(UUID id, boolean isDelete) {
+	public List<District> findAllByCityIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByCityIdAndIsDelete(id, isDelete);
+		return findAllByCityIdAndDeletedAt(id, deletedAt);
 	}
 
 }

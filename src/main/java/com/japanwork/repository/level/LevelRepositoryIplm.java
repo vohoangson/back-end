@@ -1,5 +1,6 @@
 package com.japanwork.repository.level;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -158,14 +159,14 @@ public class LevelRepositoryIplm implements LevelRepository{
 	}
 
 	@Override
-	public Level findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Level findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<Level> findAllByIsDelete(boolean isDelete) {
+	public List<Level> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 }

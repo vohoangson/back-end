@@ -13,9 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name="job")
 public class Job {
@@ -57,51 +54,41 @@ public class Job {
     @Column(name="description")
     private String desc;
     
-    @JsonProperty("required_education")
     @Column(name="required_education")
     private String requiredEducation;
     
-    @JsonProperty("required_experience")
     @Column(name="required_experience")
     private String requiredExperience;
     
-    @JsonProperty("required_language")
     @Column(name="required_language")
     private String requiredLanguage;
     
     @Column(name="benefits")
     private String benefits;
     
-    @JsonProperty("japanese_level_requirement")
     @Column(name="japanese_level_requirement")
     private int japaneseLevelRequirement;
     
-    @JsonProperty("application_deadline")
     @Column(name="application_deadline")
     private Date applicationDeadline;
     
-    @JsonProperty("min_salary")
     @Column(name="min_salary")
     private float minSalary;
     
-    @JsonProperty("max_salary")
     @Column(name="max_salary")
     private float maxSalary;
     
     @Column(name="status")
     private String status;
     
-    @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -255,37 +242,35 @@ public class Job {
 		this.status = status;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
-	public Job(UUID id, String name, Company company, Business businesses, Contract contract, Level level,
-			City city, District district, String address, String desc, String requiredEducation,
-			String requiredExperience, String requiredLanguage, String benefits, int japaneseLevelRequirement,
-			Date applicationDeadline, float minSalary, float maxSalary, String status, Timestamp createDate,
-			Timestamp updateDate, boolean isDelete) {
-		super();
+	public Job(UUID id, String name, Company company, Business businesses, Contract contract, Level level, City city,
+			District district, String address, String desc, String requiredEducation, String requiredExperience,
+			String requiredLanguage, String benefits, int japaneseLevelRequirement, Date applicationDeadline,
+			float minSalary, float maxSalary, String status, Timestamp createdAt, Timestamp updatedAt,
+			Timestamp deletedAt) {
 		this.id = id;
 		this.name = name;
 		this.company = company;
@@ -305,12 +290,12 @@ public class Job {
 		this.minSalary = minSalary;
 		this.maxSalary = maxSalary;
 		this.status = status;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Job() {
-		super();
+
 	}
 }

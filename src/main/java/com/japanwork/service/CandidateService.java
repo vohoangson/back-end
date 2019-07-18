@@ -78,9 +78,9 @@ public class CandidateService {
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(1);
-			candidate.setCreateDate(timestamp);
-			candidate.setUpdateDate(timestamp);
-			candidate.setDelete(false);
+			candidate.setCreatedAt(timestamp);
+			candidate.setUpdatedAt(timestamp);
+			candidate.setDeletedAt(null);
 			
 			Candidate result = candidateRepository.save(candidate);
 			userService.changePropertyId(userPrincipal.getId(), result.getId());
@@ -116,7 +116,7 @@ public class CandidateService {
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			candidate.setUpdateDate(timestamp);
+			candidate.setUpdatedAt(timestamp);
 			
 			Candidate result = candidateRepository.save(candidate);	
 			return result;
@@ -151,7 +151,7 @@ public class CandidateService {
 			candidate.setWishSalary(candidateWishRequest.getWishSalary());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(2);
-			candidate.setUpdateDate(timestamp);
+			candidate.setUpdatedAt(timestamp);
 			
 			Candidate result = candidateRepository.save(candidate);	
 			return result;
@@ -170,7 +170,7 @@ public class CandidateService {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
 			
-			Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+			Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
 			
 			if(!candidateExperienceRequest.getAcademies().isEmpty()) {
 				List<Academy> listAcademy = new ArrayList<>();
@@ -184,9 +184,9 @@ public class CandidateService {
 					academy.setGradeSystem(academyRequest.getGradeSystem());
 					academy.setStartDate(academyRequest.getStartDate());
 					academy.setEndDate(academyRequest.getEndDate());
-					academy.setCreateDate(timestamp);
-					academy.setUpdateDate(timestamp);
-					academy.setDelete(false);
+					academy.setCreatedAt(timestamp);
+					academy.setUpdatedAt(timestamp);
+					academy.setDeletedAt(null);
 					
 					listAcademy.add(academy);
 				}
@@ -206,9 +206,9 @@ public class CandidateService {
 					experience.setBusiness(new Business(experienceRequest.getBusinessId()));
 					experience.setStartDate(experienceRequest.getStartDate());
 					experience.setEndDate(experienceRequest.getEndDate());
-					experience.setCreateDate(timestamp);
-					experience.setUpdateDate(timestamp);
-					experience.setDelete(false);
+					experience.setCreatedAt(timestamp);
+					experience.setUpdatedAt(timestamp);
+					experience.setDeletedAt(null);
 					
 					listExperience.add(experience);
 				}
@@ -226,9 +226,9 @@ public class CandidateService {
 					languageCertificate.setScore(languageCertificateRequest.getScore());
 					languageCertificate.setLanguageCertificateType(new LanguageCertificateType(languageCertificateRequest.getLanguageCertificateTypeId()));
 					languageCertificate.setTakenDate(languageCertificateRequest.getTakenDate());
-					languageCertificate.setCreateDate(timestamp);
-					languageCertificate.setUpdateDate(timestamp);
-					languageCertificate.setDelete(false);
+					languageCertificate.setCreatedAt(timestamp);
+					languageCertificate.setUpdatedAt(timestamp);
+					languageCertificate.setDeletedAt(null);
 					
 					listLanguageCertificate.add(languageCertificate);
 				}
@@ -245,18 +245,18 @@ public class CandidateService {
 		}
 	}
 	
-	public Candidate isDel(UUID id, boolean isDel) throws ResourceNotFoundException, ServerError{
+	public Candidate isDel(UUID id, Timestamp deletedAt) throws ResourceNotFoundException, ServerError{
 		try {
 			Candidate candidate = candidateRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-			candidate.setDelete(isDel);
+			candidate.setDeletedAt(deletedAt);
 			candidateRepository.save(candidate);
-			Candidate result = candidateRepository.findByIdAndIsDelete(id, false);	
+			Candidate result = candidateRepository.findByIdAndDeletedAt(id, null);	
 			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
-			if(isDel) {
+			if(deletedAt != null) {
 				throw new ServerError(MessageConstant.CANDIDATE_DELETE_FAIL);
 			} else {
 				throw new ServerError(MessageConstant.CANDIDATE_UN_DELETE_FAIL);
@@ -267,7 +267,7 @@ public class CandidateService {
 	}
 	
 	public Candidate findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByIdAndIsDelete(id, false);
+		Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -276,7 +276,7 @@ public class CandidateService {
 	}
 	
 	public Candidate myCandidate(UserPrincipal userPrincipal) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
+		Candidate candidate = candidateRepository.findByUserAndDeletedAt(userService.findById(userPrincipal.getId()), null);
 		if(candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -293,13 +293,13 @@ public class CandidateService {
 	}
 	
 	public List<Candidate> findAllByIsDelete() {
-		List<Candidate> listCandidate = candidateRepository.findAllByIsDelete(false);
+		List<Candidate> listCandidate = candidateRepository.findAllByDeletedAt(null);
 		return listCandidate;
 	}
 	
 	public Page<Candidate> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
-			Page<Candidate> pages = candidateRepository.findAllByIsDelete(PageRequest.of(page-1, paging), false);
+			Page<Candidate> pages = candidateRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
