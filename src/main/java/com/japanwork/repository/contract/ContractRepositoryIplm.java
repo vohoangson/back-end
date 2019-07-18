@@ -1,5 +1,6 @@
 package com.japanwork.repository.contract;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,15 +163,15 @@ public class ContractRepositoryIplm implements ContractRepository{
 	}
 
 	@Override
-	public Contract findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Contract findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<Contract> findAllByIsDelete(boolean isDelete) {
+	public List<Contract> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.japanwork.repository.job;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -163,15 +164,15 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public Job findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Job findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public List<Job> findAllByIsDelete(boolean isDelete) {
+	public List<Job> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
@@ -181,8 +182,8 @@ public class JobRepositoryIplm implements JobRepository{
 	}
 
 	@Override
-	public Page<Job> findAllByCompanyIdAndIsDelete(Pageable page, UUID id, boolean isDelete) {
+	public Page<Job> findAllByCompanyIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByCompanyIdAndIsDelete(page, id, isDelete);
+		return findAllByCompanyIdAndDeletedAt(page, id, deletedAt);
 	}
 }

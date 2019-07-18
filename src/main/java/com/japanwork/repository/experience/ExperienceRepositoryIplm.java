@@ -1,5 +1,6 @@
 package com.japanwork.repository.experience;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,9 +163,9 @@ public class ExperienceRepositoryIplm implements ExperienceRepository{
 	}
 
 	@Override
-	public Experience findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Experience findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override

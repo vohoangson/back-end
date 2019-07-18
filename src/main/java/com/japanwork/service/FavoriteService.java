@@ -44,8 +44,11 @@ public class FavoriteService {
 			Job job = jobService.findByIdAndIsDelete(id);
 			Candidate candidate = candidateService.myCandidate(userPrincipal);
 			
-			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndIsDelete(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, false);
-			favorite.setDelete(true);
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			
+			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndDeletedAt(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, null);
+			favorite.setDeletedAt(timestamp);
 			
 			favoriteRepository.save(favorite);
 			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
@@ -73,8 +76,8 @@ public class FavoriteService {
 				favorite.setJob(job);
 				
 				favorite.setFavoriteType(CommonConstant.FavoriteType.CANDIDATE_JOB);
-				favorite.setCreateAt(timestamp);
-				favorite.setDelete(false);
+				favorite.setCreatedAt(timestamp);
+				favorite.setDeletedAt(null);
 				
 				favoriteRepository.save(favorite);
 				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
@@ -99,8 +102,8 @@ public class FavoriteService {
 		sql.append("	INNER JOIN Favorite fa ");	
 		sql.append("	ON fa.job.id = j.id ");
 		sql.append("	WHERE ");
-		sql.append("	j.isDelete = " + false + " ");
-		sql.append("	AND fa.isDelete = " + false + " ");
+		sql.append("	j.deletedAt is null ");
+		sql.append("	AND fa.deletedAt is null ");
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
 			Candidate candidate = candidateService.myCandidate(userPrincipal);
 			sql.append("	AND fa.candidate.id = '" + candidate.getId() + "' ");
@@ -120,9 +123,9 @@ public class FavoriteService {
 		sql.append("	INNER JOIN Favorite fa ");	
 		sql.append("	ON fa.job.id = j.id ");
 		sql.append("	WHERE ");
-		sql.append("	j.isDelete = " + false + " ");
+		sql.append("	j.deletedAt is null ");
 		sql.append("	AND j.id = '" + id + "' ");
-		sql.append("	AND fa.isDelete = " + false + " ");
+		sql.append("	AND fa.deletedAt is null ");
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
 			Candidate candidate = candidateService.myCandidate(userPrincipal);
 			sql.append("	AND fa.candidate.id = '" + candidate.getId() + "' ");

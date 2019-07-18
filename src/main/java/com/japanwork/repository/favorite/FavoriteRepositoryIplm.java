@@ -1,5 +1,6 @@
 package com.japanwork.repository.favorite;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -164,10 +165,10 @@ public class FavoriteRepositoryIplm implements FavoriteRepository{
 	}
 
 	@Override
-	public Favorite findByJobAndCandidateAndFavoriteTypeAndIsDelete(Job job, Candidate candidate, String favoriteType,
-			boolean isDel) {
+	public Favorite findByJobAndCandidateAndFavoriteTypeAndDeletedAt(Job job, Candidate candidate, String favoriteType,
+			Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByJobAndCandidateAndFavoriteTypeAndIsDelete(job, candidate, favoriteType, isDel);
+		return findByJobAndCandidateAndFavoriteTypeAndDeletedAt(job, candidate, favoriteType, deletedAt);
 	}
 
 }

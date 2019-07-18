@@ -143,9 +143,9 @@ public class UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
 	        user.setProviderId(null);
-	        user.setCreateDate(timestamp);
-	        user.setUpdateDate(timestamp);
-	        user.setDelete(false);
+	        user.setCreatedAt(timestamp);
+	        user.setUpdatedAt(timestamp);
+	        user.setDeletedAt(null);
 	        User result = userRepository.save(user);
 	        
 	        final VerificationToken newToken = this.generateNewVerificationToken(user);
@@ -182,7 +182,7 @@ public class UserService {
 	}
 		
 	public User findByIdAndIsDelete(UUID id) {
-		return userRepository.findByIdAndIsDelete(id, false);
+		return userRepository.findByIdAndDeletedAt(id, null);
 	}
 	
 	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
@@ -218,7 +218,7 @@ public class UserService {
 	
 	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{
 		try {
-			User user = userRepository.findByIdAndIsDelete(userId, false);
+			User user = userRepository.findByIdAndDeletedAt(userId, null);
 			user.setPropertyId(propertyId);
 			userRepository.save(user);
 		} catch (Exception e) {
@@ -231,7 +231,7 @@ public class UserService {
 		try {
 			boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());
 			if(checkOldPassword) {
-				User user = userRepository.findByIdAndIsDelete(userPrincipal.getId(), false);
+				User user = userRepository.findByIdAndDeletedAt(userPrincipal.getId(), null);
 				user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
 				
 				userRepository.save(user);
@@ -267,7 +267,7 @@ public class UserService {
 				ForgetPassword forgetPassword = new ForgetPassword();
 				forgetPassword.setCode(code);
 				forgetPassword.setUser(user);
-				forgetPassword.setCreate_date(timestamp);
+				forgetPassword.setCreatedAt(timestamp);
 				
 				ForgetPassword result = forgetPasswordRepository.save(forgetPassword);
 				if(result != null) {

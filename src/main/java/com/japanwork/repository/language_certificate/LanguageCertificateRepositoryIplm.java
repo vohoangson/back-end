@@ -1,5 +1,6 @@
 package com.japanwork.repository.language_certificate;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,9 +163,9 @@ public class LanguageCertificateRepositoryIplm implements LanguageCertificateRep
 	}
 
 	@Override
-	public LanguageCertificate findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public LanguageCertificate findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override

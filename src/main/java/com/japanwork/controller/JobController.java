@@ -1,6 +1,8 @@
 package com.japanwork.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,8 +108,10 @@ public class JobController {
 	
 	@DeleteMapping(UrlConstant.URL_JOB_ID)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		jobService.isDel(id, userPrincipal, true);
+	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {	
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		jobService.isDel(id, userPrincipal, timestamp);
 		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.JOB_DELETE_SUCCESS, MessageConstant.JOB_DELETE_SUCCESS_MSG);
 		return new BaseDataResponse(baseMessageResponse);
 		
@@ -116,7 +120,7 @@ public class JobController {
 	@GetMapping(UrlConstant.URL_JOB_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
-		Job job = jobService.isDel(id, userPrincipal, false);
+		Job job = jobService.isDel(id, userPrincipal, null);
 		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 	

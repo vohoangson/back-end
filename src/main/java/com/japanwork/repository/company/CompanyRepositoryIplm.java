@@ -1,5 +1,6 @@
 package com.japanwork.repository.company;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -167,25 +168,25 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Company findByIdAndIsDelete(UUID id, boolean isDelete) {
-		return findByIdAndIsDelete(id, isDelete) ;
+	public Company findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
+		return findByIdAndDeletedAt(id, deletedAt) ;
 	}
 
 	@Override
-	public List<Company> findAllByIsDelete(boolean isDelete) {
-		return findAllByIsDelete(isDelete);
+	public List<Company> findAllByDeletedAt(Timestamp deletedAt) {
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
-	public Company findByUserAndIsDelete(User user, boolean isDelete) {
+	public Company findByUserAndDeletedAt(User user, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByUserAndIsDelete(user, isDelete);
+		return findByUserAndDeletedAt(user, deletedAt);
 	}
 	
 	@Override
-	public Page<Company> findAllByIsDelete(Pageable pageable, boolean isDelete) {
+	public Page<Company> findAllByDeletedAt(Pageable pageable, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(pageable, isDelete);
+		return findAllByDeletedAt(pageable, deletedAt);
 	}
 
 	@Override

@@ -24,11 +24,11 @@ public class JobApplicationService {
 	private TranslatorService translatorService;
 	
 	public JobApplication findByJobIdAndIsDelete(UUID id) {
-		return jobApplicationRepository.findByJobIdAndIsDelete(id, false);
+		return jobApplicationRepository.findByJobIdAndDeletedAt(id, null);
 	}
 	
 	public JobApplication findByIdAndIsDelete(UUID id) {
-		return jobApplicationRepository.findByIdAndIsDelete(id, false);
+		return jobApplicationRepository.findByIdAndDeletedAt(id, null);
 	}
 	
 	public JobApplication save(JobApplication jobApplication) {

@@ -42,12 +42,12 @@ public class Favorite {
 	private String favoriteType;
 	
 	@JsonIgnore
-    @Column(name="create_at")
-    private Timestamp createAt;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
     @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -89,20 +89,20 @@ public class Favorite {
 		this.translator = translator;
 	}
 
-	public Timestamp getCreateAt() {
-		return createAt;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateAt(Timestamp createAt) {
-		this.createAt = createAt;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public boolean isDelete() {
-		return isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	public String getFavoriteType() {
@@ -114,7 +114,7 @@ public class Favorite {
 	}
 
 	public Favorite(UUID id, Candidate candidate, Job job, Company company, Translator translator, String favoriteType,
-			Timestamp createAt, boolean isDelete) {
+			Timestamp createdAt, Timestamp deletedAt) {
 		super();
 		this.id = id;
 		this.candidate = candidate;
@@ -122,8 +122,8 @@ public class Favorite {
 		this.company = company;
 		this.translator = translator;
 		this.favoriteType = favoriteType;
-		this.createAt = createAt;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Favorite() {

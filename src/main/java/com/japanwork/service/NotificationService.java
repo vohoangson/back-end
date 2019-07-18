@@ -52,7 +52,7 @@ public class NotificationService {
 		UUID senderId = null;
 		User user = userService.getUser(userPrincipal);
 		
-		Conversation conversation = conversationService.findByIdAndIsDelete(id, false);
+		Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
 			senderId = candidateService.myCandidate(userPrincipal).getId();
 			if(!conversation.getCandidate().getId().equals(senderId)) {
@@ -77,12 +77,12 @@ public class NotificationService {
 		
 		Notification notification = new Notification();
 		notification.setSenderId(senderId);
-		notification.setConversation(conversationService.findByIdAndIsDelete(id, false));
-		notification.setCreateAt(timestamp);
+		notification.setConversation(conversationService.findByIdAndIsDelete(id, null));
+		notification.setCreatedAt(timestamp);
 		notification.setContent(notificationRequest.getContent());
 		notification.setTitle("Message");
 		notification.setNotificationType(1);
-		notification.setDelete(false);
+		notification.setDeletedAt(null);
 		Notification result = notificationRepository.save(notification);
 		
 		return result;
@@ -90,8 +90,8 @@ public class NotificationService {
 	
 	public Page<Notification> listNotification(UUID id, int page, int paging) throws ResourceNotFoundException{
 		try {
-			Page<Notification> pages = notificationRepository.findByConversationIdAndIsDelete(
-					PageRequest.of(page-1, paging, Sort.by("createAt").descending()), id, false);
+			Page<Notification> pages = notificationRepository.findByConversationIdAndDeletedAt(
+					PageRequest.of(page-1, paging, Sort.by("createAt").descending()), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
@@ -106,7 +106,7 @@ public class NotificationService {
 		notificationResponse.setTitle(notification.getTitle());
 		notificationResponse.setNotificationType(notification.getNotificationType());
 		notificationResponse.setContent(notification.getContent());
-		notificationResponse.setCreateAt(notification.getCreateAt());
+		notificationResponse.setCreateAt(notification.getCreatedAt());
 		
 		return notificationResponse;
 	}

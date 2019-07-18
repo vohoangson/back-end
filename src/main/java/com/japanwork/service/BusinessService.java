@@ -28,16 +28,16 @@ public class BusinessService {
 		businessType.setJa(businessTypeRequest.getJa());
 		businessType.setVi(businessTypeRequest.getVi());
 		businessType.setDesc(businessTypeRequest.getDesc());
-		businessType.setCreateDate(timestamp);
-		businessType.setUpdateDate(timestamp);
-		businessType.setDelete(false);
+		businessType.setCreatedAt(timestamp);
+		businessType.setUpdatedAt(timestamp);
+		businessType.setDeletedAt(null);
 		
 		Business result = businessTypeRepository.save(businessType);	
 		return result;
 	}
 	
 	public Business findByIdAndIsDelete(UUID id) {
-		Business business = businessTypeRepository.findByIdAndIsDelete(id, false);
+		Business business = businessTypeRepository.findByIdAndDeletedAt(id, null);
 		if(business == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -45,7 +45,7 @@ public class BusinessService {
 	}
 	
 	public List<Business> findAllByIsDelete() {
-		List<Business> list = businessTypeRepository.findAllByIsDelete(false);
+		List<Business> list = businessTypeRepository.findAllByDeletedAt(null);
 		return list;
 	} 
 }

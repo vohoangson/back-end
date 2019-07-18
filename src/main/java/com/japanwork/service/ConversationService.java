@@ -51,8 +51,8 @@ public class ConversationService {
 			conversation.setTranslator(jobApplication.getTranslator());
 			conversation.setCandidate(jobApplication.getCandidate());
 			conversation.setCompany(jobApplication.getJob().getCompany());
-			conversation.setCreateAt(timestamp);
-			conversation.setDelete(false);
+			conversation.setCreatedAt(timestamp);
+			conversation.setDeletedAt(null);
 			
 			Conversation result = conversationRepository.save(conversation);
 			
@@ -75,8 +75,8 @@ public class ConversationService {
 			Conversation conversation = new Conversation();
 			conversation.setTranslator(jobApplication.getTranslator());
 			conversation.setCandidate(jobApplication.getCandidate());
-			conversation.setCreateAt(timestamp);
-			conversation.setDelete(false);
+			conversation.setCreatedAt(timestamp);
+			conversation.setDeletedAt(null);
 			
 			Conversation result = conversationRepository.save(conversation);
 			
@@ -100,8 +100,8 @@ public class ConversationService {
 			
 			conversation.setTranslator(jobApplication.getTranslator());
 			conversation.setCompany(jobApplication.getJob().getCompany());
-			conversation.setCreateAt(timestamp);
-			conversation.setDelete(false);
+			conversation.setCreatedAt(timestamp);
+			conversation.setDeletedAt(null);
 			
 			Conversation result = conversationRepository.save(conversation);
 			
@@ -148,8 +148,8 @@ public class ConversationService {
 		return list;
 	}
 	
-	public Conversation findByIdAndIsDelete(UUID id, boolean isDel) {
-		return conversationRepository.findByIdAndIsDelete(id, isDel);
+	public Conversation findByIdAndIsDelete(UUID id, Timestamp deletedAt) {
+		return conversationRepository.findByIdAndDeletedAt(id, deletedAt);
 	}
 	
 	public ConversationResponse convertConversationResponse(Conversation conversation) {

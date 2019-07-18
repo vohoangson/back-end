@@ -11,9 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name="academy")
 public class Academy {
@@ -22,44 +19,35 @@ public class Academy {
     @Column(name="id")
 	private UUID id;
 	
-	@JsonIgnore
 	@Column(name="candidate_id")
 	private UUID candidateId;
 	
-	@JsonProperty("academy_center_name")
 	@Column(name="academy_center_name")
 	private String academyCenterName;
 	
-	@JsonProperty("major_name")
 	@Column(name="major_name")
 	private String majorName;
 	
 	@Column(name="grade")
 	private float grade;
 	
-	@JsonProperty("grade_system")
 	@Column(name="grade_system")
 	private int gradeSystem;
 	
-	@JsonProperty("start_date")
 	@Column(name="start_date")
 	private Date startDate;
 	
-	@JsonProperty("end_date")
 	@Column(name="end_date")
 	private Date endDate;
 	
-	@JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -125,34 +113,32 @@ public class Academy {
 		this.endDate = endDate;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
-	}
-
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	public Academy(UUID id, UUID candidateId, String academyCenterName, String majorName, float grade, int gradeSystem,
-			Date startDate, Date endDate, Timestamp createDate, Timestamp updateDate, boolean isDelete) {
-		super();
+			Date startDate, Date endDate, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.candidateId = candidateId;
 		this.academyCenterName = academyCenterName;
@@ -161,17 +147,16 @@ public class Academy {
 		this.gradeSystem = gradeSystem;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Academy(UUID id) {
-		super();
 		this.id = id;
 	}
 	
 	public Academy() {
-		super();
+
 	}
 }
