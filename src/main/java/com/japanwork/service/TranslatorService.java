@@ -58,6 +58,7 @@ public class TranslatorService {
 		translator.setDeletedAt(null);
 		
 		Translator result = translatorRepository.save(translator);		
+		userService.changePropertyId(userPrincipal.getId(), result.getId());
 		return result;
 	}
 	
