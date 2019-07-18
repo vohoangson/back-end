@@ -1,6 +1,8 @@
 package com.japanwork.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,8 +97,10 @@ public class TranslatorController {
 	
 	@DeleteMapping(UrlConstant.URL_TRANSLATOR_ID)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id) {		
-		translatorService.isDel(id, true);
+	public BaseDataResponse del(@PathVariable UUID id) {
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		translatorService.isDel(id, timestamp);
 		BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.TRANSLATOR_DELETE_SUCCESS, MessageConstant.TRANSLATOR_DELETE_SUCCESS_MSG);
 		return new BaseDataResponse(deleteResponse);
 	}
@@ -104,7 +108,7 @@ public class TranslatorController {
 	@GetMapping(UrlConstant.URL_TRANSLATOR_UNDEL_ID)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
-		Translator translator = translatorService.isDel(id, false);
+		Translator translator = translatorService.isDel(id, null);
 		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 }

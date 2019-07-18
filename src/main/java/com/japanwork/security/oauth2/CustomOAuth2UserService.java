@@ -86,9 +86,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         
         user.setIsEnabled(true);
-        user.setDelete(false);
-        user.setCreateDate(timestamp);
-        user.setUpdateDate(timestamp);
+        user.setDeletedAt(null);
+        user.setCreatedAt(timestamp);
+        user.setUpdatedAt(timestamp);
         return userService.save(user);
     }
 

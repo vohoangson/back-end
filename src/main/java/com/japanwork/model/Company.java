@@ -16,9 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name="company")
 public class Company {
@@ -27,7 +24,6 @@ public class Company {
     @Column(name="id")
 	private UUID id;
     
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -55,11 +51,9 @@ public class Company {
     @Column(name="address")
     private String address;
     
-    @JsonProperty("logo")
     @Column(name="logo_url")
     private String logoUrl;
     
-    @JsonProperty("cover_image_url")
     @Column(name="cover_image_url")
     private String coverImageUrl;
     
@@ -69,17 +63,14 @@ public class Company {
     @Column(name="status")
     private String status;
     
-    @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
-    @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
-    @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -176,39 +167,38 @@ public class Company {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
 	
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
-	
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Timestamp getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
 	public Company() {
-		super();
-	}
 
-	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city,
-			District district, String address, String logoUrl, String coverImageUrl, String introduction, String status,
-			Timestamp createDate, Timestamp updateDate, boolean isDelete) {
+	}
+	
+	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city, District district,
+			String address, String logoUrl, String coverImageUrl, String introduction, String status,
+			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -222,13 +212,12 @@ public class Company {
 		this.coverImageUrl = coverImageUrl;
 		this.introduction = introduction;
 		this.status = status;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
-	
+
 	public Company(UUID id) {
-		super();
 		this.id = id;
 
 	}

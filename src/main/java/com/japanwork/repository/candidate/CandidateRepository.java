@@ -1,5 +1,6 @@
 package com.japanwork.repository.candidate;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,9 +12,9 @@ import com.japanwork.model.Candidate;
 import com.japanwork.model.User;
 
 public interface CandidateRepository extends JpaRepository<Candidate, UUID>{
-	public Candidate findByIdAndIsDelete(UUID id, boolean isDelete);
-	public List<Candidate> findAllByIsDelete(boolean isDelete);
+	public Candidate findByIdAndDeletedAt(UUID id, Timestamp deletedAt);
+	public List<Candidate> findAllByDeletedAt(Timestamp deletedAt);
 	public Candidate findByUser(User user);
-	public Page<Candidate> findAllByIsDelete(Pageable page,boolean isDelete);
-	public Candidate findByUserAndIsDelete(User user, boolean isDelete);
+	public Page<Candidate> findAllByDeletedAt(Pageable page, Timestamp deletedAt);
+	public Candidate findByUserAndDeletedAt(User user, Timestamp deletedAt);
 }

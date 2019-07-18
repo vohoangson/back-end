@@ -1,5 +1,6 @@
 package com.japanwork.repository.translator;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -169,21 +170,21 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 	}
 
 	@Override
-	public Translator findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public Translator findByIdAndDeletedAt(UUID id, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, isDelete);
 	}
 
 	@Override
-	public Page<Translator> findAllByIsDelete(Pageable page, boolean isDelete) {
+	public Page<Translator> findAllByDeletedAt(Pageable page, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(page, isDelete);
+		return findAllByDeletedAt(page, isDelete);
 	}
 
 	@Override
-	public Translator findByUserAndIsDelete(User user, boolean isDelete) {
+	public Translator findByUserAndDeletedAt(User user, Timestamp isDelete) {
 		// TODO Auto-generated method stub
-		return findByUserAndIsDelete(user, isDelete);
+		return findByUserAndDeletedAt(user, isDelete);
 	}
 
 }

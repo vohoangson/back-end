@@ -1,5 +1,6 @@
 package com.japanwork.repository.city;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,21 +163,21 @@ public class CityRepositoryIplm implements CityRepository{
 	}
 
 	@Override
-	public City findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public City findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id,isDelete);
+		return findByIdAndDeletedAt(id,deletedAt);
 	}
 
 	@Override
-	public List<City> findAllByIsDelete(boolean isDelete) {
+	public List<City> findAllByDeletedAt(Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIsDelete(isDelete);
+		return findAllByDeletedAt(deletedAt);
 	}
 
 	@Override
-	public List<City> findAllByCountryCodeAndIsDelete(String code, boolean isDelete) {
+	public List<City> findAllByCountryCodeAndDeletedAt(String code, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByCountryCodeAndIsDelete(code, isDelete);
+		return findAllByCountryCodeAndDeletedAt(code, deletedAt);
 	}
 	
 }

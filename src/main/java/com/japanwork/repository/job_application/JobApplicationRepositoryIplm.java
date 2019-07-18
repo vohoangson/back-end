@@ -1,5 +1,6 @@
 package com.japanwork.repository.job_application;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -162,15 +163,15 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public JobApplication findByJobIdAndIsDelete(UUID id, boolean isDelete) {
+	public JobApplication findByJobIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByJobIdAndIsDelete(id, isDelete);
+		return findByJobIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public JobApplication findByIdAndIsDelete(UUID id, boolean isDelete) {
+	public JobApplication findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByIdAndIsDelete(id, isDelete);
+		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 }

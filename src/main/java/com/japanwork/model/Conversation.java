@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "conversation")
 public class Conversation {
@@ -34,11 +32,11 @@ public class Conversation {
     @JoinColumn(name = "translator_id")
 	private Translator translator;
 	
-	@JsonIgnore
-	private Timestamp createAt;
+	@JoinColumn(name = "created_at")
+	private Timestamp createdAt;
 	
-	@JsonIgnore
-	private boolean isDelete;
+	@JoinColumn(name = "deleted_at")
+	private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -72,35 +70,33 @@ public class Conversation {
 		this.translator = translator;
 	}
 
-	public Timestamp getCreateAt() {
-		return createAt;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateAt(Timestamp createAt) {
-		this.createAt = createAt;
-	}
-	
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
 	}
 
-	public Conversation(UUID id, Company company, Candidate candidate, Translator translator, Timestamp createAt,
-			boolean isDelete) {
-		super();
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	public Conversation(UUID id, Company company, Candidate candidate, Translator translator, Timestamp createdAt,
+			Timestamp deletedAt) {
 		this.id = id;
 		this.company = company;
 		this.candidate = candidate;
 		this.translator = translator;
-		this.createAt = createAt;
-		this.isDelete = isDelete;
+		this.createdAt = createdAt;
+		this.deletedAt = deletedAt;
 	}
 
 	public Conversation() {
-		super();
+
 	}	
 }

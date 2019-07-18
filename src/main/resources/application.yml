@@ -1,16 +1,13 @@
+spring.profiles.include: 'database'
 server:
     servlet:
-        context-path: /api  
-    port: 8080    
+        context-path: /api
+    port: 8080
 spring:
     datasource:
         url: jdbc:postgresql://103.81.84.160/japanwork
         username: postgres
         password: japanwork2202
-        #url: jdbc:postgresql://localhost:5432/japanwork
-        #username: postgres
-        #password: phunv143
-
     jpa:
         show-sql: true
         hibernate:
@@ -73,7 +70,7 @@ amazonProperties:
   region: us-east-1
   accessKey: AKIAXNXIB2BRHJTCC54U
   secretKey: 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
-  bucketName: amazon.japanwork 
+  bucketName: amazon.japanwork
 rabbitmq:
     image: rabbitmq:management
     ports:

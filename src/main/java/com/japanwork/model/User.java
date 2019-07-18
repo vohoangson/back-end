@@ -58,16 +58,16 @@ public class User {
     private UUID propertyId;
     
     @JsonIgnore
-    @Column(name="create_date")
-    private Timestamp createDate;
+    @Column(name="created_at")
+    private Timestamp createdAt;
     
     @JsonIgnore
-    @Column(name="update_date")
-    private Timestamp updateDate;
+    @Column(name="updated_at")
+    private Timestamp updatedAt;
     
     @JsonIgnore
-    @Column(name="is_delete")
-    private boolean isDelete;
+    @Column(name="deleted_at")
+    private Timestamp deletedAt;
     
     public UUID getId() {
         return id;
@@ -145,29 +145,28 @@ public class User {
 		this.propertyId = propertyId;
 	}
 
-	public Timestamp getCreateDate() {
-		return createDate;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdateDate() {
-		return updateDate;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
-	}
-	
-	@JsonIgnore
-	public boolean isDelete() {
-		return isDelete;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
-	public void setDelete(boolean isDelete) {
-		this.isDelete = isDelete;
+	public Timestamp getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Timestamp deletedAt) {
+		this.deletedAt = deletedAt;
 	}
 
 	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
@@ -205,8 +204,8 @@ public class User {
 	}
 
 	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
-		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Timestamp createDate,
-		Timestamp updateDate, boolean isDelete) {
+		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Timestamp createdAt,
+		Timestamp updatedAt, Timestamp deletedAt) {
 	super();
 	this.id = id;
 	this.name = name;
@@ -217,8 +216,8 @@ public class User {
 	this.providerId = providerId;
 	this.role = role;
 	this.propertyId = propertyId;
-	this.createDate = createDate;
-	this.updateDate = updateDate;
-	this.isDelete = isDelete;
+	this.createdAt = createdAt;
+	this.updatedAt = updatedAt;
+	this.deletedAt = deletedAt;
 }
 }
