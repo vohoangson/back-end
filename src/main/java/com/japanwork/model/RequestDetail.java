@@ -20,17 +20,11 @@ public class RequestDetail {
     @Column(name="id")
 	private UUID id;
     
-	@OneToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+	@Column(name = "owner_id")
+	private UUID ownerId;
 	
-    @OneToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
-    
-    @OneToOne
-    @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+	@Column(name = "object_table_id")
+    private UUID objectTableId;
     
     @OneToOne
     @JoinColumn(name = "helper_id")
@@ -46,9 +40,9 @@ public class RequestDetail {
     @JoinColumn(name="conversation_id")
     private Conversation converstaion;
     
-//    @OneToOne
-//    @JoinColumn(name="country_id")
-//    private Conversation candidateSupportConversaion;
+    @OneToOne
+    @JoinColumn(name="language_id")
+    private Language language;
     
     @Column(name="approve_at")
     private Timestamp approveAt;
@@ -65,8 +59,8 @@ public class RequestDetail {
     @Column(name="user_cancel")
     private UUID userCancel;
     
-    @Column(name="reason_at")
-    private Timestamp reasonAt;
+    @Column(name="reject_at")
+    private Timestamp rejectAt;
     
     @Column(name="reason_reject")
     private String reasonReject;
@@ -88,28 +82,20 @@ public class RequestDetail {
 		this.id = id;
 	}
 
-	public Company getCompany() {
-		return company;
+	public UUID getOwnerId() {
+		return ownerId;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setOwnerId(UUID ownerId) {
+		this.ownerId = ownerId;
 	}
 
-	public Job getJob() {
-		return job;
+	public UUID getObjectTableId() {
+		return objectTableId;
 	}
 
-	public void setJob(Job job) {
-		this.job = job;
-	}
-
-	public Candidate getCandidate() {
-		return candidate;
-	}
-
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
+	public void setObjectTableId(UUID objectTableId) {
+		this.objectTableId = objectTableId;
 	}
 
 	public Translator getTranslator() {
@@ -142,6 +128,14 @@ public class RequestDetail {
 
 	public void setConverstaion(Conversation converstaion) {
 		this.converstaion = converstaion;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	public Timestamp getApproveAt() {
@@ -184,12 +178,12 @@ public class RequestDetail {
 		this.userCancel = userCancel;
 	}
 
-	public Timestamp getReasonAt() {
-		return reasonAt;
+	public Timestamp getRejectAt() {
+		return rejectAt;
 	}
 
-	public void setReasonAt(Timestamp reasonAt) {
-		this.reasonAt = reasonAt;
+	public void setRejectAt(Timestamp rejectAt) {
+		this.rejectAt = rejectAt;
 	}
 
 	public String getReasonReject() {
@@ -224,24 +218,25 @@ public class RequestDetail {
 		this.deletedAt = deletedAt;
 	}
 
-	public RequestDetail(UUID id, Company company, Job job, Candidate candidate, Translator translator, String status,
-			String requestType, Conversation converstaion, Timestamp approveAt, Timestamp completeAt,
-			Timestamp cancelAt, String reasonCancel, UUID userCancel, Timestamp reasonAt, String reasonReject,
+	public RequestDetail(UUID id, UUID ownerId, UUID objectTableId, Translator translator, String status,
+			String requestType, Conversation converstaion, Language language, Timestamp approveAt, Timestamp completeAt,
+			Timestamp cancelAt, String reasonCancel, UUID userCancel, Timestamp rejectAt, String reasonReject,
 			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+		super();
 		this.id = id;
-		this.company = company;
-		this.job = job;
-		this.candidate = candidate;
+		this.ownerId = ownerId;
+		this.objectTableId = objectTableId;
 		this.translator = translator;
 		this.status = status;
 		this.requestType = requestType;
 		this.converstaion = converstaion;
+		this.language = language;
 		this.approveAt = approveAt;
 		this.completeAt = completeAt;
 		this.cancelAt = cancelAt;
 		this.reasonCancel = reasonCancel;
 		this.userCancel = userCancel;
-		this.reasonAt = reasonAt;
+		this.rejectAt = rejectAt;
 		this.reasonReject = reasonReject;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
