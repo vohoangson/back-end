@@ -29,6 +29,7 @@ import com.japanwork.exception.ServerError;
 import com.japanwork.model.AuthProvider;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Company;
+import com.japanwork.model.Country;
 import com.japanwork.model.ForgetPassword;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
@@ -40,6 +41,7 @@ import com.japanwork.payload.response.ApiResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
+import com.japanwork.payload.response.UserResponse;
 import com.japanwork.repository.academy.AcademyRepository;
 import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.repository.company.CompanyRepository;
@@ -143,6 +145,7 @@ public class UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
 	        user.setProviderId(null);
+	        user.setCountry(new Country(signUpRequest.getCountryId()));
 	        user.setCreatedAt(timestamp);
 	        user.setUpdatedAt(timestamp);
 	        user.setDeletedAt(null);
@@ -311,6 +314,17 @@ public class UserService {
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.RESET_PASSWORD_FAIL_MSG);
 		}
+	}
+	
+	public UserResponse converUserResponse(User user) {
+		UserResponse userResponse = new UserResponse();
+		userResponse.setName(user.getName());
+		userResponse.setEmail(user.getEmail());
+		userResponse.setRole(user.getRole());
+		userResponse.setLanguageCode(user.getCountry().getLanguage().getCode());
+		userResponse.setPropertyId(user.getPropertyId());
+		
+		return userResponse;
 	}
 	
 	private User findUserByEmail(String email) {

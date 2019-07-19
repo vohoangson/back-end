@@ -5,9 +5,6 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RequestDetailRequest {
-	@JsonProperty("ownerId")
-	private UUID ownerId;
-	
 	@JsonProperty("object_table_id")
 	private UUID objectTableId;
 	
@@ -16,13 +13,8 @@ public class RequestDetailRequest {
 	
 	private String desc;
 	
-	public UUID getOwnerId() {
-		return ownerId;
-	}
-	
-	public void setOwnerId(UUID ownerId) {
-		this.ownerId = ownerId;
-	}
+	@JsonProperty("language_id")
+	private UUID languageId;
 	
 	public UUID getObjectTableId() {
 		return objectTableId;
@@ -47,6 +39,12 @@ public class RequestDetailRequest {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
-	
+
+	public UUID getLanguageId() {
+		return languageId;
+	}
+
+	public void setLanguageId(UUID languageId) {
+		this.languageId = languageId;
+	}
 }

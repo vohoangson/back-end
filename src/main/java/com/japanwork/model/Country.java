@@ -21,7 +21,7 @@ public class Country {
     private String code;
     
     @OneToOne
-    @JoinColumn(name = "language_code_id")
+    @JoinColumn(name = "language_id")
     private Language language;
     
     private Timestamp createdAt;
