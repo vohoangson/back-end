@@ -80,7 +80,7 @@ public class NotificationService {
 		notification.setConversation(conversationService.findByIdAndIsDelete(id, null));
 		notification.setCreatedAt(timestamp);
 		notification.setContent(notificationRequest.getContent());
-		notification.setTitle("Message");
+		notification.setTitle(CommonConstant.NotificationType.MESSAGE);
 		notification.setNotificationType(1);
 		notification.setDeletedAt(null);
 		Notification result = notificationRepository.save(notification);

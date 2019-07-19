@@ -1,78 +1,56 @@
-package com.japanwork.model;
+package com.japanwork.payload.response;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-@Table(name="request_detail")
-public class RequestDetail {
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
+public class RequestDetailResponse {
 	private UUID id;
     
-	@Column(name = "owner_id")
-	private UUID ownerId;
+	@JsonProperty("owner_id")
+    private UUID ownerId;
 	
-	@Column(name = "object_table_id")
+	@JsonProperty("object_table_id")
     private UUID objectTableId;
     
-    @OneToOne
-    @JoinColumn(name = "helper_id")
-    private Translator translator;
+	@JsonProperty("helper_id")
+    private UUID helperId;
     
-    @Column(name="status")
     private String status;
     
-    @Column(name="request_type")
+    @JsonProperty("request_type")
     private String requestType;
     
-    @OneToOne
-    @JoinColumn(name="conversation_id")
-    private Conversation converstaion;
+    @JsonProperty("converstaion_id")
+    private UUID converstaionId;
     
-    @OneToOne
-    @JoinColumn(name="language_id")
-    private Language language;
+    @JsonProperty("language_code")
+	private String languageCode;
     
-    @Column(name="approve_at")
+    @JsonProperty("approve_at")
     private Timestamp approveAt;
     
-    @Column(name="complete_at")
+    @JsonProperty("complete_at")
     private Timestamp completeAt;
     
-    @Column(name="cancel_at")
+    @JsonProperty("cancel_at")
     private Timestamp cancelAt;
     
-    @Column(name="reason_cancel")
+    @JsonProperty("reason_cancel")
     private String reasonCancel;
     
-    @Column(name="user_cancel")
+    @JsonProperty("user_cancel")
     private UUID userCancel;
     
-    @Column(name="reject_at")
+    @JsonProperty("reject_at")
     private Timestamp rejectAt;
     
-    @Column(name="reason_reject")
+    @JsonProperty("reason_reject")
     private String reasonReject;
     
-    @Column(name="created_at")
+    @JsonProperty("created_at")
     private Timestamp createdAt;
-    
-    @Column(name="updated_at")
-    private Timestamp updatedAt;
-    
-    @Column(name="deleted_at")
-    private Timestamp deletedAt;
 
 	public UUID getId() {
 		return id;
@@ -98,12 +76,12 @@ public class RequestDetail {
 		this.objectTableId = objectTableId;
 	}
 
-	public Translator getTranslator() {
-		return translator;
+	public UUID getHelperId() {
+		return helperId;
 	}
 
-	public void setTranslator(Translator translator) {
-		this.translator = translator;
+	public void setHelperId(UUID helperId) {
+		this.helperId = helperId;
 	}
 
 	public String getStatus() {
@@ -122,20 +100,20 @@ public class RequestDetail {
 		this.requestType = requestType;
 	}
 
-	public Conversation getConverstaion() {
-		return converstaion;
+	public UUID getConverstaionId() {
+		return converstaionId;
 	}
 
-	public void setConverstaion(Conversation converstaion) {
-		this.converstaion = converstaion;
+	public void setConverstaionId(UUID converstaionId) {
+		this.converstaionId = converstaionId;
 	}
 
-	public Language getLanguage() {
-		return language;
+	public String getLanguageCode() {
+		return languageCode;
 	}
 
-	public void setLanguage(Language language) {
-		this.language = language;
+	public void setLanguageCode(String languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public Timestamp getApproveAt() {
@@ -202,35 +180,19 @@ public class RequestDetail {
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-	public Timestamp getDeletedAt() {
-		return deletedAt;
-	}
-
-	public void setDeletedAt(Timestamp deletedAt) {
-		this.deletedAt = deletedAt;
-	}
-
-	public RequestDetail(UUID id, UUID ownerId, UUID objectTableId, Translator translator, String status,
-			String requestType, Conversation converstaion, Language language, Timestamp approveAt, Timestamp completeAt,
+	public RequestDetailResponse(UUID id, UUID ownerId, UUID objectTableId, UUID helperId, String status,
+			String requestType, UUID converstaionId, String languageCode, Timestamp approveAt, Timestamp completeAt,
 			Timestamp cancelAt, String reasonCancel, UUID userCancel, Timestamp rejectAt, String reasonReject,
-			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
-		super();
+			Timestamp createdAt) {
+
 		this.id = id;
 		this.ownerId = ownerId;
 		this.objectTableId = objectTableId;
-		this.translator = translator;
+		this.helperId = helperId;
 		this.status = status;
 		this.requestType = requestType;
-		this.converstaion = converstaion;
-		this.language = language;
+		this.converstaionId = converstaionId;
+		this.languageCode = languageCode;
 		this.approveAt = approveAt;
 		this.completeAt = completeAt;
 		this.cancelAt = cancelAt;
@@ -239,11 +201,10 @@ public class RequestDetail {
 		this.rejectAt = rejectAt;
 		this.reasonReject = reasonReject;
 		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.deletedAt = deletedAt;
 	}
 
-	public RequestDetail() {
+	public RequestDetailResponse() {
 
 	}
+    
 }

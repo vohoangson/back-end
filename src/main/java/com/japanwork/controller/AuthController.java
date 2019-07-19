@@ -136,7 +136,7 @@ public class AuthController {
     public BaseDataResponse getUser(@CurrentUser UserPrincipal userPrincipal) {    	
     	User user = userService.getUser(userPrincipal);
     	user.setRole(user.getRole().replaceAll("ROLE_", ""));
-    	return new BaseDataResponse(user);
+    	return new BaseDataResponse(userService.converUserResponse(user));
     }
     
     @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)
