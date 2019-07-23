@@ -8,17 +8,16 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 public class CompanyTranslationRequest {
 	@NotNull(message = "company_required")
-	@JsonProperty("company_id")
 	private UUID companyId;
-	
+
 	@NotBlank(message = "name_company_required")
 	private String name;
-	
+
 	@NotBlank(message = "address_required")
 	private String address;
-	
+
 	private String introduction;
-	
+
 	public UUID getCompanyId() {
 		return companyId;
 	}
@@ -49,5 +48,5 @@ public class CompanyTranslationRequest {
 
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
-	}	
+	}
 }
