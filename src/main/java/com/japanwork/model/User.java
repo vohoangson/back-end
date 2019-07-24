@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
@@ -56,6 +58,10 @@ public class User {
     @JsonProperty("property_id")
     @Column(name="property_id")
     private UUID propertyId;
+    
+    @OneToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
     
     @JsonIgnore
     @Column(name="created_at")
@@ -144,6 +150,14 @@ public class User {
 	public void setPropertyId(UUID propertyId) {
 		this.propertyId = propertyId;
 	}
+	
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
+	}
 
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -204,7 +218,7 @@ public class User {
 	}
 
 	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
-		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Timestamp createdAt,
+		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Country country,Timestamp createdAt,
 		Timestamp updatedAt, Timestamp deletedAt) {
 	super();
 	this.id = id;
@@ -216,6 +230,7 @@ public class User {
 	this.providerId = providerId;
 	this.role = role;
 	this.propertyId = propertyId;
+	this.country = country;
 	this.createdAt = createdAt;
 	this.updatedAt = updatedAt;
 	this.deletedAt = deletedAt;

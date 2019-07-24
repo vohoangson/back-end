@@ -34,6 +34,18 @@ public class MessageConstant {
 	public static final String CANDIDATE_DELETE_SUCCESS = "delete_candidate_success";
 	public static final String CANDIDATE_FAVORITE_JOB_SUCCESS = "candidate_favorite_job_success";
 	public static final String CANDIDATE_UN_FAVORITE_JOB_SUCCESS = "candidate_unfavorite_job_success";
+	public static final String REQUEST_TRANSLATION_ALREADY = "request_translation_already";
+	public static final String REQUEST_TRANSLATION_SUCCESS = "request_translation_success";
+	public static final String REQUEST_TRANSLATION_TRANSLATOR_JOIN_SUCCESS = "request_translation_translator_join_success";
+	public static final String REQUEST_TRANSLATION_TRANSLATOR_JOIN_FAIL = "request_translation_translator_join_fail";
+	public static final String REQUEST_TRANSLATION_ACCEPT_APPLY_SUCCESS = "request_translation_owner_accept_apply_success";
+	public static final String REQUEST_TRANSLATION_ACCEPT_APPLY_FAIL = "request_translation_owner_accept_apply_fail";
+	public static final String REQUEST_TRANSLATION_CONFIRM_FINISH_SUCCESS = "request_translation_confirm_finish_success";
+	public static final String REQUEST_TRANSLATION_CONFIRM_FINISH_FAIL = "request_translation_confirm_finish_fail";
+	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_SUCCESS = "request_translation_accept_finish_success";
+	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL = "request_translation_accept_finish_fail";
+	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS = "request_translation_refuse_finish_success";
+	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL = "request_translation_refuse_finish_fail";
 	
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
@@ -86,6 +98,20 @@ public class MessageConstant {
 	public static final String CANDIDATE_UN_FAVORITE_JOB_SUCCESS_MSG = "Candidate unfavorite job success!";
 	public static final String CANDIDATE_FAVORITE_JOB_FAIL = "Candidate favorite job failed!";
 	public static final String CANDIDATE_UN_FAVORITE_JOB_FAIL = "Candidate unfavorite job failed!";
+	public static final String REQUEST_TRANSLATION_ALREADY_MSG = "Request translation is already!";
+	public static final String REQUEST_TRANSLATION_SUCCESS_MSG = "Request translation success!";
+	public static final String REQUEST_TRANSLATION_FAIL = "Request translation failed!";
+	public static final String REQUEST_TRANSLATION_TRANSLATOR_JOIN_SUCCESS_MSG = "Translator join success, waiting for owner to agree!";
+	public static final String REQUEST_TRANSLATION_TRANSLATOR_JOIN_FAIL_MSG = "Translator join fail, another translator joined!";
+	public static final String REQUEST_TRANSLATION_ACCEPT_APPLY_SUCCESS_MSG = "Request translation: Owner accept apply success!";
+	public static final String REQUEST_TRANSLATION_ACCEPT_APPLY_FAIL_MSG = "Request translation: Owner accept apply fail!";
+	public static final String REQUEST_TRANSLATION_CONFIRM_FINISH_SUCCESS_MSG = "Request translation: Translator confirm finish success!";
+	public static final String REQUEST_TRANSLATION_CONFIRM_FINISH_FAIL_MSG = "Request translation: Translator confirm finish fail!";
+	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_SUCCESS_MSG = "Request translation: Owner accept finish success!";
+	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG = "Request translation: Owner accept finish fail!";
+	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS_MSG = "Request translation: Owner refuse finish success!";
+	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL_MSG = "Request translation: Owner refuse finish fail!";
+	
 	
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";

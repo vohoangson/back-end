@@ -137,7 +137,7 @@ public class CompanyService {
 	}
 	
 	public Company myCompany(UserPrincipal userPrincipal) throws ResourceNotFoundException{
-		Company company = this.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), false);
+		Company company = this.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), null);
 		if(company == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
@@ -165,7 +165,7 @@ public class CompanyService {
 		return companyRepository.findById(id).get();
 	}
 	
-	public Company findByUserAndIsDelete(User user, boolean isDelete){
+	public Company findByUserAndIsDelete(User user, Timestamp deletedAt){
 		Company company = companyRepository.findByUserAndDeletedAt(user, null);
 		return company;
 	}

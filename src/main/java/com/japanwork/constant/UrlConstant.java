@@ -76,6 +76,18 @@ public class UrlConstant {
 	//Job Application
 	public static final String URL_JOB_APPLICATION_ID= "/job-applications/{id}";
 	
+	//Request translation
+	public static final String URL_REQUEST_TRANSLATION = "/requests";
+	public static final String URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN = "/requests/{id}/apply";
+	public static final String URL_REQUEST_TRANSLATION_ACCEPT_APPLY = "/requests/{id}/accept-apply";
+	public static final String URL_REQUEST_TRANSLATION_CONFIRM_FINISHED = "/requests/{id}/check-finished";
+	public static final String URL_REQUEST_TRANSLATION_ACCEPT_FINISHED = "/requests/{id}/accept-finished";
+	public static final String URL_REQUEST_TRANSLATION_REFUSE_FINISHED = "/requests/{id}/refuse-finished";
+	public static final String URL_REQUEST_TRANSLATION_CANCEL = "/requests/{id}/cancel";
+	public static final String URL_REQUEST_TRANSLATION_REJECT = "/requests/{id}/reject";
+	public static final String URL_REQUEST_TRANSLATION_NEW_REQUEST = "/requests/new-request";
+	public static final String URL_REQUEST_TRANSLATION_YOUR_REQUEST = "/requests/your-request";
+	
 	//Conversation
 	public static final String URL_JOB_APPLICATION_ID_CONVERSATION= "/job-applications/{id}/conversations";
 	public static final String URL_JOB_APPLICATION_ID_CONVERSATION_ALL = "/job-applications/{id}/conversation-all";
