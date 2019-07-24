@@ -11,8 +11,8 @@ public class UserResponse {
 	
 	private String role;
 	
-	@JsonProperty("language_code")
-	private String languageCode;
+	@JsonProperty("language_id")
+	private UUID languageId;
 	
 	@JsonProperty("property_id")
 	private UUID propertyId;
@@ -41,12 +41,12 @@ public class UserResponse {
 		this.role = role;
 	}
 
-	public String getLanguageCode() {
-		return languageCode;
+	public UUID getLanguageId() {
+		return languageId;
 	}
 
-	public void setLanguageCode(String languageCode) {
-		this.languageCode = languageCode;
+	public void setLanguageId(UUID languageId) {
+		this.languageId = languageId;
 	}
 
 	public UUID getPropertyId() {
@@ -57,11 +57,12 @@ public class UserResponse {
 		this.propertyId = propertyId;
 	}
 
-	public UserResponse(String name, String email, String role, String languageCode, UUID propertyId) {
+	public UserResponse(String name, String email, String role, UUID languageId, UUID propertyId) {
+		super();
 		this.name = name;
 		this.email = email;
 		this.role = role;
-		this.languageCode = languageCode;
+		this.languageId = languageId;
 		this.propertyId = propertyId;
 	}
 
