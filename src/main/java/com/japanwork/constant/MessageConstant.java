@@ -35,6 +35,7 @@ public class MessageConstant {
 	public static final String CANDIDATE_FAVORITE_JOB_SUCCESS = "candidate_favorite_job_success";
 	public static final String CANDIDATE_UN_FAVORITE_JOB_SUCCESS = "candidate_unfavorite_job_success";
 	public static final String REQUEST_TRANSLATION_ALREADY = "request_translation_already";
+	public static final String REQUEST_TRANSLATION_BAD_REQUEST = "request_translation_bad_request";
 	public static final String REQUEST_TRANSLATION_SUCCESS = "request_translation_success";
 	public static final String REQUEST_TRANSLATION_TRANSLATOR_JOIN_SUCCESS = "request_translation_translator_join_success";
 	public static final String REQUEST_TRANSLATION_TRANSLATOR_JOIN_FAIL = "request_translation_translator_join_fail";
@@ -111,6 +112,7 @@ public class MessageConstant {
 	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG = "Request translation: Owner accept finish fail!";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS_MSG = "Request translation: Owner refuse finish success!";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL_MSG = "Request translation: Owner refuse finish fail!";
+	public static final String REQUEST_TRANSLATION_BAD_REQUEST_MSG = "Request translation: Bad request!";
 	
 	
 	public static final String ERROR_404_MSG = "Page not found!";

@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.HistoryStatus;
 
 @Repository
@@ -163,9 +162,9 @@ public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
 	}
 
 	@Override
-	public List<HistoryStatus> findByRequestTranslationOrderByCreatedAtDesc(RequestTranslation requestTranslation) {
+	public List<HistoryStatus> findByObjecttableIdOrderByCreatedAtDesc(UUID requestTranslationId) {
 		// TODO Auto-generated method stub
-		return findByRequestTranslationOrderByCreatedAtDesc(requestTranslation);
+		return findByObjecttableIdOrderByCreatedAtDesc(requestTranslationId);
 	}
 
 }
