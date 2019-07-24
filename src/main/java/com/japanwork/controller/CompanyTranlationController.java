@@ -1,9 +1,11 @@
 package com.japanwork.controller;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.japanwork.payload.response.BaseSuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,21 +33,26 @@ import com.japanwork.service.UserService;
 public class CompanyTranlationController {
 	@Autowired
 	private CompanyTranslationService companyTranslationService;
+
 	@Autowired
 	private UserService userService;
-	
-	@PostMapping(UrlConstant.URL_COMPANY_TS)
+
+	@PostMapping(UrlConstant.URL_COMPANY_TRANSLATION)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, 
-			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{		
+	public BaseSuccessResponse create(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest,
+			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		CompanyTranslation companyTranslation = companyTranslationService.save(companyTranslationRequest, userPrincipal);
-		return new BaseDataResponse(companyTranslationService.convertCompanyResponse(companyTranslation));
+		return new BaseSuccessResponse(
+		        "success",
+		        companyTranslationService.convertCompanyResponse(companyTranslation),
+                new Object()
+        );
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_COMPANY_TS_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, @PathVariable UUID id, 
-			@CurrentUser UserPrincipal userPrincipal){		
+	public BaseDataResponse update(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, @PathVariable UUID id,
+			@CurrentUser UserPrincipal userPrincipal){
 		CompanyTranslation companyTranslation = companyTranslationService.update(companyTranslationRequest, id, userPrincipal);
 		return new BaseDataResponse(companyTranslationService.convertCompanyResponse(companyTranslation));
 	}

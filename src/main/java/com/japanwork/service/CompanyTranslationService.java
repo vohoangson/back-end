@@ -16,28 +16,28 @@ import com.japanwork.model.Company;
 import com.japanwork.model.CompanyTranslation;
 import com.japanwork.payload.request.CompanyTranslationRequest;
 import com.japanwork.payload.response.CompanyResponse;
-import com.japanwork.repository.company_tranlation.CompanyTranlationRepository;
+import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
 import com.japanwork.security.UserPrincipal;
 
 @Service
 public class CompanyTranslationService {
 	@Autowired
-	private CompanyTranlationRepository companyTranlationRepository;
-	
+	private CompanyTranslationRepository companyTranslationRepository;
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private TranslatorService translatorService;
-	
+
 	public CompanyTranslation save(CompanyTranslationRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
-			
+
 			CompanyTranslation company = new CompanyTranslation();
 			company.setCompany(new Company(companyRequest.getCompanyId()));
 			company.setTranslator(translatorService.findTranslatorByUser(userService.findById(userPrincipal.getId())));
@@ -48,24 +48,24 @@ public class CompanyTranslationService {
 			company.setCreatedAt(timestamp);
 			company.setUpdatedAt(timestamp);
 			company.setDeletedAt(null);
-			
-			CompanyTranslation result = companyTranlationRepository.save(company);		
+
+			CompanyTranslation result = companyTranslationRepository.save(company);
 			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CREATE_COMPANY_TRANSLATE_FAIL);
 		}
 	}
-	
-	public CompanyTranslation update(CompanyTranslationRequest companyTranslationRequest, UUID id, UserPrincipal userPrincipal) 
+
+	public CompanyTranslation update(CompanyTranslationRequest companyTranslationRequest, UUID id, UserPrincipal userPrincipal)
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
-			
+
 			CompanyTranslation company = new CompanyTranslation();
-			
+
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_TRANSLATOR")) {
-				company = companyTranlationRepository.findByIdAndDeletedAt(id, null);
+				company = companyTranslationRepository.findByIdAndDeletedAt(id, null);
 				if(company == null) {
 					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 				}
@@ -73,17 +73,17 @@ public class CompanyTranslationService {
 					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 				}
 			} else {
-				company = companyTranlationRepository.findById(id)
+				company = companyTranslationRepository.findById(id)
 						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
-	
+
 			company.setName(companyTranslationRequest.getName());
 			company.setAddress(companyTranslationRequest.getAddress());
 			company.setIntroduction(companyTranslationRequest.getIntroduction());
 			company.setStatus(1);
 			company.setUpdatedAt(timestamp);
-			
-			CompanyTranslation result = companyTranlationRepository.save(company);			
+
+			CompanyTranslation result = companyTranslationRepository.save(company);
 			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
@@ -93,18 +93,18 @@ public class CompanyTranslationService {
 			throw new ServerError(MessageConstant.UPDATE_COMPANY_TRANSLATE_FAIL);
 		}
 	}
-	
+
 	public CompanyResponse convertCompanyResponse(CompanyTranslation companyTranslation) {
 		Company company = companyService.findById(companyTranslation.getCompany().getId());
 		CompanyResponse companyResponse = new CompanyResponse(
 				company.getId(),
-				companyTranslation.getName(), 
-				company.getScale(), 
+				companyTranslation.getName(),
+				company.getScale(),
 				Business.listBusinessID(company.getBusinesses()),
-				company.getCity().getId(), 
-				company.getDistrict().getId(), 
-				companyTranslation.getAddress(), 
-				company.getLogoUrl(), 
+				company.getCity().getId(),
+				company.getDistrict().getId(),
+				companyTranslation.getAddress(),
+				company.getLogoUrl(),
 				company.getCoverImageUrl(),
 				companyTranslation.getIntroduction());
 		return companyResponse;

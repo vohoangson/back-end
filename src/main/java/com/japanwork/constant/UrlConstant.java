@@ -137,6 +137,6 @@ public class UrlConstant {
 	public static final String URL_TRANSLATOR_DEL_ID = "/translators/delete/{id}";
 
 	//Company Translation
-    public static final String URL_COMPANY_TRANSLATION = "/company_translations";
-    public static final String URL_COMPANY_TRANSLATION = "/company_translations/{id}";
+    public static final String URL_COMPANY_TRANSLATION = "/v1/company_translations";
+    public static final String URL_COMPANY_TRANSLATION_BY_ID = "api/v1/company_translations/{id}";
 }

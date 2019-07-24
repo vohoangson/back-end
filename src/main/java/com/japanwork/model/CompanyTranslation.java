@@ -21,36 +21,41 @@ public class CompanyTranslation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-    
+
 	@ManyToOne
-    @JoinColumn(name="company_id")
-    @Where(clause = "is_delete = false")
+    @JoinColumn(name = "company_id")
+    @Where(clause = "delete_at IS NULL")
     private Company company;
-    
+
     @ManyToOne
-    @JoinColumn(name="translator_id")
-    @Where(clause = "is_delete = false")
+    @JoinColumn(name = "translator_id")
+    @Where(clause = "delete_at IS NULL")
     private Translator translator;
-    
-	@Column(name="name")
+
+    @ManyToOne
+    @JoinColumn(name = "language_id")
+    @Where(clause = "delete_at IS NULL")
+    private Language language;
+
+	@Column(name = "name")
     private String name;
-    
-    @Column(name="introduction")
+
+    @Column(name = "introduction")
     private String introduction;
-    
-    @Column(name="address")
+
+    @Column(name = "address")
     private String address;
-    
-    @Column(name="status")
+
+    @Column(name = "status")
     private int status;
-    
-    @Column(name="created_at")
+
+    @Column(name = "created_at")
     private Timestamp createdAt;
-    
-    @Column(name="updated_at")
+
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
-    
-    @Column(name="deleted_at")
+
+    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
 	public UUID getId() {

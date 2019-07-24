@@ -28,14 +28,15 @@ import com.japanwork.security.UserPrincipal;
 public class CompanyService {
 	@Autowired
 	private CompanyRepository companyRepository;
+
 	@Autowired
 	private UserService userService;
-	
+
 	public Company save(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
-			
+
 			Company company = new Company();
 			company.setUser(userService.findById(userPrincipal.getId()));
 			company.setName(companyRequest.getName());
@@ -51,23 +52,23 @@ public class CompanyService {
 			company.setCreatedAt(timestamp);
 			company.setUpdatedAt(timestamp);
 			company.setDeletedAt(null);
-			
+
 			Company result = companyRepository.save(company);
-			userService.changePropertyId(userPrincipal.getId(), result.getId());		
+			userService.changePropertyId(userPrincipal.getId(), result.getId());
 			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);
 		}
 	}
-	
-	public Company update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal) 
+
+	public Company update(CompanyRequest companyRequest, UUID id, UserPrincipal userPrincipal)
 			throws ResourceNotFoundException, ForbiddenException, ServerError{
 		try {
 			Date date = new Date();
 			Timestamp timestamp = new Timestamp(date.getTime());
-			
+
 			Company company = new Company();
-			
+
 			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
 				company = companyRepository.findByIdAndDeletedAt(id, null);
 				if(company == null) {
@@ -80,7 +81,7 @@ public class CompanyService {
 				company = companyRepository.findById(id)
 						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
-	
+
 			company.setName(companyRequest.getName());
 			company.setScale(companyRequest.getScale());
 			company.setBusinesses(Business.listBusiness(companyRequest.getBusinessIds()));
@@ -92,8 +93,8 @@ public class CompanyService {
 			company.setIntroduction(companyRequest.getIntroduction());
 			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			company.setUpdatedAt(timestamp);
-			
-			Company result = companyRepository.save(company);		
+
+			Company result = companyRepository.save(company);
 			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
@@ -103,14 +104,14 @@ public class CompanyService {
 			throw new ServerError(MessageConstant.COMPANY_UPDATE_FAIL);
 		}
 	}
-	
+
 	public Company isDel(UUID id, Timestamp deletedAt) throws ResourceNotFoundException, ServerError{
 		try {
 			Company company = companyRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			company.setDeletedAt(deletedAt);
 			companyRepository.save(company);
-			Company result = companyRepository.findByIdAndDeletedAt(id, null);	
+			Company result = companyRepository.findByIdAndDeletedAt(id, null);
 			return result;
 		} catch (ResourceNotFoundException e) {
 			throw e;
@@ -120,14 +121,14 @@ public class CompanyService {
 			} else {
 				throw new ServerError(MessageConstant.COMPANY_UN_DELETE_FAIL_MSG);
 			}
-			
+
 		}
 	}
-	
+
 	public void del(Company company){
 		companyRepository.delete(company);
 	}
-	
+
 	public Company findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
 		Company company = companyRepository.findByIdAndDeletedAt(id, null);
 		if(company == null) {
@@ -135,7 +136,7 @@ public class CompanyService {
 		}
 		return company;
 	}
-	
+
 	public Company myCompany(UserPrincipal userPrincipal) throws ResourceNotFoundException{
 		Company company = this.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), null);
 		if(company == null) {
@@ -143,7 +144,7 @@ public class CompanyService {
 		}
 		return company;
 	}
-	
+
 	public boolean checkCompanyByUser(User user){
 		Company company = companyRepository.findByUserAndDeletedAt(user, null);
 		if(company == null) {
@@ -151,7 +152,7 @@ public class CompanyService {
 		}
 		 return true;
 	}
-	
+
 	public Page<Company> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Company> pages = companyRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
@@ -160,31 +161,31 @@ public class CompanyService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 	}
-	
+
 	public Company findById(UUID id) {
 		return companyRepository.findById(id).get();
 	}
-	
+
 	public Company findByUserAndIsDelete(User user, Timestamp deletedAt){
 		Company company = companyRepository.findByUserAndDeletedAt(user, null);
 		return company;
 	}
-	
+
 	public Company findByUser(User user){
 		Company company = companyRepository.findByUser(user);
 		return company;
 	}
-	
+
 	public CompanyResponse convertCompanyResponse(Company company) {
 		CompanyResponse companyResponse = new CompanyResponse(
 				company.getId(),
-				company.getName(), 
-				company.getScale(), 
+				company.getName(),
+				company.getScale(),
 				Business.listBusinessID(company.getBusinesses()),
-				company.getCity().getId(), 
-				company.getDistrict().getId(), 
-				company.getAddress(), 
-				company.getLogoUrl(), 
+				company.getCity().getId(),
+				company.getDistrict().getId(),
+				company.getAddress(),
+				company.getLogoUrl(),
 				company.getCoverImageUrl(),
 				company.getIntroduction());
 		return companyResponse;

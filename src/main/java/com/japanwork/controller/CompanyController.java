@@ -41,81 +41,80 @@ public class CompanyController {
 	private CompanyService companyService;
 	@Autowired
 	private UserService userService;
-	
-	
+
 	@GetMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
-	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page, 
+	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		Page<Company> pages = companyService.findAllByIsDelete(page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
-		
+
 		if(pages.getContent().size() > 0) {
 			for (Company company : pages.getContent()) {
 				list.add(companyService.convertCompanyResponse(company));
 			}
 		}
-		
+
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
-	
+
 	@PostMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest, 
+	public BaseDataResponse create(@Valid @RequestBody CompanyRequest companyRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
-		
+
 		if(companyService.checkCompanyByUser(userService.findById(userPrincipal.getId()))) {
 			throw new BadRequestException(MessageConstant.COMPANY_ALREADY, MessageConstant.COMPANY_ALREADY_MSG);
 		}
-		
+
 		Company company = companyService.save(companyRequest, userPrincipal);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
-	
+
 	@GetMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){	
+	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){
 		Company company = companyService.findByIdAndIsDelete(id);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
-	
+
 	@GetMapping(UrlConstant.URL_MY_COMPANY)
 	@ResponseBody
-	public BaseDataResponse myCompany(@CurrentUser UserPrincipal userPrincipal){		
+	public BaseDataResponse myCompany(@CurrentUser UserPrincipal userPrincipal){
 		Company company =  companyService.myCompany(userPrincipal);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id, 
-			@CurrentUser UserPrincipal userPrincipal){		
+	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id,
+			@CurrentUser UserPrincipal userPrincipal){
 		Company company = companyService.update(companyRequest, id, userPrincipal);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
-	
+
 	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
 	@ResponseBody
 	public BaseDataResponse isDel(@PathVariable UUID id) {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		
+
 		companyService.isDel(id, timestamp);
 		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.COMPANY_DELETE_SUCCESS, MessageConstant.COMPANY_DELETE_SUCCESS_MSG);
 		return new BaseDataResponse(baseMessageResponse);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_COMPANY_UNDEL_ID)
 	@ResponseBody
-	public BaseDataResponse unDel(@PathVariable UUID id) {		
+	public BaseDataResponse unDel(@PathVariable UUID id) {
 		Company company =  companyService.isDel(id, null);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
-	
+
 	@DeleteMapping(UrlConstant.URL_COMPANY_DEL_ID)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id) {		
+	public BaseDataResponse del(@PathVariable UUID id) {
 		companyService.del(companyService.findById(id));
 		BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.DELETE, MessageConstant.DEL_SUCCESS);
 		return new BaseDataResponse(deleteResponse);
