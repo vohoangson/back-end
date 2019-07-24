@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,9 +24,8 @@ public class HistoryStatus {
 	@Column(name = "user_create_id")
 	private UUID userCreateId;
 	
-	@ManyToOne
-    @JoinColumn(name = "objecttable_id")
-	private RequestTranslation requestTranslation;
+	@Column(name = "objecttable_id")
+	private UUID objecttableId;
 	
 	@OneToOne
     @JoinColumn(name = "translator_id")
@@ -64,15 +62,15 @@ public class HistoryStatus {
 	public void setUserCreateId(UUID userCreateId) {
 		this.userCreateId = userCreateId;
 	}
+	
+	public UUID getObjecttableId() {
+		return objecttableId;
+	}
 
-	public RequestTranslation getRequestTranslation() {
-		return requestTranslation;
+	public void setObjecttableId(UUID objecttableId) {
+		this.objecttableId = objecttableId;
 	}
-	
-	public void setRequestTranslation(RequestTranslation requestTranslation) {
-		this.requestTranslation = requestTranslation;
-	}
-	
+
 	public Translator getTranslator() {
 		return translator;
 	}
@@ -121,12 +119,11 @@ public class HistoryStatus {
 		this.createdAt = createdAt;
 	}
 
-	public HistoryStatus(UUID id, UUID userCreateId, RequestTranslation requestTranslation, Translator translator,
-			Candidate candidate, String reason, String status, String type, Timestamp createdAt) {
-		super();
+	public HistoryStatus(UUID id, UUID userCreateId, UUID objecttableId, Translator translator, Candidate candidate,
+			String reason, String status, String type, Timestamp createdAt) {
 		this.id = id;
 		this.userCreateId = userCreateId;
-		this.requestTranslation = requestTranslation;
+		this.objecttableId = objecttableId;
 		this.translator = translator;
 		this.candidate = candidate;
 		this.reason = reason;

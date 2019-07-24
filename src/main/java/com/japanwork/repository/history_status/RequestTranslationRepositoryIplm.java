@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.Language;
 import com.japanwork.model.RequestTranslation;
+import com.japanwork.model.Translator;
 
 @Repository
 @Transactional
@@ -176,6 +177,19 @@ public class RequestTranslationRepositoryIplm implements RequestTranslationRepos
 	public RequestTranslation findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findByIdAndDeletedAt(id, deletedAt);
+	}
+
+	@Override
+	public Page<RequestTranslation> findAllByTranslatorAndDeletedAt(Pageable page, Translator translator, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByTranslatorAndDeletedAt(page, translator, deletedAt);
+	}
+
+	@Override
+	public Page<RequestTranslation> findAllByOwnerIdAndDeletedAt(Pageable page, UUID objecttableId,
+			Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByOwnerIdAndDeletedAt(page, objecttableId, deletedAt);
 	}
 
 }
