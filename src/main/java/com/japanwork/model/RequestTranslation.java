@@ -1,6 +1,7 @@
 package com.japanwork.model;
 
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -43,6 +46,11 @@ public class RequestTranslation {
     @OneToOne
     @JoinColumn(name="language_id")
     private Language language;
+    
+    @OneToMany
+    @JoinColumn(name="objecttable_id")
+    @OrderBy("createdAt DESC")
+    private Set<HistoryStatus> historyStatus;
     
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -117,6 +125,14 @@ public class RequestTranslation {
 		this.language = language;
 	}
 
+	public Set<HistoryStatus> getHistoryStatus() {
+		return historyStatus;
+	}
+
+	public void setHistoryStatus(Set<HistoryStatus> historyStatus) {
+		this.historyStatus = historyStatus;
+	}
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -142,8 +158,8 @@ public class RequestTranslation {
 	}
 
 	public RequestTranslation(UUID id, UUID ownerId, UUID objectTableId, Translator translator, String objectTableType,
-			String desc, Conversation converstaion, Language language, Timestamp createdAt, Timestamp updatedAt,
-			Timestamp deletedAt) {
+			String desc, Conversation converstaion, Language language, Set<HistoryStatus> historyStatus, Timestamp createdAt,
+			Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.ownerId = ownerId;
 		this.objectTableId = objectTableId;
@@ -152,6 +168,7 @@ public class RequestTranslation {
 		this.desc = desc;
 		this.converstaion = converstaion;
 		this.language = language;
+		this.historyStatus = historyStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;

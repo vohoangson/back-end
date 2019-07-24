@@ -21,7 +21,7 @@ public class HistoryStatusService {
 	public HistoryStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String type, 
 			Translator translator, Candidate candidate) {
 		HistoryStatus requestTranslationStatus = new HistoryStatus();
-		requestTranslationStatus.setRequestTranslation(requestTranslation);
+		requestTranslationStatus.setObjecttableId(requestTranslation.getId());
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
 		requestTranslationStatus.setType(type);
@@ -33,7 +33,7 @@ public class HistoryStatusService {
 	public HistoryStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String reason, 
 			String type, UUID userCreateId, Translator translator, Candidate candidate) {
 		HistoryStatus requestTranslationStatus = new HistoryStatus();
-		requestTranslationStatus.setRequestTranslation(requestTranslation);
+		requestTranslationStatus.setObjecttableId(requestTranslation.getId());
 		requestTranslationStatus.setUserCreateId(userCreateId);
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
@@ -45,7 +45,7 @@ public class HistoryStatusService {
 	}
 	
 	public HistoryStatus statusRequestTranslation(RequestTranslation requestTranslation) {
-		return historyStatusRepository.findByRequestTranslationOrderByCreatedAtDesc(requestTranslation).get(0);
+		return historyStatusRepository.findByObjecttableIdOrderByCreatedAtDesc(requestTranslation.getId()).get(0);
 	}
 	
 	public RequestTranslationStatusResponse convertRequestTranslationStatusResponse(HistoryStatus requestTranslationStatus) {
