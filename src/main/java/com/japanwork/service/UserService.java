@@ -321,7 +321,7 @@ public class UserService {
 		userResponse.setName(user.getName());
 		userResponse.setEmail(user.getEmail());
 		userResponse.setRole(user.getRole());
-		userResponse.setLanguageCode(user.getCountry().getLanguage().getCode());
+		userResponse.setLanguageId(user.getCountry().getLanguage().getId());
 		userResponse.setPropertyId(user.getPropertyId());
 		
 		return userResponse;

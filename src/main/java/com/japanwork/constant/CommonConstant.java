@@ -17,13 +17,14 @@ public class CommonConstant {
 		String APPLICATION_CANCELED = "APPLICATION_CANCELED";
     }
 	
-	public interface StatusRequestTranslation {
+	public interface RequestTranslationStatus {
 		String WAITING_FOR_HELPER = "WAITING_FOR_HELPER";
 		String WAITING_FOR_OWNER_AGREE = "WAITING_FOR_OWNER_AGREE";
 		String ON_GOING = "ON_GOING";
 		String FINISHED = "FINISHED";
 		String REVIEWED = "REVIEWED";
 		String CANCELED = "CANCELED";
+		String REJECTED = "REJECTED";
     }
 	
 	public interface RequestTranslationType {
@@ -31,6 +32,11 @@ public class CommonConstant {
 		String REQUEST_TRANSLATION_JOB = "REQUEST_TRANSLATION_JOB";
 		String REQUEST_TRANSLATION_CANDIDATE = "REQUEST_TRANSLATION_CANDIDATE";
 		String REQUEST_TRANSLATION_JOB_APPLICATION = "REQUEST_TRANSLATION_JOB_APPLICATION";
+    }
+	
+	public interface HistoryStatusTypes {
+		String REQUEST = "REQUEST";
+		String JOB_APPLICATION = "JOB_APPLICATION";
     }
 	
 	public interface Role {
