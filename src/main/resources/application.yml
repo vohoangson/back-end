@@ -5,12 +5,12 @@ server:
     port: 8080
 spring:
     datasource:
-        #url: jdbc:postgresql://103.81.84.160/japanwork
-        #username: postgres
-        #password: japanwork2202
-        url: jdbc:postgresql://localhost/japanwork
+        url: jdbc:postgresql://103.81.84.160/japanwork
         username: postgres
-        password: phunv143
+        password: japanwork2202
+        #url: jdbc:postgresql://localhost/japanwork
+        #username: postgres
+        #password: phunv143
     jpa:
         show-sql: true
         hibernate:
