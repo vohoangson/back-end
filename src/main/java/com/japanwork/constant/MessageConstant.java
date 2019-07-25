@@ -119,4 +119,5 @@ public class MessageConstant {
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
 	public static final String ERROR_401_MSG = "You do not have permission to access this page!";
 	public static final String ERROR_403_MSG = "Access Denied You don’t have permission to access!";
+	public static final String ERROR_403_TRANSLATION_MSG = "The owner reject or cancel you, please choose another request!";
 }
