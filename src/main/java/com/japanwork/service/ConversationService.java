@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.JobApplication;
+import com.japanwork.model.Translator;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.payload.response.ConversationResponse;
@@ -40,77 +43,48 @@ public class ConversationService {
 	private JobApplicationService jobApplicationService;
 	
 	@Transactional
-	public Conversation createConversationAll(UUID id) {		
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public Conversation createConversationAll(Translator translator, Company company, Candidate candidate) {		
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		if(jobApplication.getAllConversation() == null) {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Conversation conversation = new Conversation();
-			conversation.setTranslator(jobApplication.getTranslator());
-			conversation.setCandidate(jobApplication.getCandidate());
-			conversation.setCompany(jobApplication.getJob().getCompany());
-			conversation.setCreatedAt(timestamp);
-			conversation.setDeletedAt(null);
-			
-			Conversation result = conversationRepository.save(conversation);
-			
-			jobApplication.setAllConversation(result);
-			jobApplicationService.save(jobApplication);
-			
-			return result;
-		}
+		Conversation conversation = new Conversation();
+		conversation.setTranslator(translator);
+		conversation.setCandidate(candidate);
+		conversation.setCompany(company);
+		conversation.setCreatedAt(timestamp);
+		conversation.setDeletedAt(null);
 		
-		return jobApplication.getAllConversation();
+		Conversation result = conversationRepository.save(conversation);			
+		return result;
 	}
 	
-	public Conversation createConversationSupportCandidate(UUID id) {		
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public Conversation createConversationSupportCandidate(Translator translator, Candidate candidate) {		
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		if(jobApplication.getCandidateSupportConversaion() == null) {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Conversation conversation = new Conversation();
-			conversation.setTranslator(jobApplication.getTranslator());
-			conversation.setCandidate(jobApplication.getCandidate());
-			conversation.setCreatedAt(timestamp);
-			conversation.setDeletedAt(null);
-			
-			Conversation result = conversationRepository.save(conversation);
-			
-			jobApplication.setCandidateSupportConversaion(conversation);
-			jobApplicationService.save(jobApplication);
-			
-			return result;
-		}
+		Conversation conversation = new Conversation();
+		conversation.setTranslator(translator);
+		conversation.setCandidate(candidate);
+		conversation.setCreatedAt(timestamp);
+		conversation.setDeletedAt(null);
 		
-		return jobApplication.getCandidateSupportConversaion();
+		Conversation result = conversationRepository.save(conversation);	
+		return result;
 	}
 	
-	public Conversation createConversationSupportCompany(UUID id) {		
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public Conversation createConversationSupportCompany(Translator translator, Company company) {		
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		if(jobApplication.getCompanySupportConversation() == null) {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Conversation conversation = new Conversation();
-			
-			conversation.setTranslator(jobApplication.getTranslator());
-			conversation.setCompany(jobApplication.getJob().getCompany());
-			conversation.setCreatedAt(timestamp);
-			conversation.setDeletedAt(null);
-			
-			Conversation result = conversationRepository.save(conversation);
-			
-			jobApplication.setCompanySupportConversation(conversation);
-			jobApplicationService.save(jobApplication);
-			
-			return result;
-		}
-		return jobApplication.getCompanySupportConversation();
+		Conversation conversation = new Conversation();
+		
+		conversation.setTranslator(translator);
+		conversation.setCompany(company);
+		conversation.setCreatedAt(timestamp);
+		conversation.setDeletedAt(null);
+		
+		Conversation result = conversationRepository.save(conversation);			
+		return result;
 	}
 	
 	public List<Conversation> listConversationByUser(UserPrincipal userPrincipal, UUID id) {
