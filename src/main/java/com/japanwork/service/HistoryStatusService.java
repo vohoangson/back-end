@@ -44,9 +44,9 @@ public class HistoryStatusService {
 		return historyStatusRepository.save(requestTranslationStatus);
 	}
 	
-	public HistoryStatus statusRequestTranslation(RequestTranslation requestTranslation) {
-		return historyStatusRepository.findByObjecttableIdOrderByCreatedAtDesc(requestTranslation.getId()).get(0);
-	}
+//	public HistoryStatus statusRequestTranslation(RequestTranslation requestTranslation) {
+//		return historyStatusRepository.findByObjecttableIdOrderByCreatedAtDesc(requestTranslation.getId()).get(0);
+//	}
 	
 	public RequestTranslationStatusResponse convertRequestTranslationStatusResponse(HistoryStatus requestTranslationStatus) {
 		RequestTranslationStatusResponse obj = new RequestTranslationStatusResponse();

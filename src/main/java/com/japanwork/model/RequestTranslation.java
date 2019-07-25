@@ -41,7 +41,7 @@ public class RequestTranslation {
     
     @OneToOne
     @JoinColumn(name="conversation_id")
-    private Conversation converstaion;
+    private Conversation conversation;
     
     @OneToOne
     @JoinColumn(name="language_id")
@@ -109,12 +109,12 @@ public class RequestTranslation {
 		this.desc = desc;
 	}
 
-	public Conversation getConverstaion() {
-		return converstaion;
+	public Conversation getConversation() {
+		return conversation;
 	}
 
-	public void setConverstaion(Conversation converstaion) {
-		this.converstaion = converstaion;
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 
 	public Language getLanguage() {
@@ -158,7 +158,7 @@ public class RequestTranslation {
 	}
 
 	public RequestTranslation(UUID id, UUID ownerId, UUID objectTableId, Translator translator, String objectTableType,
-			String desc, Conversation converstaion, Language language, Set<HistoryStatus> historyStatus, Timestamp createdAt,
+			String desc, Conversation conversation, Language language, Set<HistoryStatus> historyStatus, Timestamp createdAt,
 			Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.ownerId = ownerId;
@@ -166,7 +166,7 @@ public class RequestTranslation {
 		this.translator = translator;
 		this.objectTableType = objectTableType;
 		this.desc = desc;
-		this.converstaion = converstaion;
+		this.conversation = conversation;
 		this.language = language;
 		this.historyStatus = historyStatus;
 		this.createdAt = createdAt;
