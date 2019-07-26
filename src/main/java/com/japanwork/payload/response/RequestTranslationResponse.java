@@ -4,29 +4,26 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.Language;
 
 public class RequestTranslationResponse {
 	private UUID id;
     
-	@JsonProperty("owner_id")
-    private UUID ownerId;
-	
-	@JsonProperty("objecttable_id")
-    private UUID objectTableId;
+    private OwnerResponse owner;
+
+    private ObjectTableResponse objectTable;
     
-	@JsonProperty("translator_id")
-    private UUID translatorId;
+    private TranslatorResponse translator;
     
     private RequestTranslationStatusResponse status;
     
     @JsonProperty("request_type")
     private String requestType;
     
-    @JsonProperty("converstaion_id")
-    private UUID converstaionId;
+    @JsonProperty("converstaion")
+    private ConversationResponse converstaion;
     
-    @JsonProperty("language_code")
-	private String languageCode;
+	private Language language;
     
     @JsonProperty("created_at")
     private Timestamp createdAt;
@@ -39,28 +36,28 @@ public class RequestTranslationResponse {
 		this.id = id;
 	}
 
-	public UUID getOwnerId() {
-		return ownerId;
+	public OwnerResponse getOwner() {
+		return owner;
 	}
 
-	public void setOwnerId(UUID ownerId) {
-		this.ownerId = ownerId;
+	public void setOwner(OwnerResponse owner) {
+		this.owner = owner;
 	}
 
-	public UUID getObjectTableId() {
-		return objectTableId;
+	public ObjectTableResponse getObjectTable() {
+		return objectTable;
 	}
 
-	public void setObjectTableId(UUID objectTableId) {
-		this.objectTableId = objectTableId;
+	public void setObjectTable(ObjectTableResponse objectTable) {
+		this.objectTable = objectTable;
 	}
 
-	public UUID getTranslatorId() {
-		return translatorId;
+	public TranslatorResponse getTranslator() {
+		return translator;
 	}
 
-	public void setTranslatorId(UUID translatorId) {
-		this.translatorId = translatorId;
+	public void setTranslator(TranslatorResponse translator) {
+		this.translator = translator;
 	}
 
 	public RequestTranslationStatusResponse getStatus() {
@@ -79,20 +76,20 @@ public class RequestTranslationResponse {
 		this.requestType = requestType;
 	}
 
-	public UUID getConverstaionId() {
-		return converstaionId;
+	public ConversationResponse getConverstaion() {
+		return converstaion;
 	}
 
-	public void setConverstaionId(UUID converstaionId) {
-		this.converstaionId = converstaionId;
+	public void setConverstaion(ConversationResponse converstaion) {
+		this.converstaion = converstaion;
 	}
 
-	public String getLanguageCode() {
-		return languageCode;
+	public Language getLanguage() {
+		return language;
 	}
 
-	public void setLanguageCode(String languageCode) {
-		this.languageCode = languageCode;
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -103,22 +100,21 @@ public class RequestTranslationResponse {
 		this.createdAt = createdAt;
 	}
 
+	public RequestTranslationResponse(UUID id, OwnerResponse owner, ObjectTableResponse objectTable,
+			TranslatorResponse translator, RequestTranslationStatusResponse status, String requestType,
+			ConversationResponse converstaion, Language language, Timestamp createdAt) {
+		this.id = id;
+		this.owner = owner;
+		this.objectTable = objectTable;
+		this.translator = translator;
+		this.status = status;
+		this.requestType = requestType;
+		this.converstaion = converstaion;
+		this.language = language;
+		this.createdAt = createdAt;
+	}
+
 	public RequestTranslationResponse() {
 
 	}
-
-	public RequestTranslationResponse(UUID id, UUID ownerId, UUID objectTableId, UUID translatorId,
-			RequestTranslationStatusResponse status, String requestType, UUID converstaionId, String languageCode,
-			Timestamp createdAt) {
-		this.id = id;
-		this.ownerId = ownerId;
-		this.objectTableId = objectTableId;
-		this.translatorId = translatorId;
-		this.status = status;
-		this.requestType = requestType;
-		this.converstaionId = converstaionId;
-		this.languageCode = languageCode;
-		this.createdAt = createdAt;
-	}
-    
 }

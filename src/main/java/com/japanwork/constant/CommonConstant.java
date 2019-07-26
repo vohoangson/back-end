@@ -58,6 +58,6 @@ public class CommonConstant {
 	
 	public interface NotificationType {
 		String MESSAGE = "Message";
-		String REQUEST_TRANSLATION = "REQUEST_TRANSLATION";
+		String NOTIFICATION = "Notification";
     }
 }
