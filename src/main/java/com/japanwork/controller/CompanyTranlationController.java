@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.japanwork.payload.response.BaseSuccessResponse;
+import com.japanwork.support.CommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,17 +36,24 @@ public class CompanyTranlationController {
 	private CompanyTranslationService companyTranslationService;
 
 	@Autowired
+	private CommonSupport commonSupport;
+
+	@Autowired
 	private UserService userService;
 
 	@PostMapping(UrlConstant.URL_COMPANY_TRANSLATION)
 	@ResponseBody
 	public BaseSuccessResponse create(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
+
+	    commonSupport.loadCompany(companyTranslationRequest.getCompanyId());
+        commonSupport.loadLanguage(companyTranslationRequest.getLanguageId());
+
 		CompanyTranslation companyTranslation = companyTranslationService.save(companyTranslationRequest, userPrincipal);
 		return new BaseSuccessResponse(
 		        "success",
-		        companyTranslationService.convertCompanyResponse(companyTranslation),
-                new Object()
+		        null,
+                null
         );
 	}
 

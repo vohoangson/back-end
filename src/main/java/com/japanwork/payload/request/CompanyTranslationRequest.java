@@ -10,6 +10,9 @@ public class CompanyTranslationRequest {
 	@NotNull(message = "company_required")
 	private UUID companyId;
 
+	@NotNull(message = "language_required")
+    private UUID languageId;
+
 	@NotBlank(message = "name_company_required")
 	private String name;
 
@@ -26,7 +29,15 @@ public class CompanyTranslationRequest {
 		this.companyId = companyId;
 	}
 
-	public String getName() {
+    public UUID getLanguageId() {
+        return languageId;
+    }
+
+    public void setLanguageId(UUID languageId) {
+        this.languageId = languageId;
+    }
+
+    public String getName() {
 		return name;
 	}
 

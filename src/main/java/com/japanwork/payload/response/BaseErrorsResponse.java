@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 public class BaseErrorsResponse {
     private String status;
-    private HashMap<String, String> errors;
+    private HashMap<String, HashMap> errors;
 
     public String getStatus() {
         return status;
     }
-    public HashMap<String, String> getErrors() {
+    public HashMap<String, HashMap> getErrors() {
         return errors;
     }
 
@@ -20,9 +20,18 @@ public class BaseErrorsResponse {
         this.errors = errors;
     }
 
-    public BaseErrorsResponse(String status, HashMap errors) {
-        this.status = status;
-        this.errors = errors;
+    public BaseErrorsResponse(Integer code, String message) {
+        this.status = "error";
+        this.errors = setErrorBody(code, message);
+    }
+
+    private HashMap setErrorBody(Integer code, String message) {
+        HashMap<String, Object> errorBody = new HashMap<>();
+
+        errorBody.put("code", code);
+        errorBody.put("message", message);
+
+        return errorBody;
     }
 }
 
