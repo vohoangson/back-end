@@ -1,20 +1,22 @@
 package com.japanwork.constant;
 
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
+
 public class MessageConstant {
 	public static final String INVALID_INPUT = "Invalid input!";
 	public static final String INVALID_INPUT_MSG = "Invalid input!";
-	
-	
+
+
 	public static final String DELETE = "Delete";
 	public static final String DEL_SUCCESS = "Successfully";
 	public static final String DEL_FAIL = "Fail";
 	public static final String UN_DELETE = "UnDelete";
 	public static final String UN_DEL_SUCCESS = "Successfully";
 	public static final String UN_DEL_FAIL = "Fail";
-	public static final String DELETE_FILE_AWS = "Delete file on Amazon Web Service:";	
-	
-	
+	public static final String DELETE_FILE_AWS = "Delete file on Amazon Web Service:";
+
+
 	public static final String LOGIN_FAIL = "invalid_user_or_password";
 	public static final String EMAIL_ALREADY = "email_already_in_use";
 	public static final String LOGIN_OAUTH2_FAIL= "login_oauth2_fail";
@@ -47,12 +49,12 @@ public class MessageConstant {
 	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL = "request_translation_accept_finish_fail";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS = "request_translation_refuse_finish_success";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL = "request_translation_refuse_finish_fail";
-	
+
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
 	public static final String ERROR_401 = "unauthorized";
 	public static final String ERROR_403 = "forbidden_error";
-	
+
 	//Message
 	public static final String LOGIN_FAIL_MSG = "Incorrect email or password!";
 	public static final String EMAIL_ALREADY_MSG = "Email address already in use.";
@@ -113,8 +115,16 @@ public class MessageConstant {
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS_MSG = "Request translation: Owner refuse finish success!";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL_MSG = "Request translation: Owner refuse finish fail!";
 	public static final String REQUEST_TRANSLATION_BAD_REQUEST_MSG = "Request translation: Bad request!";
-	
-	
+
+	//Company error response information
+	public static final String COMPANY_NOT_FOUND = "Company was not found!";
+    public static final Integer COMPANY_NOT_FOUND_CODE = 1001;
+
+    //Company error response information
+	public static final String LANGUAGE_NOT_FOUND = "Language was not found";
+    public static final Integer LANGUAGE_NOT_FOUND_CODE = 1021;
+
+
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
 	public static final String ERROR_401_MSG = "You do not have permission to access this page!";

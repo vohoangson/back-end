@@ -27,31 +27,31 @@ import com.japanwork.security.UserPrincipal;
 public class NotificationService {
 	@Autowired
 	private NotificationRepository notificationRepository;
-	
+
 	@Autowired
 	private ConversationService conversationService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private CandidateService candidateService;
-	
+
 	@Autowired
 	private TranslatorService translatorService;
-	
+
 	@Transactional
-	public Notification addNotification(UserPrincipal userPrincipal, UUID id, 
+	public Notification addNotification(UserPrincipal userPrincipal, UUID id,
 			NotificationRequest notificationRequest) throws ForbiddenException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		
+
 		UUID senderId = null;
 		User user = userService.getUser(userPrincipal);
-		
+
 		Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
 			senderId = candidateService.myCandidate(userPrincipal).getId();
@@ -59,22 +59,22 @@ public class NotificationService {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		}
-		
+
 		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
 			senderId = companyService.myCompany(userPrincipal).getId();
 			if(!conversation.getCompany().getId().equals(senderId)) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
-			
+
 		}
-		
+
 		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
 			senderId = translatorService.myTranslator(userPrincipal).getId();
 			if(!conversation.getTranslator().getId().equals(senderId)) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		}
-		
+
 		Notification notification = new Notification();
 		notification.setSenderId(senderId);
 		notification.setConversation(conversationService.findByIdAndIsDelete(id, null));
@@ -84,20 +84,20 @@ public class NotificationService {
 		notification.setNotificationType(1);
 		notification.setDeletedAt(null);
 		Notification result = notificationRepository.save(notification);
-		
+
 		return result;
 	}
-	
+
 	public Page<Notification> listNotification(UUID id, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Notification> pages = notificationRepository.findByConversationIdAndDeletedAt(
-					PageRequest.of(page-1, paging, Sort.by("createAt").descending()), id, null);
+			        PageRequest.of(page-1, paging, Sort.by("createAt").descending()), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 	}
-	
+
 	public NotificationResponse converNotificationResponse(Notification notification) {
 		NotificationResponse notificationResponse = new NotificationResponse();
 		notificationResponse.setId(notification.getId());
@@ -107,7 +107,7 @@ public class NotificationService {
 		notificationResponse.setNotificationType(notification.getNotificationType());
 		notificationResponse.setContent(notification.getContent());
 		notificationResponse.setCreateAt(notification.getCreatedAt());
-		
+
 		return notificationResponse;
 	}
 }
