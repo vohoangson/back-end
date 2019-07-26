@@ -9,21 +9,25 @@ import com.japanwork.model.Language;
 public class RequestTranslationResponse {
 	private UUID id;
     
-    private OwnerResponse owner;
+	@JsonProperty("owner_id")
+    private UUID ownerId;
 
-    private ObjectTableResponse objectTable;
+	@JsonProperty("objecttable_id")
+    private UUID objectTableId;
     
-    private TranslatorResponse translator;
+	@JsonProperty("translator_id")
+    private UUID translatorId;
     
     private RequestTranslationStatusResponse status;
     
     @JsonProperty("request_type")
     private String requestType;
     
-    @JsonProperty("converstaion")
-    private ConversationResponse converstaion;
+    @JsonProperty("converstaion_id")
+    private UUID converstaionId;
     
-	private Language language;
+    @JsonProperty("language_id")
+	private UUID languageId;
     
     @JsonProperty("created_at")
     private Timestamp createdAt;
@@ -36,28 +40,28 @@ public class RequestTranslationResponse {
 		this.id = id;
 	}
 
-	public OwnerResponse getOwner() {
-		return owner;
+	public UUID getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(OwnerResponse owner) {
-		this.owner = owner;
+	public void setOwnerId(UUID ownerId) {
+		this.ownerId = ownerId;
 	}
 
-	public ObjectTableResponse getObjectTable() {
-		return objectTable;
+	public UUID getObjectTableId() {
+		return objectTableId;
 	}
 
-	public void setObjectTable(ObjectTableResponse objectTable) {
-		this.objectTable = objectTable;
+	public void setObjectTableId(UUID objectTableId) {
+		this.objectTableId = objectTableId;
 	}
 
-	public TranslatorResponse getTranslator() {
-		return translator;
+	public UUID getTranslatorId() {
+		return translatorId;
 	}
 
-	public void setTranslator(TranslatorResponse translator) {
-		this.translator = translator;
+	public void setTranslatorId(UUID translatorId) {
+		this.translatorId = translatorId;
 	}
 
 	public RequestTranslationStatusResponse getStatus() {
@@ -76,20 +80,20 @@ public class RequestTranslationResponse {
 		this.requestType = requestType;
 	}
 
-	public ConversationResponse getConverstaion() {
-		return converstaion;
+	public UUID getConverstaionId() {
+		return converstaionId;
 	}
 
-	public void setConverstaion(ConversationResponse converstaion) {
-		this.converstaion = converstaion;
+	public void setConverstaionId(UUID converstaionId) {
+		this.converstaionId = converstaionId;
 	}
 
-	public Language getLanguage() {
-		return language;
+	public UUID getLanguageId() {
+		return languageId;
 	}
 
-	public void setLanguage(Language language) {
-		this.language = language;
+	public void setLanguageId(UUID languageId) {
+		this.languageId = languageId;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -100,17 +104,17 @@ public class RequestTranslationResponse {
 		this.createdAt = createdAt;
 	}
 
-	public RequestTranslationResponse(UUID id, OwnerResponse owner, ObjectTableResponse objectTable,
-			TranslatorResponse translator, RequestTranslationStatusResponse status, String requestType,
-			ConversationResponse converstaion, Language language, Timestamp createdAt) {
+	public RequestTranslationResponse(UUID id, UUID ownerId, UUID objectTableId, UUID translatorId,
+			RequestTranslationStatusResponse status, String requestType, UUID converstaionId, UUID languageId,
+			Timestamp createdAt) {
 		this.id = id;
-		this.owner = owner;
-		this.objectTable = objectTable;
-		this.translator = translator;
+		this.ownerId = ownerId;
+		this.objectTableId = objectTableId;
+		this.translatorId = translatorId;
 		this.status = status;
 		this.requestType = requestType;
-		this.converstaion = converstaion;
-		this.language = language;
+		this.converstaionId = converstaionId;
+		this.languageId = languageId;
 		this.createdAt = createdAt;
 	}
 
