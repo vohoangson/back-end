@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.japanwork.model.Language;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.Company;
 
-public class CompanyTranlationRepositoryIpml implements CompanyTranlationRepository{
+public class CompanyTranslationRepositoryIpml implements CompanyTranslationRepository{
 
 	@Override
 	public List<CompanyTranslation> findAll() {
@@ -41,7 +43,7 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -53,13 +55,13 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	@Override
 	public void deleteInBatch(Iterable<CompanyTranslation> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -113,25 +115,25 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(CompanyTranslation entity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends CompanyTranslation> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -163,5 +165,15 @@ public class CompanyTranlationRepositoryIpml implements CompanyTranlationReposit
 		// TODO Auto-generated method stub
 		return findByIdAndDeletedAt(id, deletedAt);
 	}
+
+    @Override
+    public List<CompanyTranslation> findByCompanyAndDeletedAt(Company company, Timestamp deletedAt) {
+        return findByCompanyAndDeletedAt(company, deletedAt);
+    }
+
+    @Override
+    public CompanyTranslation findByCompanyAndLanguageAndDeletedAt(Company company, Language language, Timestamp deletedAt) {
+        return findByCompanyAndLanguageAndDeletedAt(company, language, deletedAt);
+    }
 
 }
