@@ -24,9 +24,14 @@ public class UrlConstant {
 	public static final String URL_BUSINESS_UNDEL = "/business/undelete/{id}";
 
 	//Languague Type
-	public static final String URL_LANGUAGUE_TYPE = "/languagues";
-	public static final String URL_LANGUAGUE_TYPE_ID = "/languagues/{id}";
-	public static final String URL_LANGUAGUE_TYPE_UNDEL = "/languagues/undelete/{id}";
+	public static final String URL_LANGUAGUE = "/languagues";
+	public static final String URL_LANGUAGUE_ID = "/languagues/{id}";
+	public static final String URL_LANGUAGUE_UNDEL = "/languagues/undelete/{id}";
+	
+	//Languague Type
+	public static final String URL_LANGUAGUE_TYPE = "/languague-certificates";
+	public static final String URL_LANGUAGUE_TYPE_ID = "/languague-certificates/{id}";
+	public static final String URL_LANGUAGUE_TYPE_UNDEL = "/languague-certificates/undelete/{id}";
 
 	//Currency Unit
 	public static final String URL_CURRENCYUNIT = "/currencyunit";

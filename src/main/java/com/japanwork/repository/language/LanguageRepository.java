@@ -1,11 +1,10 @@
 package com.japanwork.repository.language;
 
-import org.apache.commons.codec.language.bm.Lang;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.UUID;
-import java.util.List;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.japanwork.model.Language;
 
