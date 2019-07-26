@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.Language;
 
 public class RequestTranslationResponse {
 	private UUID id;
