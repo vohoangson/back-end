@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Language {
 	@Id
@@ -18,10 +20,13 @@ public class Language {
     
     private String code;
     
+    @JsonIgnore
     private Timestamp createdAt;
     
+    @JsonIgnore
     private Timestamp updatedAt;
     
+    @JsonIgnore
     private Timestamp deletedAt;
 
 	public UUID getId() {
