@@ -426,10 +426,10 @@ public class RequestTranslationService {
 				sql.append(" AND r.translator.id = '" + translator.getId() + "' ");
 			} else if(user.getRole().equals(CommonConstant.Role.COMPANY)){
 				Company company = companyService.myCompany(userPrincipal);
-				sql.append(" AND r.ownewId = '" + company.getId() + "' ");
+				sql.append(" AND r.ownerId = '" + company.getId() + "' ");
 			} else {
 				Candidate candidate = candidateService.myCandidate(userPrincipal);
-				sql.append(" AND r.ownewId = '" + candidate.getId() + "' ");
+				sql.append(" AND r.ownerId = '" + candidate.getId() + "' ");
 			}
 		} else {
 			sql.append(" AND r.translator.id = null ");
