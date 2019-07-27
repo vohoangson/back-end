@@ -4,8 +4,6 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 public class CompanyTranslationRequest {
 	@NotNull(message = "company_required")
 	private UUID companyId;

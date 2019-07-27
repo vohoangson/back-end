@@ -1,15 +1,18 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,18 +29,23 @@ import com.japanwork.model.HistoryStatus;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.model.Language;
+import com.japanwork.model.PageInfo;
 import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
+import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
 import com.japanwork.repository.history_status.RequestTranslationRepository;
 import com.japanwork.security.UserPrincipal;
 
 @Service
 public class RequestTranslationService {
+	@PersistenceContext 
+	private EntityManager entityManager;
 	
 	@Autowired
 	private RequestTranslationRepository requestTranslationRepository;
@@ -364,42 +372,98 @@ public class RequestTranslationService {
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
-	public Page<RequestTranslation> yourRequestTranslation(UserPrincipal userPrincipal, int page, int paging){
-		User user = userService.getUser(userPrincipal);
-		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			Translator translator = translatorService.findTranslatorByUser(user);
-			try {
-				Page<RequestTranslation> pages = requestTranslationRepository.findAllByTranslatorAndDeletedAt(PageRequest.of(page-1, paging), translator, null);
-				return pages;
-			} catch (IllegalArgumentException e) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+	public BaseDataMetaResponse requestTranslations(UserPrincipal userPrincipal, 
+			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT DISTINCT r ");
+		sql.append("    FROM RequestTranslation r ");			
+		sql.append("	WHERE ");
+		sql.append("	r.deletedAt is null ");
+		if(filterRequest != null) {
+			if(filterRequest.getRequestTypes() != null) {
+				sql.append(" AND ");
+				if(filterRequest.getRequestTypes().size() == 1) {
+					sql.append("r.objectTableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
+				}
+				
+				if(filterRequest.getRequestTypes().size() > 1) {
+					sql.append("( b.objectTableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
+					for(int i = 1; i< filterRequest.getRequestTypes().size(); i++) {
+						sql.append(" OR b.objectTableType = '" + filterRequest.getRequestTypes().get(i) + "' ");
+					}
+					sql.append(" )");
+				}
 			}
-		} else if(user.getRole().equals(CommonConstant.Role.COMPANY)){
-			Company company = companyService.myCompany(userPrincipal);
-			try {
-				Page<RequestTranslation> pages = requestTranslationRepository.findAllByOwnerIdAndDeletedAt(PageRequest.of(page-1, paging), company.getId(), null);
-				return pages;
-			} catch (IllegalArgumentException e) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			
+			if(filterRequest.getLanguageIds() != null) {
+				sql.append(" AND ");
+				if(filterRequest.getLanguageIds().size() == 1) {
+					sql.append("r.language.id = '" + filterRequest.getLanguageIds().get(0) + "' ");
+				}
+				
+				if(filterRequest.getLanguageIds().size() > 1) {
+					sql.append("( r.language.id = '" + filterRequest.getLanguageIds().get(0) + "' ");
+					for(int i = 1; i< filterRequest.getLanguageIds().size(); i++) {
+						sql.append(" OR r.language.id = '" + filterRequest.getLanguageIds().get(i) + "' ");
+					}
+					sql.append(" )");
+				}
+			}
+			
+			if(!filterRequest.getPostDate().isEmpty()) {
+				sql.append(" AND ");
+				try {
+					sql.append(" r.createdAt >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate()) + "'");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if(filterRequest.isYourRequest()) {		
+			User user = userService.getUser(userPrincipal);
+			if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
+				Translator translator = translatorService.findTranslatorByUser(user);
+				sql.append(" AND r.translator.id = '" + translator.getId() + "' ");
+			} else if(user.getRole().equals(CommonConstant.Role.COMPANY)){
+				Company company = companyService.myCompany(userPrincipal);
+				sql.append(" AND r.ownewId = '" + company.getId() + "' ");
+			} else {
+				Candidate candidate = candidateService.myCandidate(userPrincipal);
+				sql.append(" AND r.ownewId = '" + candidate.getId() + "' ");
 			}
 		} else {
-			Candidate candidate = candidateService.myCandidate(userPrincipal);
-			try {
-				Page<RequestTranslation> pages = requestTranslationRepository.findAllByOwnerIdAndDeletedAt(PageRequest.of(page-1, paging), candidate.getId(), null);
-				return pages;
-			} catch (IllegalArgumentException e) {
-				throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			sql.append(" AND r.translator.id = null ");
+		}
+		sql.append(" ORDER BY r.createdAt ASC ");
+		
+		List<RequestTranslation> pages = (List<RequestTranslation>)entityManager
+										.createQuery(sql.toString(), RequestTranslation.class)
+										.setFirstResult((page-1)*paging)
+										.setMaxResults(paging).getResultList();
+		
+		long totalElements = ((List<RequestTranslation>)entityManager.createQuery(sql.toString(), RequestTranslation.class).getResultList()).size();
+		
+		int totalPage = (int)totalElements / paging;
+		if((totalElements % paging) > 0) {
+			totalPage ++;
+		}
+		if(totalPage == 0) {
+			totalPage = 1;
+		}
+		
+		PageInfo pageInfo = new PageInfo(page, totalPage, totalElements);
+		
+		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+		
+		if(pages.size() > 0) {
+			for (RequestTranslation requestTranslation : pages) {
+				HistoryStatus status = requestTranslation.getHistoryStatus().stream().findFirst().get();
+				list.add(convertRequestTranslationResponse(requestTranslation, status));
 			}
 		}
-	}
-	
-	public Page<RequestTranslation> newRequestTranslation(UserPrincipal userPrincipal, int page, int paging){
-		try {
-			Page<RequestTranslation> pages = requestTranslationRepository.findAllByTranslatorAndDeletedAt(PageRequest.of(page-1, paging), null, null);
-			return pages;
-		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
+		return response;
 	}
 	
 	public boolean checkRequestTranslation(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal){
@@ -450,52 +514,13 @@ public class RequestTranslationService {
 		requestTranslationResponse.setRequestType(requestTranslation.getObjectTableType());
 		
 		if(requestTranslation.getConversation() != null) {
-			requestTranslationResponse.setConverstaionId(requestTranslation.getConversation().getId());
+			requestTranslationResponse.setConversationId(requestTranslation.getConversation().getId());
 		}
 		
 		requestTranslationResponse.setLanguageId(requestTranslation.getLanguage().getId());
 		requestTranslationResponse.setCreatedAt(requestTranslation.getCreatedAt());
 		return requestTranslationResponse;
 	}
-	
-//	public OwnerResponse getOwner(RequestTranslation requestTranslation) {
-//		OwnerResponse ownerResponse = new OwnerResponse();
-//		if(requestTranslation.getObjectTableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
-//			Candidate candidate = candidateService.findByIdAndIsDelete(requestTranslation.getOwnerId());
-//			ownerResponse.setId(candidate.getId());
-//			ownerResponse.setName(candidate.getFullName());
-//			ownerResponse.setAvatar(candidate.getAvatar());
-//			
-//		} else {
-//			Company company = companyService.findByIdAndIsDelete(requestTranslation.getOwnerId());
-//			ownerResponse.setId(company.getId());
-//			ownerResponse.setName(company.getName());
-//			ownerResponse.setAvatar(company.getLogoUrl());
-//		}
-//		return ownerResponse;
-//	}
-//	
-//	public ObjectTableResponse getObjectTable(RequestTranslation requestTranslation) {
-//		ObjectTableResponse objectTable = new ObjectTableResponse();
-//		if(requestTranslation.getObjectTableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
-//			Candidate candidate = candidateService.findByIdAndIsDelete(requestTranslation.getObjectTableId());
-//			objectTable.setId(candidate.getId());
-//			objectTable.setName(candidate.getFullName());
-//		} else if(requestTranslation.getObjectTableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
-//			Company company = companyService.findByIdAndIsDelete(requestTranslation.getObjectTableId());
-//			objectTable.setId(company.getId());
-//			objectTable.setName(company.getName());
-//		} else if(requestTranslation.getObjectTableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
-//			Job job = jobService.findByIdAndIsDelete(requestTranslation.getObjectTableId());
-//			objectTable.setId(job.getId());
-//			objectTable.setName(job.getName());
-//		} else if(requestTranslation.getObjectTableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
-//			JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(requestTranslation.getObjectTableId());
-//			objectTable.setId(jobApplication.getId());
-//			objectTable.setName(jobApplication.getJob().getName());
-//		}
-//		return objectTable;
-//	}
 	
 	public UUID userCreateId(UserPrincipal userPrincipal, RequestTranslation requestTranslation) {
 		UUID userCreateId = null;

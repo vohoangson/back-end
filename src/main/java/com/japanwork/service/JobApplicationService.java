@@ -4,10 +4,13 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
+import com.japanwork.security.CurrentUser;
+import com.japanwork.security.UserPrincipal;
 
 @Service
 public class JobApplicationService {
@@ -35,23 +38,28 @@ public class JobApplicationService {
 		return jobApplicationRepository.save(jobApplication);
 	}
 	
+	public JobApplication createJobApplication(UUID id, UserPrincipal userPrincipal) {
+		
+		return null;
+	}
+	
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
 		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
 		ob.setCandidate(candidateService.convertCandiateResponse(jobApplication.getCandidate()));
 		ob.setTranslator(translatorService.convertTranslatorResponse(jobApplication.getTranslator()));
-		ob.setSubmitApplicationAt(jobApplication.getSubmitApplicationAt());
-		ob.setApproveApplicationAt(jobApplication.getApproveApplicationAt());
-		ob.setRejectApplicationAt(jobApplication.getRejectApplicationAt());
+//		ob.setSubmitApplicationAt(jobApplication.getSubmitApplicationAt());
+//		ob.setApproveApplicationAt(jobApplication.getApproveApplicationAt());
+//		ob.setRejectApplicationAt(jobApplication.getRejectApplicationAt());
 		ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getId());
 		ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getId());
 		ob.setAllConversation(jobApplication.getAllConversation().getId());
-		ob.setApplicationSucceedAt(jobApplication.getApplicationSucceedAt());
-		ob.setCancelReason(jobApplication.getCancelReason());
-		ob.setUserCancel(jobApplication.getUserCancel());
-		ob.setCancelAt(jobApplication.getCancelAt());
-		ob.setStatus(jobApplication.getStatus());
+//		ob.setApplicationSucceedAt(jobApplication.getApplicationSucceedAt());
+//		ob.setCancelReason(jobApplication.getCancelReason());
+//		ob.setUserCancel(jobApplication.getUserCancel());
+//		ob.setCancelAt(jobApplication.getCancelAt());
+//		ob.setStatus(jobApplication.getStatus());
 		
 		return ob;
 	}
