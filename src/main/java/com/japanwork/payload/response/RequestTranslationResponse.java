@@ -11,8 +11,8 @@ public class RequestTranslationResponse {
 	@JsonProperty("owner_id")
     private UUID ownerId;
 
-	@JsonProperty("objecttable_id")
-    private UUID objectTableId;
+	@JsonProperty("objectable_id")
+    private UUID objectableId;
     
 	@JsonProperty("translator_id")
     private UUID translatorId;
@@ -47,12 +47,12 @@ public class RequestTranslationResponse {
 		this.ownerId = ownerId;
 	}
 
-	public UUID getObjectTableId() {
-		return objectTableId;
+	public UUID getObjectableId() {
+		return objectableId;
 	}
 
-	public void setObjectTableId(UUID objectTableId) {
-		this.objectTableId = objectTableId;
+	public void setObjectableId(UUID objectableId) {
+		this.objectableId = objectableId;
 	}
 
 	public UUID getTranslatorId() {
@@ -103,12 +103,13 @@ public class RequestTranslationResponse {
 		this.createdAt = createdAt;
 	}
 
-	public RequestTranslationResponse(UUID id, UUID ownerId, UUID objectTableId, UUID translatorId,
+	public RequestTranslationResponse(UUID id, UUID ownerId, UUID objectableId, UUID translatorId,
 			RequestTranslationStatusResponse status, String requestType, UUID conversationId, UUID languageId,
 			Timestamp createdAt) {
+		super();
 		this.id = id;
 		this.ownerId = ownerId;
-		this.objectTableId = objectTableId;
+		this.objectableId = objectableId;
 		this.translatorId = translatorId;
 		this.status = status;
 		this.requestType = requestType;

@@ -26,15 +26,15 @@ public class RequestTranslation {
 	@Column(name = "owner_id")
 	private UUID ownerId;
 	
-	@Column(name = "objecttable_id")
-    private UUID objectTableId;
+	@Column(name = "objectable_id")
+    private UUID objectableId;
     
     @OneToOne
     @JoinColumn(name = "translator_id")
     private Translator translator;
     
-    @Column(name="objecttable_type")
-    private String objectTableType;
+    @Column(name="objectable_type")
+    private String objectableType;
     
     @Column(name="description")
     private String desc;
@@ -48,7 +48,7 @@ public class RequestTranslation {
     private Language language;
     
     @OneToMany
-    @JoinColumn(name="objecttable_id")
+    @JoinColumn(name="objectable_id")
     @OrderBy("createdAt DESC")
     private Set<HistoryStatus> historyStatus;
     
@@ -77,14 +77,6 @@ public class RequestTranslation {
 		this.ownerId = ownerId;
 	}
 
-	public UUID getObjectTableId() {
-		return objectTableId;
-	}
-
-	public void setObjectTableId(UUID objectTableId) {
-		this.objectTableId = objectTableId;
-	}
-
 	public Translator getTranslator() {
 		return translator;
 	}
@@ -93,12 +85,20 @@ public class RequestTranslation {
 		this.translator = translator;
 	}
 
-	public String getObjectTableType() {
-		return objectTableType;
+	public UUID getObjectableId() {
+		return objectableId;
 	}
 
-	public void setObjectTableType(String objectTableType) {
-		this.objectTableType = objectTableType;
+	public void setObjectableId(UUID objectableId) {
+		this.objectableId = objectableId;
+	}
+
+	public String getObjectableType() {
+		return objectableType;
+	}
+
+	public void setObjectableType(String objectableType) {
+		this.objectableType = objectableType;
 	}
 
 	public String getDesc() {
@@ -157,14 +157,14 @@ public class RequestTranslation {
 		this.deletedAt = deletedAt;
 	}
 
-	public RequestTranslation(UUID id, UUID ownerId, UUID objectTableId, Translator translator, String objectTableType,
-			String desc, Conversation conversation, Language language, Set<HistoryStatus> historyStatus, Timestamp createdAt,
-			Timestamp updatedAt, Timestamp deletedAt) {
+	public RequestTranslation(UUID id, UUID ownerId, UUID objectableId, Translator translator, String objectableType,
+			String desc, Conversation conversation, Language language, Set<HistoryStatus> historyStatus,
+			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.ownerId = ownerId;
-		this.objectTableId = objectTableId;
+		this.objectableId = objectableId;
 		this.translator = translator;
-		this.objectTableType = objectTableType;
+		this.objectableType = objectableType;
 		this.desc = desc;
 		this.conversation = conversation;
 		this.language = language;
