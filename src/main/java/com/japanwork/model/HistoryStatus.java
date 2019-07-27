@@ -21,7 +21,7 @@ public class HistoryStatus {
     @Column(name="id")
 	private UUID id;
 	
-	@Column(name = "user_create_id")
+	@Column(name = "creator_id")
 	private UUID creatorId;
 	
 	@Column(name = "objectable_id")

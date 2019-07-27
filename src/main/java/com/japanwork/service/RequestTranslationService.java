@@ -84,7 +84,7 @@ public class RequestTranslationService {
 			User user = userService.getUser(userPrincipal);
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
-				for (UUID objectTableId : requestTranslationRequest.getObjectTableId()) {
+				for (UUID objectTableId : requestTranslationRequest.getObjectableId()) {
 					RequestTranslation requestTranslation = new RequestTranslation();
 					if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
@@ -92,7 +92,7 @@ public class RequestTranslationService {
 						if(!company.getId().equals(objectTableId)) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectTableId(objectTableId);
+						requestTranslation.setObjectableId(objectTableId);
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
 						requestTranslation.setOwnerId(company.getId());
@@ -100,14 +100,14 @@ public class RequestTranslationService {
 						if(job == null || !job.getCompany().getId().equals(company.getId())) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectTableId(objectTableId);
+						requestTranslation.setObjectableId(objectTableId);
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
 						Candidate candidate = candidateService.myCandidate(userPrincipal);
 						requestTranslation.setOwnerId(candidate.getId());
 						if(!candidate.getId().equals(objectTableId)) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectTableId(objectTableId);
+						requestTranslation.setObjectableId(objectTableId);
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
 						requestTranslation.setOwnerId(company.getId());
@@ -115,11 +115,11 @@ public class RequestTranslationService {
 						if(jobApplication == null || jobApplication.getJob().getCompany().getId().equals(company.getId())) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectTableId(jobApplication.getId());
+						requestTranslation.setObjectableId(jobApplication.getId());
 					}
 					requestTranslation.setLanguage(new Language(languageId));
 					requestTranslation.setDesc(requestTranslationRequest.getDesc());
-					requestTranslation.setObjectTableType(requestTranslationRequest.getRequestType());
+					requestTranslation.setObjectableType(requestTranslationRequest.getRequestType());
 					requestTranslation.setCreatedAt(timestamp);
 					RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
 					HistoryStatus requestTranslationStatus = historyStatusService.save(
@@ -185,7 +185,7 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_ACCEPT_APPLY_FAIL_MSG);
 		}
 		
-		if(requestTranslation.getObjectTableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
+		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
 			Candidate candidate = candidateService.findByIdAndIsDelete(requestTranslation.getOwnerId());
 			Conversation conversation = conversationService.createConversationSupportCandidate(requestTranslation.getTranslator(), 
 					candidate);
@@ -383,13 +383,13 @@ public class RequestTranslationService {
 			if(filterRequest.getRequestTypes() != null) {
 				sql.append(" AND ");
 				if(filterRequest.getRequestTypes().size() == 1) {
-					sql.append("r.objectTableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
+					sql.append("r.objectableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
 				}
 				
 				if(filterRequest.getRequestTypes().size() > 1) {
-					sql.append("( b.objectTableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
+					sql.append("( b.objectableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
 					for(int i = 1; i< filterRequest.getRequestTypes().size(); i++) {
-						sql.append(" OR b.objectTableType = '" + filterRequest.getRequestTypes().get(i) + "' ");
+						sql.append(" OR b.objectableType = '" + filterRequest.getRequestTypes().get(i) + "' ");
 					}
 					sql.append(" )");
 				}
@@ -484,8 +484,8 @@ public class RequestTranslationService {
 		}
 		
 		for (UUID languageId : requestTranslationRequest.getLanguageId()) {
-			for (UUID objectTableId : requestTranslationRequest.getObjectTableId()) {
-				RequestTranslation requestTranslation = requestTranslationRepository.findByOwnerIdAndObjectTableIdAndObjectTableTypeAndLanguageAndDeletedAt(
+			for (UUID objectTableId : requestTranslationRequest.getObjectableId()) {
+				RequestTranslation requestTranslation = requestTranslationRepository.findByOwnerIdAndObjectableIdAndObjectableTypeAndLanguageAndDeletedAt(
 						ownerId, 
 						objectTableId,
 						requestTranslationRequest.getRequestType(),
@@ -505,13 +505,13 @@ public class RequestTranslationService {
 		RequestTranslationResponse requestTranslationResponse = new RequestTranslationResponse();
 		requestTranslationResponse.setId(requestTranslation.getId());
 		requestTranslationResponse.setOwnerId(requestTranslation.getOwnerId());
-		requestTranslationResponse.setObjectTableId(requestTranslation.getObjectTableId());
+		requestTranslationResponse.setObjectableId(requestTranslation.getObjectableId());
 		if(requestTranslation.getTranslator() != null) {
 			requestTranslationResponse.setTranslatorId(requestTranslation.getTranslator().getId());
 		}
 		
 		requestTranslationResponse.setStatus(historyStatusService.convertRequestTranslationStatusResponse(requestTranslationStatus));
-		requestTranslationResponse.setRequestType(requestTranslation.getObjectTableType());
+		requestTranslationResponse.setRequestType(requestTranslation.getObjectableType());
 		
 		if(requestTranslation.getConversation() != null) {
 			requestTranslationResponse.setConversationId(requestTranslation.getConversation().getId());

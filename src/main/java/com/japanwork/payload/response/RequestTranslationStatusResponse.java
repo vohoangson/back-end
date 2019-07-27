@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class RequestTranslationStatusResponse {
 	private UUID id;
 	
-	@JsonProperty("user_create_id")
+	@JsonProperty("creator_id")
 	private UUID creatorId;
 	
 	private String reason;

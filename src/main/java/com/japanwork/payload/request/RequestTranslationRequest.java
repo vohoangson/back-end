@@ -6,8 +6,8 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RequestTranslationRequest {
-	@JsonProperty("object_table_id")
-	private Set<UUID> objectTableId;
+	@JsonProperty("objectable_id")
+	private Set<UUID> objectableId;
 	
 	@JsonProperty("request_type")
 	private String requestType;
@@ -16,13 +16,13 @@ public class RequestTranslationRequest {
 	
 	@JsonProperty("language_id")
 	private Set<UUID> languageId;
-	
-	public Set<UUID> getObjectTableId() {
-		return objectTableId;
+
+	public Set<UUID> getObjectableId() {
+		return objectableId;
 	}
 
-	public void setObjectTableId(Set<UUID> objectTableId) {
-		this.objectTableId = objectTableId;
+	public void setObjectableId(Set<UUID> objectableId) {
+		this.objectableId = objectableId;
 	}
 
 	public String getRequestType() {
