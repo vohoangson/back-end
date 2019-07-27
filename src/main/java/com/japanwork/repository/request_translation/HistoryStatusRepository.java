@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.japanwork.model.HistoryStatus;
 
 public interface HistoryStatusRepository extends JpaRepository<HistoryStatus, UUID>{
-	public List<HistoryStatus> findByObjecttableIdOrderByCreatedAtDesc(UUID requestTranslationId);
+	public List<HistoryStatus> findByObjectableIdOrderByCreatedAtDesc(UUID requestTranslationId);
 }

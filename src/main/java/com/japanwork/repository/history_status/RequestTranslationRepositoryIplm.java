@@ -165,11 +165,11 @@ public class RequestTranslationRepositoryIplm implements RequestTranslationRepos
 	}
 
 	@Override
-	public RequestTranslation findByOwnerIdAndObjectTableIdAndObjectTableTypeAndLanguageAndDeletedAt(
+	public RequestTranslation findByOwnerIdAndObjectableIdAndObjectableTypeAndLanguageAndDeletedAt(
 			UUID ownerId, UUID objectTableId, String objectTableType, Language language,
 			Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByOwnerIdAndObjectTableIdAndObjectTableTypeAndLanguageAndDeletedAt(
+		return findByOwnerIdAndObjectableIdAndObjectableTypeAndLanguageAndDeletedAt(
 				ownerId, objectTableId, objectTableType, language, deletedAt);
 	}
 

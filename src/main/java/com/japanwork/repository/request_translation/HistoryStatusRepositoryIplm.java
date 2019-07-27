@@ -162,9 +162,9 @@ public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
 	}
 
 	@Override
-	public List<HistoryStatus> findByObjecttableIdOrderByCreatedAtDesc(UUID requestTranslationId) {
+	public List<HistoryStatus> findByObjectableIdOrderByCreatedAtDesc(UUID requestTranslationId) {
 		// TODO Auto-generated method stub
-		return findByObjecttableIdOrderByCreatedAtDesc(requestTranslationId);
+		return findByObjectableIdOrderByCreatedAtDesc(requestTranslationId);
 	}
 
 }
