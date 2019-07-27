@@ -21,7 +21,7 @@ public class HistoryStatusService {
 	public HistoryStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String type, 
 			Translator translator, Candidate candidate) {
 		HistoryStatus requestTranslationStatus = new HistoryStatus();
-		requestTranslationStatus.setObjecttableId(requestTranslation.getId());
+		requestTranslationStatus.setObjectableId(requestTranslation.getId());
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
 		requestTranslationStatus.setType(type);
@@ -31,10 +31,10 @@ public class HistoryStatusService {
 	}
 	
 	public HistoryStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String reason, 
-			String type, UUID userCreateId, Translator translator, Candidate candidate) {
+			String type, UUID creatorId, Translator translator, Candidate candidate) {
 		HistoryStatus requestTranslationStatus = new HistoryStatus();
-		requestTranslationStatus.setObjecttableId(requestTranslation.getId());
-		requestTranslationStatus.setUserCreateId(userCreateId);
+		requestTranslationStatus.setObjectableId(requestTranslation.getId());
+		requestTranslationStatus.setCreatorId(creatorId);
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
 		requestTranslationStatus.setType(type);
@@ -51,7 +51,7 @@ public class HistoryStatusService {
 	public RequestTranslationStatusResponse convertRequestTranslationStatusResponse(HistoryStatus requestTranslationStatus) {
 		RequestTranslationStatusResponse obj = new RequestTranslationStatusResponse();
 		obj.setId(requestTranslationStatus.getId());
-		obj.setUserCreateId(requestTranslationStatus.getUserCreateId());
+		obj.setCreatorId(requestTranslationStatus.getCreatorId());
 		obj.setStatus(requestTranslationStatus.getStatus());
 		obj.setReason(requestTranslationStatus.getReason());
 		obj.setCreatedAt(requestTranslationStatus.getCreatedAt());

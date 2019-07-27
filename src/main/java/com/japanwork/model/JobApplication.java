@@ -1,6 +1,7 @@
 package com.japanwork.model;
 
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -32,15 +35,6 @@ public class JobApplication {
     @JoinColumn(name = "translator_id")
     private Translator translator;
     
-    @Column(name="submit_application_at")
-    private Timestamp submitApplicationAt;
-    
-    @Column(name="approve_application_at")
-    private Timestamp approveApplicationAt;
-    
-    @Column(name="reject_application_at")
-    private Timestamp rejectApplicationAt;
-    
     @OneToOne
     @JoinColumn(name="candidate_support_conversaion_id")
     private Conversation candidateSupportConversaion;
@@ -53,20 +47,10 @@ public class JobApplication {
     @JoinColumn(name="all_conversation_id")
     private Conversation allConversation;
     
-    @Column(name="application_succeed_at")
-    private Timestamp applicationSucceedAt;
-    
-    @Column(name="cancel_reason")
-    private String cancelReason;
-    
-    @Column(name="user_cancel")
-    private int userCancel;
-    
-    @Column(name="cancel_at")
-    private Timestamp cancelAt;
-    
-    @Column(name="status")
-    private int status;
+    @OneToMany
+    @JoinColumn(name="objecttable_id")
+    @OrderBy("createdAt DESC")
+    private Set<HistoryStatus> historyStatus;
     
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -109,30 +93,6 @@ public class JobApplication {
 		this.translator = translator;
 	}
 
-	public Timestamp getSubmitApplicationAt() {
-		return submitApplicationAt;
-	}
-
-	public void setSubmitApplicationAt(Timestamp submitApplicationAt) {
-		this.submitApplicationAt = submitApplicationAt;
-	}
-
-	public Timestamp getApproveApplicationAt() {
-		return approveApplicationAt;
-	}
-
-	public void setApproveApplicationAt(Timestamp approveApplicationAt) {
-		this.approveApplicationAt = approveApplicationAt;
-	}
-
-	public Timestamp getRejectApplicationAt() {
-		return rejectApplicationAt;
-	}
-
-	public void setRejectApplicationAt(Timestamp rejectApplicationAt) {
-		this.rejectApplicationAt = rejectApplicationAt;
-	}
-
 	public Conversation getCandidateSupportConversaion() {
 		return candidateSupportConversaion;
 	}
@@ -157,44 +117,12 @@ public class JobApplication {
 		this.allConversation = allConversation;
 	}
 
-	public Timestamp getApplicationSucceedAt() {
-		return applicationSucceedAt;
+	public Set<HistoryStatus> getHistoryStatus() {
+		return historyStatus;
 	}
 
-	public void setApplicationSucceedAt(Timestamp applicationSucceedAt) {
-		this.applicationSucceedAt = applicationSucceedAt;
-	}
-
-	public String getCancelReason() {
-		return cancelReason;
-	}
-
-	public void setCancelReason(String cancelReason) {
-		this.cancelReason = cancelReason;
-	}
-
-	public int getUserCancel() {
-		return userCancel;
-	}
-
-	public void setUserCancel(int userCancel) {
-		this.userCancel = userCancel;
-	}
-
-	public Timestamp getCancelAt() {
-		return cancelAt;
-	}
-
-	public void setCancelAt(Timestamp cancelAt) {
-		this.cancelAt = cancelAt;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
+	public void setHistoryStatus(Set<HistoryStatus> historyStatus) {
+		this.historyStatus = historyStatus;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -221,26 +149,18 @@ public class JobApplication {
 		this.deletedAt = deletedAt;
 	}
 
-	public JobApplication(UUID id, Job job, Candidate candidate, Translator translator, Timestamp submitApplicationAt,
-			Timestamp approveApplicationAt, Timestamp rejectApplicationAt, Conversation candidateSupportConversaion,
-			Conversation companySupportConversation, Conversation allConversation, Timestamp applicationSucceedAt,
-			String cancelReason, int userCancel, Timestamp cancelAt, int status, Timestamp createdAt,
-			Timestamp updatedAt, Timestamp deletedAt) {
+	public JobApplication(UUID id, Job job, Candidate candidate, Translator translator,
+			Conversation candidateSupportConversaion, Conversation companySupportConversation,
+			Conversation allConversation, Set<HistoryStatus> historyStatus, Timestamp createdAt, Timestamp updatedAt,
+			Timestamp deletedAt) {
 		this.id = id;
 		this.job = job;
 		this.candidate = candidate;
 		this.translator = translator;
-		this.submitApplicationAt = submitApplicationAt;
-		this.approveApplicationAt = approveApplicationAt;
-		this.rejectApplicationAt = rejectApplicationAt;
 		this.candidateSupportConversaion = candidateSupportConversaion;
 		this.companySupportConversation = companySupportConversation;
 		this.allConversation = allConversation;
-		this.applicationSucceedAt = applicationSucceedAt;
-		this.cancelReason = cancelReason;
-		this.userCancel = userCancel;
-		this.cancelAt = cancelAt;
-		this.status = status;
+		this.historyStatus = historyStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;

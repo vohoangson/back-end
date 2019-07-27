@@ -1,8 +1,5 @@
 package com.japanwork.constant;
 
-
-import com.amazonaws.services.dynamodbv2.xspec.S;
-
 public class MessageConstant {
 	public static final String INVALID_INPUT = "Invalid input!";
 	public static final String INVALID_INPUT_MSG = "Invalid input!";

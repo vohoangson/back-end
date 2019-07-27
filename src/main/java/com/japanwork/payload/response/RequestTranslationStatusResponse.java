@@ -9,7 +9,7 @@ public class RequestTranslationStatusResponse {
 	private UUID id;
 	
 	@JsonProperty("user_create_id")
-	private UUID userCreateId;
+	private UUID creatorId;
 	
 	private String reason;
 	
@@ -26,12 +26,12 @@ public class RequestTranslationStatusResponse {
 		this.id = id;
 	}
 
-	public UUID getUserCreateId() {
-		return userCreateId;
+	public UUID getCreatorId() {
+		return creatorId;
 	}
 
-	public void setUserCreateId(UUID userCreateId) {
-		this.userCreateId = userCreateId;
+	public void setCreatorId(UUID creatorId) {
+		this.creatorId = creatorId;
 	}
 
 	public String getReason() {
@@ -57,11 +57,11 @@ public class RequestTranslationStatusResponse {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-
-	public RequestTranslationStatusResponse(UUID id, UUID userCreateId, String reason, String status,
+	
+	public RequestTranslationStatusResponse(UUID id, UUID creatorId, String reason, String status,
 			Timestamp createdAt) {
 		this.id = id;
-		this.userCreateId = userCreateId;
+		this.creatorId = creatorId;
 		this.reason = reason;
 		this.status = status;
 		this.createdAt = createdAt;
