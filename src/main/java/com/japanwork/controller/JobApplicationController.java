@@ -11,12 +11,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.security.CurrentUser;
+import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.JobApplicationService;
 
 @Controller
 public class JobApplicationController {
 	@Autowired
 	private JobApplicationService jobApplicationService;
+	
+	@GetMapping(UrlConstant.URL_JOB_APPLICATION)
+	@ResponseBody
+	public BaseDataResponse createJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		JobApplication jobApplication = jobApplicationService.createJobApplication(id, userPrincipal);
+		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication));
+	}
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID)
 	@ResponseBody

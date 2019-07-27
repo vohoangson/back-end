@@ -22,10 +22,10 @@ public class HistoryStatus {
 	private UUID id;
 	
 	@Column(name = "user_create_id")
-	private UUID userCreateId;
+	private UUID creatorId;
 	
-	@Column(name = "objecttable_id")
-	private UUID objecttableId;
+	@Column(name = "objectable_id")
+	private UUID objectableId;
 	
 	@OneToOne
     @JoinColumn(name = "translator_id")
@@ -55,20 +55,20 @@ public class HistoryStatus {
 		this.id = id;
 	}
 	
-	public UUID getUserCreateId() {
-		return userCreateId;
+	public UUID getCreatorId() {
+		return creatorId;
 	}
 
-	public void setUserCreateId(UUID userCreateId) {
-		this.userCreateId = userCreateId;
-	}
-	
-	public UUID getObjecttableId() {
-		return objecttableId;
+	public void setCreatorId(UUID creatorId) {
+		this.creatorId = creatorId;
 	}
 
-	public void setObjecttableId(UUID objecttableId) {
-		this.objecttableId = objecttableId;
+	public UUID getObjectableId() {
+		return objectableId;
+	}
+
+	public void setObjectableId(UUID objectableId) {
+		this.objectableId = objectableId;
 	}
 
 	public Translator getTranslator() {
@@ -119,11 +119,11 @@ public class HistoryStatus {
 		this.createdAt = createdAt;
 	}
 
-	public HistoryStatus(UUID id, UUID userCreateId, UUID objecttableId, Translator translator, Candidate candidate,
+	public HistoryStatus(UUID id, UUID creatorId, UUID objectableId, Translator translator, Candidate candidate,
 			String reason, String status, String type, Timestamp createdAt) {
 		this.id = id;
-		this.userCreateId = userCreateId;
-		this.objecttableId = objecttableId;
+		this.creatorId = creatorId;
+		this.objectableId = objectableId;
 		this.translator = translator;
 		this.candidate = candidate;
 		this.reason = reason;

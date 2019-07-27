@@ -76,7 +76,8 @@ public class UrlConstant {
 	public static final String URL_JOB_UNDEL = "/jobs/undelete/{id}";
 
 	//Job Application
-	public static final String URL_JOB_APPLICATION_ID= "/job-applications/{id}";
+	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";
+	public static final String URL_JOB_APPLICATION = "/jobs/{id}/apply";
 
 	//Request translation
 	public static final String URL_REQUEST_TRANSLATION = "/requests";
@@ -87,8 +88,7 @@ public class UrlConstant {
 	public static final String URL_REQUEST_TRANSLATION_REFUSE_FINISHED = "/requests/{id}/refuse-finished";
 	public static final String URL_REQUEST_TRANSLATION_CANCEL = "/requests/{id}/cancel";
 	public static final String URL_REQUEST_TRANSLATION_REJECT = "/requests/{id}/reject";
-	public static final String URL_REQUEST_TRANSLATION_NEW_REQUEST = "/requests/new-request";
-	public static final String URL_REQUEST_TRANSLATION_YOUR_REQUEST = "/requests/your-request";
+	public static final String URL_REQUEST_TRANSLATIONS = "/requests";
 
 	//Conversation
 	public static final String URL_JOB_APPLICATION_ID_CONVERSATION= "/job-applications/{id}/conversations";
