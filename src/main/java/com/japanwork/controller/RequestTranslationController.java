@@ -104,7 +104,7 @@ public class RequestTranslationController {
 			@RequestParam(defaultValue = "", name = "request_types") String requestTypes,
 			@RequestParam(defaultValue = "", name = "language_ids") String languageIds,
 			@RequestParam(defaultValue = "", name = "post_date") String postDate,
-			@RequestParam(defaultValue = "", name = "your_request") Boolean yourRequest,
+			@RequestParam(defaultValue = "false", name = "your_request") Boolean yourRequest,
 			@CurrentUser UserPrincipal userPrincipal){
 		
 		RequestTranslationFilterRequest filterRequest = new RequestTranslationFilterRequest();
