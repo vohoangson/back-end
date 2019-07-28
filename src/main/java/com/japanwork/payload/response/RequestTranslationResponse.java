@@ -31,6 +31,8 @@ public class RequestTranslationResponse {
     @JsonProperty("created_at")
     private Timestamp createdAt;
 
+    private String desc;
+    
 	public UUID getId() {
 		return id;
 	}
@@ -103,10 +105,17 @@ public class RequestTranslationResponse {
 		this.createdAt = createdAt;
 	}
 
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
 	public RequestTranslationResponse(UUID id, UUID ownerId, UUID objectableId, UUID translatorId,
 			RequestTranslationStatusResponse status, String requestType, UUID conversationId, UUID languageId,
-			Timestamp createdAt) {
-		super();
+			Timestamp createdAt, String desc) {
 		this.id = id;
 		this.ownerId = ownerId;
 		this.objectableId = objectableId;
@@ -116,6 +125,7 @@ public class RequestTranslationResponse {
 		this.conversationId = conversationId;
 		this.languageId = languageId;
 		this.createdAt = createdAt;
+		this.desc = desc;
 	}
 
 	public RequestTranslationResponse() {
