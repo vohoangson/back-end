@@ -135,8 +135,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CONTRACT,
                 		UrlConstant.URL_LANGUAGUE_TYPE,
                 		UrlConstant.URL_CURRENCYUNIT,
-                		UrlConstant.URL_USER)
+                		UrlConstant.URL_USER,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
                     	.permitAll()
+                	.antMatchers(HttpMethod.PATCH,
+                		UrlConstant.URL_REQUEST_TRANSLATION_CANCEL)
+                		.permitAll()
+            		.antMatchers(HttpMethod.POST,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS)
+                    	.hasAnyRole("COMPANY","CANDIDATE","ADMIN")	
+                	.antMatchers(HttpMethod.PATCH,
+                		UrlConstant.URL_REQUEST_TRANSLATION_ACCEPT_APPLY,
+                		UrlConstant.URL_REQUEST_TRANSLATION_ACCEPT_FINISHED,
+                		UrlConstant.URL_REQUEST_TRANSLATION_REFUSE_FINISHED,
+                		UrlConstant.URL_REQUEST_TRANSLATION_REJECT)
+                    	.hasAnyRole("COMPANY","CANDIDATE","ADMIN")	
                     .antMatchers(HttpMethod.POST,
                 		UrlConstant.URL_COMPANY,
                 		UrlConstant.URL_JOB)
@@ -154,14 +168,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CANDIDATE_ID_WISH)
                     	.hasAnyRole("CANDIDATE","ADMIN")
                 	.antMatchers(HttpMethod.DELETE,
-                    		UrlConstant.URL_JOB_ID
-                    		).hasAnyRole("ADMIN","COMPANY")
+                		UrlConstant.URL_JOB_ID
+                		).hasAnyRole("ADMIN","COMPANY")
                 	.antMatchers(HttpMethod.POST,
-                    		UrlConstant.URL_COMPANY_TS)
-                        	.hasAnyRole("TRANSLATOR","ADMIN")
-                        .antMatchers(HttpMethod.PATCH,
-                    		UrlConstant.URL_COMPANY_TS_ID)
-                        	.hasAnyRole("TRANSLATOR","ADMIN")
+                		UrlConstant.URL_COMPANY_TS)
+                    	.hasAnyRole("TRANSLATOR","ADMIN")
+                    .antMatchers(HttpMethod.PATCH,
+                		UrlConstant.URL_COMPANY_TS_ID,
+                		UrlConstant.URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN,
+                		UrlConstant.URL_REQUEST_TRANSLATION_CONFIRM_FINISHED)
+                    	.hasAnyRole("TRANSLATOR","ADMIN")
                     .antMatchers(HttpMethod.DELETE,
                 		UrlConstant.URL_COMPANY_ID,
                 		UrlConstant.URL_CANDIDATE_ID
@@ -184,23 +200,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CURRENCYUNIT
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.PATCH,
-                    		UrlConstant.URL_BUSINESS_ID,
-                    		UrlConstant.URL_CITY_ID,
-                    		UrlConstant.URL_DISTRICT_ID,
-                    		UrlConstant.URL_LEVEL_ID,
-                    		UrlConstant.URL_CONTRACT_ID,
-                    		UrlConstant.URL_LANGUAGUE_TYPE_ID,
-                    		UrlConstant.URL_CURRENCYUNIT_ID
-                    		).hasRole("ADMIN")
+                		UrlConstant.URL_BUSINESS_ID,
+                		UrlConstant.URL_CITY_ID,
+                		UrlConstant.URL_DISTRICT_ID,
+                		UrlConstant.URL_LEVEL_ID,
+                		UrlConstant.URL_CONTRACT_ID,
+                		UrlConstant.URL_LANGUAGUE_TYPE_ID,
+                		UrlConstant.URL_CURRENCYUNIT_ID
+                		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.DELETE,
-                    		UrlConstant.URL_BUSINESS_ID,
-                    		UrlConstant.URL_CITY_ID,
-                    		UrlConstant.URL_DISTRICT_ID,
-                    		UrlConstant.URL_LEVEL_ID,
-                    		UrlConstant.URL_CONTRACT_ID,
-                    		UrlConstant.URL_LANGUAGUE_TYPE,
-                    		UrlConstant.URL_CURRENCYUNIT_ID
-                    		).hasRole("ADMIN")
+                		UrlConstant.URL_BUSINESS_ID,
+                		UrlConstant.URL_CITY_ID,
+                		UrlConstant.URL_DISTRICT_ID,
+                		UrlConstant.URL_LEVEL_ID,
+                		UrlConstant.URL_CONTRACT_ID,
+                		UrlConstant.URL_LANGUAGUE_TYPE,
+                		UrlConstant.URL_CURRENCYUNIT_ID
+                		).hasRole("ADMIN")
                     .anyRequest()
                         .permitAll()
                     .and()

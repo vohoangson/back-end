@@ -19,6 +19,8 @@ import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.RequestTranslation;
 import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
 import com.japanwork.payload.request.RequestTranslationFilterRequest;
@@ -36,7 +38,7 @@ public class RequestTranslationController {
 	@Autowired
 	private RequestTranslationService requestTranslationService;
 	
-	@PostMapping(UrlConstant.URL_REQUEST_TRANSLATION)
+	@PostMapping(UrlConstant.URL_REQUEST_TRANSLATIONS)
 	@ResponseBody
 	public BaseDataResponse createRequestTranslation(@Valid @RequestBody RequestTranslationRequest requestTranslationRequest, 
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
@@ -118,8 +120,9 @@ public class RequestTranslationController {
 	
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
 	@ResponseBody
-	public BaseDataResponse requestTranslation(@PathVariable UUID id){
-		RequestTranslationResponse response = requestTranslationService.requestTranslation(id);
-		return new BaseDataResponse(response);
+	public BaseDataResponse requestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = requestTranslationService.requestTranslation(id, userPrincipal);
+		HistoryStatus status = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
 	}
 }
