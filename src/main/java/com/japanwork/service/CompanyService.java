@@ -2,7 +2,6 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,9 +33,13 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 
-	public List<Company> companiesByIds(Set<UUID> ids){
-		List<Company> list = companyRepository.findAllById(ids);
-		return list;
+	public Page<Company> companiesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
+		try {
+			Page<Company> pages = companyRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids,null);
+			return pages;
+		} catch (IllegalArgumentException e) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
 	}
 	public Company save(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {

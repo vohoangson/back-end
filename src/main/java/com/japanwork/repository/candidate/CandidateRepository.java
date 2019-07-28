@@ -16,5 +16,6 @@ public interface CandidateRepository extends JpaRepository<Candidate, UUID>{
 	public List<Candidate> findAllByDeletedAt(Timestamp deletedAt);
 	public Candidate findByUser(User user);
 	public Page<Candidate> findAllByDeletedAt(Pageable page, Timestamp deletedAt);
+	public Page<Candidate> findAllByIdInAndDeletedAt(Pageable page, Iterable<UUID> ids,Timestamp deletedAt);
 	public Candidate findByUserAndDeletedAt(User user, Timestamp deletedAt);
 }
