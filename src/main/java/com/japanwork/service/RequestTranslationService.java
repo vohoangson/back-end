@@ -84,34 +84,34 @@ public class RequestTranslationService {
 			User user = userService.getUser(userPrincipal);
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
-				for (UUID objectTableId : requestTranslationRequest.getObjectableId()) {
+				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
 					RequestTranslation requestTranslation = new RequestTranslation();
 					if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
 						requestTranslation.setOwnerId(company.getId());
-						if(!company.getId().equals(objectTableId)) {
+						if(!company.getId().equals(objectableId)) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectableId(objectTableId);
+						requestTranslation.setObjectableId(objectableId);
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
 						requestTranslation.setOwnerId(company.getId());
-						Job job = jobService.findByIdAndIsDelete(objectTableId);
+						Job job = jobService.findByIdAndIsDelete(objectableId);
 						if(job == null || !job.getCompany().getId().equals(company.getId())) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectableId(objectTableId);
+						requestTranslation.setObjectableId(objectableId);
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
 						Candidate candidate = candidateService.myCandidate(userPrincipal);
 						requestTranslation.setOwnerId(candidate.getId());
-						if(!candidate.getId().equals(objectTableId)) {
+						if(!candidate.getId().equals(objectableId)) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
-						requestTranslation.setObjectableId(objectTableId);
+						requestTranslation.setObjectableId(objectableId);
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
 						requestTranslation.setOwnerId(company.getId());
-						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(objectTableId);
+						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(objectableId);
 						if(jobApplication == null || jobApplication.getJob().getCompany().getId().equals(company.getId())) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
@@ -387,9 +387,9 @@ public class RequestTranslationService {
 				}
 				
 				if(filterRequest.getRequestTypes().size() > 1) {
-					sql.append("( b.objectableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
+					sql.append("( r.objectableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
 					for(int i = 1; i< filterRequest.getRequestTypes().size(); i++) {
-						sql.append(" OR b.objectableType = '" + filterRequest.getRequestTypes().get(i) + "' ");
+						sql.append(" OR r.objectableType = '" + filterRequest.getRequestTypes().get(i) + "' ");
 					}
 					sql.append(" )");
 				}
@@ -464,6 +464,15 @@ public class RequestTranslationService {
 		
 		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
 		return response;
+	}
+	
+	public RequestTranslationResponse requestTranslation(UUID id) throws ResourceNotFoundException{
+		RequestTranslation requestTranslation = requestTranslationRepository.findByIdAndDeletedAt(id, null);
+		if(requestTranslation == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+		HistoryStatus status = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		return this.convertRequestTranslationResponse(requestTranslation, status);
 	}
 	
 	public boolean checkRequestTranslation(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal){

@@ -89,6 +89,7 @@ public class UrlConstant {
 	public static final String URL_REQUEST_TRANSLATION_CANCEL = "/requests/{id}/cancel";
 	public static final String URL_REQUEST_TRANSLATION_REJECT = "/requests/{id}/reject";
 	public static final String URL_REQUEST_TRANSLATIONS = "/requests";
+	public static final String URL_REQUEST_TRANSLATIONS_ID = "/requests/{id}";
 
 	//Conversation
 	public static final String URL_JOB_APPLICATION_ID_CONVERSATION= "/job-applications/{id}/conversations";
