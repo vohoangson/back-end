@@ -557,6 +557,7 @@ public class RequestTranslationService {
 		
 		requestTranslationResponse.setLanguageId(requestTranslation.getLanguage().getId());
 		requestTranslationResponse.setCreatedAt(requestTranslation.getCreatedAt());
+		requestTranslationResponse.setDesc(requestTranslation.getDesc());
 		return requestTranslationResponse;
 	}
 	
