@@ -4,12 +4,10 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
-import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 
 @Service

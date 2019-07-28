@@ -98,7 +98,7 @@ public class RequestTranslationController {
 	
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS)
 	@ResponseBody
-	public BaseDataMetaResponse yourRequestTranslation(
+	public BaseDataMetaResponse requestTranslations(
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "request_types") String requestTypes,
@@ -114,5 +114,12 @@ public class RequestTranslationController {
 		filterRequest.setYourRequest(yourRequest);
 		
 		return requestTranslationService.requestTranslations(userPrincipal, filterRequest, page, paging);
+	}
+	
+	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
+	@ResponseBody
+	public BaseDataResponse requestTranslation(@PathVariable UUID id){
+		RequestTranslationResponse response = requestTranslationService.requestTranslation(id);
+		return new BaseDataResponse(response);
 	}
 }
