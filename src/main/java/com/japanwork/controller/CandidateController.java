@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -108,6 +109,12 @@ public class CandidateController {
 		
 		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
 		return response;
+	}
+	
+	@GetMapping(UrlConstant.URL_CANDIDATE_IDS)
+	@ResponseBody
+	public BaseDataResponse listCandidateByIds(@RequestParam(name = "ids") Set<UUID> ids) {
+		return new BaseDataResponse(candidateService.candidatesByIds(ids));
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_ID)

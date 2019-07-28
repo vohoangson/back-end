@@ -48,7 +48,7 @@ public class JobApplication {
     private Conversation allConversation;
     
     @OneToMany
-    @JoinColumn(name="objecttable_id")
+    @JoinColumn(name="objectable_id")
     @OrderBy("createdAt DESC")
     private Set<HistoryStatus> historyStatus;
     

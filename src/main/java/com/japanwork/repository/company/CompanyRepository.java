@@ -17,4 +17,5 @@ public interface CompanyRepository extends JpaRepository<Company, UUID>{
 	public Page<Company> findAllByDeletedAt(Pageable page, Timestamp deletedAt);
 	public Company findByUserAndDeletedAt(User user, Timestamp deletedAt);
 	public Company findByUser(User user);
+	public List<Company> findAllByIdAndDeletedAt(Iterable<UUID> ids, Timestamp deletedAt);
 }

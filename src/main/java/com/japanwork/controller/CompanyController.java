@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -57,6 +58,12 @@ public class CompanyController {
 		}
 
 		return new BaseDataMetaResponse(list, pageInfo);
+	}
+	
+	@GetMapping(UrlConstant.URL_COMPANY_IDS)
+	@ResponseBody
+	public BaseDataResponse listCompanyByIds(@RequestParam(name = "ids") Set<UUID> ids) {
+		return new BaseDataResponse(companyService.companiesByIds(ids));
 	}
 
 	@PostMapping(UrlConstant.URL_COMPANY)

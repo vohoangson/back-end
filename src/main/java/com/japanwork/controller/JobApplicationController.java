@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.HistoryStatus;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.JobApplicationService;
@@ -20,17 +23,18 @@ public class JobApplicationController {
 	@Autowired
 	private JobApplicationService jobApplicationService;
 	
-	@GetMapping(UrlConstant.URL_JOB_APPLICATION)
+	@PostMapping(UrlConstant.URL_JOB_APPLICATION)
 	@ResponseBody
 	public BaseDataResponse createJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
-		JobApplication jobApplication = jobApplicationService.createJobApplication(id, userPrincipal);
-		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication));
+		JobApplicationResponse jobApplicationResponse = jobApplicationService.createJobApplication(id, userPrincipal);
+		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID)
 	@ResponseBody
 	public BaseDataResponse findJobApplicationById(@PathVariable UUID id) {
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
-		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication));
+		HistoryStatus historyStatus = jobApplication.getHistoryStatus().stream().findFirst().get();
+		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication, historyStatus));
 	}
 }
