@@ -194,4 +194,10 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 		// TODO Auto-generated method stub
 		return findByUser(user);
 	}
+
+	@Override
+	public List<Company> findAllByIdAndDeletedAt(Iterable<UUID> ids, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByIdAndDeletedAt( ids, deletedAt);
+	}
 }

@@ -306,6 +306,10 @@ public class CandidateService {
 		}
 	}
 	
+	public List<Candidate> candidatesByIds(Set<UUID> ids){
+		List<Candidate> list = candidateRepository.findAllById(ids);
+		return list;
+	}
 	private void deleteExperiencer(UUID id) {
 		academyService.del(id);
 		experienceService.del(id);
