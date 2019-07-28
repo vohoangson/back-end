@@ -196,8 +196,8 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public List<Company> findAllByIdAndDeletedAt(Iterable<UUID> ids, Timestamp deletedAt) {
+	public Page<Company> findAllByIdInAndDeletedAt(Pageable page, Iterable<UUID> ids, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByIdAndDeletedAt( ids, deletedAt);
+		return findAllByIdInAndDeletedAt(page, ids, deletedAt);
 	}
 }

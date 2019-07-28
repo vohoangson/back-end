@@ -113,8 +113,20 @@ public class CandidateController {
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_IDS)
 	@ResponseBody
-	public BaseDataResponse listCandidateByIds(@RequestParam(name = "ids") Set<UUID> ids) {
-		return new BaseDataResponse(candidateService.candidatesByIds(ids));
+	public BaseDataMetaResponse listCandidateByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(name = "ids") Set<UUID> ids) {
+		Page<Candidate> pages = candidateService.candidatesByIds(ids, page, paging);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<CandidateResponse> list = new ArrayList<CandidateResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (Candidate candidate: pages.getContent()) {
+				list.add(candidateService.convertCandiateResponse(candidate));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_ID)

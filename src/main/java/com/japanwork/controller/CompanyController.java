@@ -62,8 +62,21 @@ public class CompanyController {
 	
 	@GetMapping(UrlConstant.URL_COMPANY_IDS)
 	@ResponseBody
-	public BaseDataResponse listCompanyByIds(@RequestParam(name = "ids") Set<UUID> ids) {
-		return new BaseDataResponse(companyService.companiesByIds(ids));
+	public BaseDataMetaResponse listCompanyByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(name = "ids") Set<UUID> ids) {
+		
+		Page<Company> pages = companyService.companiesByIds(ids, page, paging);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (Company company : pages.getContent()) {
+				list.add(companyService.convertCompanyResponse(company));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
 	}
 
 	@PostMapping(UrlConstant.URL_COMPANY)

@@ -192,5 +192,11 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 		// TODO Auto-generated method stub
 		return findByUserAndDeletedAt(user, deletedAt);
 	}
+
+	@Override
+	public Page<Candidate> findAllByIdInAndDeletedAt(Pageable page, Iterable<UUID> ids, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByIdInAndDeletedAt(page, ids, deletedAt);
+	}
 	
 }

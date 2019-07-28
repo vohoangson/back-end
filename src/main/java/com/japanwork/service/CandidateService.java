@@ -306,9 +306,9 @@ public class CandidateService {
 		}
 	}
 	
-	public List<Candidate> candidatesByIds(Set<UUID> ids){
-		List<Candidate> list = candidateRepository.findAllById(ids);
-		return list;
+	public Page<Candidate> candidatesByIds(Set<UUID> ids, int page, int paging){
+		Page<Candidate> pages = candidateRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids, null);
+		return pages;
 	}
 	private void deleteExperiencer(UUID id) {
 		academyService.del(id);
