@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -47,6 +48,25 @@ public class CompanyController {
 	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		Page<Company> pages = companyService.findAllByIsDelete(page, paging);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (Company company : pages.getContent()) {
+				list.add(companyService.convertCompanyResponse(company));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
+	}
+	
+	@GetMapping(UrlConstant.URL_COMPANY_IDS)
+	@ResponseBody
+	public BaseDataMetaResponse listCompanyByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(name = "ids") Set<UUID> ids) {
+		
+		Page<Company> pages = companyService.companiesByIds(ids, page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
 

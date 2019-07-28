@@ -59,6 +59,7 @@ public class UrlConstant {
 
 	//Company
 	public static final String URL_COMPANY = "/companies";
+	public static final String URL_COMPANY_IDS = "/companies-by-ids";
 	public static final String URL_COMPANY_ID = "/companies/{id}";
 	public static final String URL_MY_COMPANY = "/companies/my_company";
 	public static final String URL_COMPANY_ID_JOB = "/companies/{id}/jobs";
@@ -114,6 +115,7 @@ public class UrlConstant {
 
 	//CANDIDATE
 	public static final String URL_CANDIDATE = "/candidates";
+	public static final String URL_CANDIDATE_IDS = "/candidates-by-ids";
 	public static final String URL_MY_CANDIDATE = "/candidates/my-candidate";
 	public static final String URL_CANDIDATE_ID = "/candidates/{id}";
 	public static final String URL_CANDIDATE_UNDEL = "/candidates/undelete/{id}";

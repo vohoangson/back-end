@@ -306,6 +306,10 @@ public class CandidateService {
 		}
 	}
 	
+	public Page<Candidate> candidatesByIds(Set<UUID> ids, int page, int paging){
+		Page<Candidate> pages = candidateRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids, null);
+		return pages;
+	}
 	private void deleteExperiencer(UUID id) {
 		academyService.del(id);
 		experienceService.del(id);

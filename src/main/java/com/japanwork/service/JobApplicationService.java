@@ -1,10 +1,16 @@
 package com.japanwork.service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.constant.CommonConstant;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
@@ -24,6 +30,9 @@ public class JobApplicationService {
 	@Autowired
 	private TranslatorService translatorService;
 	
+	@Autowired
+	private HistoryStatusService historyStatusService;
+	
 	public JobApplication findByJobIdAndIsDelete(UUID id) {
 		return jobApplicationRepository.findByJobIdAndDeletedAt(id, null);
 	}
@@ -36,29 +45,41 @@ public class JobApplicationService {
 		return jobApplicationRepository.save(jobApplication);
 	}
 	
-	public JobApplication createJobApplication(UUID id, UserPrincipal userPrincipal) {
+	public JobApplicationResponse createJobApplication(UUID id, UserPrincipal userPrincipal) {
+		JobApplication jobApplication = new JobApplication();
 		
-		return null;
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		Job job = jobService.findByIdAndIsDelete(id);
+		Candidate candidate = candidateService.myCandidate(userPrincipal);
+		
+		jobApplication.setJob(job);
+		jobApplication.setCandidate(candidate);
+		jobApplication.setCreatedAt(timestamp);
+		jobApplication.setDeletedAt(null);
+		JobApplication result = jobApplicationRepository.save(jobApplication);
+		
+		HistoryStatus historyStatus = historyStatusService.save(
+				result.getId(), 
+				timestamp, 
+				CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE,
+				CommonConstant.HistoryStatusTypes.JOB_APPLICATION,
+				null,
+				null);
+		return this.convertApplicationResponse(jobApplication, historyStatus);
 	}
 	
-	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication) {
+	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, HistoryStatus historyStatus) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
 		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
 		ob.setCandidate(candidateService.convertCandiateResponse(jobApplication.getCandidate()));
 		ob.setTranslator(translatorService.convertTranslatorResponse(jobApplication.getTranslator()));
-//		ob.setSubmitApplicationAt(jobApplication.getSubmitApplicationAt());
-//		ob.setApproveApplicationAt(jobApplication.getApproveApplicationAt());
-//		ob.setRejectApplicationAt(jobApplication.getRejectApplicationAt());
 		ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getId());
 		ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getId());
 		ob.setAllConversation(jobApplication.getAllConversation().getId());
-//		ob.setApplicationSucceedAt(jobApplication.getApplicationSucceedAt());
-//		ob.setCancelReason(jobApplication.getCancelReason());
-//		ob.setUserCancel(jobApplication.getUserCancel());
-//		ob.setCancelAt(jobApplication.getCancelAt());
-//		ob.setStatus(jobApplication.getStatus());
-		
+		ob.setStatus(historyStatusService.convertRequestTranslationStatusResponse(historyStatus));
+		ob.setCreatedAt(jobApplication.getCreatedAt());
 		return ob;
 	}
 }

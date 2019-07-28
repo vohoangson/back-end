@@ -6,10 +6,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.model.RequestTranslation;
-import com.japanwork.model.Translator;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.Translator;
 import com.japanwork.payload.response.RequestTranslationStatusResponse;
 import com.japanwork.repository.request_translation.HistoryStatusRepository;
 
@@ -18,10 +17,10 @@ public class HistoryStatusService {
 	@Autowired
 	private HistoryStatusRepository historyStatusRepository;
 	
-	public HistoryStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String type, 
+	public HistoryStatus save(UUID objectableId, Timestamp timestamp, String status, String type, 
 			Translator translator, Candidate candidate) {
 		HistoryStatus requestTranslationStatus = new HistoryStatus();
-		requestTranslationStatus.setObjectableId(requestTranslation.getId());
+		requestTranslationStatus.setObjectableId(objectableId);
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
 		requestTranslationStatus.setType(type);
@@ -30,10 +29,10 @@ public class HistoryStatusService {
 		return historyStatusRepository.save(requestTranslationStatus);
 	}
 	
-	public HistoryStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String reason, 
+	public HistoryStatus save(UUID objectableId, Timestamp timestamp, String status, String reason, 
 			String type, UUID creatorId, Translator translator, Candidate candidate) {
 		HistoryStatus requestTranslationStatus = new HistoryStatus();
-		requestTranslationStatus.setObjectableId(requestTranslation.getId());
+		requestTranslationStatus.setObjectableId(objectableId);
 		requestTranslationStatus.setCreatorId(creatorId);
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);

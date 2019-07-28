@@ -123,7 +123,7 @@ public class RequestTranslationService {
 					requestTranslation.setCreatedAt(timestamp);
 					RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
 					HistoryStatus requestTranslationStatus = historyStatusService.save(
-							resultRequest, 
+							resultRequest.getId(), 
 							timestamp, 
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER,
 							CommonConstant.HistoryStatusTypes.REQUEST,
@@ -163,7 +163,7 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -200,7 +200,7 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.ON_GOING,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -225,7 +225,7 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.REVIEWED,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -250,7 +250,7 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.FINISHED,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -275,7 +275,7 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.ON_GOING,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -304,7 +304,7 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.REJECTED, 
 				reasonReject.getReason(),
@@ -316,7 +316,7 @@ public class RequestTranslationService {
 		date = new Date();
 		timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -349,7 +349,7 @@ public class RequestTranslationService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.CANCELED, 
 				reasonCancel.getReason(),
@@ -361,7 +361,7 @@ public class RequestTranslationService {
 		date = new Date();
 		timestamp = new Timestamp(date.getTime());
 		HistoryStatus result = historyStatusService.save(
-				requestTranslation, 
+				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER,
 				CommonConstant.HistoryStatusTypes.REQUEST,
@@ -557,6 +557,7 @@ public class RequestTranslationService {
 		
 		requestTranslationResponse.setLanguageId(requestTranslation.getLanguage().getId());
 		requestTranslationResponse.setCreatedAt(requestTranslation.getCreatedAt());
+		requestTranslationResponse.setDesc(requestTranslation.getDesc());
 		return requestTranslationResponse;
 	}
 	
