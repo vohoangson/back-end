@@ -43,9 +43,9 @@ public class NotificationController {
 	
 	@PostMapping(UrlConstant.URL_CONVERSATION_ID)
 	@ResponseBody
-	public BaseDataResponse addNotification(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
+	public BaseDataResponse addMessage(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
 			@Valid @RequestBody NotificationRequest notificationRequest) {
-		Notification notification =  notificationService.addNotification(userPrincipal, id, notificationRequest);
+		Notification notification =  notificationService.addMessage(userPrincipal, id, notificationRequest);
 		BaseDataResponse response = new BaseDataResponse(notificationService.converNotificationResponse(notification));
 		Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 		if(conversation.getCandidate() != null) {
@@ -60,12 +60,21 @@ public class NotificationController {
 		return response;
 	}
 	
+//	@PostMapping(UrlConstant.URL_NOTIFICATION)
+//	@ResponseBody
+//	public BaseDataResponse addNotification(UUID userId, String title, String type) {
+//		Notification notification =  notificationService.addNotification(userId, title, type);
+//		BaseDataResponse response = new BaseDataResponse(notificationService.converNotificationResponse(notification));
+//		rabbitTemplate.convertAndSend("notifications/"+notification.getObjectableId(), ""+notification.getObjectableId(), response);
+//		return response;
+//	}
+	
 	@GetMapping(UrlConstant.URL_CONVERSATION_ID)
 	@ResponseBody
-	public BaseDataMetaResponse listNotification(@PathVariable UUID id, 
+	public BaseDataMetaResponse listMessage(@PathVariable UUID id, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
-		Page<Notification> pages = notificationService.listNotification(id, page, paging);
+		Page<Notification> pages = notificationService.listMessage(id, page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		
 		List<NotificationResponse> list = new ArrayList<NotificationResponse>();

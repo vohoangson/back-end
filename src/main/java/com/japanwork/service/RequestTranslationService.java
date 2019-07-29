@@ -74,6 +74,9 @@ public class RequestTranslationService {
 	@Autowired
 	private ConversationService conversationService;
 	
+	@Autowired
+	private NotificationService notificationService;
+	
 	@Transactional
 	public List<RequestTranslationResponse> createRequestTranslation(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal) 
 			throws ServerError, BadRequestException{
@@ -169,7 +172,11 @@ public class RequestTranslationService {
 				CommonConstant.HistoryStatusTypes.REQUEST,
 				translator,
 				null);
-		
+		notificationService.addNotification(
+				requestTranslation.getId(),
+				this.userIdOfOwner(requestTranslation), 
+				CommonConstant.NotificationContent.HELPER_JOINED,
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -206,6 +213,11 @@ public class RequestTranslationService {
 				CommonConstant.HistoryStatusTypes.REQUEST,
 				requestTranslation.getTranslator(),
 				null);
+		notificationService.addNotification(
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
+				CommonConstant.NotificationContent.OWNER_ACCEPTED_APPLY,
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -231,6 +243,11 @@ public class RequestTranslationService {
 				CommonConstant.HistoryStatusTypes.REQUEST,
 				requestTranslation.getTranslator(),
 				null);
+		notificationService.addNotification(
+				requestTranslation.getId(),
+				this.userIdOfOwner(requestTranslation), 
+				CommonConstant.NotificationContent.HELPER_FINISHED,
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -256,6 +273,11 @@ public class RequestTranslationService {
 				CommonConstant.HistoryStatusTypes.REQUEST,
 				requestTranslation.getTranslator(),
 				null);
+		notificationService.addNotification(
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
+				CommonConstant.NotificationContent.OWNER_ACCEPTED_FINISHED,
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -281,6 +303,11 @@ public class RequestTranslationService {
 				CommonConstant.HistoryStatusTypes.REQUEST,
 				requestTranslation.getTranslator(),
 				null);
+		notificationService.addNotification(
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
+				CommonConstant.NotificationContent.OWNER_REFUSED_FINISHED,
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -297,7 +324,6 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG);
 		}
 		Translator translator = requestTranslation.getTranslator();
-		UUID userCreateId = this.userCreateId(userPrincipal, requestTranslation);
 		requestTranslation.setTranslator(null);
 		requestTranslationRepository.save(requestTranslation);
 		
@@ -309,7 +335,7 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.REJECTED, 
 				reasonReject.getReason(),
 				CommonConstant.HistoryStatusTypes.REQUEST,
-				userCreateId,
+				requestTranslation.getOwnerId(),
 				translator,
 				null);
 		
@@ -322,7 +348,11 @@ public class RequestTranslationService {
 				CommonConstant.HistoryStatusTypes.REQUEST,
 				null,
 				null);
-		
+		notificationService.addNotification(
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
+				CommonConstant.NotificationContent.OWNER_REJECT_APPLY,
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -432,7 +462,7 @@ public class RequestTranslationService {
 		} else {
 			sql.append(" AND r.translator.id = null ");
 		}
-		sql.append(" ORDER BY r.createdAt ASC ");
+		sql.append(" ORDER BY r.createdAt DESC ");
 		
 		List<RequestTranslation> pages = (List<RequestTranslation>)entityManager
 										.createQuery(sql.toString(), RequestTranslation.class)
@@ -565,11 +595,31 @@ public class RequestTranslationService {
 		UUID userCreateId = null;
 		if(userService.findByIdAndIsDelete(userPrincipal.getId()).getRole().equals(CommonConstant.Role.TRANSLATOR)) {
 			userCreateId = requestTranslation.getTranslator().getId();
+			notificationService.addNotification(
+					requestTranslation.getId(),
+					userPrincipal.getId(), 
+					CommonConstant.NotificationContent.HELPER_CANCEL,
+					CommonConstant.NotificationType.STATUS_REQUEST);
 		} else {
 			userCreateId = requestTranslation.getOwnerId();
+			notificationService.addNotification(
+					requestTranslation.getId(),
+					userPrincipal.getId(), 
+					CommonConstant.NotificationContent.OWNER_CANCEL,
+					CommonConstant.NotificationType.STATUS_REQUEST);
 		}
 		
 		return userCreateId;
+	}
+	
+	public UUID userIdOfOwner(RequestTranslation requestTranslation) {
+		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
+			Candidate candidate = candidateService.findByIdAndIsDelete(requestTranslation.getOwnerId());
+			return candidate.getUser().getId();
+		} else {
+			Company company = companyService.findByIdAndIsDelete(requestTranslation.getOwnerId());
+			return company.getUser().getId();
+		}
 	}
 	
 	public boolean checkTranslatorJoin(Set<HistoryStatus> status, Translator translator) {

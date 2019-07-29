@@ -2,6 +2,7 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +118,15 @@ public class TranslatorService {
 	public Page<Translator> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Translator> pages = translatorRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
+			return pages;
+		} catch (IllegalArgumentException e) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+	}
+	
+	public Page<Translator> translatorsByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
+		try {
+			Page<Translator> pages = translatorRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids,null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);

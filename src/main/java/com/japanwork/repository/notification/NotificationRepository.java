@@ -10,5 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.japanwork.model.Notification;
 
 public interface NotificationRepository extends JpaRepository<Notification, UUID>{
-	public Page<Notification> findByConversationIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt);
+	public Page<Notification> findByObjectableIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt);
 }

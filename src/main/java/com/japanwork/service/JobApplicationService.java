@@ -74,10 +74,22 @@ public class JobApplicationService {
 		ob.setId(jobApplication.getId());
 		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
 		ob.setCandidate(candidateService.convertCandiateResponse(jobApplication.getCandidate()));
-		ob.setTranslator(translatorService.convertTranslatorResponse(jobApplication.getTranslator()));
-		ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getId());
-		ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getId());
-		ob.setAllConversation(jobApplication.getAllConversation().getId());
+		if(jobApplication.getTranslator() != null) {
+			ob.setTranslator(translatorService.convertTranslatorResponse(jobApplication.getTranslator()));
+		}
+		
+		if(jobApplication.getCandidateSupportConversaion() != null) {
+			ob.setCandidateSupportConversaionId(jobApplication.getCandidateSupportConversaion().getId());
+		}
+		
+		if(jobApplication.getCompanySupportConversation() != null) {
+			ob.setCompanySupportConversationId(jobApplication.getCompanySupportConversation().getId());
+		}
+		
+		if(jobApplication.getAllConversation() != null) {
+			ob.setAllConversation(jobApplication.getAllConversation().getId());
+		}
+				
 		ob.setStatus(historyStatusService.convertRequestTranslationStatusResponse(historyStatus));
 		ob.setCreatedAt(jobApplication.getCreatedAt());
 		return ob;
