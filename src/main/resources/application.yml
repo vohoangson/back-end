@@ -5,9 +5,9 @@ server:
     port: 8080
 spring:
     datasource:
-        url: jdbc:postgresql://localhost/social_network_job
-        username: vohoangson
-        password: 12345678
+        url: jdbc:postgresql://103.81.84.160/japanwork
+        username: postgres
+        password: japanwork2202
     jpa:
         show-sql: true
         hibernate:
