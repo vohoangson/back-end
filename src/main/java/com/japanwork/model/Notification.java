@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,21 +19,20 @@ public class Notification {
     @Column(name="id")
 	private long id;
 	
-	@OneToOne
-    @JoinColumn(name = "conversation_id")
-	private Conversation conversation;
+	@Column(name = "objectable_id")
+	private UUID objectableId;
+	
+	@Column(name = "notification_type")
+	private String notificationType;
+	
+	@Column(name = "receiver_id")
+	private UUID receiverId;
 	
 	@Column(name = "sender_id")
 	private UUID senderId;
 	
 	@Column(name = "content")
 	private String content;
-	
-	@Column(name = "title")
-	private String title;
-	
-	@Column(name = "notification_type")
-	private int notificationType;
 	
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -54,12 +51,28 @@ public class Notification {
 		this.id = id;
 	}
 
-	public Conversation getConversation() {
-		return conversation;
+	public UUID getObjectableId() {
+		return objectableId;
 	}
 
-	public void setConversation(Conversation conversation) {
-		this.conversation = conversation;
+	public void setObjectableId(UUID objectableId) {
+		this.objectableId = objectableId;
+	}
+
+	public String getNotificationType() {
+		return notificationType;
+	}
+
+	public void setNotificationType(String notificationType) {
+		this.notificationType = notificationType;
+	}
+
+	public UUID getReceiverId() {
+		return receiverId;
+	}
+
+	public void setReceiverId(UUID receiverId) {
+		this.receiverId = receiverId;
 	}
 
 	public UUID getSenderId() {
@@ -77,23 +90,7 @@ public class Notification {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public int getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(int notificationType) {
-		this.notificationType = notificationType;
-	}
-
+	
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -118,20 +115,20 @@ public class Notification {
 		this.deletedAt = deletedAt;
 	}
 
-	public Notification(long id, Conversation conversation, UUID senderId, String content, String title,
-			int notificationType, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+	public Notification(long id, UUID objectableId, String notificationType, UUID receiverId, UUID senderId,
+			String content, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
-		this.conversation = conversation;
+		this.objectableId = objectableId;
+		this.notificationType = notificationType;
+		this.receiverId = receiverId;
 		this.senderId = senderId;
 		this.content = content;
-		this.title = title;
-		this.notificationType = notificationType;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
 	}
 
 	public Notification() {
-
 	}
+	
 }

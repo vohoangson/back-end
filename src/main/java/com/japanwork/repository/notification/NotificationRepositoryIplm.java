@@ -163,8 +163,8 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public Page<Notification> findByConversationIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt) {
+	public Page<Notification> findByObjectableIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByConversationIdAndDeletedAt(page, id, deletedAt);
+		return findByObjectableIdAndDeletedAt(page, id, deletedAt);
 	}
 }

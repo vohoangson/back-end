@@ -8,18 +8,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class NotificationResponse {
 	private long id;
 	
-    @JsonProperty("conversation_id")
-	private UUID conversationId;
+    @JsonProperty("objectable_id")
+	private UUID objectableId;
+    
+    @JsonProperty("notification_type")
+	private String notificationType;
+    
+    @JsonProperty("receiver_id")
+	private UUID receiverId;
 	
     @JsonProperty("sender_id")
 	private UUID senderId;
 	
 	private String content;
-	
-	private String title;
-	
-	@JsonProperty("notification_type")
-	private int notificationType;
 	
 	@JsonProperty("create_at")
 	private Timestamp createAt;
@@ -32,12 +33,28 @@ public class NotificationResponse {
 		this.id = id;
 	}
 
-	public UUID getConversationId() {
-		return conversationId;
+	public UUID getObjectableId() {
+		return objectableId;
 	}
 
-	public void setConversationId(UUID conversationId) {
-		this.conversationId = conversationId;
+	public void setObjectableId(UUID objectableId) {
+		this.objectableId = objectableId;
+	}
+
+	public String getNotificationType() {
+		return notificationType;
+	}
+
+	public void setNotificationType(String notificationType) {
+		this.notificationType = notificationType;
+	}
+
+	public UUID getReceiverId() {
+		return receiverId;
+	}
+
+	public void setReceiverId(UUID receiverId) {
+		this.receiverId = receiverId;
 	}
 
 	public UUID getSenderId() {
@@ -56,22 +73,6 @@ public class NotificationResponse {
 		this.content = content;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public int getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(int notificationType) {
-		this.notificationType = notificationType;
-	}
-
 	public Timestamp getCreateAt() {
 		return createAt;
 	}
@@ -80,19 +81,18 @@ public class NotificationResponse {
 		this.createAt = createAt;
 	}
 
-	public NotificationResponse(long id, UUID conversationId, UUID senderId, String content, String title,
-			int notificationType, Timestamp createAt) {
-		super();
+	public NotificationResponse(long id, UUID objectableId, String notificationType, UUID receiverId, UUID senderId,
+			String content, Timestamp createAt) {
 		this.id = id;
-		this.conversationId = conversationId;
+		this.objectableId = objectableId;
+		this.notificationType = notificationType;
+		this.receiverId = receiverId;
 		this.senderId = senderId;
 		this.content = content;
-		this.title = title;
-		this.notificationType = notificationType;
 		this.createAt = createAt;
 	}
 
 	public NotificationResponse() {
-		super();
 	}
+
 }

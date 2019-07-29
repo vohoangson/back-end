@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -70,6 +71,25 @@ public class TranslatorController {
 			}
 		}
 		
+		return new BaseDataMetaResponse(list, pageInfo);
+	}
+	
+	@GetMapping(UrlConstant.URL_TRANSLATOR_IDS)
+	@ResponseBody
+	public BaseDataMetaResponse listTranslatorByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(name = "ids") Set<UUID> ids) {
+		
+		Page<Translator> pages = translatorService.translatorsByIds(ids, page, paging);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<TranslatorResponse> list = new ArrayList<TranslatorResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (Translator translator : pages.getContent()) {
+				list.add(translatorService.convertTranslatorResponse(translator));
+			}
+		}
+
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	

@@ -15,4 +15,5 @@ public interface TranslatorRepository extends JpaRepository<Translator, UUID>{
 	public Translator findByUserAndDeletedAt(User user, Timestamp deletedAt);
 	public Translator findByIdAndDeletedAt(UUID id, Timestamp deletedAt);
 	public Page<Translator> findAllByDeletedAt(Pageable page, Timestamp deletedAt);
+	public Page<Translator> findAllByIdInAndDeletedAt(Pageable page, Iterable<UUID> ids,Timestamp deletedAt);
 }
