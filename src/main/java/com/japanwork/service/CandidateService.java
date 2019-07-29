@@ -306,9 +306,14 @@ public class CandidateService {
 		}
 	}
 	
-	public Page<Candidate> candidatesByIds(Set<UUID> ids, int page, int paging){
-		Page<Candidate> pages = candidateRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids, null);
-		return pages;
+	public Page<Candidate> candidatesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
+		try {
+			Page<Candidate> pages = candidateRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids, null);
+			return pages;
+
+		} catch (IllegalArgumentException e) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
 	}
 	private void deleteExperiencer(UUID id) {
 		academyService.del(id);

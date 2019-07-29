@@ -99,6 +99,7 @@ public class UrlConstant {
 
 	//Notification
 	public static final String URL_CONVERSATION_ID= "/conversations/{id}";
+	public static final String URL_NOTIFICATION= "/notification";
 //		public static final String URL_CONVERSATION_ID_NOTIFICATION = "/job-applications/{id}/conversation-all";
 //		public static final String URL_CONVERSATION_ID = "/job-applications/{id}/conversation-support-candidate";
 //		public static final String URL_CONVERSATION_ID = "/job-applications/{id}/conversation-support-company";
@@ -138,6 +139,7 @@ public class UrlConstant {
 
 	//Translator
 	public static final String URL_TRANSLATOR = "/translators";
+	public static final String URL_TRANSLATOR_IDS = "/translators-by-ids";
 	public static final String URL_TRANSLATOR_ID = "/translators/{id}";
 	public static final String URL_MY_TRANSLATOR = "/translators/my-translator";
 	public static final String URL_TRANSLATOR_UNDEL_ID = "/translators/undelete/{id}";
