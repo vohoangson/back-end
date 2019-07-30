@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost/social_network_job
-    username: vohoangson
-    password: 12345678s
