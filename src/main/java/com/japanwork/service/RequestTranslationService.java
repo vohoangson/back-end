@@ -215,7 +215,7 @@ public class RequestTranslationService {
 				null);
 		notificationService.addNotification(
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(), 
+				requestTranslation.getTranslator().getUser().getId(), 
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_APPLY,
 				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
@@ -275,7 +275,7 @@ public class RequestTranslationService {
 				null);
 		notificationService.addNotification(
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(), 
+				requestTranslation.getTranslator().getUser().getId(), 
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
@@ -305,7 +305,7 @@ public class RequestTranslationService {
 				null);
 		notificationService.addNotification(
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(), 
+				requestTranslation.getTranslator().getUser().getId(), 
 				CommonConstant.NotificationContent.OWNER_REFUSED_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
@@ -350,7 +350,7 @@ public class RequestTranslationService {
 				null);
 		notificationService.addNotification(
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(), 
+				requestTranslation.getTranslator().getUser().getId(), 
 				CommonConstant.NotificationContent.OWNER_REJECT_APPLY,
 				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
