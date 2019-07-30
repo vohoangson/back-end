@@ -390,10 +390,20 @@ public class RequestTranslationService {
 			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT DISTINCT r ");
-		sql.append("    FROM RequestTranslation r ");			
+		sql.append("    FROM RequestTranslation r ");
+		sql.append("	LEFT JOIN Company c ");
+		sql.append("	ON c.id = r.ownerId ");
+		sql.append("	LEFT JOIN Candidate ca ");
+		sql.append("	ON ca.id = r.ownerId ");
 		sql.append("	WHERE ");
 		sql.append("	r.deletedAt is null ");
 		if(filterRequest != null) {
+			if(!filterRequest.getName().isEmpty()) {
+				sql.append(" AND ");
+				sql.append(" (ca.fullName LIKE '%" + filterRequest.getName() + "%' ");
+				sql.append(" OR c.name LIKE '%" + filterRequest.getName() + "%' )");
+			}
+			
 			if(filterRequest.getRequestTypes() != null) {
 				sql.append(" AND ");
 				if(filterRequest.getRequestTypes().size() == 1) {

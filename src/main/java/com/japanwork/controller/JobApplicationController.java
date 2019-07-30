@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.model.RequestStatus;
 import com.japanwork.model.JobApplication;
+import com.japanwork.model.JobApplicationStatus;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.security.CurrentUser;
@@ -23,7 +23,7 @@ public class JobApplicationController {
 	@Autowired
 	private JobApplicationService jobApplicationService;
 	
-	@PostMapping(UrlConstant.URL_JOB_APPLICATION)
+	@PostMapping(UrlConstant.URL_JOB_APPLICATION_CANDIDATE_JOIN)
 	@ResponseBody
 	public BaseDataResponse createJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.createJobApplication(id, userPrincipal);
@@ -34,7 +34,7 @@ public class JobApplicationController {
 	@ResponseBody
 	public BaseDataResponse findJobApplicationById(@PathVariable UUID id) {
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
-		RequestStatus historyStatus = jobApplication.getHistoryStatus().stream().findFirst().get();
-		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication, historyStatus));
+		JobApplicationStatus status = jobApplication.getJobApplicationStatus().stream().findFirst().get();
+		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication, status));
 	}
 }

@@ -23,7 +23,7 @@ public class JobApplicationResponse {
     @JsonProperty("all_conversation_id")
     private UUID allConversation;
     
-    private RequestTranslationStatusResponse status;
+    private JobApplicationStatusResponse status;
 
     @JsonProperty("created_at")
     private Timestamp createdAt;
@@ -84,11 +84,11 @@ public class JobApplicationResponse {
 		this.allConversation = allConversation;
 	}
 
-	public RequestTranslationStatusResponse getStatus() {
+	public JobApplicationStatusResponse getStatus() {
 		return status;
 	}
 
-	public void setStatus(RequestTranslationStatusResponse status) {
+	public void setStatus(JobApplicationStatusResponse status) {
 		this.status = status;
 	}
 
@@ -106,7 +106,7 @@ public class JobApplicationResponse {
 
 	public JobApplicationResponse(UUID id, JobResponse job, CandidateResponse candidate, TranslatorResponse translator,
 			UUID candidateSupportConversaionId, UUID companySupportConversationId, UUID allConversation,
-			RequestTranslationStatusResponse status, Timestamp createdAt) {
+			JobApplicationStatusResponse status, Timestamp createdAt) {
 		this.id = id;
 		this.job = job;
 		this.candidate = candidate;
