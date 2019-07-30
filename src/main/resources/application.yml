@@ -1,13 +1,11 @@
-spring.profiles.include: 'database'
 server:
     servlet:
         context-path: /api
     port: 8080
+
 spring:
-    datasource:
-        url: jdbc:postgresql://103.81.84.160/japanwork
-        username: postgres
-        password: japanwork2202
+    profiles:
+        active: prod
     jpa:
         show-sql: true
         hibernate:
