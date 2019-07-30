@@ -48,9 +48,9 @@ public class JobApplication {
     private Conversation allConversation;
     
     @OneToMany
-    @JoinColumn(name="request_translation_id")
+    @JoinColumn(name="job_application_id")
     @OrderBy("createdAt DESC")
-    private Set<RequestStatus> historyStatus;
+    private Set<JobApplicationStatus> jobApplicationStatus;
     
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -117,12 +117,12 @@ public class JobApplication {
 		this.allConversation = allConversation;
 	}
 
-	public Set<RequestStatus> getHistoryStatus() {
-		return historyStatus;
+	public Set<JobApplicationStatus> getJobApplicationStatus() {
+		return jobApplicationStatus;
 	}
 
-	public void setHistoryStatus(Set<RequestStatus> historyStatus) {
-		this.historyStatus = historyStatus;
+	public void setJobApplicationStatus(Set<JobApplicationStatus> jobApplicationStatus) {
+		this.jobApplicationStatus = jobApplicationStatus;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -151,8 +151,8 @@ public class JobApplication {
 
 	public JobApplication(UUID id, Job job, Candidate candidate, Translator translator,
 			Conversation candidateSupportConversaion, Conversation companySupportConversation,
-			Conversation allConversation, Set<RequestStatus> historyStatus, Timestamp createdAt, Timestamp updatedAt,
-			Timestamp deletedAt) {
+			Conversation allConversation, Set<JobApplicationStatus> jobApplicationStatus, Timestamp createdAt,
+			Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.job = job;
 		this.candidate = candidate;
@@ -160,7 +160,7 @@ public class JobApplication {
 		this.candidateSupportConversaion = candidateSupportConversaion;
 		this.companySupportConversation = companySupportConversation;
 		this.allConversation = allConversation;
-		this.historyStatus = historyStatus;
+		this.jobApplicationStatus = jobApplicationStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;

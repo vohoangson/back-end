@@ -78,7 +78,7 @@ public class UrlConstant {
 
 	//Job Application
 	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";
-	public static final String URL_JOB_APPLICATION = "/jobs/{id}/apply";
+	public static final String URL_JOB_APPLICATION_CANDIDATE_JOIN = "/jobs/{id}/apply";
 
 	//Request translation
 	public static final String URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN = "/requests/{id}/apply";

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.model.Candidate;
-import com.japanwork.model.RequestStatus;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
+import com.japanwork.model.JobApplicationStatus;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
 import com.japanwork.security.UserPrincipal;
@@ -31,7 +31,7 @@ public class JobApplicationService {
 	private TranslatorService translatorService;
 	
 	@Autowired
-	private RequestStatusService historyStatusService;
+	private JobApplicationStatusService jobApplicationStatusService;
 	
 	public JobApplication findByJobIdAndIsDelete(UUID id) {
 		return jobApplicationRepository.findByJobIdAndDeletedAt(id, null);
@@ -59,17 +59,16 @@ public class JobApplicationService {
 		jobApplication.setDeletedAt(null);
 		JobApplication result = jobApplicationRepository.save(jobApplication);
 		
-		RequestStatus historyStatus = historyStatusService.save(
+		JobApplicationStatus status = jobApplicationStatusService.save(
 				result.getId(), 
 				timestamp, 
 				CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE,
-				CommonConstant.HistoryStatusTypes.JOB_APPLICATION,
 				null,
 				null);
-		return this.convertApplicationResponse(jobApplication, historyStatus);
+		return this.convertApplicationResponse(jobApplication, status);
 	}
 	
-	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, RequestStatus historyStatus) {
+	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
 		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
@@ -90,7 +89,7 @@ public class JobApplicationService {
 			ob.setAllConversation(jobApplication.getAllConversation().getId());
 		}
 				
-		ob.setStatus(historyStatusService.convertRequestTranslationStatusResponse(historyStatus));
+		ob.setStatus(jobApplicationStatusService.convertJobApplicationStatusResponse(status));
 		ob.setCreatedAt(jobApplication.getCreatedAt());
 		return ob;
 	}
