@@ -103,6 +103,7 @@ public class RequestTranslationController {
 	public BaseDataMetaResponse requestTranslations(
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(defaultValue = "", name = "name") String name,
 			@RequestParam(defaultValue = "", name = "request_types") String requestTypes,
 			@RequestParam(defaultValue = "", name = "language_ids") String languageIds,
 			@RequestParam(defaultValue = "", name = "post_date") String postDate,
@@ -110,6 +111,7 @@ public class RequestTranslationController {
 			@CurrentUser UserPrincipal userPrincipal){
 		
 		RequestTranslationFilterRequest filterRequest = new RequestTranslationFilterRequest();
+		filterRequest.setName(name);
 		filterRequest.setRequestTypes(CommonFunction.listParam(requestTypes));
 		filterRequest.setLanguageIds(CommonFunction.listParam(languageIds));
 		filterRequest.setPostDate(postDate);

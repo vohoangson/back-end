@@ -3,6 +3,8 @@ package com.japanwork.payload.request;
 import java.util.List;
 
 public class RequestTranslationFilterRequest {
+	private String name;
+	
 	private List<String> languageIds;
 
 	private List<String> requestTypes;
@@ -10,6 +12,14 @@ public class RequestTranslationFilterRequest {
 	private String postDate;
 	
 	private boolean yourRequest;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public List<String> getLanguageIds() {
 		return languageIds;
