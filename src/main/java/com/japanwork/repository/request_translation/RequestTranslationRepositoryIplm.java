@@ -1,4 +1,4 @@
-package com.japanwork.repository.history_status;
+package com.japanwork.repository.request_translation;
 
 import java.sql.Timestamp;
 import java.util.List;
