@@ -48,9 +48,9 @@ public class JobApplication {
     private Conversation allConversation;
     
     @OneToMany
-    @JoinColumn(name="objectable_id")
+    @JoinColumn(name="request_translation_id")
     @OrderBy("createdAt DESC")
-    private Set<HistoryStatus> historyStatus;
+    private Set<RequestStatus> historyStatus;
     
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -117,11 +117,11 @@ public class JobApplication {
 		this.allConversation = allConversation;
 	}
 
-	public Set<HistoryStatus> getHistoryStatus() {
+	public Set<RequestStatus> getHistoryStatus() {
 		return historyStatus;
 	}
 
-	public void setHistoryStatus(Set<HistoryStatus> historyStatus) {
+	public void setHistoryStatus(Set<RequestStatus> historyStatus) {
 		this.historyStatus = historyStatus;
 	}
 
@@ -151,7 +151,7 @@ public class JobApplication {
 
 	public JobApplication(UUID id, Job job, Candidate candidate, Translator translator,
 			Conversation candidateSupportConversaion, Conversation companySupportConversation,
-			Conversation allConversation, Set<HistoryStatus> historyStatus, Timestamp createdAt, Timestamp updatedAt,
+			Conversation allConversation, Set<RequestStatus> historyStatus, Timestamp createdAt, Timestamp updatedAt,
 			Timestamp deletedAt) {
 		this.id = id;
 		this.job = job;

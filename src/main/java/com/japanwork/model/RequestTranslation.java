@@ -48,9 +48,9 @@ public class RequestTranslation {
     private Language language;
     
     @OneToMany
-    @JoinColumn(name="objectable_id")
+    @JoinColumn(name="request_translation_id")
     @OrderBy("createdAt DESC")
-    private Set<HistoryStatus> historyStatus;
+    private Set<RequestStatus> requestStatus;
     
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -125,12 +125,12 @@ public class RequestTranslation {
 		this.language = language;
 	}
 
-	public Set<HistoryStatus> getHistoryStatus() {
-		return historyStatus;
+	public Set<RequestStatus> getRequestStatus() {
+		return requestStatus;
 	}
 
-	public void setHistoryStatus(Set<HistoryStatus> historyStatus) {
-		this.historyStatus = historyStatus;
+	public void setRequestStatus(Set<RequestStatus> requestStatus) {
+		this.requestStatus = requestStatus;
 	}
 
 	public Timestamp getCreatedAt() {
@@ -158,7 +158,7 @@ public class RequestTranslation {
 	}
 
 	public RequestTranslation(UUID id, UUID ownerId, UUID objectableId, Translator translator, String objectableType,
-			String desc, Conversation conversation, Language language, Set<HistoryStatus> historyStatus,
+			String desc, Conversation conversation, Language language, Set<RequestStatus> requestStatus,
 			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.ownerId = ownerId;
@@ -168,7 +168,7 @@ public class RequestTranslation {
 		this.desc = desc;
 		this.conversation = conversation;
 		this.language = language;
-		this.historyStatus = historyStatus;
+		this.requestStatus = requestStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;

@@ -25,7 +25,7 @@ import com.japanwork.exception.ServerError;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
-import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.RequestStatus;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.model.Language;
@@ -39,7 +39,7 @@ import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
-import com.japanwork.repository.history_status.RequestTranslationRepository;
+import com.japanwork.repository.request_translation.RequestTranslationRepository;
 import com.japanwork.security.UserPrincipal;
 
 @Service
@@ -51,7 +51,7 @@ public class RequestTranslationService {
 	private RequestTranslationRepository requestTranslationRepository;
 	
 	@Autowired
-	private HistoryStatusService historyStatusService;
+	private RequestStatusService requestStatusService;
 	
 	@Autowired
 	private UserService userService;
@@ -125,7 +125,7 @@ public class RequestTranslationService {
 					requestTranslation.setObjectableType(requestTranslationRequest.getRequestType());
 					requestTranslation.setCreatedAt(timestamp);
 					RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
-					HistoryStatus requestTranslationStatus = historyStatusService.save(
+					RequestStatus requestTranslationStatus = requestStatusService.save(
 							resultRequest.getId(), 
 							timestamp, 
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER,
@@ -151,13 +151,13 @@ public class RequestTranslationService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(!requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_TRANSLATOR_JOIN_FAIL, 
 											MessageConstant.REQUEST_TRANSLATION_TRANSLATOR_JOIN_FAIL_MSG);
 		}
 		Translator translator = translatorService.myTranslator(userPrincipal);
-		if(!this.checkTranslatorJoin(requestTranslation.getHistoryStatus(), translator)) {
+		if(!this.checkTranslatorJoin(requestTranslation.getRequestStatus(), translator)) {
 			throw new ForbiddenException(MessageConstant.ERROR_403_TRANSLATION_MSG);
 		}
 		requestTranslation.setTranslator(translator);
@@ -165,13 +165,11 @@ public class RequestTranslationService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE,
-				CommonConstant.HistoryStatusTypes.REQUEST,
-				translator,
-				null);
+				translator);
 		notificationService.addNotification(
 				requestTranslation.getId(),
 				this.userIdOfOwner(requestTranslation), 
@@ -184,7 +182,7 @@ public class RequestTranslationService {
 			throws BadRequestException{
 		RequestTranslation requestTranslation = this.requestTranslation(id, userPrincipal);
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(!requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ACCEPT_APPLY_FAIL, 
 											MessageConstant.REQUEST_TRANSLATION_ACCEPT_APPLY_FAIL_MSG);
@@ -206,13 +204,11 @@ public class RequestTranslationService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.ON_GOING,
-				CommonConstant.HistoryStatusTypes.REQUEST,
-				requestTranslation.getTranslator(),
-				null);
+				requestTranslation.getTranslator());
 		notificationService.addNotification(
 				requestTranslation.getId(),
 				requestTranslation.getTranslator().getUser().getId(), 
@@ -228,7 +224,7 @@ public class RequestTranslationService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(!requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.ON_GOING)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_CONFIRM_FINISH_FAIL, 
 											MessageConstant.REQUEST_TRANSLATION_CONFIRM_FINISH_FAIL_MSG);
@@ -236,13 +232,11 @@ public class RequestTranslationService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.REVIEWED,
-				CommonConstant.HistoryStatusTypes.REQUEST,
-				requestTranslation.getTranslator(),
-				null);
+				requestTranslation.getTranslator());
 		notificationService.addNotification(
 				requestTranslation.getId(),
 				this.userIdOfOwner(requestTranslation), 
@@ -258,7 +252,7 @@ public class RequestTranslationService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(!requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.REVIEWED)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL, 
 											MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG);
@@ -266,13 +260,11 @@ public class RequestTranslationService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.FINISHED,
-				CommonConstant.HistoryStatusTypes.REQUEST,
-				requestTranslation.getTranslator(),
-				null);
+				requestTranslation.getTranslator());
 		notificationService.addNotification(
 				requestTranslation.getId(),
 				requestTranslation.getTranslator().getUser().getId(), 
@@ -288,7 +280,7 @@ public class RequestTranslationService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(!requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.REVIEWED)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_REFUSE_FINISH_FAIL, 
 											MessageConstant.REQUEST_TRANSLATION_REFUSE_FINISH_FAIL_MSG);
@@ -296,13 +288,11 @@ public class RequestTranslationService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.ON_GOING,
-				CommonConstant.HistoryStatusTypes.REQUEST,
-				requestTranslation.getTranslator(),
-				null);
+				requestTranslation.getTranslator());
 		notificationService.addNotification(
 				requestTranslation.getId(),
 				requestTranslation.getTranslator().getUser().getId(), 
@@ -318,7 +308,7 @@ public class RequestTranslationService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(!requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL, 
 											MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG);
@@ -329,19 +319,17 @@ public class RequestTranslationService {
 		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		historyStatusService.save(
+		requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.REJECTED, 
 				reasonReject.getReason(),
-				CommonConstant.HistoryStatusTypes.REQUEST,
 				requestTranslation.getOwnerId(),
-				translator,
-				null);
+				translator);
 		
 		date = new Date();
 		timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER,
@@ -363,7 +351,7 @@ public class RequestTranslationService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 		
-		HistoryStatus requestTranslationStatus = requestTranslation.getHistoryStatus().stream().findFirst().get();
+		RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
 		if(requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.REVIEWED) 
 				|| requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER)) {
 			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL, 
@@ -378,19 +366,17 @@ public class RequestTranslationService {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		historyStatusService.save(
+		requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.CANCELED, 
 				reasonCancel.getReason(),
-				CommonConstant.HistoryStatusTypes.REQUEST,
 				userCreateId,
-				translator,
-				null);
+				translator);
 		
 		date = new Date();
 		timestamp = new Timestamp(date.getTime());
-		HistoryStatus result = historyStatusService.save(
+		RequestStatus result = requestStatusService.save(
 				requestTranslation.getId(), 
 				timestamp, 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER,
@@ -485,7 +471,7 @@ public class RequestTranslationService {
 		
 		if(pages.size() > 0) {
 			for (RequestTranslation requestTranslation : pages) {
-				HistoryStatus status = requestTranslation.getHistoryStatus().stream().findFirst().get();
+				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 				list.add(convertRequestTranslationResponse(requestTranslation, status));
 			}
 		}
@@ -513,7 +499,7 @@ public class RequestTranslationService {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 			}
 		} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			HistoryStatus status = requestTranslation.getHistoryStatus().stream().findFirst().get();
+			RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 			if(!status.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER) 
 					&& !requestTranslation.getTranslator().getUser().equals(user)) {
 				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
@@ -569,7 +555,7 @@ public class RequestTranslationService {
 		return false;
 	}
 	
-	public RequestTranslationResponse convertRequestTranslationResponse(RequestTranslation requestTranslation, HistoryStatus requestTranslationStatus) {
+	public RequestTranslationResponse convertRequestTranslationResponse(RequestTranslation requestTranslation, RequestStatus requestTranslationStatus) {
 		RequestTranslationResponse requestTranslationResponse = new RequestTranslationResponse();
 		requestTranslationResponse.setId(requestTranslation.getId());
 		requestTranslationResponse.setOwnerId(requestTranslation.getOwnerId());
@@ -578,7 +564,7 @@ public class RequestTranslationService {
 			requestTranslationResponse.setTranslatorId(requestTranslation.getTranslator().getId());
 		}
 		
-		requestTranslationResponse.setStatus(historyStatusService.convertRequestTranslationStatusResponse(requestTranslationStatus));
+		requestTranslationResponse.setStatus(requestStatusService.convertRequestTranslationStatusResponse(requestTranslationStatus));
 		requestTranslationResponse.setRequestType(requestTranslation.getObjectableType());
 		
 		if(requestTranslation.getConversation() != null) {
@@ -622,8 +608,8 @@ public class RequestTranslationService {
 		}
 	}
 	
-	public boolean checkTranslatorJoin(Set<HistoryStatus> status, Translator translator) {
-		for (HistoryStatus historyStatus : status) {
+	public boolean checkTranslatorJoin(Set<RequestStatus> status, Translator translator) {
+		for (RequestStatus historyStatus : status) {
 			if(historyStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.CANCELED) || 
 					historyStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.REJECTED)) {
 				if(historyStatus.getTranslator().equals(translator)) {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.RequestStatus;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.JobApplicationResponse;
@@ -34,7 +34,7 @@ public class JobApplicationController {
 	@ResponseBody
 	public BaseDataResponse findJobApplicationById(@PathVariable UUID id) {
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
-		HistoryStatus historyStatus = jobApplication.getHistoryStatus().stream().findFirst().get();
+		RequestStatus historyStatus = jobApplication.getHistoryStatus().stream().findFirst().get();
 		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication, historyStatus));
 	}
 }

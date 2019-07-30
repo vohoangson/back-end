@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.model.Candidate;
-import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.RequestStatus;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.JobApplicationResponse;
@@ -31,7 +31,7 @@ public class JobApplicationService {
 	private TranslatorService translatorService;
 	
 	@Autowired
-	private HistoryStatusService historyStatusService;
+	private RequestStatusService historyStatusService;
 	
 	public JobApplication findByJobIdAndIsDelete(UUID id) {
 		return jobApplicationRepository.findByJobIdAndDeletedAt(id, null);
@@ -59,7 +59,7 @@ public class JobApplicationService {
 		jobApplication.setDeletedAt(null);
 		JobApplication result = jobApplicationRepository.save(jobApplication);
 		
-		HistoryStatus historyStatus = historyStatusService.save(
+		RequestStatus historyStatus = historyStatusService.save(
 				result.getId(), 
 				timestamp, 
 				CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE,
@@ -69,7 +69,7 @@ public class JobApplicationService {
 		return this.convertApplicationResponse(jobApplication, historyStatus);
 	}
 	
-	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, HistoryStatus historyStatus) {
+	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, RequestStatus historyStatus) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
 		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
