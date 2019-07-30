@@ -161,7 +161,7 @@ public class AuthController {
     	String exchangeName = "notifications/"+userPrincipal.getId();
     	String queueName = CommonFunction.generateCode(8);
         rabbitAdmin.declareExchange(new DirectExchange(exchangeName, false, true));
-        rabbitAdmin.declareQueue(new Queue(queueName, false, true, false));
+        rabbitAdmin.declareQueue(new Queue(queueName, false, false, true));
         rabbitAdmin.declareBinding(
             new Binding(
         		queueName,
