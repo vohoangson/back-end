@@ -15,7 +15,7 @@
 *.iws
 *.iml
 *.ipr
-src/main/resources/application-dev.yml
+application-dev.yml
 
 ### NetBeans ###
 /nbproject/private/
