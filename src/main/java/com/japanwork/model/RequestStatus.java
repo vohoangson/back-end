@@ -13,8 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="history_status")
-public class HistoryStatus {
+@Table(name="request_status")
+public class RequestStatus {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,25 +24,18 @@ public class HistoryStatus {
 	@Column(name = "creator_id")
 	private UUID creatorId;
 	
-	@Column(name = "objectable_id")
-	private UUID objectableId;
+	@Column(name = "request_translation_id")
+	private UUID requestTranslationId;
 	
 	@OneToOne
     @JoinColumn(name = "translator_id")
 	private Translator translator;
-	
-	@OneToOne
-    @JoinColumn(name = "candidate_id")
-	private Candidate candidate;
 	
 	@Column(name = "reason")
 	private String reason;
 	
 	@Column(name = "status")
 	private String status;
-	
-	@Column(name = "type")
-	private String type;
 	
 	@Column(name = "created_at")
 	private Timestamp createdAt;
@@ -63,12 +56,12 @@ public class HistoryStatus {
 		this.creatorId = creatorId;
 	}
 
-	public UUID getObjectableId() {
-		return objectableId;
+	public UUID getRequestTranslationId() {
+		return requestTranslationId;
 	}
 
-	public void setObjectableId(UUID objectableId) {
-		this.objectableId = objectableId;
+	public void setRequestTranslationId(UUID requestTranslationId) {
+		this.requestTranslationId = requestTranslationId;
 	}
 
 	public Translator getTranslator() {
@@ -77,14 +70,6 @@ public class HistoryStatus {
 
 	public void setTranslator(Translator translator) {
 		this.translator = translator;
-	}
-
-	public Candidate getCandidate() {
-		return candidate;
-	}
-
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
 	}
 
 	public String getReason() {
@@ -102,14 +87,6 @@ public class HistoryStatus {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	public String getType() {
-		return type;
-	}
-	
-	public void setType(String type) {
-		this.type = type;
-	}
 	
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -119,24 +96,22 @@ public class HistoryStatus {
 		this.createdAt = createdAt;
 	}
 
-	public HistoryStatus(UUID id, UUID creatorId, UUID objectableId, Translator translator, Candidate candidate,
-			String reason, String status, String type, Timestamp createdAt) {
+	public RequestStatus(UUID id, UUID creatorId, UUID requestTranslationId, Translator translator, String reason,
+			String status, Timestamp createdAt) {
 		this.id = id;
 		this.creatorId = creatorId;
-		this.objectableId = objectableId;
+		this.requestTranslationId = requestTranslationId;
 		this.translator = translator;
-		this.candidate = candidate;
 		this.reason = reason;
 		this.status = status;
-		this.type = type;
 		this.createdAt = createdAt;
 	}
 
-	public HistoryStatus(UUID id) {
+	public RequestStatus(UUID id) {
 		this.id = id;
 	}
 
-	public HistoryStatus() {
+	public RequestStatus() {
 	}
 	
 }

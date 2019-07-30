@@ -1,4 +1,4 @@
-package com.japanwork.repository.request_translation;
+package com.japanwork.repository.request_status;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,32 +11,32 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.HistoryStatus;
+import com.japanwork.model.RequestStatus;
 
 @Repository
 @Transactional
-public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
+public class RequestStatusRepositoryIplm implements RequestStatusRepository{
 
 	@Override
-	public List<HistoryStatus> findAll() {
+	public List<RequestStatus> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<HistoryStatus> findAll(Sort sort) {
+	public List<RequestStatus> findAll(Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<HistoryStatus> findAllById(Iterable<UUID> ids) {
+	public List<RequestStatus> findAllById(Iterable<UUID> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends HistoryStatus> List<S> saveAll(Iterable<S> entities) {
+	public <S extends RequestStatus> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,13 +48,13 @@ public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
 	}
 
 	@Override
-	public <S extends HistoryStatus> S saveAndFlush(S entity) {
+	public <S extends RequestStatus> S saveAndFlush(S entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteInBatch(Iterable<HistoryStatus> entities) {
+	public void deleteInBatch(Iterable<RequestStatus> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,37 +66,37 @@ public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
 	}
 
 	@Override
-	public HistoryStatus getOne(UUID id) {
+	public RequestStatus getOne(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends HistoryStatus> List<S> findAll(Example<S> example) {
+	public <S extends RequestStatus> List<S> findAll(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends HistoryStatus> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends RequestStatus> List<S> findAll(Example<S> example, Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<HistoryStatus> findAll(Pageable pageable) {
+	public Page<RequestStatus> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends HistoryStatus> S save(S entity) {
+	public <S extends RequestStatus> S save(S entity) {
 		// TODO Auto-generated method stub
 		return save(entity);
 	}
 
 	@Override
-	public Optional<HistoryStatus> findById(UUID id) {
+	public Optional<RequestStatus> findById(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -120,13 +120,13 @@ public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
 	}
 
 	@Override
-	public void delete(HistoryStatus entity) {
+	public void delete(RequestStatus entity) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends HistoryStatus> entities) {
+	public void deleteAll(Iterable<? extends RequestStatus> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -138,33 +138,33 @@ public class HistoryStatusRepositoryIplm implements HistoryStatusRepository{
 	}
 
 	@Override
-	public <S extends HistoryStatus> Optional<S> findOne(Example<S> example) {
+	public <S extends RequestStatus> Optional<S> findOne(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends HistoryStatus> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends RequestStatus> Page<S> findAll(Example<S> example, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends HistoryStatus> long count(Example<S> example) {
+	public <S extends RequestStatus> long count(Example<S> example) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public <S extends HistoryStatus> boolean exists(Example<S> example) {
+	public <S extends RequestStatus> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public List<HistoryStatus> findByObjectableIdOrderByCreatedAtDesc(UUID requestTranslationId) {
+	public List<RequestStatus> findByRequestTranslationIdOrderByCreatedAtDesc(UUID requestTranslationId) {
 		// TODO Auto-generated method stub
-		return findByObjectableIdOrderByCreatedAtDesc(requestTranslationId);
+		return findByRequestTranslationIdOrderByCreatedAtDesc(requestTranslationId);
 	}
 
 }
