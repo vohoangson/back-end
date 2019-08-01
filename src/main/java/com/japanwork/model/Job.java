@@ -20,73 +20,73 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
 	@Column(name="name")
     private String name;
-    
+
 	@ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-    
+
 	@ManyToOne
 	@JoinColumn(name = "business_id")
     private Business businesses;
-	
+
 	@ManyToOne
     @JoinColumn(name = "contract_type_id")
     private Contract contract;
-    
+
 	@ManyToOne
     @JoinColumn(name = "level_id")
     private Level level;
-	
+
 	@ManyToOne
     @JoinColumn(name = "work_place_city_id")
     private City city;
-    
+
 	@ManyToOne
     @JoinColumn(name = "work_place_district_id")
     private District district;
-    
+
     @Column(name="work_place_address")
     private String address;
-    
+
     @Column(name="description")
     private String desc;
-    
+
     @Column(name="required_education")
     private String requiredEducation;
-    
+
     @Column(name="required_experience")
     private String requiredExperience;
-    
+
     @Column(name="required_language")
     private String requiredLanguage;
-    
+
     @Column(name="benefits")
     private String benefits;
-    
+
     @Column(name="japanese_level_requirement")
     private int japaneseLevelRequirement;
-    
+
     @Column(name="application_deadline")
     private Date applicationDeadline;
-    
+
     @Column(name="min_salary")
     private float minSalary;
-    
+
     @Column(name="max_salary")
     private float maxSalary;
-    
+
     @Column(name="status")
     private String status;
-    
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 
@@ -137,7 +137,7 @@ public class Job {
 	public void setLevel(Level level) {
 		this.level = level;
 	}
-	
+
 	public City getCity() {
 		return city;
 	}
@@ -294,6 +294,10 @@ public class Job {
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
 	}
+
+	public Job(UUID id) {
+	    this.id = id;
+    }
 
 	public Job() {
 

@@ -27,7 +27,7 @@ public class UrlConstant {
 	public static final String URL_LANGUAGUE = "/languagues";
 	public static final String URL_LANGUAGUE_ID = "/languagues/{id}";
 	public static final String URL_LANGUAGUE_UNDEL = "/languagues/undelete/{id}";
-	
+
 	//Languague Type
 	public static final String URL_LANGUAGUE_TYPE = "/languague-certificates";
 	public static final String URL_LANGUAGUE_TYPE_ID = "/languague-certificates/{id}";
@@ -75,6 +75,10 @@ public class UrlConstant {
 	public static final String URL_JOB = "/jobs";
 	public static final String URL_JOB_ID = "/jobs/{id}";
 	public static final String URL_JOB_UNDEL = "/jobs/undelete/{id}";
+
+	//Job Translation
+    public static final String URL_JOB_TRANSLATION = "v1/job_translations";
+    public static final String URL_SHOW_JOB_TRANSLATION = "v1/job_translations";
 
 	//Job Application
 	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";

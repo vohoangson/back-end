@@ -4,6 +4,8 @@ public class MessageConstant {
 	public static final String INVALID_INPUT = "Invalid input!";
 	public static final String INVALID_INPUT_MSG = "Invalid input!";
 
+	public static final String CREATED_SUCCESS = "Created successfully";
+    public static final String CREATED_FAILED = "Created failed";
 
 	public static final String DELETE = "Delete";
 	public static final String DEL_SUCCESS = "Successfully";
@@ -121,6 +123,13 @@ public class MessageConstant {
 	public static final String LANGUAGE_NOT_FOUND = "Language was not found";
     public static final Integer LANGUAGE_NOT_FOUND_CODE = 1021;
 
+    //Job error response information
+    public static final String JOB_NOT_FOUND = "Job was not found";
+    public static final Integer JOB_NOT_FOUND_CODE = 1041;
+
+    //Translator error response information
+    public static final String TRANSLATOR_NOT_FOUND = "Translator was not found";
+    public static final Integer TRANSLATOR_NOT_FOUND_CODE = 1061;
 
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
