@@ -4,17 +4,20 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.JobApplication;
 import com.japanwork.model.Translator;
+import com.japanwork.model.User;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.payload.response.ConversationResponse;
@@ -120,6 +123,21 @@ public class ConversationService {
 			}
 		}
 		return list;
+	}
+	
+	public Set<Conversation> listConversationByUser(UserPrincipal userPrincipal) {
+		User user = userService.getUser(userPrincipal);
+    	if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
+    		Candidate candidate = candidateService.myCandidate(userPrincipal);
+    		return conversationRepository.findByCandidateAndDeletedAt(candidate, null);
+    	} else if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
+    		Company company = companyService.myCompany(userPrincipal);
+    		return conversationRepository.findByCompanyAndDeletedAt(company, null);
+    	} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
+    		Translator translator = translatorService.myTranslator(userPrincipal);
+    		return conversationRepository.findByTranslatorAndDeletedAt(translator, null);
+    	}		
+		return null;
 	}
 	
 	public Conversation findByIdAndIsDelete(UUID id, Timestamp deletedAt) {

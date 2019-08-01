@@ -3,6 +3,7 @@ package com.japanwork.repository.conversation;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Example;
@@ -12,7 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
+import com.japanwork.model.Translator;
 
 @Repository
 @Transactional
@@ -166,6 +170,24 @@ public class ConversationRepositoryIplm implements ConversationRepository{
 	public Conversation findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findByIdAndDeletedAt(id, deletedAt);
+	}
+
+	@Override
+	public Set<Conversation> findByCandidateAndDeletedAt(Candidate candidate, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByCandidateAndDeletedAt( candidate, deletedAt);
+	}
+
+	@Override
+	public Set<Conversation> findByCompanyAndDeletedAt(Company company, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByCompanyAndDeletedAt( company, deletedAt);
+	}
+
+	@Override
+	public Set<Conversation> findByTranslatorAndDeletedAt(Translator translator, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByTranslatorAndDeletedAt( translator, deletedAt);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.japanwork.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,7 +47,7 @@ public class NotificationController {
 	public BaseDataResponse addMessage(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
 			@Valid @RequestBody NotificationRequest notificationRequest) {
 		Notification notification =  notificationService.addMessage(userPrincipal, id, notificationRequest);
-		BaseDataResponse response = new BaseDataResponse(notificationService.converNotificationResponse(notification));
+		BaseDataResponse response = new BaseDataResponse(notificationService.converNotificationResponse(notification, null));
 		Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 		if(conversation.getCandidate() != null) {
 			rabbitTemplate.convertAndSend("notifications/"+conversation.getCandidate().getUser().getId(), ""+conversation.getCandidate().getUser().getId(), response);
@@ -72,18 +73,27 @@ public class NotificationController {
 		
 		if(pages.getContent().size() > 0) {
 			for (Notification notification : pages.getContent()) {
-				list.add(notificationService.converNotificationResponse(notification));
+				Timestamp readAt = notificationService.readAt(notification.getId(), userPrincipal, null);
+				list.add(notificationService.converNotificationResponse(notification, readAt));
 			}
 		}
 		
 		return new BaseDataMetaResponse(list, pageInfo);
 	} 
 	
+//	@GetMapping(UrlConstant.URL_NOTIFICATION_UNREADS_NUMBER)
+//	@ResponseBody
+//	public BaseDataMetaResponse unreadNumber( @CurrentUser UserPrincipal userPrincipal) {
+//		Page<Notification> pages = notificationService.unreadNumber(userPrincipal);
+//		return new BaseDataMetaResponse(pages, null);
+//	} 
+	
 	@GetMapping(UrlConstant.URL_CONVERSATION_ID)
 	@ResponseBody
 	public BaseDataMetaResponse messages(@PathVariable UUID id, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
-			@RequestParam(defaultValue = "25", name = "paging") int paging) {
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@CurrentUser UserPrincipal userPrincipal) {
 		Page<Notification> pages = notificationService.listMessage(id, page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		
@@ -91,7 +101,8 @@ public class NotificationController {
 		
 		if(pages.getContent().size() > 0) {
 			for (Notification notification : pages.getContent()) {
-				list.add(notificationService.converNotificationResponse(notification));
+				Timestamp readAt = notificationService.readAt(notification.getId(), userPrincipal, null);
+				list.add(notificationService.converNotificationResponse(notification, readAt));
 			}
 		}
 		
