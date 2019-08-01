@@ -37,6 +37,9 @@ public class Notification {
 	@Column(name = "sub_objectable_id")
 	private UUID subObjectableId;
 	
+	@Column(name = "is_read")
+	private boolean isRead;
+	
     @Column(name="created_at")
     private Timestamp createdAt;
     
@@ -102,6 +105,14 @@ public class Notification {
 		this.subObjectableId = subObjectableId;
 	}
 
+	public boolean isRead() {
+		return isRead;
+	}
+
+	public void setRead(boolean isRead) {
+		this.isRead = isRead;
+	}
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -127,7 +138,8 @@ public class Notification {
 	}
 
 	public Notification(long id, UUID objectableId, String notificationType, UUID receiverId, UUID senderId,
-			String content, UUID subObjectableId, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+			String content, UUID subObjectableId, boolean isRead, Timestamp createdAt, Timestamp updatedAt,
+			Timestamp deletedAt) {
 		this.id = id;
 		this.objectableId = objectableId;
 		this.notificationType = notificationType;
@@ -135,6 +147,7 @@ public class Notification {
 		this.senderId = senderId;
 		this.content = content;
 		this.subObjectableId = subObjectableId;
+		this.isRead = isRead;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
