@@ -3,49 +3,50 @@ package com.japanwork.model;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="job_translation")
 public class JobTranslation {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
 	private UUID id;
-	
-	@Column(name="job_id")
-    private UUID jobId;
-    
-    @Column(name="translator_id")
-    private UUID translatorId;
-    
-    @Column(name="name")
+
+	@OneToOne
+    private Job job;
+
+	@OneToOne
+    private Translator translator;
+
+    @OneToOne
+    private Language language;
+
+    @Column(name = "work_place_address", length = 255)
+    private String address;
+
+    @Column(name = "name", nullable = false, length = 128)
     private String name;
-    
-    @Column(name="description")
+
+    @Column(name = "description", length = 2000)
     private String description;
-    
-    @Column(name="skill_requirement")
-    private String skillRequirement;
-    
-    @Column(name="benefit")
+
+    @Column(name = "required_education", length = 255)
+    private String requiredEducation;
+
+    @Column(name = "required_experience", nullable = false, length = 255)
+    private String requiredExperience;
+
+    @Column(name = "benefit", length = 1000)
     private String benefit;
-    
-    @Column(name="status")
+
+    @Column(name = "required_language", nullable = false, length = 128)
+    private String requiredLanguage;
+
+    private int japaneseLevelRequirement;
     private int status;
-    
-    @Column(name="created_at")
+
     private Timestamp createdAt;
-    
-    @Column(name="updated_at")
     private Timestamp updatedAt;
-    
-    @Column(name="deleted_at")
     private Timestamp deletedAt;
 
 	public UUID getId() {
@@ -56,23 +57,31 @@ public class JobTranslation {
 		this.id = id;
 	}
 
-	public UUID getJobId() {
-		return jobId;
-	}
+    public Job getJob() {
+        return job;
+    }
 
-	public void setJobId(UUID jobId) {
-		this.jobId = jobId;
-	}
+    public Translator getTranslator() {
+        return translator;
+    }
 
-	public UUID getTranslatorId() {
-		return translatorId;
-	}
+    public Language getLanguage() {
+        return language;
+    }
 
-	public void setTranslatorId(UUID translatorId) {
-		this.translatorId = translatorId;
-	}
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
-	public String getName() {
+    public void setTranslator(Translator translator) {
+        this.translator = translator;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public String getName() {
 		return name;
 	}
 
@@ -88,15 +97,47 @@ public class JobTranslation {
 		this.description = description;
 	}
 
-	public String getSkillRequirement() {
-		return skillRequirement;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setSkillRequirement(String skillRequirement) {
-		this.skillRequirement = skillRequirement;
-	}
+    public String getRequiredEducation() {
+        return requiredEducation;
+    }
 
-	public String getBenefit() {
+    public String getRequiredExperience() {
+        return requiredExperience;
+    }
+
+    public String getRequiredLanguage() {
+        return requiredLanguage;
+    }
+
+    public int getJapaneseLevelRequirement() {
+        return japaneseLevelRequirement;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setRequiredEducation(String requiredEducation) {
+        this.requiredEducation = requiredEducation;
+    }
+
+    public void setRequiredExperience(String requiredExperience) {
+        this.requiredExperience = requiredExperience;
+    }
+
+    public void setRequiredLanguage(String requiredLanguage) {
+        this.requiredLanguage = requiredLanguage;
+    }
+
+    public void setJapaneseLevelRequirement(int japaneseLevelRequirement) {
+        this.japaneseLevelRequirement = japaneseLevelRequirement;
+    }
+
+    public String getBenefit() {
 		return benefit;
 	}
 
@@ -136,23 +177,29 @@ public class JobTranslation {
 		this.deletedAt = deletedAt;
 	}
 
-	public JobTranslation(UUID id, UUID jobId, UUID translatorId, String name, String description,
-			String skillRequirement, String benefit, int status, Timestamp createdAt, Timestamp updatedAt,
-			Timestamp deletedAt) {
-		this.id = id;
-		this.jobId = jobId;
-		this.translatorId = translatorId;
-		this.name = name;
-		this.description = description;
-		this.skillRequirement = skillRequirement;
-		this.benefit = benefit;
-		this.status = status;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.deletedAt = deletedAt;
-	}
+    public JobTranslation(UUID id, Job job, Translator translator, Language language, String address, String name,
+                          String description, String requiredEducation, String requiredExperience, String benefit,
+                          String requiredLanguage, int japaneseLevelRequirement, int status, Timestamp createdAt,
+                          Timestamp updatedAt, Timestamp deletedAt) {
+        this.id = id;
+        this.job = job;
+        this.translator = translator;
+        this.language = language;
+        this.address = address;
+        this.name = name;
+        this.description = description;
+        this.requiredEducation = requiredEducation;
+        this.requiredExperience = requiredExperience;
+        this.benefit = benefit;
+        this.requiredLanguage = requiredLanguage;
+        this.japaneseLevelRequirement = japaneseLevelRequirement;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
 
-	public JobTranslation() {
+    public JobTranslation() {
 
 	}
 }

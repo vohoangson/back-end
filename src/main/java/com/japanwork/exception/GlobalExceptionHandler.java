@@ -88,12 +88,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	    InputStream input = null;
 
 	    try {
-
 	        input = new FileInputStream("src/main/resources/validate.properties");
 
 	        // load a properties file
 	        prop.load(input);
 	        msg = prop.getProperty(code);
+
+            //text.replaceAll("([^_A-Z])([A-Z])", "$1_$2").toLowerCase();
 
 	    } catch (IOException e) {
 	        ex.printStackTrace();
