@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.model.Conversation;
 import com.japanwork.model.Language;
 import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.Translator;
@@ -190,6 +191,12 @@ public class RequestTranslationRepositoryIplm implements RequestTranslationRepos
 			Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findAllByOwnerIdAndDeletedAt(page, objecttableId, deletedAt);
+	}
+
+	@Override
+	public RequestTranslation findByConversationAndDeletedAt(Conversation conversation, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByConversationAndDeletedAt( conversation, deletedAt);
 	}
 
 }

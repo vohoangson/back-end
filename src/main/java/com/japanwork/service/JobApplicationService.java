@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.model.Candidate;
+import com.japanwork.model.Conversation;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.model.JobApplicationStatus;
@@ -92,5 +93,10 @@ public class JobApplicationService {
 		ob.setStatus(jobApplicationStatusService.convertJobApplicationStatusResponse(status));
 		ob.setCreatedAt(jobApplication.getCreatedAt());
 		return ob;
+	}
+	
+	public JobApplication jobApplicationByConversation(Conversation conversation) {
+		return jobApplicationRepository.findByCandidateSupportConversaionAndDeletedAtOrCompanySupportConversationAndDeletedAtOrAllConversationAndDeletedAt(
+				conversation, null, conversation, null, conversation, null);
 	}
 }
