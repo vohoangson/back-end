@@ -3,7 +3,6 @@ package com.japanwork.repository.notification;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Example;
@@ -170,9 +169,14 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	}
 
 	@Override
-	public Page<Notification> findByObjectableIdInAndDeletedAtOrReceiverIdAndDeletedAt(Pageable page,
-			Set<UUID> conversationIds, Timestamp deletedAt, UUID id, Timestamp deletedAt1) {
+	public Page<Notification> findByReceiverIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByObjectableIdInAndDeletedAtOrReceiverIdAndDeletedAt( page, conversationIds, deletedAt, id, deletedAt1);
+		return findByReceiverIdAndDeletedAt( page, id, deletedAt);
+	}
+
+	@Override
+	public int countByReceiverIdAndIsReadAndDeletedAt(UUID id, boolean isRead, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return countByReceiverIdAndIsReadAndDeletedAt( id, isRead, deletedAt);
 	}
 }

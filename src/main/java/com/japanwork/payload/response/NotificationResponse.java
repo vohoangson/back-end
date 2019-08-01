@@ -25,8 +25,8 @@ public class NotificationResponse {
 	@JsonProperty("sub_objectable_id")
 	private UUID subObjectableId;
 	
-	@JsonProperty("read_at")
-	private Timestamp readAt;
+	@JsonProperty("is_read")
+	private boolean isRead;
 	
 	@JsonProperty("create_at")
 	private Timestamp createAt;
@@ -91,12 +91,12 @@ public class NotificationResponse {
 		return createAt;
 	}
 
-	public Timestamp getReadAt() {
-		return readAt;
+	public boolean isRead() {
+		return isRead;
 	}
 
-	public void setReadAt(Timestamp readAt) {
-		this.readAt = readAt;
+	public void setRead(boolean isRead) {
+		this.isRead = isRead;
 	}
 
 	public void setCreateAt(Timestamp createAt) {
@@ -104,7 +104,7 @@ public class NotificationResponse {
 	}
 
 	public NotificationResponse(long id, UUID objectableId, String notificationType, UUID receiverId, UUID senderId,
-			String content, UUID subObjectableId, Timestamp readAt, Timestamp createAt) {
+			String content, UUID subObjectableId, boolean isRead, Timestamp createAt) {
 		this.id = id;
 		this.objectableId = objectableId;
 		this.notificationType = notificationType;
@@ -112,7 +112,7 @@ public class NotificationResponse {
 		this.senderId = senderId;
 		this.content = content;
 		this.subObjectableId = subObjectableId;
-		this.readAt = readAt;
+		this.isRead = isRead;
 		this.createAt = createAt;
 	}
 
