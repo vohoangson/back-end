@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.japanwork.model.Conversation;
 import com.japanwork.model.Language;
 import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.Translator;
@@ -17,4 +18,5 @@ public interface RequestTranslationRepository extends JpaRepository<RequestTrans
 	public RequestTranslation findByIdAndDeletedAt(UUID id, Timestamp deletedAt);
 	public Page<RequestTranslation> findAllByTranslatorAndDeletedAt( Pageable page, Translator translator, Timestamp deletedAt);
 	public Page<RequestTranslation> findAllByOwnerIdAndDeletedAt( Pageable page, UUID objecttableId, Timestamp deletedAt);
+	public RequestTranslation findByConversationAndDeletedAt(Conversation conversation, Timestamp deletedAt);
 }
