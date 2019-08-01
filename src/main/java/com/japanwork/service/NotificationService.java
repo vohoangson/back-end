@@ -106,11 +106,19 @@ public class NotificationService {
 		BaseDataResponse response = new BaseDataResponse(this.converNotificationResponse(result));
 		rabbitTemplate.convertAndSend("notifications/"+result.getReceiverId(), ""+result.getReceiverId(), response);
 	}
-	
+	public Page<Notification> notifications(UserPrincipal userPrincipal, int page, int paging) throws ResourceNotFoundException{
+		try {
+			Page<Notification> pages = notificationRepository.findByObjectableIdAndDeletedAt(
+			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), null, null);
+			return pages;
+		} catch (IllegalArgumentException e) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+	}
 	public Page<Notification> listMessage(UUID id, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Notification> pages = notificationRepository.findByObjectableIdAndDeletedAt(
-			        PageRequest.of(page-1, paging, Sort.by("createAt").descending()), id, null);
+			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);

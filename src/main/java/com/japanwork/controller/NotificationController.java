@@ -60,18 +60,28 @@ public class NotificationController {
 		return response;
 	}
 	
-//	@PostMapping(UrlConstant.URL_NOTIFICATION)
-//	@ResponseBody
-//	public BaseDataResponse addNotification(UUID userId, String title, String type) {
-//		Notification notification =  notificationService.addNotification(userId, title, type);
-//		BaseDataResponse response = new BaseDataResponse(notificationService.converNotificationResponse(notification));
-//		rabbitTemplate.convertAndSend("notifications/"+notification.getObjectableId(), ""+notification.getObjectableId(), response);
-//		return response;
-//	}
+	@GetMapping(UrlConstant.URL_NOTIFICATION)
+	@ResponseBody
+	public BaseDataMetaResponse notifications(@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@CurrentUser UserPrincipal userPrincipal) {
+		Page<Notification> pages = notificationService.notifications(userPrincipal, page, paging);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		
+		List<NotificationResponse> list = new ArrayList<NotificationResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (Notification notification : pages.getContent()) {
+				list.add(notificationService.converNotificationResponse(notification));
+			}
+		}
+		
+		return new BaseDataMetaResponse(list, pageInfo);
+	} 
 	
 	@GetMapping(UrlConstant.URL_CONVERSATION_ID)
 	@ResponseBody
-	public BaseDataMetaResponse listMessage(@PathVariable UUID id, 
+	public BaseDataMetaResponse messages(@PathVariable UUID id, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		Page<Notification> pages = notificationService.listMessage(id, page, paging);
