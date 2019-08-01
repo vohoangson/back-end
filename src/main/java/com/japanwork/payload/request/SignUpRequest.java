@@ -22,9 +22,9 @@ public class SignUpRequest {
     @Size(min=8,message = "invalid_password_length")
     private String password;
 
-    @NotNull(message = "country_required")
+//    @NotNull(message = "country_required")
     @JsonProperty("country_id")
-    private UUID countryId;;
+    private UUID countryId;
     
     @NotBlank(message = "role_required")
     @Pattern(regexp = "COMPANY|CANDIDATE|TRANSLATOR",message = "invalid_role_format")

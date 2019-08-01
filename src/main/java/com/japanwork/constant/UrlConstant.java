@@ -99,10 +99,9 @@ public class UrlConstant {
 
 	//Notification
 	public static final String URL_CONVERSATION_ID= "/conversations/{id}";
-	public static final String URL_NOTIFICATION= "/notification";
-//		public static final String URL_CONVERSATION_ID_NOTIFICATION = "/job-applications/{id}/conversation-all";
-//		public static final String URL_CONVERSATION_ID = "/job-applications/{id}/conversation-support-candidate";
-//		public static final String URL_CONVERSATION_ID = "/job-applications/{id}/conversation-support-company";
+	public static final String URL_NOTIFICATION = "/notifications";
+	public static final String URL_NOTIFICATION_UNREADS_NUMBER = "/notifications/unreads_number";
+	public static final String URL_NOTIFICATION_MARK_ALL_READ = "/notifications/mark_all_read";
 
 	//Contract
 	public static final String URL_CONTRACT = "/contracts";
