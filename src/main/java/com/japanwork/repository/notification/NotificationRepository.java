@@ -1,7 +1,6 @@
 package com.japanwork.repository.notification;
 
 import java.sql.Timestamp;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +11,6 @@ import com.japanwork.model.Notification;
 
 public interface NotificationRepository extends JpaRepository<Notification, UUID>{
 	public Page<Notification> findByObjectableIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt);
-	public Page<Notification> findByObjectableIdInAndDeletedAtOrReceiverIdAndDeletedAt(Pageable page, Set<UUID> conversationIds, 
-			Timestamp deletedAt, UUID id, Timestamp deletedAt1);
+	public Page<Notification> findByReceiverIdAndDeletedAt(Pageable page, UUID id, Timestamp deletedAt);
+	public int countByReceiverIdAndIsReadAndDeletedAt(UUID id, boolean isRead, Timestamp deletedAt);
 }
