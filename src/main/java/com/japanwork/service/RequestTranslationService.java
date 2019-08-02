@@ -171,11 +171,13 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE,
 				translator);
 		notificationService.addNotification(
+				translator.getId(),
 				null,
-				this.userIdOfOwner(requestTranslation), 
+				requestTranslation.getId(),
+				requestTranslation.getOwnerId(), 
 				CommonConstant.NotificationContent.HELPER_JOINED,
 				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getId());
+				this.userIdOfOwner(requestTranslation));
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -211,11 +213,13 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.ON_GOING,
 				requestTranslation.getTranslator());
 		notificationService.addNotification(
+				requestTranslation.getOwnerId(),
 				null,
-				requestTranslation.getTranslator().getUser().getId(), 
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_APPLY,
 				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getId());
+				requestTranslation.getTranslator().getUser().getId());
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -240,11 +244,13 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.REVIEWED,
 				requestTranslation.getTranslator());
 		notificationService.addNotification(
+				requestTranslation.getTranslator().getId(),
 				null,
-				this.userIdOfOwner(requestTranslation), 
+				requestTranslation.getId(),
+				requestTranslation.getOwnerId(), 
 				CommonConstant.NotificationContent.HELPER_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getId());
+				this.userIdOfOwner(requestTranslation));
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -269,11 +275,13 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.FINISHED,
 				requestTranslation.getTranslator());
 		notificationService.addNotification(
+				requestTranslation.getOwnerId(),
 				null,
-				requestTranslation.getTranslator().getUser().getId(), 
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getId());
+				requestTranslation.getTranslator().getUser().getId());
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -298,11 +306,13 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.ON_GOING,
 				requestTranslation.getTranslator());
 		notificationService.addNotification(
+				requestTranslation.getOwnerId(),
 				null,
-				requestTranslation.getTranslator().getUser().getId(), 
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
 				CommonConstant.NotificationContent.OWNER_REFUSED_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getId());
+				requestTranslation.getTranslator().getUser().getId());
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -342,11 +352,13 @@ public class RequestTranslationService {
 				null,
 				null);
 		notificationService.addNotification(
+				requestTranslation.getOwnerId(),
 				null,
-				requestTranslation.getTranslator().getUser().getId(), 
+				requestTranslation.getId(),
+				requestTranslation.getTranslator().getId(), 
 				CommonConstant.NotificationContent.OWNER_REJECT_APPLY,
 				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getId());
+				requestTranslation.getTranslator().getUser().getId());
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
@@ -598,19 +610,23 @@ public class RequestTranslationService {
 		if(userService.findByIdAndIsDelete(userPrincipal.getId()).getRole().equals(CommonConstant.Role.TRANSLATOR)) {
 			userCreateId = requestTranslation.getTranslator().getId();
 			notificationService.addNotification(
+					requestTranslation.getOwnerId(),
 					null,
-					userPrincipal.getId(), 
+					requestTranslation.getId(),
+					userCreateId, 
 					CommonConstant.NotificationContent.HELPER_CANCEL,
 					CommonConstant.NotificationType.STATUS_REQUEST,
-					requestTranslation.getId());
+					requestTranslation.getTranslator().getUser().getId());
 		} else {
 			userCreateId = requestTranslation.getOwnerId();
 			notificationService.addNotification(
+					requestTranslation.getTranslator().getId(),
 					null,
-					userPrincipal.getId(), 
+					requestTranslation.getId(),
+					userCreateId, 
 					CommonConstant.NotificationContent.OWNER_CANCEL,
 					CommonConstant.NotificationType.STATUS_REQUEST,
-					requestTranslation.getId());
+					this.userIdOfOwner(requestTranslation));
 		}
 		
 		return userCreateId;
@@ -623,6 +639,16 @@ public class RequestTranslationService {
 		} else {
 			Company company = companyService.findByIdAndIsDelete(requestTranslation.getOwnerId());
 			return company.getUser().getId();
+		}
+	}
+	
+	public UUID receiverId(RequestTranslation requestTranslation) {
+		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
+			Candidate candidate = candidateService.findByIdAndIsDelete(requestTranslation.getOwnerId());
+			return candidate.getId();
+		} else {
+			Company company = companyService.findByIdAndIsDelete(requestTranslation.getOwnerId());
+			return company.getId();
 		}
 	}
 	

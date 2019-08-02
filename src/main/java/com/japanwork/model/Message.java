@@ -8,11 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "notification")
-public class Notification {
+@Table(name = "message")
+public class Message {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,17 +26,12 @@ public class Notification {
 	@Column(name = "sender_id")
 	private UUID senderId;
 	
-	@Column(name = "receiver_id")
-	private UUID receiverId;
-	
-	@Column(name = "objectable_id")
-	private UUID objectableId;
-	
-	@Column(name = "notification_type")
-	private String notificationType;
-	
 	@Column(name = "content")
 	private String content;
+	
+	@ManyToOne
+	@JoinColumn(name = "conversation_id")
+	private Conversation conversation;
 	
 	@Column(name = "is_read")
 	private boolean isRead;
@@ -40,9 +39,11 @@ public class Notification {
     @Column(name="created_at")
     private Timestamp createdAt;
     
+    @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
     
+    @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 
@@ -52,30 +53,6 @@ public class Notification {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public UUID getObjectableId() {
-		return objectableId;
-	}
-
-	public void setObjectableId(UUID objectableId) {
-		this.objectableId = objectableId;
-	}
-
-	public String getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(String notificationType) {
-		this.notificationType = notificationType;
-	}
-
-	public UUID getReceiverId() {
-		return receiverId;
-	}
-
-	public void setReceiverId(UUID receiverId) {
-		this.receiverId = receiverId;
 	}
 
 	public UUID getSenderId() {
@@ -92,6 +69,14 @@ public class Notification {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Conversation getConversation() {
+		return conversation;
+	}
+
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 
 	public boolean isRead() {
@@ -126,22 +111,19 @@ public class Notification {
 		this.deletedAt = deletedAt;
 	}
 
-	public Notification(long id, UUID objectableId, String notificationType, UUID receiverId, UUID senderId,
-			String content, boolean isRead, Timestamp createdAt, Timestamp updatedAt,
-			Timestamp deletedAt) {
+	public Message() {
+	}
+
+	public Message(long id, UUID senderId, String content, Conversation conversation, boolean isRead,
+			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
-		this.objectableId = objectableId;
-		this.notificationType = notificationType;
-		this.receiverId = receiverId;
 		this.senderId = senderId;
 		this.content = content;
+		this.conversation = conversation;
 		this.isRead = isRead;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
-	}
-
-	public Notification() {
 	}
 	
 }
