@@ -3,6 +3,7 @@ package com.japanwork.repository.notification;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Example;
@@ -178,5 +179,17 @@ public class NotificationRepositoryIplm implements NotificationRepository{
 	public int countByReceiverIdAndIsReadAndDeletedAt(UUID id, boolean isRead, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return countByReceiverIdAndIsReadAndDeletedAt( id, isRead, deletedAt);
+	}
+
+	@Override
+	public void updateIsReadByIdInAndDeletedAt(boolean isRead, Set<Long> ids) {
+		// TODO Auto-generated method stub
+		updateIsReadByIdInAndDeletedAt( isRead, ids);
+	}
+
+	@Override
+	public void updateIsReadByReceiverIdAndDeletedAt(boolean isRead, UUID receiverId) {
+		// TODO Auto-generated method stub
+		updateIsReadByReceiverIdAndDeletedAt( isRead, receiverId);
 	}
 }

@@ -5,17 +5,8 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class NotificationResponse {
+public class MessageResponse {
 	private long id;
-	
-    @JsonProperty("objectable_id")
-	private UUID objectableId;
-    
-    @JsonProperty("notification_type")
-	private String notificationType;
-    
-    @JsonProperty("receiver_id")
-	private UUID receiverId;
 	
     @JsonProperty("sender_id")
 	private UUID senderId;
@@ -37,30 +28,6 @@ public class NotificationResponse {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public UUID getObjectableId() {
-		return objectableId;
-	}
-
-	public void setObjectableId(UUID objectableId) {
-		this.objectableId = objectableId;
-	}
-
-	public String getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(String notificationType) {
-		this.notificationType = notificationType;
-	}
-
-	public UUID getReceiverId() {
-		return receiverId;
-	}
-
-	public void setReceiverId(UUID receiverId) {
-		this.receiverId = receiverId;
 	}
 
 	public UUID getSenderId() {
@@ -103,12 +70,8 @@ public class NotificationResponse {
 		this.createAt = createAt;
 	}
 
-	public NotificationResponse(long id, UUID objectableId, String notificationType, UUID receiverId, UUID senderId,
-			String content, UUID conversationId, boolean isRead, Timestamp createAt) {
+	public MessageResponse(long id, UUID senderId, String content, UUID conversationId, boolean isRead, Timestamp createAt) {
 		this.id = id;
-		this.objectableId = objectableId;
-		this.notificationType = notificationType;
-		this.receiverId = receiverId;
 		this.senderId = senderId;
 		this.content = content;
 		this.conversationId = conversationId;
@@ -116,7 +79,7 @@ public class NotificationResponse {
 		this.createAt = createAt;
 	}
 
-	public NotificationResponse() {
+	public MessageResponse() {
 	}
 
 }
