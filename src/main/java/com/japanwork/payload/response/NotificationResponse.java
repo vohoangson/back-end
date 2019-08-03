@@ -3,6 +3,7 @@ package com.japanwork.payload.response;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NotificationResponse {
@@ -91,6 +92,7 @@ public class NotificationResponse {
 		return createAt;
 	}
 
+	@JsonIgnore
 	public boolean isRead() {
 		return isRead;
 	}
