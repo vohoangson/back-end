@@ -14,14 +14,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
-import com.japanwork.model.JobApplication;
 import com.japanwork.model.Notification;
 import com.japanwork.model.PageInfo;
-import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.MarkReadNotificationReuqest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
@@ -40,12 +37,6 @@ public class NotificationService {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private RequestTranslationService requestTranslationService;
-	
-	@Autowired
-	private JobApplicationService jobApplicationService;
 
 	public void addNotification(UUID senderId, UUID conversationId,UUID objectableId, UUID receiverId, String content, String type, UUID userId) 
 			throws ForbiddenException{
@@ -74,23 +65,7 @@ public class NotificationService {
 			
 			if(pages.getContent().size() > 0) {
 				for (Notification notification : pages.getContent()) {
-					UUID conversationId = null;
-					String notificationType = notification.getNotificationType();
-					if(notificationType.equals(CommonConstant.NotificationType.MESSAGE_REQUEST)) {
-						RequestTranslation requestTranslation = requestTranslationService.requestTranslation(
-								notification.getObjectableId(), userPrincipal);
-						conversationId = requestTranslation.getConversation().getId();
-					} else if(notificationType.equals(CommonConstant.NotificationType.MESSAGE_JOB_APPLICATION_COMPANY_SUPPORT)){
-						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(notification.getObjectableId());
-						conversationId = jobApplication.getCandidateSupportConversaion().getId();
-					} else if(notificationType.equals(CommonConstant.NotificationType.MESSAGE_JOB_APPLICATION_ALL)) {
-						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(notification.getObjectableId());
-						conversationId = jobApplication.getAllConversation().getId();
-					} else if(notificationType.equals(CommonConstant.NotificationType.MESSAGE_JOB_APPLICATION_CANDIDATE_SUPPORT)) {
-						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(notification.getObjectableId());
-						conversationId = jobApplication.getCandidateSupportConversaion().getId();
-					} 
-					list.add(this.convertNotificationResponse(notification, conversationId));
+					list.add(this.convertNotificationResponse(notification, null));
 				}
 			}
 			
