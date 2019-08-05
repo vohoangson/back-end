@@ -119,7 +119,7 @@ public class MessageConstant {
 	public static final String COMPANY_NOT_FOUND = "Company was not found!";
     public static final Integer COMPANY_NOT_FOUND_CODE = 1001;
 
-    //Company error response information
+    //Language error response information
 	public static final String LANGUAGE_NOT_FOUND = "Language was not found";
     public static final Integer LANGUAGE_NOT_FOUND_CODE = 1021;
 
@@ -130,6 +130,10 @@ public class MessageConstant {
     //Translator error response information
     public static final String TRANSLATOR_NOT_FOUND = "Translator was not found";
     public static final Integer TRANSLATOR_NOT_FOUND_CODE = 1061;
+
+    //Candidate error response information
+    public static final String CANDIDATE_NOT_FOUND = "Candidate was not found";
+    public static final Integer CANDIDATE_NOT_FOUND_CODE = 1081;
 
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
