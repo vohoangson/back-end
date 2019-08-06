@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,8 +25,9 @@ public class RequestStatus {
 	@Column(name = "creator_id")
 	private UUID creatorId;
 	
-	@Column(name = "request_translation_id")
-	private UUID requestTranslationId;
+	@ManyToOne
+	@JoinColumn(name = "request_translation_id")
+	private RequestTranslation requestTranslation;
 	
 	@OneToOne
     @JoinColumn(name = "translator_id")
@@ -56,12 +58,12 @@ public class RequestStatus {
 		this.creatorId = creatorId;
 	}
 
-	public UUID getRequestTranslationId() {
-		return requestTranslationId;
+	public RequestTranslation getRequestTranslation() {
+		return requestTranslation;
 	}
 
-	public void setRequestTranslationId(UUID requestTranslationId) {
-		this.requestTranslationId = requestTranslationId;
+	public void setRequestTranslation(RequestTranslation requestTranslation) {
+		this.requestTranslation = requestTranslation;
 	}
 
 	public Translator getTranslator() {
@@ -96,11 +98,11 @@ public class RequestStatus {
 		this.createdAt = createdAt;
 	}
 
-	public RequestStatus(UUID id, UUID creatorId, UUID requestTranslationId, Translator translator, String reason,
-			String status, Timestamp createdAt) {
+	public RequestStatus(UUID id, UUID creatorId, RequestTranslation requestTranslation, Translator translator,
+			String reason, String status, Timestamp createdAt) {
 		this.id = id;
 		this.creatorId = creatorId;
-		this.requestTranslationId = requestTranslationId;
+		this.requestTranslation = requestTranslation;
 		this.translator = translator;
 		this.reason = reason;
 		this.status = status;

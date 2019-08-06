@@ -25,7 +25,7 @@ public class ContractService {
 	}
 	
 	public Contract findByIdAndIsDelete(UUID id) {
-		Contract contract = contractRepository.findByIdAndDeletedAt(id, null);
+		Contract contract = contractRepository.findById(id).get();
 		if(contract == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}

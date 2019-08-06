@@ -30,10 +30,6 @@ public class JobApplicationStatus {
     @JoinColumn(name = "translator_id")
 	private Translator translator;
 	
-	@OneToOne
-    @JoinColumn(name = "candidate_id")
-	private Candidate candidate;
-	
 	@Column(name = "reason")
 	private String reason;
 	
@@ -75,14 +71,6 @@ public class JobApplicationStatus {
 		this.translator = translator;
 	}
 
-	public Candidate getCandidate() {
-		return candidate;
-	}
-
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
-	}
-
 	public String getReason() {
 		return reason;
 	}
@@ -108,12 +96,11 @@ public class JobApplicationStatus {
 	}
 
 	public JobApplicationStatus(UUID id, UUID creatorId, UUID jobApplicationId, Translator translator,
-			Candidate candidate, String reason, String status, Timestamp createdAt) {
+			String reason, String status, Timestamp createdAt) {
 		this.id = id;
 		this.creatorId = creatorId;
 		this.jobApplicationId = jobApplicationId;
 		this.translator = translator;
-		this.candidate = candidate;
 		this.reason = reason;
 		this.status = status;
 		this.createdAt = createdAt;

@@ -47,8 +47,7 @@ public class RequestTranslation {
     @JoinColumn(name="language_id")
     private Language language;
     
-    @OneToMany
-    @JoinColumn(name="request_translation_id")
+    @OneToMany(mappedBy = "requestTranslation")
     @OrderBy("createdAt DESC")
     private Set<RequestStatus> requestStatus;
     
