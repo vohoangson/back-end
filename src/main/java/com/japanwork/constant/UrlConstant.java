@@ -81,8 +81,12 @@ public class UrlConstant {
     public static final String URL_SHOW_JOB_TRANSLATION = "v1/job_translations";
 
 	//Job Application
+    public static final String URL_JOB_APPLICATION_CANDIDATE_JOIN = "/jobs/{id}/apply";
+	public static final String URL_JOB_APPLICATION_COMPANY_REJECT = "/job-applications/{id}/reject";
+	public static final String URL_JOB_APPLICATION_CANCEL = "/job-applications/{id}/cancel";
+	public static final String URL_JOB_APPLICATION_COMPANY_ACCEPT_APPLY = "/job-applications/{id}/accept-apply";
 	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";
-	public static final String URL_JOB_APPLICATION_CANDIDATE_JOIN = "/jobs/{id}/apply";
+	public static final String URL_JOB_APPLICATION = "/job-applications";
 
 	//Request translation
 	public static final String URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN = "/requests/{id}/apply";

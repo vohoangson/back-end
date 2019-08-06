@@ -1,12 +1,14 @@
 package com.japanwork.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +29,13 @@ public class ContractController {
 	public BaseDataResponse listContract() {		
 		List<Contract> list = contractService.findAllByIsDelete();
 		return new BaseDataResponse(list);
+	}
+	
+	@GetMapping(value = UrlConstant.URL_CONTRACT_ID)
+	@ResponseBody
+	public BaseDataResponse contract(@PathVariable UUID id) {		
+		Contract contract = contractService.findByIdAndIsDelete(id);
+		return new BaseDataResponse(contract);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_CONTRACT)

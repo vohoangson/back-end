@@ -1,7 +1,5 @@
 package com.japanwork.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +12,6 @@ import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.ConversationResponse;
-import com.japanwork.security.CurrentUser;
-import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.ConversationService;
 import com.japanwork.service.JobApplicationService;
 
@@ -72,18 +67,5 @@ public class ConversationController {
 		}
 		return new BaseDataResponse(conversationService.convertConversationResponse(
 				jobApplication.getCandidateSupportConversaion()));
-	}
-	
-	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION)
-	@ResponseBody
-	public BaseDataResponse listConversationByUser(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id) {
-		List<Conversation> list = conversationService.listConversationByUser(userPrincipal, id);
-		List<ConversationResponse> listConversationResponse = new ArrayList<ConversationResponse>();
-		if(list != null) {
-			for (Conversation conversation : list) {
-				listConversationResponse.add(conversationService.convertConversationResponse(conversation));
-			}
-		}
-		return new BaseDataResponse(listConversationResponse);
 	}
 }

@@ -12,10 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.Conversation;
 import com.japanwork.model.Language;
 import com.japanwork.model.RequestTranslation;
-import com.japanwork.model.Translator;
 
 @Repository
 @Transactional
@@ -181,22 +179,9 @@ public class RequestTranslationRepositoryIplm implements RequestTranslationRepos
 	}
 
 	@Override
-	public Page<RequestTranslation> findAllByTranslatorAndDeletedAt(Pageable page, Translator translator, Timestamp deletedAt) {
+	public List<RequestTranslation> findAllByObjectableIdAndObjectableTypeAndDeletedAt(UUID objectTableId,
+			String objectTableType, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findAllByTranslatorAndDeletedAt(page, translator, deletedAt);
+		return findAllByObjectableIdAndObjectableTypeAndDeletedAt( objectTableId, objectTableType, deletedAt);
 	}
-
-	@Override
-	public Page<RequestTranslation> findAllByOwnerIdAndDeletedAt(Pageable page, UUID objecttableId,
-			Timestamp deletedAt) {
-		// TODO Auto-generated method stub
-		return findAllByOwnerIdAndDeletedAt(page, objecttableId, deletedAt);
-	}
-
-	@Override
-	public RequestTranslation findByConversationAndDeletedAt(Conversation conversation, Timestamp deletedAt) {
-		// TODO Auto-generated method stub
-		return findByConversationAndDeletedAt( conversation, deletedAt);
-	}
-
 }

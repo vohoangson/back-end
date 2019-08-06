@@ -12,7 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.Conversation;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 
 @Repository
@@ -164,24 +165,15 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 	}
 
 	@Override
-	public JobApplication findByJobIdAndDeletedAt(UUID id, Timestamp deletedAt) {
-		// TODO Auto-generated method stub
-		return findByJobIdAndDeletedAt(id, deletedAt);
-	}
-
-	@Override
 	public JobApplication findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findByIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override
-	public JobApplication findByCandidateSupportConversaionAndDeletedAtOrCompanySupportConversationAndDeletedAtOrAllConversationAndDeletedAt(
-			Conversation conversation, Timestamp deletedAt1, Conversation conversation1, Timestamp deletedAt2,
-			Conversation conversation2, Timestamp deletedAt3) {
+	public JobApplication findByJobAndCandidateAndDeletedAt(Job job, Candidate candidate, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByCandidateSupportConversaionAndDeletedAtOrCompanySupportConversationAndDeletedAtOrAllConversationAndDeletedAt(
-				 conversation, deletedAt1, conversation1, deletedAt2, conversation2, deletedAt3);
+		return findByJobAndCandidateAndDeletedAt( job, candidate, deletedAt);
 	}
 
 }
