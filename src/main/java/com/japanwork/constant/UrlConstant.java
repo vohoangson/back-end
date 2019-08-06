@@ -81,8 +81,12 @@ public class UrlConstant {
     public static final String URL_SHOW_JOB_TRANSLATION = "v1/job_translations";
 
 	//Job Application
+    public static final String URL_JOB_APPLICATION_CANDIDATE_JOIN = "/jobs/{id}/apply";
+	public static final String URL_JOB_APPLICATION_COMPANY_REJECT = "/job-applications/{id}/reject";
+	public static final String URL_JOB_APPLICATION_CANCEL = "/job-applications/{id}/cancel";
+	public static final String URL_JOB_APPLICATION_COMPANY_ACCEPT_APPLY = "/job-applications/{id}/accept-apply";
 	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";
-	public static final String URL_JOB_APPLICATION_CANDIDATE_JOIN = "/jobs/{id}/apply";
+	public static final String URL_JOB_APPLICATION = "/job-applications";
 
 	//Request translation
 	public static final String URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN = "/requests/{id}/apply";
@@ -118,7 +122,7 @@ public class UrlConstant {
 	public static final String URL_LEVEL_ID = "/levels/{id}";
 	public static final String URL_LEVEL_UNDEL = "/levels/undelete/{id}";
 
-	//CANDIDATE
+	//Candidate
 	public static final String URL_CANDIDATE = "/candidates";
 	public static final String URL_CANDIDATE_IDS = "/candidates-by-ids";
 	public static final String URL_MY_CANDIDATE = "/candidates/my-candidate";
@@ -127,17 +131,20 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_JOB_FAVORITE_ID = "/candidates/jobs/{id}/favorite";
 	public static final String URL_CANDIDATE_JOB_FAVORITE = "/candidates/jobs/favorite";
 
-	//CANDIDATE_PERSONAL
+	//Candidate personal
 	public static final String URL_CANDIDATE_PERSONAL = "/candidates/personal";
 	public static final String URL_CANDIDATE_ID_PERSONAL = "/candidates/{id}/personal";
 
-	//CANDIDATE_WISH
+	//Candidate expected
 	public static final String URL_CANDIDATE_ID_WISH = "/candidates/{id}/wish";
 
-	//CANDIDATE_EXPERIENCES
+	//Candidate experience
 	public static final String URL_CANDIDATE_ID_EXPERIENCE = "/candidates/{id}/experience";
 
-	//UPLOAD FILE ON AMW
+	//Candidate translation
+    public static final String URL_CANDIDATE_TRANSLATION = "/v1/candidates/{id}/candidate_translations";
+
+	//Upload file on AWS
 	public static final String URL_AMW_UPLOAD_FILE = "/storage/upload-file";
 	public static final String URL_AMW_DELETE_FILE = "/storage/delete-file";
 

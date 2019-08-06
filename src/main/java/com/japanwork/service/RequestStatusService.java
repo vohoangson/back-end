@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.model.RequestStatus;
-import com.japanwork.model.Translator;
+import com.japanwork.model.RequestTranslation;
 import com.japanwork.payload.response.RequestTranslationStatusResponse;
 import com.japanwork.repository.request_status.RequestStatusRepository;
 
@@ -16,24 +16,23 @@ public class RequestStatusService {
 	@Autowired
 	private RequestStatusRepository requestStatusRepository;
 	
-	public RequestStatus save(UUID requestTranslationId, Timestamp timestamp, String status, Translator translator) {
+	public RequestStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status) {
 		RequestStatus requestTranslationStatus = new RequestStatus();
-		requestTranslationStatus.setRequestTranslationId(requestTranslationId);
+		requestTranslationStatus.setRequestTranslation(requestTranslation);
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
-		requestTranslationStatus.setTranslator(translator);
+		requestTranslationStatus.setTranslator(requestTranslation.getTranslator());
 		return requestStatusRepository.save(requestTranslationStatus);
 	}
 	
-	public RequestStatus save(UUID requestTranslationId, Timestamp timestamp, String status, String reason, UUID creatorId, 
-			Translator translator) {
+	public RequestStatus save(RequestTranslation requestTranslation, Timestamp timestamp, String status, String reason, UUID creatorId) {
 		RequestStatus requestTranslationStatus = new RequestStatus();
-		requestTranslationStatus.setRequestTranslationId(requestTranslationId);
+		requestTranslationStatus.setRequestTranslation(requestTranslation);
 		requestTranslationStatus.setCreatorId(creatorId);
 		requestTranslationStatus.setCreatedAt(timestamp);
 		requestTranslationStatus.setStatus(status);
 		requestTranslationStatus.setReason(reason);
-		requestTranslationStatus.setTranslator(translator);
+		requestTranslationStatus.setTranslator(requestTranslation.getTranslator());
 		return requestStatusRepository.save(requestTranslationStatus);
 	}
 	

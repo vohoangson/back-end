@@ -4,13 +4,11 @@ import java.util.UUID;
 
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFound;
-import com.japanwork.model.Company;
+import com.japanwork.model.*;
+import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.repository.company.CompanyRepository;
-import com.japanwork.model.Language;
 import com.japanwork.repository.language.LanguageRepository;
-import com.japanwork.model.Job;
 import com.japanwork.repository.job.JobRepository;
-import com.japanwork.model.Translator;
 import com.japanwork.repository.translator.TranslatorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,9 @@ public class CommonSupport {
 
     @Autowired
     private TranslatorRepository translatorRepository;
+
+    @Autowired
+    private CandidateRepository candidateRepository;
 
     public void loadCompany(UUID id) throws ResourceNotFound {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
@@ -69,4 +70,15 @@ public class CommonSupport {
             );
         }
     }
+
+    public void loadCandidate(UUID id) throws ResourceNotFound {
+        Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
+        if(candidate == null) {
+            throw new ResourceNotFound(
+                    MessageConstant.CANDIDATE_NOT_FOUND_CODE,
+                    MessageConstant.CANDIDATE_NOT_FOUND
+            );
+        }
+    }
+
 }

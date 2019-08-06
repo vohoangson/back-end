@@ -48,6 +48,13 @@ public class MessageConstant {
 	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL = "request_translation_accept_finish_fail";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS = "request_translation_refuse_finish_success";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL = "request_translation_refuse_finish_fail";
+	public static final String REQUEST_TRANSLATION_CANCEL_FAIL = "request_translation_cancel_fail";
+	public static final String JOB_APPLIACTION_APPLY_FAIL = "job_application_candidate_apply_job_fail";
+	public static final String REQUEST_TRANSLATION_REJECT_FAIL = "request_translation_reject_fail";
+	public static final String JOB_APPLIACTION_REJECT_FAIL = "job_application_reject_fail";
+	public static final String JOB_APPLIACTION_CANCEL_FAIL = "job_application_cancel_fail";
+	public static final String JOB_APPLIACTION_ACCEPT_APPLY_FAIL = "job_application_company_accept_apply_candidate_fail";
+	public static final String JOB_APPLIACTION_APPROVE_CANDIDATE_FAIL = "job_application_company_approve_candidate_fail";
 
 	public static final String ERROR_404 = "page_not_found";
 	public static final String SERVER_ERROR = "internal_server_error";
@@ -113,13 +120,20 @@ public class MessageConstant {
 	public static final String REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG = "Request translation: Owner accept finish fail!";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_SUCCESS_MSG = "Request translation: Owner refuse finish success!";
 	public static final String REQUEST_TRANSLATION_REFUSE_FINISH_FAIL_MSG = "Request translation: Owner refuse finish fail!";
+	public static final String REQUEST_TRANSLATION_CANCEL_FAIL_MSG = "Request translation: cancel fail!";
+	public static final String REQUEST_TRANSLATION_REJECT_FAIL_MSG = "Request translation: reject fail!";
 	public static final String REQUEST_TRANSLATION_BAD_REQUEST_MSG = "Request translation: Bad request!";
+	public static final String JOB_APPLIACTION_APPLY_FAIL_MSG = "Job application: Candidate apply job failed!";
+	public static final String JOB_APPLIACTION_REJECT_FAIL_MSG = "Job application: Company reject candidate failed!";
+	public static final String JOB_APPLIACTION_ACCEPT_APPLY_FAIL_MSG = "Job application: Company accept apply candidate failed!";
+	public static final String JOB_APPLIACTION_CANCEL_FAIL_MSG = "Job application: Cancel failed!";
+	public static final String JOB_APPLIACTION_APPROVE_CANDIDATE_FAIL_MSG = "jJob application: Company approve candidate failed!";
 
 	//Company error response information
 	public static final String COMPANY_NOT_FOUND = "Company was not found!";
     public static final Integer COMPANY_NOT_FOUND_CODE = 1001;
 
-    //Company error response information
+    //Language error response information
 	public static final String LANGUAGE_NOT_FOUND = "Language was not found";
     public static final Integer LANGUAGE_NOT_FOUND_CODE = 1021;
 
@@ -131,9 +145,14 @@ public class MessageConstant {
     public static final String TRANSLATOR_NOT_FOUND = "Translator was not found";
     public static final Integer TRANSLATOR_NOT_FOUND_CODE = 1061;
 
+    //Candidate error response information
+    public static final String CANDIDATE_NOT_FOUND = "Candidate was not found";
+    public static final Integer CANDIDATE_NOT_FOUND_CODE = 1081;
+
 	public static final String ERROR_404_MSG = "Page not found!";
 	public static final String SERVER_ERROR_MSG = "Internal server error!";
 	public static final String ERROR_401_MSG = "You do not have permission to access this page!";
 	public static final String ERROR_403_MSG = "Access Denied You don’t have permission to access!";
 	public static final String ERROR_403_TRANSLATION_MSG = "The owner reject or cancel you, please choose another request!";
+	public static final String ERROR_403_JOB_APPLICATION_MSG = "The company reject or cancel you, please choose another job!";
 }

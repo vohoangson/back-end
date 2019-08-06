@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.model.Candidate;
 import com.japanwork.model.JobApplicationStatus;
 import com.japanwork.model.Translator;
 import com.japanwork.payload.response.JobApplicationStatusResponse;
@@ -17,18 +16,17 @@ public class JobApplicationStatusService {
 	@Autowired
 	private JobApplicationStatusRepository jobApplicationStatusRepository;
 	
-	public JobApplicationStatus save(UUID jobApplicationId, Timestamp timestamp, String status, Translator translator, Candidate candidate) {
+	public JobApplicationStatus save(UUID jobApplicationId, Timestamp timestamp, String status, Translator translator) {
 		JobApplicationStatus jobApplicationStatus = new JobApplicationStatus();
 		jobApplicationStatus.setJobApplicationId(jobApplicationId);
 		jobApplicationStatus.setCreatedAt(timestamp);
 		jobApplicationStatus.setStatus(status);
 		jobApplicationStatus.setTranslator(translator);
-		jobApplicationStatus.setCandidate(candidate);
 		return jobApplicationStatusRepository.save(jobApplicationStatus);
 	}
 	
 	public JobApplicationStatus save(UUID jobApplicationId, Timestamp timestamp, String status, String reason, UUID creatorId, 
-			Translator translator, Candidate candidate) {
+			Translator translator) {
 		JobApplicationStatus jobApplicationStatus = new JobApplicationStatus();
 		jobApplicationStatus.setJobApplicationId(jobApplicationId);
 		jobApplicationStatus.setCreatorId(creatorId);
@@ -36,7 +34,6 @@ public class JobApplicationStatusService {
 		jobApplicationStatus.setStatus(status);
 		jobApplicationStatus.setReason(reason);
 		jobApplicationStatus.setTranslator(translator);
-		jobApplicationStatus.setCandidate(candidate);
 		return jobApplicationStatusRepository.save(jobApplicationStatus);
 	}
 	
