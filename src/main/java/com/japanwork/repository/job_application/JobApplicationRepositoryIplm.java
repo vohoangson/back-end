@@ -176,4 +176,22 @@ public class JobApplicationRepositoryIplm implements JobApplicationRepository{
 		return findByJobAndCandidateAndDeletedAt( job, candidate, deletedAt);
 	}
 
+	@Override
+	public Page<JobApplication> findAllByJobCompanyIdAndDeletedAt(Pageable page, UUID companyId, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByJobCompanyIdAndDeletedAt( page,  companyId, deletedAt);
+	}
+
+	@Override
+	public Page<JobApplication> findAllByCandidateIdAndDeletedAt(Pageable page, UUID candidateId, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByCandidateIdAndDeletedAt( page, candidateId, deletedAt);
+	}
+
+	@Override
+	public Page<JobApplication> findAllByTranslator(Pageable page, UUID translatorId) {
+		// TODO Auto-generated method stub
+		return findAllByTranslator( page, translatorId);
+	}
+
 }

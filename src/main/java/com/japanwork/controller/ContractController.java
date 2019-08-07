@@ -33,7 +33,7 @@ public class ContractController {
 	
 	@GetMapping(value = UrlConstant.URL_CONTRACT_ID)
 	@ResponseBody
-	public BaseDataResponse contract(@PathVariable UUID id) {		
+	public BaseDataResponse show(@PathVariable UUID id) {		
 		Contract contract = contractService.findByIdAndIsDelete(id);
 		return new BaseDataResponse(contract);
 	}

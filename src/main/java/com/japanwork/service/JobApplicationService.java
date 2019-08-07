@@ -1,10 +1,14 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
@@ -13,11 +17,11 @@ import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Candidate;
-import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.model.JobApplicationStatus;
+import com.japanwork.model.PageInfo;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelJobApplicationRequest;
@@ -272,12 +276,53 @@ public class JobApplicationService {
 		}
 	}
 	
-	public BaseDataMetaResponse show(UserPrincipal userPrincipal, int page, int paging) {
+	public BaseDataMetaResponse indexByCompany(UserPrincipal userPrincipal, int page, int paging) {
 		User user = userService.getUser(userPrincipal);
-		
-		return null;
+		Page<JobApplication> pages = jobApplicationRepository.findAllByJobCompanyIdAndDeletedAt(PageRequest.of(page-1, paging), user.getPropertyId(),null);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (JobApplication jobApplication : pages.getContent()) {
+				JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
+				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	
+	public BaseDataMetaResponse indexByCandidate(UserPrincipal userPrincipal, int page, int paging) {
+		User user = userService.getUser(userPrincipal);
+		Page<JobApplication> pages = jobApplicationRepository.findAllByCandidateIdAndDeletedAt(PageRequest.of(page-1, paging), user.getPropertyId(),null);
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (JobApplication jobApplication : pages.getContent()) {
+				JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
+				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
+	}
+	
+	public BaseDataMetaResponse indexByTranslator(UserPrincipal userPrincipal, int page, int paging) {
+		User user = userService.getUser(userPrincipal);
+		Page<JobApplication> pages = jobApplicationRepository.findAllByTranslator(PageRequest.of(page-1, paging), user.getPropertyId());
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
+
+		if(pages.getContent().size() > 0) {
+			for (JobApplication jobApplication : pages.getContent()) {
+				JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
+				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
+			}
+		}
+
+		return new BaseDataMetaResponse(list, pageInfo);
+	}
 	
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {
 		JobApplicationResponse ob = new JobApplicationResponse();
