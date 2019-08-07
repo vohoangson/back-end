@@ -127,4 +127,12 @@ public class RequestTranslationController {
 		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
 	}
+	
+	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_REQUEST)
+	@ResponseBody
+	public BaseDataResponse requestTranslationByJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = requestTranslationService.requestTranslationByJobApplication(id, userPrincipal);
+		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
+		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
+	}
 }

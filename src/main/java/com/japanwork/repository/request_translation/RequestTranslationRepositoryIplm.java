@@ -184,4 +184,11 @@ public class RequestTranslationRepositoryIplm implements RequestTranslationRepos
 		// TODO Auto-generated method stub
 		return findAllByObjectableIdAndObjectableTypeAndDeletedAt( objectTableId, objectTableType, deletedAt);
 	}
+
+	@Override
+	public RequestTranslation findByObjectableIdAndObjectableTypeAndDeletedAt(UUID id, String type,
+			Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByObjectableIdAndObjectableTypeAndDeletedAt( id, type, deletedAt);
+	}
 }
