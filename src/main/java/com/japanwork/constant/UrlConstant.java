@@ -84,6 +84,7 @@ public class UrlConstant {
 	public static final String URL_JOB_APPLICATION_COMPANY_ACCEPT_APPLY = "/job-applications/{id}/accept-apply";
 	public static final String URL_JOB_APPLICATION_COMPANY_APPROVE = "/job-applications/{id}/approve";
 	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";
+	public static final String URL_JOB_APPLICATION_ID_REQUEST = "/job-applications/{id}/request";
 
 	//Request translation
 	public static final String URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN = "/requests/{id}/apply";

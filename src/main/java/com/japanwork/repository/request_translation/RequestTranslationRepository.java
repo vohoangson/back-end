@@ -13,5 +13,6 @@ public interface RequestTranslationRepository extends JpaRepository<RequestTrans
 	public RequestTranslation findByOwnerIdAndObjectableIdAndObjectableTypeAndLanguageAndDeletedAt(
 			UUID ownerId, UUID objectTableId, String objectTableType, Language language, Timestamp deletedAt);
 	public RequestTranslation findByIdAndDeletedAt(UUID id, Timestamp deletedAt);
+	public RequestTranslation findByObjectableIdAndObjectableTypeAndDeletedAt(UUID id, String type,Timestamp deletedAt);
 	public List<RequestTranslation> findAllByObjectableIdAndObjectableTypeAndDeletedAt(UUID objectTableId, String objectTableType, Timestamp deletedAt);
 }

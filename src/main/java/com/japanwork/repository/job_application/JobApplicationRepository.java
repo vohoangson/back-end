@@ -19,12 +19,14 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 	public Page<JobApplication> findAllByJobCompanyIdAndDeletedAt(Pageable page, UUID companyId, Timestamp deletedAt);
 	public Page<JobApplication> findAllByCandidateIdAndDeletedAt(Pageable page, UUID candidateId, Timestamp deletedAt);
 	
-    @Query("SELECT ja FROM JobApplication ja " + 
+    @Query("SELECT DISTINCT ja FROM JobApplication ja " + 
     		"INNER JOIN RequestTranslation rt " + 
     		"ON ja.id = rt.objectableId " + 
     		"AND rt.objectableType = 'REQUEST_JOB_APPLICATION_SUPPORT' " + 
     		"INNER JOIN rt.requestStatus rs "+
-    		"WHERE ja.translator.id = :translatorId " + 
+    		"WHERE ja.translator.id = :translatorId " +
+    		"OR (rs.status = 'CANCELED'" + 
+    		"	AND	rs.translator.id = :translatorId)" +
     		"AND ja.deletedAt is null")
 	public Page<JobApplication> findAllByTranslator(Pageable page, @Param("translatorId") UUID translatorId);
 }
