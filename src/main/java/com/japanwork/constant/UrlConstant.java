@@ -65,11 +65,8 @@ public class UrlConstant {
 	public static final String URL_COMPANY_ID_JOB = "/companies/{id}/jobs";
 	public static final String URL_COMPANY_UNDEL_ID = "/companies/undelete/{id}";
 	public static final String URL_COMPANY_DEL_ID = "/companies/delete/{id}";
-	public static final String URL_COMPANY_TS = "/vn/companies";
-	public static final String URL_COMPANY_TS_ID = "/vn/companies/{id}";
-	public static final String URL_COMPANY_TS_ID_JOB = "/vn/companies/{id}/jobs";
-	public static final String URL_COMPANY_TS_UNDEL_ID = "/vn/companies/undelete/{id}";
-	public static final String URL_COMPANY_TS_DEL_ID = "/vn/companies/delete/{id}";
+	public static final String URL_COMPANY_ID_JOB_APPLICATION = "/companies/{id}/job_applications";
+	public static final String URL_COMPANY_ID_REQUEST = "/companies/{id}/requests";
 
 	//Job
 	public static final String URL_JOB = "/jobs";
@@ -85,8 +82,8 @@ public class UrlConstant {
 	public static final String URL_JOB_APPLICATION_COMPANY_REJECT = "/job-applications/{id}/reject";
 	public static final String URL_JOB_APPLICATION_CANCEL = "/job-applications/{id}/cancel";
 	public static final String URL_JOB_APPLICATION_COMPANY_ACCEPT_APPLY = "/job-applications/{id}/accept-apply";
+	public static final String URL_JOB_APPLICATION_COMPANY_APPROVE = "/job-applications/{id}/approve";
 	public static final String URL_JOB_APPLICATION_ID = "/job-applications/{id}";
-	public static final String URL_JOB_APPLICATION = "/job-applications";
 
 	//Request translation
 	public static final String URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN = "/requests/{id}/apply";
@@ -130,6 +127,8 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_UNDEL = "/candidates/undelete/{id}";
 	public static final String URL_CANDIDATE_JOB_FAVORITE_ID = "/candidates/jobs/{id}/favorite";
 	public static final String URL_CANDIDATE_JOB_FAVORITE = "/candidates/jobs/favorite";
+	public static final String URL_CANDIDATE_ID_JOB_APPLICATION = "/candidates/{id}/job_applications";
+	public static final String URL_CANDIDATE_ID_REQUEST = "/candidates/{id}/requests";
 
 	//Candidate personal
 	public static final String URL_CANDIDATE_PERSONAL = "/candidates/personal";
@@ -155,6 +154,8 @@ public class UrlConstant {
 	public static final String URL_MY_TRANSLATOR = "/translators/my-translator";
 	public static final String URL_TRANSLATOR_UNDEL_ID = "/translators/undelete/{id}";
 	public static final String URL_TRANSLATOR_DEL_ID = "/translators/delete/{id}";
+	public static final String URL_TRANSLATOR_ID_JOB_APPLICATION = "/translators/{id}/job_applications";
+	public static final String URL_TRANSLATOR_ID_REQUEST = "/translators/{id}/requests";
 
 	//Company Translation
     public static final String URL_COMPANY_TRANSLATION = "/v1/company_translations";

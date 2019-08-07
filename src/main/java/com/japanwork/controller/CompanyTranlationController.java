@@ -51,7 +51,7 @@ public class CompanyTranlationController {
         );
 	}
 
-	@PatchMapping(UrlConstant.URL_COMPANY_TS_ID)
+	@PatchMapping(UrlConstant.URL_COMPANY_TRANSLATION_BY_ID)
 	@ResponseBody
 	public BaseDataResponse update(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, @PathVariable UUID id,
 			@CurrentUser UserPrincipal userPrincipal){

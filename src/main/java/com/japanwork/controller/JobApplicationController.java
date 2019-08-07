@@ -19,6 +19,7 @@ import com.japanwork.model.JobApplication;
 import com.japanwork.model.JobApplicationStatus;
 import com.japanwork.payload.request.CancelJobApplicationRequest;
 import com.japanwork.payload.request.RejectJobApplicationRequest;
+import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.security.CurrentUser;
@@ -58,17 +59,37 @@ public class JobApplicationController {
 		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
-	
-	@GetMapping(UrlConstant.URL_JOB_APPLICATION)
+	@PatchMapping(UrlConstant.URL_JOB_APPLICATION_COMPANY_APPROVE)
 	@ResponseBody
-	public BaseDataResponse jobApplications(@CurrentUser UserPrincipal userPrincipal, 
+	public BaseDataResponse approveJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		JobApplicationResponse jobApplicationResponse = jobApplicationService.approveCandidate(id, userPrincipal);
+		return new BaseDataResponse(jobApplicationResponse);
+	}
+	
+	@GetMapping(UrlConstant.URL_COMPANY_ID_JOB_APPLICATION)
+	@ResponseBody
+	public BaseDataMetaResponse indexByCompany(@CurrentUser UserPrincipal userPrincipal, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
-//		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
-//		JobApplicationStatus status = jobApplication.getJobApplicationStatus().stream().findFirst().get();
-//		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication, status));
-		return null;
+		return jobApplicationService.indexByCompany(userPrincipal, page, paging);
 	}
+	
+	@GetMapping(UrlConstant.URL_CANDIDATE_ID_JOB_APPLICATION)
+	@ResponseBody
+	public BaseDataMetaResponse indexByCandidate(@CurrentUser UserPrincipal userPrincipal, 
+			@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging) {
+		return jobApplicationService.indexByCandidate(userPrincipal, page, paging);
+	}
+	
+	@GetMapping(UrlConstant.URL_TRANSLATOR_ID_JOB_APPLICATION)
+	@ResponseBody
+	public BaseDataMetaResponse indexByTranslator(@CurrentUser UserPrincipal userPrincipal, 
+			@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging) {
+		return jobApplicationService.indexByTranslator(userPrincipal, page, paging);
+	}
+	
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID)
 	@ResponseBody
