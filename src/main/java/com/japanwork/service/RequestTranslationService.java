@@ -589,6 +589,16 @@ public class RequestTranslationService {
 		return requestTranslation;
 	}
 	
+	public RequestTranslation requestTranslationByJobApplication(UUID id, UserPrincipal userPrincipal) 
+			throws ResourceNotFoundException, ForbiddenException{
+		RequestTranslation requestTranslation = requestTranslationRepository.findByObjectableIdAndObjectableTypeAndDeletedAt(
+				id, CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION, null);
+		if(requestTranslation == null) {
+			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+		}
+		return requestTranslation;
+	}
+	
 	public boolean checkRequestTranslation(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal){
 		UUID ownerId = null;
 		User user = userService.getUser(userPrincipal);
