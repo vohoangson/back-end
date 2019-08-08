@@ -16,6 +16,7 @@ public class CommonConstant {
 		String ON_GOING = "ON_GOING";
 		String FINISHED = "FINISHED";
 		String CANCELED = "CANCELED";
+		String CANCELED_TRANSLATOR = "CANCELED_TRANSLATOR";
     }
 	
 	public interface RequestTranslationStatus {

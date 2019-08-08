@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.model.JobApplication;
 import com.japanwork.model.JobApplicationStatus;
-import com.japanwork.model.Translator;
 import com.japanwork.payload.response.JobApplicationStatusResponse;
 import com.japanwork.repository.job_application_status.JobApplicationStatusRepository;
 
@@ -16,24 +16,23 @@ public class JobApplicationStatusService {
 	@Autowired
 	private JobApplicationStatusRepository jobApplicationStatusRepository;
 	
-	public JobApplicationStatus save(UUID jobApplicationId, Timestamp timestamp, String status, Translator translator) {
+	public JobApplicationStatus save(JobApplication jobApplication, Timestamp timestamp, String status) {
 		JobApplicationStatus jobApplicationStatus = new JobApplicationStatus();
-		jobApplicationStatus.setJobApplicationId(jobApplicationId);
+		jobApplicationStatus.setJobApplication(jobApplication);
 		jobApplicationStatus.setCreatedAt(timestamp);
 		jobApplicationStatus.setStatus(status);
-		jobApplicationStatus.setTranslator(translator);
+		jobApplicationStatus.setTranslator(jobApplication.getTranslator());
 		return jobApplicationStatusRepository.save(jobApplicationStatus);
 	}
 	
-	public JobApplicationStatus save(UUID jobApplicationId, Timestamp timestamp, String status, String reason, UUID creatorId, 
-			Translator translator) {
+	public JobApplicationStatus save(JobApplication jobApplication, Timestamp timestamp, String status, String reason, UUID creatorId) {
 		JobApplicationStatus jobApplicationStatus = new JobApplicationStatus();
-		jobApplicationStatus.setJobApplicationId(jobApplicationId);
+		jobApplicationStatus.setJobApplication(jobApplication);
 		jobApplicationStatus.setCreatorId(creatorId);
 		jobApplicationStatus.setCreatedAt(timestamp);
 		jobApplicationStatus.setStatus(status);
 		jobApplicationStatus.setReason(reason);
-		jobApplicationStatus.setTranslator(translator);
+		jobApplicationStatus.setTranslator(jobApplication.getTranslator());
 		return jobApplicationStatusRepository.save(jobApplicationStatus);
 	}
 	

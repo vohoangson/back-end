@@ -163,4 +163,10 @@ public class JobApplicationStatusRepositoryIplm implements JobApplicationStatusR
 		return findByJobApplicationIdOrderByCreatedAtDesc(jobApplicationId);
 	}
 
+	@Override
+	public Page<JobApplicationStatus> findByTranslator(Pageable pageable, UUID transaltorId) {
+		// TODO Auto-generated method stub
+		return findByTranslator( pageable, transaltorId);
+	}
+
 }

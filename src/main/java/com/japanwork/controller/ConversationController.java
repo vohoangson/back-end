@@ -12,6 +12,8 @@ import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.JobApplication;
 import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.security.CurrentUser;
+import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.ConversationService;
 import com.japanwork.service.JobApplicationService;
 
@@ -25,8 +27,8 @@ public class ConversationController {
 
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_ALL)
 	@ResponseBody
-	public BaseDataResponse createConversationAll(@PathVariable UUID id) {
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public BaseDataResponse createConversationAll(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id, userPrincipal);
 		if(jobApplication.getAllConversation() == null) {
 			Conversation conversation = conversationService.createConversationAll(jobApplication.getTranslator(), 
 					jobApplication.getJob().getCompany(), jobApplication.getCandidate());
@@ -40,8 +42,8 @@ public class ConversationController {
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_CANDIDATE)
 	@ResponseBody
-	public BaseDataResponse createConversationSupportCandidate(@PathVariable UUID id) {
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public BaseDataResponse createConversationSupportCandidate(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id, userPrincipal);
 		if(jobApplication.getCandidateSupportConversaion() == null) {
 			Conversation conversation = conversationService.createConversationSupportCandidate(jobApplication.getTranslator(), 
 					jobApplication.getCandidate());
@@ -56,8 +58,8 @@ public class ConversationController {
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_CONVERSATION_COMPANY)
 	@ResponseBody
-	public BaseDataResponse createConversationSupportCompany(@PathVariable UUID id) {
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public BaseDataResponse createConversationSupportCompany(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id, userPrincipal);
 		if(jobApplication.getCompanySupportConversation() == null) {
 			Conversation conversation = conversationService.createConversationSupportCompany(jobApplication.getTranslator(), 
 					jobApplication.getJob().getCompany());

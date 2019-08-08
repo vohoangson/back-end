@@ -114,7 +114,7 @@ public class RequestTranslationService {
 					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
 						Company company = companyService.findByUserAndIsDelete(user, null);
 						requestTranslation.setOwnerId(company.getId());
-						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(objectableId);
+						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(objectableId, userPrincipal);
 						if(jobApplication == null || !jobApplication.getJob().getCompany().getId().equals(company.getId())) {
 							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 						}
@@ -394,16 +394,10 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_CANCEL_FAIL_MSG);
 		}
 		
-		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)
-				&& requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.ON_GOING)) {
-			jobApplicationService.cancelRequestTranslation(requestTranslation.getObjectableId());
-		}
-		
-		
+		UUID userCreateId = this.userCreateId(userPrincipal, requestTranslation);		
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
-		UUID userCreateId = this.userCreateId(userPrincipal, requestTranslation);
 		requestStatusService.save(
 				requestTranslation, 
 				timestamp, 
@@ -415,6 +409,11 @@ public class RequestTranslationService {
 		requestTranslation.setConversation(null);
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);		
+		
+		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)
+				&& requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.ON_GOING)) {
+			jobApplicationService.cancelRequestTranslation(requestTranslation.getObjectableId(), userCreateId, reasonCancel.getReason());
+		}
 		
 		date = new Date();
 		timestamp = new Timestamp(date.getTime());
@@ -593,9 +592,6 @@ public class RequestTranslationService {
 			throws ResourceNotFoundException, ForbiddenException{
 		RequestTranslation requestTranslation = requestTranslationRepository.findByObjectableIdAndObjectableTypeAndDeletedAt(
 				id, CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION, null);
-		if(requestTranslation == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
 		return requestTranslation;
 	}
 	

@@ -132,6 +132,10 @@ public class RequestTranslationController {
 	@ResponseBody
 	public BaseDataResponse requestTranslationByJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslation requestTranslation = requestTranslationService.requestTranslationByJobApplication(id, userPrincipal);
+		if(requestTranslation == null) {
+			return new BaseDataResponse(null);
+		}
+		
 		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
 	}
