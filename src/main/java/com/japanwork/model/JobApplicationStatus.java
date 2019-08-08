@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,8 +24,9 @@ public class JobApplicationStatus {
 	@Column(name = "creator_id")
 	private UUID creatorId;
 	
-	@Column(name = "job_application_id")
-	private UUID jobApplicationId;
+	@ManyToOne
+	@JoinColumn(name = "job_application_id")
+	private JobApplication jobApplication;
 	
 	@OneToOne
     @JoinColumn(name = "translator_id")
@@ -55,12 +57,12 @@ public class JobApplicationStatus {
 		this.creatorId = creatorId;
 	}
 
-	public UUID getJobApplicationId() {
-		return jobApplicationId;
+	public JobApplication getJobApplication() {
+		return jobApplication;
 	}
 
-	public void setJobApplicationId(UUID jobApplicationId) {
-		this.jobApplicationId = jobApplicationId;
+	public void setJobApplication(JobApplication jobApplication) {
+		this.jobApplication = jobApplication;
 	}
 
 	public Translator getTranslator() {
@@ -95,11 +97,11 @@ public class JobApplicationStatus {
 		this.createdAt = createdAt;
 	}
 
-	public JobApplicationStatus(UUID id, UUID creatorId, UUID jobApplicationId, Translator translator,
+	public JobApplicationStatus(UUID id, UUID creatorId, JobApplication jobApplication, Translator translator,
 			String reason, String status, Timestamp createdAt) {
 		this.id = id;
 		this.creatorId = creatorId;
-		this.jobApplicationId = jobApplicationId;
+		this.jobApplication = jobApplication;
 		this.translator = translator;
 		this.reason = reason;
 		this.status = status;

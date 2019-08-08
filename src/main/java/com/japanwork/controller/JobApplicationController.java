@@ -93,8 +93,8 @@ public class JobApplicationController {
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID)
 	@ResponseBody
-	public BaseDataResponse findJobApplicationById(@PathVariable UUID id) {
-		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id);
+	public BaseDataResponse findJobApplicationById(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id, userPrincipal);
 		JobApplicationStatus status = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		return new BaseDataResponse(jobApplicationService.convertApplicationResponse(jobApplication, status));
 	}

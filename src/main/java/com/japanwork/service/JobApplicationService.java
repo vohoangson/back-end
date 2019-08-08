@@ -29,12 +29,16 @@ import com.japanwork.payload.request.RejectJobApplicationRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
+import com.japanwork.repository.job_application_status.JobApplicationStatusRepository;
 import com.japanwork.security.UserPrincipal;
 
 @Service
 public class JobApplicationService {
 	@Autowired
 	private JobApplicationRepository jobApplicationRepository;
+	
+	@Autowired 
+	private JobApplicationStatusRepository jobApplicationStatusRepository;
 	
 	@Autowired
 	private JobService jobService;
@@ -57,8 +61,25 @@ public class JobApplicationService {
 	@Autowired
 	private ConversationService conversationService;
 	
-	public JobApplication findByIdAndIsDelete(UUID id) {
-		return jobApplicationRepository.findByIdAndDeletedAt(id, null);
+	public JobApplication findByIdAndIsDelete(UUID id, UserPrincipal userPrincipal) throws ForbiddenException{
+		User user = userService.getUser(userPrincipal);
+		
+		JobApplication jobApplication = jobApplicationRepository.findByIdAndDeletedAt(id, null);
+		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
+			if(!user.getPropertyId().equals(jobApplication.getCandidate().getId())) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
+		} else if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
+			if(!user.getPropertyId().equals(jobApplication.getJob().getCompany().getId())) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
+		} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
+			if(jobApplication.getTranslator() == null || !user.getPropertyId().equals(jobApplication.getTranslator().getId())) {
+				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+			}
+		}
+		
+		return jobApplication;
 	}
 	
 	public JobApplication save(JobApplication jobApplication) {
@@ -85,10 +106,9 @@ public class JobApplicationService {
 		JobApplication result = jobApplicationRepository.save(jobApplication);
 		
 		JobApplicationStatus status = jobApplicationStatusService.save(
-				result.getId(), 
+				result, 
 				timestamp, 
-				CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE,
-				null);
+				CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE);
 		return this.convertApplicationResponse(jobApplication, status);
 	}
 	
@@ -108,12 +128,11 @@ public class JobApplicationService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		JobApplicationStatus status = jobApplicationStatusService.save(
-				jobApplication.getId(), 
+				jobApplication, 
 				timestamp, 
 				CommonConstant.StatusApplyJob.REJECT_CANDIDATE,
 				rejectJobApplicationRequest.getReason(),
-				jobApplication.getJob().getCompany().getId(),
-				null);
+				jobApplication.getJob().getCompany().getId());
 		
 		jobApplication.setUpdatedAt(timestamp);
 		JobApplication result = jobApplicationRepository.save(jobApplication);
@@ -142,12 +161,11 @@ public class JobApplicationService {
 		
 		User user = userService.getUser(userPrincipal);
 		JobApplicationStatus status = jobApplicationStatusService.save(
-				jobApplication.getId(), 
+				jobApplication, 
 				timestamp, 
 				CommonConstant.StatusApplyJob.CANCELED,
 				cancelJobApplicationRequest.getReason(),
-				user.getPropertyId(),
-				null);
+				user.getPropertyId());
 		
 		jobApplication.setUpdatedAt(timestamp);
 		JobApplication result = jobApplicationRepository.save(jobApplication);
@@ -170,10 +188,9 @@ public class JobApplicationService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		JobApplicationStatus status = jobApplicationStatusService.save(
-				jobApplication.getId(), 
+				jobApplication, 
 				timestamp, 
-				CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN,
-				null);
+				CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN);
 		
 		jobApplication.setUpdatedAt(timestamp);
 		JobApplication result = jobApplicationRepository.save(jobApplication);
@@ -198,26 +215,25 @@ public class JobApplicationService {
 		Conversation conversationSupportCompany = conversationService.createConversationSupportCompany(jobApplication.getTranslator(), 
 				jobApplication.getJob().getCompany());
 		
-		Conversation conversationAll = conversationService.createConversationAll(jobApplication.getTranslator(), 
+		Conversation conversationAll = conversationService.createConversationAll(translator, 
 				jobApplication.getJob().getCompany(), jobApplication.getCandidate());
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		
-		jobApplicationStatusService.save(
-				jobApplication.getId(), 
-				timestamp, 
-				CommonConstant.StatusApplyJob.ON_GOING,
-				translator);
 		
 		jobApplication.setUpdatedAt(timestamp);
 		jobApplication.setTranslator(translator);
 		jobApplication.setAllConversation(conversationAll);
 		jobApplication.setCandidateSupportConversaion(conversationSupportCandidate);
 		jobApplication.setCompanySupportConversation(conversationSupportCompany);
-		jobApplicationRepository.save(jobApplication);
+		JobApplication result = jobApplicationRepository.save(jobApplication);
+		
+		jobApplicationStatusService.save(
+				result, 
+				timestamp, 
+				CommonConstant.StatusApplyJob.ON_GOING);
 	}
 	
-	public void cancelRequestTranslation(UUID id) {
+	public void cancelRequestTranslation(UUID id, UUID userCreateId, String reason) {
 		JobApplication jobApplication = jobApplicationRepository.findByIdAndDeletedAt(id, null);
 		if(jobApplication == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
@@ -225,16 +241,26 @@ public class JobApplicationService {
 
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
-		
 		jobApplicationStatusService.save(
-				jobApplication.getId(), 
+				jobApplication, 
 				timestamp, 
-				CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN,
-				null);
+				CommonConstant.StatusApplyJob.CANCELED_TRANSLATOR,
+				reason,
+				userCreateId);
+		
+		date = new Date();
+		timestamp = new Timestamp(date.getTime());
 		
 		jobApplication.setUpdatedAt(timestamp);
 		jobApplication.setTranslator(null);
-		jobApplicationRepository.save(jobApplication);
+		JobApplication result = jobApplicationRepository.save(jobApplication);
+		
+		jobApplicationStatusService.save(
+				result, 
+				timestamp, 
+				CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN);
+		
+		
 	}
 	
 	public JobApplicationResponse approveCandidate(UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException {
@@ -253,10 +279,9 @@ public class JobApplicationService {
 		Timestamp timestamp = new Timestamp(date.getTime());
 		
 		JobApplicationStatus status = jobApplicationStatusService.save(
-				jobApplication.getId(), 
+				jobApplication, 
 				timestamp, 
-				CommonConstant.StatusApplyJob.FINISHED,
-				jobApplicationStatus.getTranslator());
+				CommonConstant.StatusApplyJob.FINISHED);
 		
 		jobApplication.setUpdatedAt(timestamp);
 		JobApplication result = jobApplicationRepository.save(jobApplication);
@@ -310,13 +335,16 @@ public class JobApplicationService {
 	
 	public BaseDataMetaResponse indexByTranslator(UserPrincipal userPrincipal, int page, int paging) {
 		User user = userService.getUser(userPrincipal);
-		Page<JobApplication> pages = jobApplicationRepository.findAllByTranslator(PageRequest.of(page-1, paging), user.getPropertyId());
+		Page<JobApplicationStatus> pages = jobApplicationStatusRepository.findByTranslator(PageRequest.of(page-1, paging), user.getPropertyId());
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
 
 		if(pages.getContent().size() > 0) {
-			for (JobApplication jobApplication : pages.getContent()) {
-				JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
+			for (JobApplicationStatus jobApplicationStatus : pages.getContent()) {
+				JobApplication jobApplication = jobApplicationStatus.getJobApplication();
+				if(jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.CANCELED_TRANSLATOR)) {
+					jobApplication.setTranslator(jobApplicationStatus.getTranslator());
+				}
 				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
 			}
 		}

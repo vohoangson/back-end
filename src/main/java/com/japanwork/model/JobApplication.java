@@ -47,8 +47,7 @@ public class JobApplication {
     @JoinColumn(name="all_conversation_id")
     private Conversation allConversation;
     
-    @OneToMany
-    @JoinColumn(name="job_application_id")
+    @OneToMany(mappedBy = "jobApplication")
     @OrderBy("createdAt DESC")
     private Set<JobApplicationStatus> jobApplicationStatus;
     
