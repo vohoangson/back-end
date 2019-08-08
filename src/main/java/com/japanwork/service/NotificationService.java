@@ -38,7 +38,7 @@ public class NotificationService {
 	@Autowired
 	private UserService userService;
 
-	public void addNotification(UUID senderId, UUID conversationId,UUID objectableId, UUID receiverId, String content, String type, UUID userId) 
+	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content, String type, UUID userId) 
 			throws ForbiddenException{
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
