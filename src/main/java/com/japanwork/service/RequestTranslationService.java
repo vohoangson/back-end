@@ -425,31 +425,31 @@ public class RequestTranslationService {
 		return convertRequestTranslationResponse(resultRequest, result);
 	}
 	
-	public void cancelRequestTranslation(UUID objectableId, String objectableType) {
-		List<RequestTranslation> list = requestTranslationRepository.findAllByObjectableIdAndObjectableTypeAndDeletedAt(objectableId, objectableType, null);
+	public void cancelRequestTranslation(UUID objectableId, UUID userCreateId, String content) {
+		List<RequestTranslation> list = requestTranslationRepository.findAllByObjectableIdAndObjectableTypeAndDeletedAt(
+				objectableId, CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION, null);
 		if(list.size() > 0) {
 			for (RequestTranslation requestTranslation : list) {
 				RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
-				if(requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER)) {
-					Date date = new Date();
-					Timestamp timestamp = new Timestamp(date.getTime());
-					
-					requestStatusService.save(
-							requestTranslation, 
-							timestamp, 
-							CommonConstant.RequestTranslationStatus.CANCELED, 
+				
+				Date date = new Date();
+				Timestamp timestamp = new Timestamp(date.getTime());
+				
+				requestStatusService.save(
+						requestTranslation, 
+						timestamp, 
+						CommonConstant.RequestTranslationStatus.CANCELED, 
+						content,
+						userCreateId);
+				if(requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE)) {
+					notificationService.addNotification(
+							userCreateId,
 							null,
-							null);
-				} else {
-					Date date = new Date();
-					Timestamp timestamp = new Timestamp(date.getTime());
-					
-					requestStatusService.save(
-							requestTranslation, 
-							timestamp, 
-							CommonConstant.RequestTranslationStatus.CANCELED, 
-							null,
-							null);
+							requestTranslation.getId(),
+							requestTranslation.getTranslator().getId(), 
+							content,
+							CommonConstant.NotificationType.STATUS_REQUEST,
+							requestTranslation.getTranslator().getUser().getId());
 				}
 			}
 		}
@@ -669,23 +669,23 @@ public class RequestTranslationService {
 		if(userService.findByIdAndIsDelete(userPrincipal.getId()).getRole().equals(CommonConstant.Role.TRANSLATOR)) {
 			userCreateId = requestTranslation.getTranslator().getId();
 			notificationService.addNotification(
-					requestTranslation.getOwnerId(),
+					userCreateId,
 					null,
 					requestTranslation.getId(),
-					userCreateId, 
+					requestTranslation.getOwnerId(), 
 					CommonConstant.NotificationContent.HELPER_CANCEL,
 					CommonConstant.NotificationType.STATUS_REQUEST,
-					requestTranslation.getTranslator().getUser().getId());
+					this.userIdOfOwner(requestTranslation));
 		} else {
 			userCreateId = requestTranslation.getOwnerId();
 			notificationService.addNotification(
-					requestTranslation.getTranslator().getId(),
+					userCreateId,
 					null,
 					requestTranslation.getId(),
-					userCreateId, 
+					requestTranslation.getTranslator().getId(), 
 					CommonConstant.NotificationContent.OWNER_CANCEL,
 					CommonConstant.NotificationType.STATUS_REQUEST,
-					this.userIdOfOwner(requestTranslation));
+					requestTranslation.getTranslator().getUser().getId());
 		}
 		
 		return userCreateId;
