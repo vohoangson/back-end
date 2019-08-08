@@ -209,10 +209,10 @@ public class JobApplicationService {
 					MessageConstant.JOB_APPLIACTION_ACCEPT_APPLY_FAIL_MSG);
 		}
 		
-		Conversation conversationSupportCandidate = conversationService.createConversationSupportCandidate(jobApplication.getTranslator(), 
+		Conversation conversationSupportCandidate = conversationService.createConversationSupportCandidate(translator, 
 				jobApplication.getCandidate());
 		
-		Conversation conversationSupportCompany = conversationService.createConversationSupportCompany(jobApplication.getTranslator(), 
+		Conversation conversationSupportCompany = conversationService.createConversationSupportCompany(translator, 
 				jobApplication.getJob().getCompany());
 		
 		Conversation conversationAll = conversationService.createConversationAll(translator, 
