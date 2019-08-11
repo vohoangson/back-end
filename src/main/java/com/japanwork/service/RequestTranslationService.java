@@ -434,15 +434,6 @@ public class RequestTranslationService {
 				reasonReject.getReason(),
 				requestTranslation.getOwnerId());
 		
-		requestTranslation.setTranslator(null);
-		requestTranslation.setUpdatedAt(timestamp);
-		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
-				
-		RequestStatus result = requestStatusService.save(
-				resultRequest, 
-				CommonFunction.dateTimeNow(), 
-				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-		
 		notificationService.addNotification(
 				requestTranslation.getOwnerId(),
 				null,
@@ -451,6 +442,15 @@ public class RequestTranslationService {
 				CommonConstant.NotificationContent.OWNER_REJECT_APPLY,
 				CommonConstant.NotificationType.STATUS_REQUEST,
 				requestTranslation.getTranslator().getUser().getId());
+		
+		requestTranslation.setTranslator(null);
+		requestTranslation.setUpdatedAt(timestamp);
+		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
+				
+		RequestStatus result = requestStatusService.save(
+				resultRequest, 
+				CommonFunction.dateTimeNow(), 
+				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 		
 		return convertRequestTranslationResponse(resultRequest, result);
 	}
