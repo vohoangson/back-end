@@ -1,7 +1,9 @@
 package com.japanwork.repository.request_status;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Example;
@@ -167,4 +169,10 @@ public class RequestStatusRepositoryIplm implements RequestStatusRepository{
 		return findByRequestTranslationIdOrderByCreatedAtDesc(requestTranslationId);
 	}
 
+	@Override
+	public Page<RequestStatus> findAllByTranslator(Pageable pageable, String name, Set<String> objectableTypes,
+			Set<UUID> languageIds, Date postTime, UUID transaltorId) {
+		// TODO Auto-generated method stub
+		return findAllByTranslator( pageable, name, objectableTypes, languageIds, postTime, transaltorId);
+	}
 }

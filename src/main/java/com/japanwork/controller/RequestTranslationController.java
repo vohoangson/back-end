@@ -1,6 +1,7 @@
 package com.japanwork.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -15,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.RequestStatus;
 import com.japanwork.model.RequestTranslation;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
 import com.japanwork.payload.request.RequestTranslationFilterRequest;
@@ -31,6 +33,7 @@ import com.japanwork.payload.response.RequestTranslationResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.RequestTranslationService;
+import com.japanwork.service.UserService;
 
 @Controller
 public class RequestTranslationController {
@@ -38,14 +41,31 @@ public class RequestTranslationController {
 	@Autowired
 	private RequestTranslationService requestTranslationService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@PostMapping(UrlConstant.URL_REQUEST_TRANSLATIONS)
 	@ResponseBody
-	public BaseDataResponse createRequestTranslation(@Valid @RequestBody RequestTranslationRequest requestTranslationRequest, 
+	public BaseDataResponse create(@Valid @RequestBody RequestTranslationRequest requestTranslationRequest, 
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
-		if(requestTranslationService.checkRequestTranslation(requestTranslationRequest, userPrincipal)) {
-			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY, MessageConstant.REQUEST_TRANSLATION_ALREADY_MSG);
+		List<RequestTranslationResponse> response = null;
+		if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
+			if(requestTranslationService.checkRequestTranslationByCandidate(requestTranslationRequest, userPrincipal)){
+				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY, MessageConstant.REQUEST_TRANSLATION_ALREADY_MSG);
+			}
+			response = requestTranslationService.createRequestTranslationCanidate(requestTranslationRequest, userPrincipal);
+		} else {
+			if(requestTranslationService.checkRequestTranslationByCompany(requestTranslationRequest, userPrincipal)){
+				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY, MessageConstant.REQUEST_TRANSLATION_ALREADY_MSG);
+			}
+			if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
+				response = requestTranslationService.createRequestTranslationCompany(requestTranslationRequest, userPrincipal);
+			} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
+				response = requestTranslationService.createRequestTranslationJob(requestTranslationRequest, userPrincipal);
+			} else {
+				response = requestTranslationService.createRequestTranslationJobApplication(requestTranslationRequest, userPrincipal);
+			}
 		}
-		List<RequestTranslationResponse> response = requestTranslationService.createRequestTranslation(requestTranslationRequest, userPrincipal);
 		return new BaseDataResponse(response);
 	}
 	
@@ -104,20 +124,31 @@ public class RequestTranslationController {
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "name") String name,
-			@RequestParam(defaultValue = "", name = "request_types") String requestTypes,
-			@RequestParam(defaultValue = "", name = "language_ids") String languageIds,
+			@RequestParam(defaultValue = "", name = "request_types") Set<String> requestTypes,
+			@RequestParam(defaultValue = "", name = "language_ids") Set<UUID> languageIds,
 			@RequestParam(defaultValue = "", name = "post_date") String postDate,
 			@RequestParam(defaultValue = "false", name = "your_request") Boolean yourRequest,
 			@CurrentUser UserPrincipal userPrincipal){
 		
 		RequestTranslationFilterRequest filterRequest = new RequestTranslationFilterRequest();
 		filterRequest.setName(name);
-		filterRequest.setRequestTypes(CommonFunction.listParam(requestTypes));
-		filterRequest.setLanguageIds(CommonFunction.listParam(languageIds));
+		filterRequest.setRequestTypes(requestTypes);
+		filterRequest.setLanguageIds(languageIds);
 		filterRequest.setPostDate(postDate);
 		filterRequest.setYourRequest(yourRequest);
+		User user = userService.getUser(userPrincipal);
+		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
+			return requestTranslationService.requestTranslationsByCompany(userPrincipal, filterRequest, page, paging);
+		} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
+			if(yourRequest) {
+				return requestTranslationService.requestTranslationsByTranslator(userPrincipal, filterRequest, page, paging);
+			} else {
+				return requestTranslationService.newRequestTranslations(userPrincipal, filterRequest, page, paging);
+			}
+		} else {
+			return requestTranslationService.requestTranslationsByCandidate(userPrincipal, filterRequest, page, paging);
+		}
 		
-		return requestTranslationService.requestTranslations(userPrincipal, filterRequest, page, paging);
 	}
 	
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
