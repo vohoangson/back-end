@@ -1,7 +1,9 @@
 package com.japanwork.common;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -53,5 +55,11 @@ public class CommonFunction {
 			}
 		}
 		return true;
+	}
+	
+	public static Timestamp dateTimeNow() {
+		Date date = new Date();
+		Timestamp timestamp = new Timestamp(date.getTime());
+		return timestamp;
 	}
 }

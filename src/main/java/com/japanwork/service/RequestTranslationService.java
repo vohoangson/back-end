@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -13,9 +14,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.BadRequestException;
@@ -39,6 +43,7 @@ import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
+import com.japanwork.repository.request_status.RequestStatusRepository;
 import com.japanwork.repository.request_translation.RequestTranslationRepository;
 import com.japanwork.security.UserPrincipal;
 
@@ -49,6 +54,9 @@ public class RequestTranslationService {
 	
 	@Autowired
 	private RequestTranslationRepository requestTranslationRepository;
+	
+	@Autowired
+	private RequestStatusRepository requestStatusRepository;
 	
 	@Autowired
 	private RequestStatusService requestStatusService;
@@ -77,57 +85,27 @@ public class RequestTranslationService {
 	@Autowired
 	private NotificationService notificationService;
 	
+	@Autowired
+	private LanguageService languageService;
+	
 	@Transactional
-	public List<RequestTranslationResponse> createRequestTranslation(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal) 
-			throws ServerError, BadRequestException{
+	public List<RequestTranslationResponse> createRequestTranslationCanidate(RequestTranslationRequest requestTranslationRequest, 
+			UserPrincipal userPrincipal) throws ServerError, BadRequestException{
 		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
+			Candidate candidate = candidateService.myCandidate(userPrincipal);
 			
-			User user = userService.getUser(userPrincipal);
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
 				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
-					RequestTranslation requestTranslation = new RequestTranslation();
-					if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
-						Company company = companyService.findByUserAndIsDelete(user, null);
-						requestTranslation.setOwnerId(company.getId());
-						if(!company.getId().equals(objectableId)) {
-							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-						}
-						requestTranslation.setObjectableId(objectableId);
-					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
-						Company company = companyService.findByUserAndIsDelete(user, null);
-						requestTranslation.setOwnerId(company.getId());
-						Job job = jobService.findByIdAndIsDelete(objectableId);
-						if(job == null || !job.getCompany().getId().equals(company.getId())) {
-							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-						}
-						requestTranslation.setObjectableId(objectableId);
-					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
-						Candidate candidate = candidateService.myCandidate(userPrincipal);
-						requestTranslation.setOwnerId(candidate.getId());
-						if(!candidate.getId().equals(objectableId)) {
-							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-						}
-						requestTranslation.setObjectableId(objectableId);
-					} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
-						Company company = companyService.findByUserAndIsDelete(user, null);
-						requestTranslation.setOwnerId(company.getId());
-						JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(objectableId, userPrincipal);
-						if(jobApplication == null || !jobApplication.getJob().getCompany().getId().equals(company.getId())) {
-							throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-						}
-						requestTranslation.setObjectableId(jobApplication.getId());
+					if(!candidate.getId().equals(objectableId)) {
+						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, 
+								MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 					}
-					requestTranslation.setLanguage(new Language(languageId));
-					requestTranslation.setDesc(requestTranslationRequest.getDesc());
-					requestTranslation.setObjectableType(requestTranslationRequest.getRequestType());
-					requestTranslation.setCreatedAt(timestamp);
-					RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
+					RequestTranslation resultRequest = this.save(candidate.getId(), objectableId, languageId, 
+							requestTranslationRequest);
 					RequestStatus requestTranslationStatus = requestStatusService.save(
 							resultRequest, 
-							timestamp, 
+							CommonFunction.dateTimeNow(), 
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 					list.add(this.convertRequestTranslationResponse(resultRequest, requestTranslationStatus));
 				}				
@@ -141,6 +119,118 @@ public class RequestTranslationService {
 		}
 	}
 	
+	@Transactional
+	public List<RequestTranslationResponse> createRequestTranslationCompany(RequestTranslationRequest requestTranslationRequest, 
+			UserPrincipal userPrincipal) throws ServerError, BadRequestException{
+		try {
+			Company company = companyService.myCompany(userPrincipal);
+			
+			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
+				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
+					if(!company.getId().equals(objectableId)) {
+						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, 
+								MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
+					}
+					
+					RequestTranslation requestTranslation = this.save(company.getId(), objectableId, languageId, 
+							requestTranslationRequest);
+					RequestStatus requestTranslationStatus = requestStatusService.save(
+							requestTranslation, 
+							CommonFunction.dateTimeNow(), 
+							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
+					list.add(this.convertRequestTranslationResponse(requestTranslation, requestTranslationStatus));
+				}				
+			}			
+					
+			return list;
+		} catch (BadRequestException e) {
+			throw e;	
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.REQUEST_TRANSLATION_FAIL);
+		}
+	}
+	
+	@Transactional
+	public List<RequestTranslationResponse> createRequestTranslationJob(RequestTranslationRequest requestTranslationRequest, 
+			UserPrincipal userPrincipal) throws ServerError, BadRequestException{
+		try {
+			Company company = companyService.myCompany(userPrincipal);
+			
+			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
+				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
+					Job job = jobService.findByIdAndIsDelete(objectableId);
+					if(job == null || !job.getCompany().getId().equals(company.getId())) {
+						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, 
+								MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
+					}
+					
+					RequestTranslation requestTranslation = this.save(company.getId(), objectableId, languageId, 
+							requestTranslationRequest);
+					RequestStatus requestTranslationStatus = requestStatusService.save(
+							requestTranslation, 
+							CommonFunction.dateTimeNow(), 
+							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
+					list.add(this.convertRequestTranslationResponse(requestTranslation, requestTranslationStatus));
+				}				
+			}			
+					
+			return list;
+		} catch (BadRequestException e) {
+			throw e;	
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.REQUEST_TRANSLATION_FAIL);
+		}
+	}
+	
+	@Transactional
+	public List<RequestTranslationResponse> createRequestTranslationJobApplication(RequestTranslationRequest requestTranslationRequest, 
+			UserPrincipal userPrincipal) throws ServerError, BadRequestException{
+		try {
+			Company company = companyService.myCompany(userPrincipal);
+			
+			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
+				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
+					JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(objectableId, userPrincipal);
+					if(jobApplication == null || !jobApplication.getJob().getCompany().getId().equals(company.getId())) {
+						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, 
+								MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
+					}
+					
+					RequestTranslation requestTranslation = this.save(company.getId(), objectableId, languageId, 
+							requestTranslationRequest);
+					RequestStatus requestTranslationStatus = requestStatusService.save(
+							requestTranslation, 
+							CommonFunction.dateTimeNow(), 
+							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
+					list.add(this.convertRequestTranslationResponse(requestTranslation, requestTranslationStatus));
+				}				
+			}			
+					
+			return list;
+		} catch (BadRequestException e) {
+			throw e;	
+		} catch (Exception e) {
+			throw new ServerError(MessageConstant.REQUEST_TRANSLATION_FAIL);
+		}
+	}
+	
+	public RequestTranslation save(UUID ownerId, UUID objectableId, UUID languageId, 
+			RequestTranslationRequest requestTranslationRequest) {
+		RequestTranslation requestTranslation = new RequestTranslation();
+		requestTranslation.setOwnerId(ownerId);
+		requestTranslation.setObjectableId(objectableId);
+		requestTranslation.setLanguage(new Language(languageId));
+		requestTranslation.setDesc(requestTranslationRequest.getDesc());
+		requestTranslation.setObjectableType(requestTranslationRequest.getRequestType());
+		requestTranslation.setCreatedAt(CommonFunction.dateTimeNow());
+		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
+		return resultRequest;
+	}
+	
+	@Transactional
 	public RequestTranslationResponse translatorJoinRequestTranslation(UUID id, UserPrincipal userPrincipal) 
 			throws BadRequestException, ResourceNotFoundException, ForbiddenException{
 		RequestTranslation requestTranslation = requestTranslationRepository.findByIdAndDeletedAt(id, null);
@@ -157,9 +247,8 @@ public class RequestTranslationService {
 		if(!this.checkTranslatorJoin(requestTranslation.getRequestStatus(), translator)) {
 			throw new ForbiddenException(MessageConstant.ERROR_403_TRANSLATION_MSG);
 		}
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
 		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestTranslation.setTranslator(translator);
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
@@ -203,12 +292,9 @@ public class RequestTranslationService {
 			requestTranslation.setConversation(conversation);
 		}
 		
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
-		
 		
 		RequestStatus result = requestStatusService.save(
 				resultRequest, 
@@ -242,9 +328,7 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_CONFIRM_FINISH_FAIL_MSG);
 		}
 		
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
 		
@@ -277,9 +361,7 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_ACCEPT_FINISH_FAIL_MSG);
 		}
 		
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
 		
@@ -312,9 +394,7 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_REFUSE_FINISH_FAIL_MSG);
 		}
 		
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
 		
@@ -333,8 +413,8 @@ public class RequestTranslationService {
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 	
-	public RequestTranslationResponse rejectRequestTranslation(UUID id, UserPrincipal userPrincipal, RejectRequestTranslationRequest reasonReject) 
-			throws BadRequestException, ResourceNotFoundException{
+	public RequestTranslationResponse rejectRequestTranslation(UUID id, UserPrincipal userPrincipal, 
+			RejectRequestTranslationRequest reasonReject) throws BadRequestException, ResourceNotFoundException{
 		RequestTranslation requestTranslation = this.requestTranslation(id, userPrincipal);
 		if(requestTranslation == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
@@ -346,9 +426,7 @@ public class RequestTranslationService {
 											MessageConstant.REQUEST_TRANSLATION_REJECT_FAIL_MSG);
 		}
 		
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestStatusService.save(
 				requestTranslation, 
 				timestamp, 
@@ -360,11 +438,9 @@ public class RequestTranslationService {
 		requestTranslation.setUpdatedAt(timestamp);
 		RequestTranslation resultRequest = requestTranslationRepository.save(requestTranslation);
 				
-		date = new Date();
-		timestamp = new Timestamp(date.getTime());
 		RequestStatus result = requestStatusService.save(
 				resultRequest, 
-				timestamp, 
+				CommonFunction.dateTimeNow(), 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 		
 		notificationService.addNotification(
@@ -379,8 +455,8 @@ public class RequestTranslationService {
 		return convertRequestTranslationResponse(resultRequest, result);
 	}
 	
-	public RequestTranslationResponse cancelRequestTranslation(UUID id, UserPrincipal userPrincipal, CancelRequestTranslationRequest reasonCancel) 
-			throws BadRequestException, ResourceNotFoundException{
+	public RequestTranslationResponse cancelRequestTranslation(UUID id, UserPrincipal userPrincipal, 
+			CancelRequestTranslationRequest reasonCancel) throws BadRequestException, ResourceNotFoundException{
 		RequestTranslation requestTranslation = this.requestTranslation(id, userPrincipal);
 		if(requestTranslation == null) {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
@@ -395,9 +471,8 @@ public class RequestTranslationService {
 		}
 		
 		UUID userCreateId = this.userCreateId(userPrincipal, requestTranslation);		
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
 		
+		Timestamp timestamp = CommonFunction.dateTimeNow();
 		requestStatusService.save(
 				requestTranslation, 
 				timestamp, 
@@ -412,14 +487,12 @@ public class RequestTranslationService {
 		
 		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)
 				&& requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.ON_GOING)) {
-			jobApplicationService.cancelRequestTranslation(requestTranslation.getObjectableId(), userCreateId, reasonCancel.getReason());
+			jobApplicationService.cancelRequestTranslation(requestTranslation.getObjectableId(),userCreateId,reasonCancel.getReason());
 		}
 		
-		date = new Date();
-		timestamp = new Timestamp(date.getTime());
 		RequestStatus result = requestStatusService.save(
 				resultRequest, 
-				timestamp, 
+				CommonFunction.dateTimeNow(), 
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 		
 		return convertRequestTranslationResponse(resultRequest, result);
@@ -455,102 +528,174 @@ public class RequestTranslationService {
 		}
 	}
 	
-	public BaseDataMetaResponse requestTranslations(UserPrincipal userPrincipal, 
+	public BaseDataMetaResponse requestTranslationsByCompany(UserPrincipal userPrincipal, 
 			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
 		
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT DISTINCT r ");
-		sql.append("    FROM RequestTranslation r ");
-		sql.append("	LEFT JOIN Company c ");
-		sql.append("	ON c.id = r.ownerId ");
-		sql.append("	LEFT JOIN Candidate ca ");
-		sql.append("	ON ca.id = r.ownerId ");
-		sql.append("	WHERE ");
-		sql.append("	r.deletedAt is null ");
-		if(filterRequest != null) {
-			if(!filterRequest.getName().isEmpty()) {
-				sql.append(" AND ");
-				sql.append(" (ca.fullName LIKE '%" + filterRequest.getName() + "%' ");
-				sql.append(" OR c.name LIKE '%" + filterRequest.getName() + "%' )");
-			}
-			
-			if(filterRequest.getRequestTypes() != null) {
-				sql.append(" AND ");
-				if(filterRequest.getRequestTypes().size() == 1) {
-					sql.append("r.objectableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
-				}
-				
-				if(filterRequest.getRequestTypes().size() > 1) {
-					sql.append("( r.objectableType = '" + filterRequest.getRequestTypes().get(0) + "' ");
-					for(int i = 1; i< filterRequest.getRequestTypes().size(); i++) {
-						sql.append(" OR r.objectableType = '" + filterRequest.getRequestTypes().get(i) + "' ");
-					}
-					sql.append(" )");
-				}
-			}
-			
-			if(filterRequest.getLanguageIds() != null) {
-				sql.append(" AND ");
-				if(filterRequest.getLanguageIds().size() == 1) {
-					sql.append("r.language.id = '" + filterRequest.getLanguageIds().get(0) + "' ");
-				}
-				
-				if(filterRequest.getLanguageIds().size() > 1) {
-					sql.append("( r.language.id = '" + filterRequest.getLanguageIds().get(0) + "' ");
-					for(int i = 1; i< filterRequest.getLanguageIds().size(); i++) {
-						sql.append(" OR r.language.id = '" + filterRequest.getLanguageIds().get(i) + "' ");
-					}
-					sql.append(" )");
-				}
-			}
-			
-			if(!filterRequest.getPostDate().isEmpty()) {
-				sql.append(" AND ");
-				try {
-					sql.append(" r.createdAt >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate()) + "'");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		if(filterRequest.isYourRequest()) {		
-			User user = userService.getUser(userPrincipal);
-			if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-				Translator translator = translatorService.findTranslatorByUser(user);
-				sql.append(" AND r.translator.id = '" + translator.getId() + "' ");
-			} else if(user.getRole().equals(CommonConstant.Role.COMPANY)){
-				Company company = companyService.myCompany(userPrincipal);
-				sql.append(" AND r.ownerId = '" + company.getId() + "' ");
-			} else {
-				Candidate candidate = candidateService.myCandidate(userPrincipal);
-				sql.append(" AND r.ownerId = '" + candidate.getId() + "' ");
+		User user = userService.getUser(userPrincipal);
+		Date date = null;
+		if(!filterRequest.getPostDate().isEmpty()) {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
 		} else {
-			sql.append(" AND r.translator.id = null ");
-		}
-		sql.append(" ORDER BY r.createdAt DESC ");
-		
-		List<RequestTranslation> pages = (List<RequestTranslation>)entityManager
-										.createQuery(sql.toString(), RequestTranslation.class)
-										.setFirstResult((page-1)*paging)
-										.setMaxResults(paging).getResultList();
-		
-		long totalElements = ((List<RequestTranslation>)entityManager.createQuery(sql.toString(), RequestTranslation.class).getResultList()).size();
-		
-		int totalPage = (int)totalElements / paging;
-		if((totalElements % paging) > 0) {
-			totalPage ++;
-		}
-		if(totalPage == 0) {
-			totalPage = 1;
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		PageInfo pageInfo = new PageInfo(page, totalPage, totalElements);
+		if(filterRequest.getLanguageIds().size() == 0) {
+			filterRequest.setLanguageIds(languageService.languageIds());
+		}
 		
+		if(filterRequest.getRequestTypes().size() == 0) {
+			Set<String> requestTypes = new HashSet<String>();
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION);
+			filterRequest.setRequestTypes(requestTypes);
+		}
+		Page<RequestTranslation> pages = requestTranslationRepository.findAllByCompany(PageRequest.of(page-1, paging), 
+				filterRequest.getName(), filterRequest.getRequestTypes(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());		
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 		
-		if(pages.size() > 0) {
-			for (RequestTranslation requestTranslation : pages) {
+		if(pages.getContent().size() > 0) {
+			for (RequestTranslation requestTranslation : pages.getContent()) {
+				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
+				list.add(convertRequestTranslationResponse(requestTranslation, status));
+			}
+		}
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
+		return response;
+	}
+	
+	public BaseDataMetaResponse requestTranslationsByCandidate(UserPrincipal userPrincipal, 
+			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
+		
+		User user = userService.getUser(userPrincipal);
+		Date date = null;
+		if(!filterRequest.getPostDate().isEmpty()) {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(filterRequest.getLanguageIds().size() == 0) {
+			filterRequest.setLanguageIds(languageService.languageIds());
+		}
+		Page<RequestTranslation> pages = requestTranslationRepository.findAllByCandidate(PageRequest.of(page-1, paging), 
+				filterRequest.getName(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());		
+		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (RequestTranslation requestTranslation : pages.getContent()) {
+				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
+				list.add(convertRequestTranslationResponse(requestTranslation, status));
+			}
+		}
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
+		return response;
+	}
+	
+	public BaseDataMetaResponse requestTranslationsByTranslator(UserPrincipal userPrincipal, 
+			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
+		
+		User user = userService.getUser(userPrincipal);
+		Date date = null;
+		if(!filterRequest.getPostDate().isEmpty()) {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(filterRequest.getLanguageIds().size() == 0) {
+			filterRequest.setLanguageIds(languageService.languageIds());
+		}
+		
+		if(filterRequest.getRequestTypes().size() == 0) {
+			Set<String> requestTypes = new HashSet<String>();
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE);
+			filterRequest.setRequestTypes(requestTypes);
+		}
+		Page<RequestStatus> pages = requestStatusRepository.findAllByTranslator(PageRequest.of(page-1, paging), 
+				filterRequest.getName(), filterRequest.getRequestTypes(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());		
+		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (RequestStatus requestStatus : pages.getContent()) {
+				list.add(convertRequestTranslationResponse(requestStatus.getRequestTranslation(), requestStatus));
+			}
+		}
+		
+		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
+		return response;
+	}
+	
+	public BaseDataMetaResponse newRequestTranslations(UserPrincipal userPrincipal, 
+			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
+		
+		User user = userService.getUser(userPrincipal);
+		Date date = null;
+		if(!filterRequest.getPostDate().isEmpty()) {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(filterRequest.getLanguageIds().size() == 0) {
+			filterRequest.setLanguageIds(languageService.languageIds());
+		}
+		
+		if(filterRequest.getRequestTypes().size() == 0) {
+			Set<String> requestTypes = new HashSet<String>();
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION);
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE);
+			filterRequest.setRequestTypes(requestTypes);
+		}
+		Page<RequestTranslation> pages = requestTranslationRepository.findNewRequestByTranslator(PageRequest.of(page-1, paging), 
+				filterRequest.getName(), filterRequest.getRequestTypes(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());		
+		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+		
+		if(pages.getContent().size() > 0) {
+			for (RequestTranslation requestTranslation : pages.getContent()) {
 				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 				list.add(convertRequestTranslationResponse(requestTranslation, status));
 			}
@@ -595,54 +740,48 @@ public class RequestTranslationService {
 		return requestTranslation;
 	}
 	
-	public boolean checkRequestTranslation(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal){
-		UUID ownerId = null;
-		User user = userService.getUser(userPrincipal);
-		if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
-			Company company = companyService.findByUserAndIsDelete(user, null);
-			if(company == null) {
-				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-			}
-			ownerId = company.getId();
-		} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
-			Company company = companyService.findByUserAndIsDelete(user, null);
-			if(company == null) {
-				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-			}
-			ownerId = company.getId();
-		} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
-			Candidate candidate = candidateService.myCandidate(userPrincipal);
-			if(candidate == null) {
-				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-			}
-			ownerId = candidate.getId();
-		} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
-			Company company = companyService.findByUserAndIsDelete(user, null);
-			if(company == null) {
-				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
-			}
-			ownerId = company.getId();
+	public boolean checkRequestTranslationByCandidate(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal){
+		Candidate candidate = candidateService.myCandidate(userPrincipal);
+		if(candidate == null) {
+			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, 
+					MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
+		}
+		UUID ownerId = candidate.getId();
+		return this.checkRequestTranslation(requestTranslationRequest, ownerId);
+	}
+	
+	public boolean checkRequestTranslationByCompany(RequestTranslationRequest requestTranslationRequest, UserPrincipal userPrincipal){
+		Company company = companyService.myCompany(userPrincipal);
+		if(company == null) {
+			throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST, 
+					MessageConstant.REQUEST_TRANSLATION_BAD_REQUEST_MSG);
 		}
 		
+		UUID ownerId = company.getId();		
+		return this.checkRequestTranslation(requestTranslationRequest, ownerId);
+	}
+	
+	public boolean checkRequestTranslation(RequestTranslationRequest requestTranslationRequest, UUID ownerId){		
 		for (UUID languageId : requestTranslationRequest.getLanguageId()) {
 			for (UUID objectTableId : requestTranslationRequest.getObjectableId()) {
-				RequestTranslation requestTranslation = requestTranslationRepository.findByOwnerIdAndObjectableIdAndObjectableTypeAndLanguageAndDeletedAt(
-						ownerId, 
-						objectTableId,
-						requestTranslationRequest.getRequestType(),
-						new Language(languageId),
-						null
-						);
+				RequestTranslation requestTranslation = requestTranslationRepository
+														.findByOwnerIdAndObjectableIdAndObjectableTypeAndLanguageAndDeletedAt(
+															ownerId, 
+															objectTableId,
+															requestTranslationRequest.getRequestType(),
+															new Language(languageId),
+															null
+														);
 				if(requestTranslation != null) {
 					return true;
 				}
 			}
 		}
-		
 		return false;
 	}
 	
-	public RequestTranslationResponse convertRequestTranslationResponse(RequestTranslation requestTranslation, RequestStatus requestTranslationStatus) {
+	public RequestTranslationResponse convertRequestTranslationResponse(RequestTranslation requestTranslation, 
+			RequestStatus requestTranslationStatus) {
 		RequestTranslationResponse requestTranslationResponse = new RequestTranslationResponse();
 		requestTranslationResponse.setId(requestTranslation.getId());
 		requestTranslationResponse.setOwnerId(requestTranslation.getOwnerId());

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class LanguageRepositoryImplement implements LanguageRepository {
@@ -141,4 +142,10 @@ public class LanguageRepositoryImplement implements LanguageRepository {
     public List<Language> findAllByDeletedAt(Timestamp deletedAt) {
         return findAllByDeletedAt(deletedAt);
     }
+
+	@Override
+	public Set<UUID> findIdByDeletedAt(Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findIdByDeletedAt(deletedAt);
+	}
 }

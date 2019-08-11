@@ -1,13 +1,14 @@
 package com.japanwork.payload.request;
 
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class RequestTranslationFilterRequest {
 	private String name;
 	
-	private List<String> languageIds;
+	private Set<UUID> languageIds;
 
-	private List<String> requestTypes;
+	private Set<String> requestTypes;
 	
 	private String postDate;
 	
@@ -21,19 +22,19 @@ public class RequestTranslationFilterRequest {
 		this.name = name;
 	}
 
-	public List<String> getLanguageIds() {
+	public Set<UUID> getLanguageIds() {
 		return languageIds;
 	}
 
-	public void setLanguageIds(List<String> languageIds) {
+	public void setLanguageIds(Set<UUID> languageIds) {
 		this.languageIds = languageIds;
 	}
 
-	public List<String> getRequestTypes() {
+	public Set<String> getRequestTypes() {
 		return requestTypes;
 	}
 
-	public void setRequestTypes(List<String> requestTypes) {
+	public void setRequestTypes(Set<String> requestTypes) {
 		this.requestTypes = requestTypes;
 	}
 
@@ -52,5 +53,4 @@ public class RequestTranslationFilterRequest {
 	public void setYourRequest(boolean yourRequest) {
 		this.yourRequest = yourRequest;
 	}
-	
 }

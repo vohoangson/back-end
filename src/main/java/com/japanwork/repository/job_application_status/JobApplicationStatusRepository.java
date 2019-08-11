@@ -16,10 +16,10 @@ public interface JobApplicationStatusRepository extends JpaRepository<JobApplica
 	
 	@Query("SELECT ja FROM JobApplicationStatus ja "
 			+ "WHERE (ja.jobApplication, ja.translator, ja.createdAt ) IN "
-			+ "( SELECT jas.jobApplication, jas.translator, max(jas.createdAt) AS createdAt "
-			+ "FROM JobApplicationStatus jas "
-			+ "WHERE jas.translator.id = :translatorId "
-			+ "GROUP BY ( jas.jobApplication, jas.translator ))"
+			+ "( 	SELECT jas.jobApplication, jas.translator, max(jas.createdAt) AS createdAt "
+			+ "		FROM JobApplicationStatus jas "
+			+ "		WHERE jas.translator.id = :translatorId "
+			+ "		GROUP BY ( jas.jobApplication, jas.translator ))"
 			+ "ORDER BY ja.createdAt DESC")
 	public Page<JobApplicationStatus> findByTranslator(Pageable pageable, @Param("translatorId") UUID transaltorId);
 }
