@@ -134,7 +134,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_LEVEL,
                 		UrlConstant.URL_CONTRACT,
                 		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT,
                 		UrlConstant.URL_USER,
                 		UrlConstant.URL_REQUEST_TRANSLATIONS,
                 		UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
@@ -192,8 +191,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_DISTRICTS,
                 		UrlConstant.URL_LEVEL,
                 		UrlConstant.URL_CONTRACT,
-                		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT
+                		UrlConstant.URL_LANGUAGUE_TYPE
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.PATCH,
                 		UrlConstant.URL_BUSINESS_ID,
@@ -201,8 +199,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_DISTRICT_ID,
                 		UrlConstant.URL_LEVEL_ID,
                 		UrlConstant.URL_CONTRACT_ID,
-                		UrlConstant.URL_LANGUAGUE_TYPE_ID,
-                		UrlConstant.URL_CURRENCYUNIT_ID
+                		UrlConstant.URL_LANGUAGUE_TYPE_ID
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.DELETE,
                 		UrlConstant.URL_BUSINESS_ID,
@@ -210,8 +207,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_DISTRICT_ID,
                 		UrlConstant.URL_LEVEL_ID,
                 		UrlConstant.URL_CONTRACT_ID,
-                		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT_ID
+                		UrlConstant.URL_LANGUAGUE_TYPE
                 		).hasRole("ADMIN")
                     .anyRequest()
                         .permitAll()
