@@ -18,7 +18,7 @@ public class LanguageController {
 	private LanguageService languageService;
 	
 	
-	@GetMapping(UrlConstant.URL_LANGUAGUE)
+	@GetMapping(UrlConstant.URL_LANGUAGUES)
 	@ResponseBody
 	public BaseDataResponse listLanguage() {
 		List<Language> list = languageService.findAllByIsDelete();

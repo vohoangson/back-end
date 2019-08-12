@@ -40,7 +40,7 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 
-	@GetMapping(UrlConstant.URL_JOB)
+	@GetMapping(UrlConstant.URL_JOBS)
 	@ResponseBody
 	public BaseDataMetaResponse listJob(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
@@ -65,7 +65,7 @@ public class JobController {
 		return jobService.findAllByIsDelete(jobFilterRequest, page, paging);
 	}
 
-	@GetMapping(UrlConstant.URL_COMPANY_ID_JOB)
+	@GetMapping(UrlConstant.URL_COMPANY_JOB)
 	@ResponseBody
 	public BaseDataMetaResponse listJobByCompny(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging, @PathVariable UUID id) {
@@ -83,21 +83,21 @@ public class JobController {
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
 
-	@PostMapping(UrlConstant.URL_JOB)
+	@PostMapping(UrlConstant.URL_JOBS)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody JobRequest jobRequest, @CurrentUser UserPrincipal userPrincipal) {
 		Job job = jobService.save(jobRequest, userPrincipal);
 		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 
-	@GetMapping(UrlConstant.URL_JOB_ID)
+	@GetMapping(UrlConstant.URL_JOB)
 	@ResponseBody
 	public BaseDataResponse findJobByIdAndIsDelete(@PathVariable UUID id){
 		Job job = jobService.findByIdAndIsDelete(id);
 		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 
-	@PatchMapping(UrlConstant.URL_JOB_ID)
+	@PatchMapping(UrlConstant.URL_JOB)
 	@ResponseBody
 	public BaseDataResponse update(@Valid @RequestBody JobRequest jobRequest, @PathVariable UUID id,
 			@CurrentUser UserPrincipal userPrincipal) {
@@ -105,7 +105,7 @@ public class JobController {
 		return new BaseDataResponse(jobService.convertJobResponse(job));
 	}
 
-	@DeleteMapping(UrlConstant.URL_JOB_ID)
+	@DeleteMapping(UrlConstant.URL_JOB)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		Date date = new Date();
@@ -116,7 +116,7 @@ public class JobController {
 
 	}
 
-	@GetMapping(UrlConstant.URL_JOB_UNDEL)
+	@PatchMapping(UrlConstant.URL_JOB_UNDELETE)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		Job job = jobService.isDel(id, userPrincipal, null);

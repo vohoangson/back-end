@@ -21,13 +21,13 @@ public class FileHandlerController {
 	@Autowired
     private AmazonService amazonService;
 
-    @PostMapping(UrlConstant.URL_AMW_UPLOAD_FILE)
+    @PostMapping(UrlConstant.URL_AMW)
     public BaseDataResponse uploadFile(@RequestPart(value = "file") MultipartFile file, HttpServletResponse httpServletResponse){
         String url = amazonService.uploadFile(file, httpServletResponse);
         return new BaseDataResponse(url);
     }
 
-    @DeleteMapping(UrlConstant.URL_AMW_DELETE_FILE)
+    @DeleteMapping(UrlConstant.URL_AMW)
     public BaseDataResponse deleteFile(@RequestParam("url") String fileUrl, HttpServletResponse httpServletResponse) {
     	BaseMessageResponse baseMessageResponse = amazonService.deleteFileFromS3Bucket(fileUrl, httpServletResponse);
     	return new BaseDataResponse(baseMessageResponse);

@@ -25,28 +25,28 @@ public class DistrictController {
 	@Autowired
 	private DistrictService districtService;
 	
-	@GetMapping(UrlConstant.URL_DISTRICT)
+	@GetMapping(UrlConstant.URL_DISTRICTS)
 	@ResponseBody
 	public BaseDataResponse listDistrict() {
 		List<District> list = districtService.findAllByIsDelete();
 		return new BaseDataResponse(list);
 	}
 	
-	@GetMapping(UrlConstant.URL_DISTRICTS_ID)
+	@GetMapping(UrlConstant.URL_DISTRICTS_LIST_ID)
 	@ResponseBody
 	public BaseDataResponse listDistrictByCity(@PathVariable UUID id) {
 		List<District> list = districtService.findAllByCityIdAndIsDelete(id);
 		return new BaseDataResponse(list);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_DISTRICT)
+	@PostMapping(value = UrlConstant.URL_DISTRICTS)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody DistrictRequest districtRequest) {		
 		District district = districtService.save(districtRequest);
 		return new BaseDataResponse(district);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_DISTRICTS)
+	@PostMapping(value = UrlConstant.URL_DISTRICTS_LIST)
 	@ResponseBody
 	public BaseDataResponse createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {		
 		List<District> list =  districtService.saves(listDistrictRequest);

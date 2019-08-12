@@ -32,7 +32,7 @@ public class MessageController {
 	@Autowired
 	private MessageService messageService;
 	
-	@PostMapping(UrlConstant.URL_CONVERSATION_ID)
+	@PostMapping(UrlConstant.URL_CONVERSATION)
 	@ResponseBody
 	public BaseDataResponse addMessage(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
 			@Valid @RequestBody MessageRequest messageRequest) {
@@ -41,7 +41,7 @@ public class MessageController {
 		return response;
 	}
 	
-	@GetMapping(UrlConstant.URL_CONVERSATION_ID)
+	@GetMapping(UrlConstant.URL_CONVERSATION)
 	@ResponseBody
 	public BaseDataMetaResponse messages(@PathVariable UUID id, 
 			@RequestParam(defaultValue = "1", name = "page") int page,

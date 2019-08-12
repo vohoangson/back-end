@@ -22,14 +22,14 @@ public class LevelController {
 	@Autowired
 	private LevelService levelService;
 	
-	@GetMapping(UrlConstant.URL_LEVEL)
+	@GetMapping(UrlConstant.URL_LEVELS)
 	@ResponseBody
 	public BaseDataResponse listLevel() {
 		List<Level> list = levelService.findAllByIsDelete();
 		return new BaseDataResponse(list);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_LEVEL)
+	@PostMapping(value = UrlConstant.URL_LEVELS)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody LevelRequest levelRequest) {		
 		Level level = levelService.save(levelRequest);
