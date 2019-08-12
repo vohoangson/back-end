@@ -13,7 +13,6 @@ public class UrlConstant {
 	public static final String URL_USER_CHANGE_PASSWORD = "/v1/user/change_password";
 	public static final String URL_USER_FORGET_PASSWORD = "/v1/forget_password";
 	public static final String URL_USER_RESET_PASSWORD = "/v1/reset_password";
-	public static final String URL_DELETE_ACCOUNT = "/v1/user/delete";
 	public static final String URL_CONFIRM_ACCOUNT = "/v1/confirm_account";
 	public static final String URL_RESEND_REGISTRATION_TOKEN = "/v1/resend_registration";
 	public static final String URL_NOTIFICATIONS_ENDPOINT = "/v1/notifications/endpoint";
@@ -31,18 +30,19 @@ public class UrlConstant {
 
 	//District
 	public static final String URL_DISTRICTS = "/v1/districts";
-	public static final String URL_DISTRICTS_LIST = "/v1/districts/list";
-	public static final String URL_DISTRICTS_LIST_ID = "/v1/districts/list/{id}";
-	public static final String URL_DISTRICT = "/v1/district/{id}";
+	public static final String URL_DISTRICTS_BATCH = "/v1/districts/batch";
+	public static final String URL_DISTRICT = "/v1/districts/{id}";
 
 	//Country
 	public static final String URL_COUNTRIES = "/v1/countries";
 	public static final String URL_COUNTRY = "/v1/countries/{id}";
+	public static final String URL_COUNTRIES_CITIES = "/v1//countries/{code}/cities";
+	
 	//City
 	public static final String URL_CITIES = "/v1/cities";
-	public static final String URL_CITIES_LIST = "/v1/cities/list";
-	public static final String URL_CITIE_LISTS_ID = "/v1/cities/list/{code}";
+	public static final String URL_CITIES_BATCH = "/v1/cities/batch";
 	public static final String URL_CITY = "/v1/cities/{id}";
+	public static final String URL_CITIES_DISTRICTS = "/v1/cities/{id}/districts";
 
 	//Company
 	public static final String URL_COMPANIES = "/v1/companies";
@@ -123,7 +123,7 @@ public class UrlConstant {
     public static final String URL_CANDIDATE_TRANSLATION = "/v1/v1/candidates/{id}/candidate_translations";
 
 	//Upload file on AWS
-	public static final String URL_AMW = "/v1/storage";
+	public static final String URL_AMW = "/v1/storages";
 
 	//Translator
 	public static final String URL_TRANSLATORS = "/v1/translators";

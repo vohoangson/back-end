@@ -185,7 +185,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_BUSINESS,
                 		UrlConstant.URL_COUNTRIES,
                 		UrlConstant.URL_CITIES,
-                		UrlConstant.URL_CITIES_LIST,
+                		UrlConstant.URL_CITIES_BATCH,
                 		UrlConstant.URL_DISTRICT,
                 		UrlConstant.URL_DISTRICTS,
                 		UrlConstant.URL_LEVELS,

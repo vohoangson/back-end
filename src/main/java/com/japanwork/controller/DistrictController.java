@@ -32,7 +32,7 @@ public class DistrictController {
 		return new BaseDataResponse(list);
 	}
 	
-	@GetMapping(UrlConstant.URL_DISTRICTS_LIST_ID)
+	@GetMapping(UrlConstant.URL_CITIES_DISTRICTS)
 	@ResponseBody
 	public BaseDataResponse listDistrictByCity(@PathVariable UUID id) {
 		List<District> list = districtService.findAllByCityIdAndIsDelete(id);
@@ -46,7 +46,7 @@ public class DistrictController {
 		return new BaseDataResponse(district);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_DISTRICTS_LIST)
+	@PostMapping(value = UrlConstant.URL_DISTRICTS_BATCH)
 	@ResponseBody
 	public BaseDataResponse createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {		
 		List<District> list =  districtService.saves(listDistrictRequest);

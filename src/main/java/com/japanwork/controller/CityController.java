@@ -32,7 +32,7 @@ public class CityController {
 		return new BaseDataResponse(list);
 	}
 	
-	@GetMapping(UrlConstant.URL_CITIE_LISTS_ID)
+	@GetMapping(UrlConstant.URL_COUNTRIES_CITIES)
 	@ResponseBody
 	public BaseDataResponse listCityByCountry(@PathVariable String code) {
 		List<City> list = cityService.listCityByCountry(code);
@@ -46,7 +46,7 @@ public class CityController {
 		return new BaseDataResponse(city);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_CITIES_LIST)
+	@PostMapping(value = UrlConstant.URL_CITIES_BATCH)
 	@ResponseBody
 	public BaseDataResponse createList(@Valid @RequestBody ListCityRequest listCityRequest) {		
 		List<City> list =  cityService.saves(listCityRequest);
