@@ -36,7 +36,7 @@ public class UrlConstant {
 	//Country
 	public static final String URL_COUNTRIES = "/v1/countries";
 	public static final String URL_COUNTRY = "/v1/countries/{id}";
-	public static final String URL_COUNTRIES_CITIES = "/v1//countries/{code}/cities";
+	public static final String URL_COUNTRIES_CITIES = "/v1/countries/{code}/cities";
 	
 	//City
 	public static final String URL_CITIES = "/v1/cities";
@@ -84,9 +84,9 @@ public class UrlConstant {
 	public static final String URL_REQUEST_TRANSLATION = "/v1/requests/{id}";
 
 	//Notification
-	public static final String URL_CONVERSATION= "/v1/conversation/{id}";
+	public static final String URL_CONVERSATION= "/v1/conversations/{id}";
 	public static final String URL_NOTIFICATIONS = "/v1/notifications";
-	public static final String URL_NOTIFICATIONS_UNREADS_NUMBER = "/v1/notificationS/unreads_number";
+	public static final String URL_NOTIFICATIONS_UNREADS_NUMBER = "/v1/notifications/unreads_number";
 	public static final String URL_NOTIFICATIONS_MARK_ALL_READ = "/v1/notifications/mark_all_read";
 	public static final String URL_NOTIFICATIONS_MARK_READS = "/v1/notifications/mark_reads";
 
