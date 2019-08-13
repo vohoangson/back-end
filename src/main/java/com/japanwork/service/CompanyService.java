@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
+import com.japanwork.exception.ResourceNotFound;
+import com.japanwork.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,11 +17,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.model.Business;
-import com.japanwork.model.City;
-import com.japanwork.model.Company;
-import com.japanwork.model.District;
-import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
@@ -33,6 +30,18 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 
+	public Company show(UUID id, UUID language_id) throws ResourceNotFound {
+	    try {
+            Company company = companyRepository.findByIdAndDeletedAt(id, null);
+            return company;
+        } catch(Exception e) {
+            throw new ResourceNotFound(
+                    MessageConstant.COMPANY_NOT_FOUND_CODE,
+                    MessageConstant.COMPANY_NOT_FOUND
+            );
+        }
+    }
+
 	public Page<Company> companiesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Company> pages = companyRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids,null);
@@ -41,6 +50,7 @@ public class CompanyService {
 			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
 		}
 	}
+
 	public Company save(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Date date = new Date();

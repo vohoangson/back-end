@@ -1,21 +1,15 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.JoinFormula;
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 @Entity
 @Table(name="company")
 public class Company {
@@ -23,52 +17,56 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-    
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-    
+
+    @OneToMany(mappedBy = "company")
+    @Where(clause = "deleted_at IS NULL")
+    private Set<CompanyTranslation> companyTranslations;
+
     @Column(name="name")
     private String name;
-    
+
     @ManyToMany
-    @JoinTable(name = "company_business", 
-      joinColumns = { @JoinColumn(name = "company_id") }, 
+    @JoinTable(name = "company_business",
+      joinColumns = { @JoinColumn(name = "company_id") },
       inverseJoinColumns = {@JoinColumn(name = "business_id") })
     private Set<Business> businesses = new HashSet<>();
-    
+
     @Column(name="scale")
     private int scale;
-    
+
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "district_id")   
+    @JoinColumn(name = "district_id")
     private District district;
-    
+
     @Column(name="address")
     private String address;
-    
+
     @Column(name="logo_url")
     private String logoUrl;
-    
+
     @Column(name="cover_image_url")
     private String coverImageUrl;
-    
+
     @Column(name="introduction")
     private String introduction;
-    
+
     @Column(name="status")
     private String status;
-    
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 
@@ -84,7 +82,15 @@ public class Company {
 		return user;
 	}
 
-	public void setUser(User user) {
+    public Set<CompanyTranslation> getCompanyTranslations() {
+        return companyTranslations;
+    }
+
+    public void setCompanyTranslations(Set<CompanyTranslation> companyTranslations) {
+        this.companyTranslations = companyTranslations;
+    }
+
+    public void setUser(User user) {
 		this.user = user;
 	}
 
@@ -159,7 +165,7 @@ public class Company {
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -167,7 +173,7 @@ public class Company {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -195,7 +201,7 @@ public class Company {
 	public Company() {
 
 	}
-	
+
 	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city, District district,
 			String address, String logoUrl, String coverImageUrl, String introduction, String status,
 			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
