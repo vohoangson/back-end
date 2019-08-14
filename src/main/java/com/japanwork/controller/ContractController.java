@@ -24,21 +24,21 @@ public class ContractController {
 	@Autowired
 	private ContractService contractService;
 	
-	@GetMapping(value = UrlConstant.URL_CONTRACT)
+	@GetMapping(value = UrlConstant.URL_CONTRACTS)
 	@ResponseBody
 	public BaseDataResponse listContract() {		
 		List<Contract> list = contractService.findAllByIsDelete();
 		return new BaseDataResponse(list);
 	}
 	
-	@GetMapping(value = UrlConstant.URL_CONTRACT_ID)
+	@GetMapping(value = UrlConstant.URL_CONTRACT)
 	@ResponseBody
 	public BaseDataResponse show(@PathVariable UUID id) {		
 		Contract contract = contractService.findByIdAndIsDelete(id);
 		return new BaseDataResponse(contract);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_CONTRACT)
+	@PostMapping(value = UrlConstant.URL_CONTRACTS)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody ContractRequest contractRequest) {		
 		Contract contract =  contractService.save(contractRequest);

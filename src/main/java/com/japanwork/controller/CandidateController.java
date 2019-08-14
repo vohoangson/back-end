@@ -47,7 +47,7 @@ public class CandidateController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
+	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONALS)
 	@ResponseBody
 	public BaseDataResponse createCandidatePersonal (@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
@@ -58,7 +58,7 @@ public class CandidateController {
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_PERSONAL)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
 	@ResponseBody
 	public BaseDataResponse updateCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
@@ -69,7 +69,7 @@ public class CandidateController {
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_WISH)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_WISH)
 	@ResponseBody
 	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateWishRequest candidateWishRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
@@ -81,7 +81,7 @@ public class CandidateController {
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE)
 	@ResponseBody
 	public BaseDataResponse updateCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{	
@@ -92,7 +92,7 @@ public class CandidateController {
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
-	@GetMapping(UrlConstant.URL_CANDIDATE)
+	@GetMapping(UrlConstant.URL_CANDIDATES)
 	@ResponseBody
 	public BaseDataMetaResponse listCandidate(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging){	
@@ -129,7 +129,7 @@ public class CandidateController {
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	
-	@GetMapping(UrlConstant.URL_CANDIDATE_ID)
+	@GetMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
 	public BaseDataResponse findCadidateByIdAndIsDelete(@PathVariable UUID id){		
 		Candidate candidate = candidateService.findByIdAndIsDelete(id);
@@ -143,7 +143,7 @@ public class CandidateController {
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
-	@DeleteMapping(UrlConstant.URL_CANDIDATE_ID)
+	@DeleteMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {
 		Date date = new Date();
@@ -154,7 +154,7 @@ public class CandidateController {
 		return new BaseDataResponse(baseMessageResponse);
 	}
 	
-	@GetMapping(UrlConstant.URL_CANDIDATE_UNDEL)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_UNDELETE)
 	@ResponseBody
 	public BaseDataResponse favoriteJob(@PathVariable UUID id) {		
 		Candidate candidate = candidateService.isDel(id, null);

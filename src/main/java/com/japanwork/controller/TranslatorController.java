@@ -44,7 +44,7 @@ public class TranslatorController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping(UrlConstant.URL_TRANSLATOR)
+	@PostMapping(UrlConstant.URL_TRANSLATORS)
 	@ResponseBody
 	public BaseDataResponse createTranslator (@Valid @RequestBody TranslatorRequest translatorRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
@@ -56,7 +56,7 @@ public class TranslatorController {
 		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
-	@GetMapping(UrlConstant.URL_TRANSLATOR)
+	@GetMapping(UrlConstant.URL_TRANSLATORS)
 	@ResponseBody
 	public BaseDataMetaResponse listTranslator (@RequestParam(defaultValue = "1", name = "page") int page, 
 			@RequestParam(defaultValue = "25", name = "paging") int paging){
@@ -93,7 +93,7 @@ public class TranslatorController {
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
 	
-	@PatchMapping(UrlConstant.URL_TRANSLATOR_ID)
+	@PatchMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
 	public BaseDataResponse updateTranslator(@Valid @RequestBody TranslatorRequest translatorRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
@@ -101,7 +101,7 @@ public class TranslatorController {
 		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
-	@GetMapping(UrlConstant.URL_TRANSLATOR_ID)
+	@GetMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
 	public BaseDataResponse findTranslatorByIdAndIsDelete(@PathVariable UUID id){		
 		Translator translator = translatorService.findByIdAndIsDelete(id);
@@ -115,7 +115,7 @@ public class TranslatorController {
 		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
 	}
 	
-	@DeleteMapping(UrlConstant.URL_TRANSLATOR_ID)
+	@DeleteMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {
 		Date date = new Date();
@@ -125,7 +125,7 @@ public class TranslatorController {
 		return new BaseDataResponse(deleteResponse);
 	}
 	
-	@GetMapping(UrlConstant.URL_TRANSLATOR_UNDEL_ID)
+	@GetMapping(UrlConstant.URL_TRANSLATORS_UNDEL)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {		
 		Translator translator = translatorService.isDel(id, null);

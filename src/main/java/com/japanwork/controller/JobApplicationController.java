@@ -31,42 +31,42 @@ public class JobApplicationController {
 	@Autowired
 	private JobApplicationService jobApplicationService;
 	
-	@PostMapping(UrlConstant.URL_JOB_APPLICATION_CANDIDATE_JOIN)
+	@PostMapping(UrlConstant.URL_JOB_APPLICATIONS_CANDIDATE_JOIN)
 	@ResponseBody
 	public BaseDataResponse createJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.createJobApplication(id, userPrincipal);
 		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
-	@PatchMapping(UrlConstant.URL_JOB_APPLICATION_COMPANY_REJECT)
+	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_COMPANY_REJECT)
 	@ResponseBody
 	public BaseDataResponse rejectCandiadte(@Valid @RequestBody RejectJobApplicationRequest rejectJobApplicationRequest,@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.rejectCandiadte(rejectJobApplicationRequest, id, userPrincipal);
 		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
-	@PatchMapping(UrlConstant.URL_JOB_APPLICATION_COMPANY_ACCEPT_APPLY)
+	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_COMPANY_ACCEPT_APPLY)
 	@ResponseBody
 	public BaseDataResponse acceptApplyCandidate(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.acceptApplyCandidate(id, userPrincipal);
 		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
-	@PatchMapping(UrlConstant.URL_JOB_APPLICATION_CANCEL)
+	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_CANCEL)
 	@ResponseBody
 	public BaseDataResponse cancelJobApplication(@Valid @RequestBody CancelJobApplicationRequest cancelJobApplicationRequest,@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.cancelJobApplication(cancelJobApplicationRequest, id, userPrincipal);
 		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
-	@PatchMapping(UrlConstant.URL_JOB_APPLICATION_COMPANY_APPROVE)
+	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_COMPANY_APPROVE)
 	@ResponseBody
 	public BaseDataResponse approveJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.approveCandidate(id, userPrincipal);
 		return new BaseDataResponse(jobApplicationResponse);
 	}
 	
-	@GetMapping(UrlConstant.URL_COMPANY_ID_JOB_APPLICATION)
+	@GetMapping(UrlConstant.URL_COMPANY_JOB_APPLICATION)
 	@ResponseBody
 	public BaseDataMetaResponse indexByCompany(@CurrentUser UserPrincipal userPrincipal, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
@@ -74,7 +74,7 @@ public class JobApplicationController {
 		return jobApplicationService.indexByCompany(userPrincipal, page, paging);
 	}
 	
-	@GetMapping(UrlConstant.URL_CANDIDATE_ID_JOB_APPLICATION)
+	@GetMapping(UrlConstant.URL_CANDIDATES_JOB_APPLICATIONS)
 	@ResponseBody
 	public BaseDataMetaResponse indexByCandidate(@CurrentUser UserPrincipal userPrincipal, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
@@ -82,7 +82,7 @@ public class JobApplicationController {
 		return jobApplicationService.indexByCandidate(userPrincipal, page, paging);
 	}
 	
-	@GetMapping(UrlConstant.URL_TRANSLATOR_ID_JOB_APPLICATION)
+	@GetMapping(UrlConstant.URL_TRANSLATORS_JOB_APPLICATIONS)
 	@ResponseBody
 	public BaseDataMetaResponse indexByTranslator(@CurrentUser UserPrincipal userPrincipal, 
 			@RequestParam(defaultValue = "1", name = "page") int page,
@@ -91,7 +91,7 @@ public class JobApplicationController {
 	}
 	
 	
-	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID)
+	@GetMapping(UrlConstant.URL_JOB_APPLICATION)
 	@ResponseBody
 	public BaseDataResponse findJobApplicationById(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplication jobApplication = jobApplicationService.findByIdAndIsDelete(id, userPrincipal);

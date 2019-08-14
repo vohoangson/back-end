@@ -23,14 +23,14 @@ public class BusinessTypeController {
 	private BusinessService businessTypeService;
 	
 	
-	@GetMapping(UrlConstant.URL_BUSINESS)
+	@GetMapping(UrlConstant.URL_BUSINESSES)
 	@ResponseBody
 	public BaseDataResponse listBusiness() {
 		List<Business> list = businessTypeService.findAllByIsDelete();
 		return new BaseDataResponse(list);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_BUSINESS)
+	@PostMapping(value = UrlConstant.URL_BUSINESSES)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody BusinessRequest businessTypeRequest) {
 		Business business = businessTypeService.save(businessTypeRequest);

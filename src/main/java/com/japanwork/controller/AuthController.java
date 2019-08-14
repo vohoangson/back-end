@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -127,7 +128,7 @@ public class AuthController {
 //	  	}
 //	}
     
-    @GetMapping(value = UrlConstant.URL_DELETE_ACCOUNT)
+    @DeleteMapping(value = UrlConstant.URL_USER)
     public BaseMessageResponse deleteUserByEmail(@RequestParam("email") String email) {
     	return userService.deleteUserByEmail(email);    
     }

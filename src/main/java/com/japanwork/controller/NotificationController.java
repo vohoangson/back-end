@@ -23,7 +23,7 @@ public class NotificationController {
 	@Autowired
 	private NotificationService notificationService;
 
-	@GetMapping(UrlConstant.URL_NOTIFICATION)
+	@GetMapping(UrlConstant.URL_NOTIFICATIONS)
 	@ResponseBody
 	public BaseDataMetaResponse notifications(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
@@ -32,7 +32,7 @@ public class NotificationController {
 		return notificationService.notifications(userPrincipal, page, paging);
 	} 
 	
-	@GetMapping(UrlConstant.URL_NOTIFICATION_UNREADS_NUMBER)
+	@GetMapping(UrlConstant.URL_NOTIFICATIONS_UNREADS_NUMBER)
 	@ResponseBody
 	public BaseDataResponse unreadNumber( @CurrentUser UserPrincipal userPrincipal) {
 		int num = notificationService.unreadNumber(userPrincipal);
@@ -40,14 +40,14 @@ public class NotificationController {
 		return new BaseDataResponse(obj);
 	} 
 	
-	@PatchMapping(UrlConstant.URL_NOTIFICATION_MARK_ALL_READ)
+	@PatchMapping(UrlConstant.URL_NOTIFICATIONS_MARK_ALL_READ)
 	@ResponseBody
 	public BaseSuccessResponse markAllRead( @CurrentUser UserPrincipal userPrincipal) {
 		notificationService.markAllReads(userPrincipal);
 		return new BaseSuccessResponse("Success",null,null);
 	} 
 	
-	@PatchMapping(UrlConstant.URL_NOTIFICATION_MARK_READS)
+	@PatchMapping(UrlConstant.URL_NOTIFICATIONS_MARK_READS)
 	@ResponseBody
 	public BaseSuccessResponse markReads( @CurrentUser UserPrincipal userPrincipal, 
 			@RequestBody MarkReadNotificationReuqest markReadNotificationReuqest) {

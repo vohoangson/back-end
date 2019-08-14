@@ -116,102 +116,97 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_REGISTER,
                 		UrlConstant.URL_CONFIRM_ACCOUNT,
                 		UrlConstant.URL_RESEND_REGISTRATION_TOKEN,
-                		UrlConstant.URL_AMW_UPLOAD_FILE,
-                		UrlConstant.URL_AMW_DELETE_FILE,
+                		UrlConstant.URL_AMW,
                 		UrlConstant.URL_NOTIFICATIONS_ENDPOINT)
                         .permitAll()
                     .antMatchers(HttpMethod.GET, 
-                		UrlConstant.URL_COMPANY, 
-                		UrlConstant.URL_COMPANY_ID,
-                		UrlConstant.URL_JOB, 
-                		UrlConstant.URL_JOB_ID,
-                		UrlConstant.URL_CANDIDATE, 
-                		UrlConstant.URL_CANDIDATE_ID,
+                		UrlConstant.URL_COMPANIES, 
+                		UrlConstant.URL_COMPANY,
+                		UrlConstant.URL_JOBS, 
+                		UrlConstant.URL_JOB,
+                		UrlConstant.URL_CANDIDATES, 
+                		UrlConstant.URL_CANDIDATE,
                 		UrlConstant.URL_BUSINESS,
-                		UrlConstant.URL_COUNTRY,
-                		UrlConstant.URL_CITY,
+                		UrlConstant.URL_COUNTRIES,
+                		UrlConstant.URL_CITIES,
                 		UrlConstant.URL_DISTRICT,
-                		UrlConstant.URL_LEVEL,
+                		UrlConstant.URL_LEVELS,
                 		UrlConstant.URL_CONTRACT,
                 		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT,
                 		UrlConstant.URL_USER,
                 		UrlConstant.URL_REQUEST_TRANSLATIONS,
-                		UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
+                		UrlConstant.URL_REQUEST_TRANSLATION)
                     	.permitAll()
                 	.antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_REQUEST_TRANSLATION_CANCEL)
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_CANCEL)
                 		.permitAll()
             		.antMatchers(HttpMethod.POST,
                 		UrlConstant.URL_REQUEST_TRANSLATIONS)
                     	.hasAnyRole("COMPANY","CANDIDATE","ADMIN")	
                 	.antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_REQUEST_TRANSLATION_ACCEPT_APPLY,
-                		UrlConstant.URL_REQUEST_TRANSLATION_ACCEPT_FINISHED,
-                		UrlConstant.URL_REQUEST_TRANSLATION_REFUSE_FINISHED,
-                		UrlConstant.URL_REQUEST_TRANSLATION_REJECT)
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_ACCEPT_APPLY,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_ACCEPT_FINISHED,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_REFUSE_FINISHED,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_REJECT)
                     	.hasAnyRole("COMPANY","CANDIDATE","ADMIN")	
                     .antMatchers(HttpMethod.POST,
+                		UrlConstant.URL_COMPANIES,
+                		UrlConstant.URL_JOBS)
+                    	.hasAnyRole("COMPANY","ADMIN")
+                    .antMatchers(HttpMethod.PATCH,
                 		UrlConstant.URL_COMPANY,
                 		UrlConstant.URL_JOB)
                     	.hasAnyRole("COMPANY","ADMIN")
-                    .antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_COMPANY_ID,
-                		UrlConstant.URL_JOB_ID)
-                    	.hasAnyRole("COMPANY","ADMIN")
                 	.antMatchers(HttpMethod.POST,
-                		UrlConstant.URL_CANDIDATE_PERSONAL,
-                		UrlConstant.URL_CANDIDATE_ID_EXPERIENCE)
+                		UrlConstant.URL_CANDIDATE_PERSONALS,
+                		UrlConstant.URL_CANDIDATE_EXPERIENCE)
                     	.hasAnyRole("CANDIDATE","ADMIN")
                     .antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_CANDIDATE_ID_PERSONAL,
-                		UrlConstant.URL_CANDIDATE_ID_WISH)
+                		UrlConstant.URL_CANDIDATE_PERSONAL,
+                		UrlConstant.URL_CANDIDATE_WISH)
                     	.hasAnyRole("CANDIDATE","ADMIN")
                 	.antMatchers(HttpMethod.DELETE,
-                		UrlConstant.URL_JOB_ID
+                		UrlConstant.URL_JOB
                 		).hasAnyRole("ADMIN","COMPANY")
                     .antMatchers(HttpMethod.PATCH,
-                		UrlConstant.URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN,
-                		UrlConstant.URL_REQUEST_TRANSLATION_CONFIRM_FINISHED)
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_TRANSLATOR_JOIN,
+                		UrlConstant.URL_REQUEST_TRANSLATIONS_CONFIRM_FINISHED)
                     	.hasAnyRole("TRANSLATOR","ADMIN")
                     .antMatchers(HttpMethod.DELETE,
-                		UrlConstant.URL_COMPANY_ID,
-                		UrlConstant.URL_CANDIDATE_ID
+                		UrlConstant.URL_COMPANY,
+                		UrlConstant.URL_CANDIDATE
                 		).hasRole("ADMIN")
-                    .antMatchers(
-                		UrlConstant.URL_COMPANY_UNDEL_ID,
-                		UrlConstant.URL_JOB_UNDEL,
-                		UrlConstant.URL_CANDIDATE_UNDEL
+                    .antMatchers(HttpMethod.PATCH,
+                		UrlConstant.URL_COMPANY_UNDELETE,
+                		UrlConstant.URL_JOB,
+                		UrlConstant.URL_CANDIDATE
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.POST,
                 		UrlConstant.URL_BUSINESS,
-                		UrlConstant.URL_COUNTRY,
-                		UrlConstant.URL_CITY,
+                		UrlConstant.URL_COUNTRIES,
                 		UrlConstant.URL_CITIES,
+                		UrlConstant.URL_CITIES_BATCH,
                 		UrlConstant.URL_DISTRICT,
                 		UrlConstant.URL_DISTRICTS,
-                		UrlConstant.URL_LEVEL,
-                		UrlConstant.URL_CONTRACT,
-                		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT
+                		UrlConstant.URL_LEVELS,
+                		UrlConstant.URL_CONTRACTS,
+                		UrlConstant.URL_LANGUAGUE_TYPE
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.PATCH,
-                		UrlConstant.URL_BUSINESS_ID,
-                		UrlConstant.URL_CITY_ID,
-                		UrlConstant.URL_DISTRICT_ID,
-                		UrlConstant.URL_LEVEL_ID,
-                		UrlConstant.URL_CONTRACT_ID,
-                		UrlConstant.URL_LANGUAGUE_TYPE_ID,
-                		UrlConstant.URL_CURRENCYUNIT_ID
+                		UrlConstant.URL_BUSINESS,
+                		UrlConstant.URL_CITY,
+                		UrlConstant.URL_DISTRICT,
+                		UrlConstant.URL_LEVEL,
+                		UrlConstant.URL_CONTRACT,
+                		UrlConstant.URL_LANGUAGUE_TYPE
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.DELETE,
-                		UrlConstant.URL_BUSINESS_ID,
-                		UrlConstant.URL_CITY_ID,
-                		UrlConstant.URL_DISTRICT_ID,
-                		UrlConstant.URL_LEVEL_ID,
-                		UrlConstant.URL_CONTRACT_ID,
-                		UrlConstant.URL_LANGUAGUE_TYPE,
-                		UrlConstant.URL_CURRENCYUNIT_ID
+                		UrlConstant.URL_BUSINESS,
+                		UrlConstant.URL_CITY,
+                		UrlConstant.URL_DISTRICT,
+                		UrlConstant.URL_LEVEL,
+                		UrlConstant.URL_CONTRACT,
+                		UrlConstant.URL_LANGUAGUE_TYPE
                 		).hasRole("ADMIN")
                     .anyRequest()
                         .permitAll()
