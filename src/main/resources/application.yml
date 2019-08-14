@@ -66,8 +66,8 @@ app:
 amazonProperties:
   url: https://s3.amazonaws.com
   region: us-east-1
-  accessKey: AKIAXNXIB2BRHJTCC54U
-  secretKey: 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
+  accessKey: AKIAXNXIB2BRKLFM4ZE2
+  secretKey: 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
   bucketName: amazon.japanwork
 rabbitmq:
     image: rabbitmq:management
