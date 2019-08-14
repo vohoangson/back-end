@@ -25,28 +25,28 @@ public class CityController {
 	private CityService cityService;
 	
 	
-	@GetMapping(UrlConstant.URL_CITY)
+	@GetMapping(UrlConstant.URL_CITIES)
 	@ResponseBody
 	public BaseDataResponse listCity() {
 		List<City> list = cityService.findAllByIsDelete();
 		return new BaseDataResponse(list);
 	}
 	
-	@GetMapping(UrlConstant.URL_CITIES_ID)
+	@GetMapping(UrlConstant.URL_COUNTRIES_CITIES)
 	@ResponseBody
 	public BaseDataResponse listCityByCountry(@PathVariable String code) {
 		List<City> list = cityService.listCityByCountry(code);
 		return new BaseDataResponse(list);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_CITY)
+	@PostMapping(value = UrlConstant.URL_CITIES)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody CityRequest cityRequest) {		
 		City city = cityService.save(cityRequest);
 		return new BaseDataResponse(city);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_CITIES)
+	@PostMapping(value = UrlConstant.URL_CITIES_BATCH)
 	@ResponseBody
 	public BaseDataResponse createList(@Valid @RequestBody ListCityRequest listCityRequest) {		
 		List<City> list =  cityService.saves(listCityRequest);

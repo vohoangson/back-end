@@ -23,14 +23,14 @@ public class LanguageCertificateTypeController {
 	@Autowired
 	private LanguageCertificateTypeService languageCertificateTypeService;
 	
-	@GetMapping(UrlConstant.URL_LANGUAGUE_TYPE)
+	@GetMapping(UrlConstant.URL_LANGUAGUE_TYPES)
 	@ResponseBody
 	public BaseDataResponse listLanguageCertificateType() {
 		List<LanguageCertificateType> list = languageCertificateTypeService.findAllByIsDelete();
 		return new BaseDataResponse(list);
 	}
 	
-	@PostMapping(value = UrlConstant.URL_LANGUAGUE_TYPE)
+	@PostMapping(value = UrlConstant.URL_LANGUAGUE_TYPES)
 	@ResponseBody
 	public BaseDataResponse create(@Valid @RequestBody LanguageCertificateTypeRequest languageCertificateTypeRequest) {		
 		LanguageCertificateType obj = languageCertificateTypeService.save(languageCertificateTypeRequest);

@@ -30,19 +30,19 @@ public class FavoriteController {
 	@Autowired
 	private JobService jobService;
 	
-	@PostMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE_ID)
+	@PostMapping(UrlConstant.URL_CANDIDATES_JOB_FAVORITE)
 	@ResponseBody
 	public BaseDataResponse canidateFavoriteJob(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
 		return new BaseDataResponse(favoriteService.canidateFavoriteJob(id, userPrincipal));
 	}
 	
-	@DeleteMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE_ID)
+	@DeleteMapping(UrlConstant.URL_CANDIDATES_JOB_FAVORITE)
 	@ResponseBody
 	public BaseDataResponse canidateUnFavoriteJob(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
 		return new BaseDataResponse(favoriteService.canidateUnFavoriteJob(id, userPrincipal));
 	}
 	
-	@GetMapping(UrlConstant.URL_CANDIDATE_JOB_FAVORITE)
+	@GetMapping(UrlConstant.URL_CANDIDATES_JOB_FAVORITES)
 	@ResponseBody
 	public BaseDataResponse listFavoriteJob(@CurrentUser UserPrincipal userPrincipal) {
 		List<Job> list = favoriteService.listFavoriteJob(userPrincipal);

@@ -43,7 +43,7 @@ public class CompanyController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(UrlConstant.URL_COMPANY)
+	@GetMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
 	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
@@ -92,7 +92,7 @@ public class CompanyController {
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
 
-	@GetMapping(UrlConstant.URL_COMPANY_ID)
+	@GetMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public BaseDataResponse findCompanyByIdAndIsDelete(@PathVariable UUID id){
 		Company company = companyService.findByIdAndIsDelete(id);
@@ -106,7 +106,7 @@ public class CompanyController {
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
 
-	@PatchMapping(UrlConstant.URL_COMPANY_ID)
+	@PatchMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public BaseDataResponse update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id,
 			@CurrentUser UserPrincipal userPrincipal){
@@ -114,7 +114,7 @@ public class CompanyController {
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
 
-	@DeleteMapping(UrlConstant.URL_COMPANY_ID)
+	@DeleteMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public BaseDataResponse isDel(@PathVariable UUID id) {
 		Date date = new Date();
@@ -125,14 +125,14 @@ public class CompanyController {
 		return new BaseDataResponse(baseMessageResponse);
 	}
 
-	@GetMapping(UrlConstant.URL_COMPANY_UNDEL_ID)
+	@PatchMapping(UrlConstant.URL_COMPANY_UNDELETE)
 	@ResponseBody
 	public BaseDataResponse unDel(@PathVariable UUID id) {
 		Company company =  companyService.isDel(id, null);
 		return new BaseDataResponse(companyService.convertCompanyResponse(company));
 	}
 
-	@DeleteMapping(UrlConstant.URL_COMPANY_DEL_ID)
+	@DeleteMapping(UrlConstant.URL_COMPANY_DEL)
 	@ResponseBody
 	public BaseDataResponse del(@PathVariable UUID id) {
 		companyService.del(companyService.findById(id));

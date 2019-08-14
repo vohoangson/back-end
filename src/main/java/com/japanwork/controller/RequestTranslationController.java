@@ -69,49 +69,49 @@ public class RequestTranslationController {
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_TRANSLATOR_JOIN)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_TRANSLATOR_JOIN)
 	@ResponseBody
 	public BaseDataResponse translatorJoinRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslationResponse response = requestTranslationService.translatorJoinRequestTranslation(id, userPrincipal);
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_ACCEPT_APPLY)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ACCEPT_APPLY)
 	@ResponseBody
 	public BaseDataResponse ownerAcceptApllyRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslationResponse response = requestTranslationService.ownerAcceptApllyRequestTranslation(id, userPrincipal);
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_CONFIRM_FINISHED)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_CONFIRM_FINISHED)
 	@ResponseBody
 	public BaseDataResponse translatorConfirmFinishedRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslationResponse response = requestTranslationService.translatorConfirmFinishedRequestTranslation(id, userPrincipal);
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_ACCEPT_FINISHED)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ACCEPT_FINISHED)
 	@ResponseBody
 	public BaseDataResponse ownerAcceptFinishRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslationResponse response = requestTranslationService.ownerAcceptFinishRequestTranslation(id, userPrincipal);
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_REFUSE_FINISHED)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_REFUSE_FINISHED)
 	@ResponseBody
 	public BaseDataResponse ownerRefuseFinishRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslationResponse response = requestTranslationService.ownerRefuseFinishRequestTranslation(id, userPrincipal);
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_CANCEL)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_CANCEL)
 	@ResponseBody
 	public BaseDataResponse cancelRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, @RequestBody CancelRequestTranslationRequest reasonCancel){
 		RequestTranslationResponse response = requestTranslationService.cancelRequestTranslation(id, userPrincipal, reasonCancel);
 		return new BaseDataResponse(response);
 	}
 	
-	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATION_REJECT)
+	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_REJECT)
 	@ResponseBody
 	public BaseDataResponse rejectRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, @RequestBody RejectRequestTranslationRequest reasonReject){
 		RequestTranslationResponse response = requestTranslationService.rejectRequestTranslation(id, userPrincipal, reasonReject);
@@ -151,7 +151,7 @@ public class RequestTranslationController {
 		
 	}
 	
-	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ID)
+	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATION)
 	@ResponseBody
 	public BaseDataResponse requestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslation requestTranslation = requestTranslationService.requestTranslation(id, userPrincipal);
@@ -159,7 +159,7 @@ public class RequestTranslationController {
 		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
 	}
 	
-	@GetMapping(UrlConstant.URL_JOB_APPLICATION_ID_REQUEST)
+	@GetMapping(UrlConstant.URL_JOB_APPLICATIONS_REQUEST)
 	@ResponseBody
 	public BaseDataResponse requestTranslationByJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslation requestTranslation = requestTranslationService.requestTranslationByJobApplication(id, userPrincipal);
