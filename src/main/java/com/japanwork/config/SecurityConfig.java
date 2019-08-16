@@ -163,7 +163,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     	.hasAnyRole("CANDIDATE","ADMIN")
                     .antMatchers(HttpMethod.PATCH,
                 		UrlConstant.URL_CANDIDATE_PERSONAL,
-                		UrlConstant.URL_CANDIDATE_WISH)
+                		UrlConstant.URL_CANDIDATE_EXPECTED)
                     	.hasAnyRole("CANDIDATE","ADMIN")
                 	.antMatchers(HttpMethod.DELETE,
                 		UrlConstant.URL_JOB

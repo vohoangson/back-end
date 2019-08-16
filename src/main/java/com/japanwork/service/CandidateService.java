@@ -34,7 +34,7 @@ import com.japanwork.model.User;
 import com.japanwork.payload.request.AcademyRequest;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
-import com.japanwork.payload.request.CandidateWishRequest;
+import com.japanwork.payload.request.CandidateExpectedRequest;
 import com.japanwork.payload.request.ExperienceRequest;
 import com.japanwork.payload.request.LanguageCertificateRequest;
 import com.japanwork.payload.response.CandidateResponse;
@@ -72,7 +72,7 @@ public class CandidateService {
 			candidate.setMarital(candidatePersonalRequest.getMarital());
 			candidate.setResidentalCity(new City(candidatePersonalRequest.getResidentalCityId()));
 			candidate.setResidentalDistrict(new District(candidatePersonalRequest.getResidentalDistrictId()));
-			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
+			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddress());
 			candidate.setAvatar(candidatePersonalRequest.getAvatar());
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
@@ -111,7 +111,7 @@ public class CandidateService {
 			candidate.setMarital(candidatePersonalRequest.getMarital());
 			candidate.setResidentalCity(new City(candidatePersonalRequest.getResidentalCityId()));
 			candidate.setResidentalDistrict(new District(candidatePersonalRequest.getResidentalDistrictId()));
-			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
+			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddress());
 			candidate.setAvatar(candidatePersonalRequest.getAvatar());
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
@@ -127,7 +127,7 @@ public class CandidateService {
 		}
 	}
 	
-	public Candidate updateWish(CandidateWishRequest candidateWishRequest, UUID id,UserPrincipal userPrincipal) 
+	public Candidate updateWish(CandidateExpectedRequest candidateExpectedRequest, UUID id,UserPrincipal userPrincipal) 
 			throws ResourceNotFoundException, ServerError{
 		try {
 			Date date = new Date();
@@ -142,13 +142,13 @@ public class CandidateService {
 						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
 			}
 	
-			candidate.setWishWorkingCity(new City(candidateWishRequest.getWishWorkingCityId()));
-			candidate.setWishWorkingDistrict(new District(candidateWishRequest.getWishWorkingDistrictId()));
-			candidate.setWishWorkingAddress(candidateWishRequest.getWishWorkingAddress());
-			candidate.setWishBusiness(new Business(candidateWishRequest.getWishBusinessId()));
-			candidate.setWishLevel(new Level(candidateWishRequest.getWishLevelId()));
-			candidate.setWishContract(new Contract(candidateWishRequest.getWishContractId()));
-			candidate.setWishSalary(candidateWishRequest.getWishSalary());
+			candidate.setExpectedWorkingCity(new City(candidateExpectedRequest.getExpectedWorkingCityId()));
+			candidate.setExpectedWorkingDistrict(new District(candidateExpectedRequest.getExpectedWorkingDistrictId()));
+			candidate.setExpectedWorkingAddress(candidateExpectedRequest.getExpectedWorkingAddress());
+			candidate.setExpectedBusiness(new Business(candidateExpectedRequest.getExpectedBusinessId()));
+			candidate.setExpectedLevel(new Level(candidateExpectedRequest.getExpectedLevelId()));
+			candidate.setExpectedContract(new Contract(candidateExpectedRequest.getExpectedContractId()));
+			candidate.setExpectedSalary(candidateExpectedRequest.getExpectedSalary());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(2);
 			candidate.setUpdatedAt(timestamp);
@@ -336,29 +336,29 @@ public class CandidateService {
 		candidateResponse.setIntroduction(candidate.getIntroduction());
 		candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
 		
-		if(candidate.getWishWorkingCity() != null) {
-			candidateResponse.setWishWorkingCityId(candidate.getWishWorkingCity().getId());
+		if(candidate.getExpectedWorkingCity() != null) {
+			candidateResponse.setExpectedWorkingCityId(candidate.getExpectedWorkingCity().getId());
 		}
 		
-		if(candidate.getWishWorkingDistrict() != null) {
-			candidateResponse.setWishWorkingDistrictId(candidate.getWishWorkingDistrict().getId());
+		if(candidate.getExpectedWorkingDistrict() != null) {
+			candidateResponse.setExpectedWorkingDistrictId(candidate.getExpectedWorkingDistrict().getId());
 		}
 		
-		candidateResponse.setWishWorkingAddress(candidate.getWishWorkingAddress());
+		candidateResponse.setExpectedWorkingAddress(candidate.getExpectedWorkingAddress());
 		
-		if(candidate.getWishBusiness() != null) {
-			candidateResponse.setWishBusinessId(candidate.getWishBusiness().getId());
+		if(candidate.getExpectedBusiness() != null) {
+			candidateResponse.setExpectedBusinessId(candidate.getExpectedBusiness().getId());
 		}
 		
-		if(candidate.getWishLevel() != null) {
-			candidateResponse.setWishLevelId(candidate.getWishLevel().getId());
+		if(candidate.getExpectedLevel() != null) {
+			candidateResponse.setExpectedLevelId(candidate.getExpectedLevel().getId());
 		}
 		
-		if(candidate.getWishContract() != null) {
-			candidateResponse.setWishContractId(candidate.getWishContract().getId());
+		if(candidate.getExpectedContract() != null) {
+			candidateResponse.setExpectedContractId(candidate.getExpectedContract().getId());
 		}
 		
-		candidateResponse.setWishSalary(candidate.getWishSalary());
+		candidateResponse.setExpectedSalary(candidate.getExpectedSalary());
 
 		candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
 		candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
