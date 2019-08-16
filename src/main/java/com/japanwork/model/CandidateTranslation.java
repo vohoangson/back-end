@@ -153,8 +153,7 @@ public class CandidateTranslation {
         this.deletedAt = deletedAt;
     }
 
-    public CandidateTranslation(Candidate candidate, Language language, String fullName,
-                                String residentalAddres, String introduction,
+    public CandidateTranslation(Candidate candidate, Language language, String fullName, String residentalAddres, String introduction,
                                 String expectedWorkingAddress, Timestamp createdAt, Timestamp updatedAt) {
         this.candidate = candidate;
         this.language = language;

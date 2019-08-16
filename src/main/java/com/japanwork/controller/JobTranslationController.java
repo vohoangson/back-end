@@ -2,19 +2,19 @@ package com.japanwork.controller;
 
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.Job;
 import com.japanwork.model.JobTranslation;
+import com.japanwork.model.Language;
 import com.japanwork.payload.request.JobTranslationRequest;
 import com.japanwork.payload.response.BaseSuccessResponse;
 import com.japanwork.service.JobTranslationService;
 import com.japanwork.support.CommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 public class JobTranslationController {
@@ -26,18 +26,22 @@ public class JobTranslationController {
 
     @PostMapping(UrlConstant.URL_JOB_TRANSLATION)
     @ResponseBody
-    public BaseSuccessResponse create(@Valid @RequestBody JobTranslationRequest jobTranslationRequest)
-            throws BadRequestException {
+    public ResponseDataAPI create(
+            @PathVariable UUID id,
+            @Valid @RequestBody JobTranslationRequest jobTranslationRequest
+    ) throws BadRequestException {
+        Job job           = commonSupport.loadJob(id );
+        Language language = commonSupport.loadLanguage(jobTranslationRequest.getLanguageId());
 
-        commonSupport.loadJob(jobTranslationRequest.getJobId());
-        commonSupport.loadTranslator(jobTranslationRequest.getTranslatorId());
-        commonSupport.loadLanguage(jobTranslationRequest.getLanguageId());
-
-        JobTranslation jobTranslation = jobTranslationService.save(jobTranslationRequest);
-        return new BaseSuccessResponse(
-                "success",
-                null,
-                null
+        JobTranslation jobTranslation = jobTranslationService.save(
+                job,
+                language,
+                jobTranslationRequest
         );
+
+        ResponseDataAPI responseDataAPI = new ResponseDataAPI();
+        responseDataAPI.savedSuccess();
+
+        return responseDataAPI;
     }
 }

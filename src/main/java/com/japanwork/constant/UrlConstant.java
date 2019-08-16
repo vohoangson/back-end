@@ -64,7 +64,7 @@ public class UrlConstant {
 	public static final String URL_JOB_UNDELETE = "/v1/jobs/{id}/undelete";
 
 	//Job Translation
-    public static final String URL_JOB_TRANSLATION = "v1/job_translations";
+    public static final String URL_JOB_TRANSLATION = "/v1/job/{id}/job_translations";
 
 	//Job Application
     public static final String URL_JOB_APPLICATIONS_CANDIDATE_JOIN = "/v1/jobs/{id}/apply";
@@ -123,7 +123,7 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_EXPERIENCE = "/v1/candidates/{id}/experience";
 
 	//Candidate translation
-    public static final String URL_CANDIDATE_TRANSLATION = "/v1/v1/candidates/{id}/candidate_translations";
+    public static final String URL_CANDIDATE_TRANSLATION = "/v1/candidates/{id}/candidate_translations";
 
 	//Upload file on AWS
 	public static final String URL_AMW = "/v1/storages";

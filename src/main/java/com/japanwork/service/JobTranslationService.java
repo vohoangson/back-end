@@ -1,6 +1,7 @@
 package com.japanwork.service;
 
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.*;
 import com.japanwork.payload.request.JobTranslationRequest;
 import com.japanwork.repository.job_translation.JobTranslationRepository;
@@ -25,15 +26,17 @@ public class JobTranslationService {
     @Autowired
     private UserService userService;
 
-    public JobTranslation save(JobTranslationRequest jobTranslationRequest) throws ServerError {
+    public JobTranslation save(
+            Job job,
+            Language language,
+            JobTranslationRequest jobTranslationRequest) throws ServerError {
         try {
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
-            JobTranslation jobTranslation = new JobTranslation();
 
-            jobTranslation.setJob(new Job(jobTranslationRequest.getJobId()));
-            jobTranslation.setTranslator(new Translator(jobTranslationRequest.getTranslatorId()));
-            jobTranslation.setLanguage(new Language(jobTranslationRequest.getLanguageId()));
+            JobTranslation jobTranslation = new JobTranslation();
+            jobTranslation.setJob(job);
+            jobTranslation.setLanguage(language);
             jobTranslation.setName(jobTranslationRequest.getName());
             jobTranslation.setAddress(jobTranslationRequest.getAddress());
             jobTranslation.setDescription(jobTranslationRequest.getDescription());
@@ -48,7 +51,7 @@ public class JobTranslationService {
             JobTranslation result = jobTranslationRepository.save(jobTranslation);
             return result;
         } catch (Exception e) {
-            throw new ServerError(MessageConstant.CREATED_SUCCESS);
+            throw new BadRequestException(MessageConstant.CREATED_SUCCESS);
         }
     }
 }

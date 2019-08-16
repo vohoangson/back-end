@@ -42,15 +42,13 @@ public class CompanyTranlationController {
 	@ResponseBody
 	public ResponseDataAPI create(
             @PathVariable UUID id,
-	        @Valid @RequestBody CompanyTranslationRequest companyTranslationRequest
+            @Valid @RequestBody CompanyTranslationRequest companyTranslationRequest
     ) throws BadRequestException{
-	    Company company       = commonSupport.loadCompany(id);
-        Translator translator = commonSupport.loadTranslator(companyTranslationRequest.getTranslatorId());
+        Company company       = commonSupport.loadCompany(id);
         Language language     = commonSupport.loadLanguage(companyTranslationRequest.getLanguageId());
 
 		CompanyTranslation companyTranslation = companyTranslationService.save(
-		        company,
-                translator,
+                company,
                 language,
                 companyTranslationRequest
         );

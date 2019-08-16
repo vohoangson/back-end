@@ -1,38 +1,24 @@
 package com.japanwork.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.UUID;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CompanyTranslationRequest {
-    @NotNull(message = "translator_required")
-    private UUID translatorId;
-
-	@NotNull(message = "language_required")
+    @NotNull(message = "language_required")
     private UUID languageId;
 
-	@NotBlank(message = "name_company_required")
+    @NotBlank(message = "name_company_required")
     @Size(max = 128)
-	private String name;
+    private String name;
 
-	@NotBlank(message = "address_required")
+    @NotBlank(message = "address_required")
     @Size(max = 256)
-	private String address;
+    private String address;
 
     @Size(max = 1000)
-	private String introduction;
-
-    public UUID getTranslatorId() {
-        return translatorId;
-    }
-
-    public void setTranslatorId(UUID translatorId) {
-        this.translatorId = translatorId;
-    }
+    private String introduction;
 
     public UUID getLanguageId() {
         return languageId;
@@ -46,15 +32,15 @@ public class CompanyTranslationRequest {
 		return name;
 	}
 
-	public void setName(String name) {
+    public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getAddress() {
+    public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+    public void setAddress(String address) {
 		this.address = address;
 	}
 

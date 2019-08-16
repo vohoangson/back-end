@@ -2,6 +2,7 @@ package com.japanwork.repository.CandidateTranslation;
 
 import com.japanwork.model.Candidate;
 import com.japanwork.model.CandidateTranslation;
+import com.japanwork.model.Language;
 import com.japanwork.model.Translator;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -137,7 +138,7 @@ public class CandidateTranslationRepositoryImplement implements CandidateTransla
     }
 
     @Override
-    public CandidateTranslation findByCandidateAndTranslatorAndDeletedAt(Candidate candidate, Translator translator, Timestamp deletedAt) {
-        return findByCandidateAndTranslatorAndDeletedAt(candidate, translator, deletedAt);
+    public CandidateTranslation findByCandidateAndLanguageAndDeletedAt(Candidate candidate, Language language, Timestamp deletedAt) {
+        return findByCandidateAndLanguageAndDeletedAt(candidate, language, deletedAt);
     }
 }
