@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -15,22 +17,24 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "forget_password")
+@Where(clause = "deleted_at IS NULL")
 public class ForgetPassword {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
 	@Column(name="code")
 	private String code;
-	
+
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
+    @Where(clause = "deleted_at IS NULL")
 	private User user;
-	
+
 	@Column(name="created_at")
 	private Timestamp createdAt;
-	
+
 	public UUID getId() {
 		return id;
 	}
@@ -71,6 +75,6 @@ public class ForgetPassword {
 	}
 
 	public ForgetPassword() {
-		
+
 	}
 }

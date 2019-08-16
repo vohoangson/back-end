@@ -13,36 +13,39 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="district")
+@Where(clause = "deleted_at IS NULL")
 public class District {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
 	@OneToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private City city;
-	
+
 	@Column(name="name_vi")
     private String vi;
-    
+
     @Column(name="name_ja")
     private String ja;
-    
-    @Column(name="description")
+
+    @Column(name="description", length = 1000)
     private String desc;
-    
+
     @JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
@@ -54,7 +57,7 @@ public class District {
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
+
 	public City getCity() {
 		return city;
 	}
@@ -126,8 +129,8 @@ public class District {
 	public District(UUID id) {
 		this.id = id;
 	}
-	
+
 	public District() {
-		
+
 	}
 }

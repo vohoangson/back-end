@@ -11,32 +11,34 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "level")
+@Where(clause = "deleted_at IS NULL")
 public class Level {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private UUID id;
-    
-    @Column(name="name_vi")
+
+    @Column(name="name_vi", unique = true)
     private String vi;
-    
-    @Column(name="name_ja")
+
+    @Column(name="name_ja", unique = true)
     private String ja;
-    
-    @Column(name="description")
+
+    @Column(name="description", length = 1000)
     private String desc;
-    
+
     @JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
@@ -111,7 +113,7 @@ public class Level {
 	public Level(UUID id) {
 		this.id = id;
 	}
-	
+
 	public Level() {
 
 	}

@@ -56,7 +56,7 @@ public class UrlConstant {
 	public static final String URL_COMPANY_REQUEST = "/v1/companies/{id}/requests";
 
 	//Company Translation
-    public static final String URL_COMPANY_TRANSLATION = "/v1/company_translations";
+    public static final String URL_COMPANY_TRANSLATION = "/v1/companies/{id}/company_translations";
 
 	//Job
 	public static final String URL_JOBS = "/v1/jobs";

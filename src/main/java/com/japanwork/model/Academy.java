@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -13,39 +15,41 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="academy")
+@Where(clause = "deleted_at IS NULL")
 public class Academy {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
-	@Column(name="candidate_id")
+
+	@Column(name="candidate_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private UUID candidateId;
-	
-	@Column(name="academy_center_name")
+
+	@Column(name="academy_center_name", nullable = false, length = 128)
 	private String academyCenterName;
-	
-	@Column(name="major_name")
+
+	@Column(name="major_name", nullable = false, length = 128)
 	private String majorName;
-	
-	@Column(name="grade")
+
+	@Column(name="grade", length = 32)
 	private float grade;
-	
-	@Column(name="grade_system")
+
+	@Column(name="grade_system", length = 64)
 	private int gradeSystem;
-	
+
 	@Column(name="start_date")
 	private Date startDate;
-	
+
 	@Column(name="end_date")
 	private Date endDate;
-	
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 
@@ -128,7 +132,7 @@ public class Academy {
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
 	public Timestamp getDeletedAt() {
 		return deletedAt;
 	}
@@ -155,7 +159,7 @@ public class Academy {
 	public Academy(UUID id) {
 		this.id = id;
 	}
-	
+
 	public Academy() {
 
 	}

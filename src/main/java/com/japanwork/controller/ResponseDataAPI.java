@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class ResponseDataAPI {
     private String status;
     private Object data;
-    private Object errors;
+    private Object error;
     private Object meta;
 
     public String getStatus() {
@@ -25,12 +25,12 @@ public class ResponseDataAPI {
         this.data = data;
     }
 
-    public Object getErrors() {
-        return errors;
+    public Object getError() {
+        return error;
     }
 
-    public void setErrors(Object errors) {
-        this.errors = errors;
+    public void setError(Object error) {
+        this.error = error;
     }
 
     public Object getMeta() {
@@ -39,5 +39,19 @@ public class ResponseDataAPI {
 
     public void setMeta(Object meta) {
         this.meta = meta;
+    }
+
+    public void setStatusSuccess() {
+        this.status = "success";
+    }
+
+    public void setStatusFailure() {
+        this.status = "failure";
+    }
+
+    public void savedSuccess() {
+        this.status = "success";
+        this.data   = "";
+        this.meta   = "";
     }
 }

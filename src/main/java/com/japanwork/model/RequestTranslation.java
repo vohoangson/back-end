@@ -1,62 +1,65 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name="request_translation")
+@Table(
+        name="request_translation",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"objectable_id", "language_id"})}
+)
+@Where(clause = "deleted_at IS NULL")
 public class RequestTranslation {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-    
-	@Column(name = "owner_id")
+
+	@Column(name = "owner_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private UUID ownerId;
-	
-	@Column(name = "objectable_id")
+
+	@Column(name = "objectable_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private UUID objectableId;
-    
+
     @OneToOne
     @JoinColumn(name = "translator_id")
+    @Where(clause = "deleted_at IS NULL")
     private Translator translator;
-    
-    @Column(name="objectable_type")
+
+    @Column(name="objectable_type", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private String objectableType;
-    
-    @Column(name="description")
+
+    @Column(name="description", length = 2000)
     private String desc;
-    
+
     @OneToOne
     @JoinColumn(name="conversation_id")
+    @Where(clause = "deleted_at IS NULL")
     private Conversation conversation;
-    
+
     @OneToOne
-    @JoinColumn(name="language_id")
+    @JoinColumn(name="language_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Language language;
-    
-    @OneToMany(mappedBy = "requestTranslation")
+
+    @OneToMany(mappedBy = "requestTranslation", orphanRemoval = true)
     @OrderBy("createdAt DESC")
     private Set<RequestStatus> requestStatus;
-    
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 

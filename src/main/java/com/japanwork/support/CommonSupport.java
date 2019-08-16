@@ -31,7 +31,7 @@ public class CommonSupport {
     @Autowired
     private CandidateRepository candidateRepository;
 
-    public void loadCompany(UUID id) throws ResourceNotFound {
+    public Company loadCompany(UUID id) throws ResourceNotFound {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
         if(company == null) {
             throw new ResourceNotFound(
@@ -39,9 +39,10 @@ public class CommonSupport {
                     MessageConstant.COMPANY_NOT_FOUND
             );
         }
+        return company;
     }
 
-    public void loadLanguage(UUID id) throws ResourceNotFound {
+    public Language loadLanguage(UUID id) throws ResourceNotFound {
         Language language = languageRepository.findByIdAndDeletedAt(id, null);
         if(language == null) {
             throw new ResourceNotFound(
@@ -49,9 +50,10 @@ public class CommonSupport {
                     MessageConstant.LANGUAGE_NOT_FOUND
             );
         }
+        return language;
     }
 
-    public void loadJob(UUID id) throws ResourceNotFound {
+    public Job loadJob(UUID id) throws ResourceNotFound {
         Job job = jobRepository.findByIdAndDeletedAt(id, null);
         if(job == null) {
             throw new ResourceNotFound(
@@ -59,9 +61,10 @@ public class CommonSupport {
                     MessageConstant.JOB_NOT_FOUND
             );
         }
+        return job;
     }
 
-    public void loadTranslator(UUID id) throws ResourceNotFound {
+    public Translator loadTranslator(UUID id) throws ResourceNotFound {
         Translator translator = translatorRepository.findByIdAndDeletedAt(id, null);
         if(translator == null) {
             throw new ResourceNotFound(
@@ -69,9 +72,10 @@ public class CommonSupport {
                     MessageConstant.TRANSLATOR_NOT_FOUND
             );
         }
+        return translator;
     }
 
-    public void loadCandidate(UUID id) throws ResourceNotFound {
+    public Candidate loadCandidate(UUID id) throws ResourceNotFound {
         Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
         if(candidate == null) {
             throw new ResourceNotFound(
@@ -79,5 +83,6 @@ public class CommonSupport {
                     MessageConstant.CANDIDATE_NOT_FOUND
             );
         }
+        return candidate;
     }
 }

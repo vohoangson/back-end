@@ -12,6 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="company")
+@Where(clause = "deleted_at IS NULL")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,31 +20,35 @@ public class Company {
 	private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private User user;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", orphanRemoval = true)
     @Where(clause = "deleted_at IS NULL")
     private Set<CompanyTranslation> companyTranslations;
 
-    @Column(name="name")
+    @Column(name="name", nullable = false)
     private String name;
 
     @ManyToMany
     @JoinTable(name = "company_business",
       joinColumns = { @JoinColumn(name = "company_id") },
       inverseJoinColumns = {@JoinColumn(name = "business_id") })
+    @Where(clause = "deleted_at IS NULL")
     private Set<Business> businesses = new HashSet<>();
 
     @Column(name="scale")
     private int scale;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private City city;
 
     @ManyToOne
     @JoinColumn(name = "district_id")
+    @Where(clause = "deleted_at IS NULL")
     private District district;
 
     @Column(name="address")
@@ -55,7 +60,7 @@ public class Company {
     @Column(name="cover_image_url")
     private String coverImageUrl;
 
-    @Column(name="introduction")
+    @Column(name="introduction", length = 2000)
     private String introduction;
 
     @Column(name="status")

@@ -30,17 +30,11 @@ public class CandidateTranslationService {
 
             CandidateTranslation candidateTranslation = new CandidateTranslation(
                     new Candidate(id),
-                    new Translator(candidateTranslationRequest.getTranslatorId()),
                     new Language(candidateTranslationRequest.getLanguageId()),
                     candidateTranslationRequest.getFullName(),
-                    candidateTranslationRequest.getDateOfBirth(),
-                    candidateTranslationRequest.getGender(),
-                    candidateTranslationRequest.getMarital(),
                     candidateTranslationRequest.getResidentalAddress(),
                     candidateTranslationRequest.getIntroduction(),
-                    candidateTranslationRequest.getJapaneseLevel(),
                     candidateTranslationRequest.getExpectedWorkingAddress(),
-                    candidateTranslationRequest.getExpectedSalary(),
                     timestamp,
                     timestamp
             );

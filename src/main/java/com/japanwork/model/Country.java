@@ -1,33 +1,34 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
+@Where(clause = "deleted_at IS NULL")
 public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(name="name", nullable = false)
     private String name;
-    
+
+    @Column(name="code", nullable = false, unique = true)
     private String code;
-    
+
     @OneToOne
-    @JoinColumn(name = "language_id")
+    @JoinColumn(name = "language_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Language language;
-    
+
     private Timestamp createdAt;
-    
+
     private Timestamp updatedAt;
-    
+
     private Timestamp deletedAt;
 
     public UUID getId() {
@@ -85,7 +86,7 @@ public class Country {
 	public void setDeletedAt(Timestamp deletedAt) {
 		this.deletedAt = deletedAt;
 	}
-	
+
 	public Country(UUID id, String name, String code, Language language, Timestamp createdAt,
 			Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;

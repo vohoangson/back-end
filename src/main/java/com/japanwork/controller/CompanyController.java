@@ -81,21 +81,21 @@ public class CompanyController {
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
 
-	@GetMapping(UrlConstant.URL_COMPANY)
-    @ResponseBody
-    public BaseSuccessResponse show(
-            @PathVariable UUID id,
-            @RequestParam UUID language_id
-    ) throws BadRequestException {
-        commonSupport.loadLanguage(language_id);
-
-        Company company = companyService.show(id, language_id);
-        return new BaseSuccessResponse(
-                "success",
-                companyService.convertCompanyResponse(company),
-                null
-        );
-    }
+//	@GetMapping(UrlConstant.URL_COMPANY)
+//    @ResponseBody
+//    public BaseSuccessResponse show(
+//            @PathVariable UUID id,
+//            @RequestParam UUID language_id
+//    ) throws BadRequestException {
+//        commonSupport.loadLanguage(language_id);
+//
+//        Company company = companyService.show(id, language_id);
+//        return new BaseSuccessResponse(
+//                "success",
+//                companyService.convertCompanyResponse(company),
+//                null
+//        );
+//    }
 
 	@PostMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
