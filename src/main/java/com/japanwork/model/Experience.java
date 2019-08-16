@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -15,41 +17,43 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="experience")
+@Where(clause = "deleted_at IS NULL")
 public class Experience {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
-    @Column(name = "candidate_id")
+
+    @Column(name = "candidate_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private UUID candidateId;
-	
+
 	@Column(name="organizaion")
 	private String organizaion;
-	
-	@Column(name="description")
+
+	@Column(name="description", length = 2000)
 	private String desc;
-	
+
 	@ManyToOne
-    @JoinColumn(name = "level_id")
+    @JoinColumn(name = "level_id", nullable = false)
 	private Level level;
-	
+
 	@ManyToOne
     @JoinColumn(name = "business_id")
 	private Business business;
-	
+
 	@Column(name="start_date")
 	private Date startDate;
-	
+
 	@Column(name="end_date")
 	private Date endDate;
-	
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 
@@ -161,7 +165,7 @@ public class Experience {
 		super();
 		this.id = id;
 	}
-	
+
 	public Experience() {
 		super();
 	}

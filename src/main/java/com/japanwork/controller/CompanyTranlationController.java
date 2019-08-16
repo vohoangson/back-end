@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.japanwork.model.Company;
+import com.japanwork.model.Language;
+import com.japanwork.model.Translator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -37,25 +40,32 @@ public class CompanyTranlationController {
 
 	@PostMapping(UrlConstant.URL_COMPANY_TRANSLATION)
 	@ResponseBody
-	public BaseSuccessResponse create(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest,
-			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
+	public ResponseDataAPI create(
+            @PathVariable UUID id,
+	        @Valid @RequestBody CompanyTranslationRequest companyTranslationRequest
+    ) throws BadRequestException{
+	    Company company       = commonSupport.loadCompany(id);
+        Translator translator = commonSupport.loadTranslator(companyTranslationRequest.getTranslatorId());
+        Language language     = commonSupport.loadLanguage(companyTranslationRequest.getLanguageId());
 
-	    commonSupport.loadCompany(companyTranslationRequest.getCompanyId());
-        commonSupport.loadLanguage(companyTranslationRequest.getLanguageId());
-
-		CompanyTranslation companyTranslation = companyTranslationService.save(companyTranslationRequest, userPrincipal);
-		return new BaseSuccessResponse(
-		        "success",
-		        null,
-                null
+		CompanyTranslation companyTranslation = companyTranslationService.save(
+		        company,
+                translator,
+                language,
+                companyTranslationRequest
         );
+
+		ResponseDataAPI responseDataAPI = new ResponseDataAPI();
+		responseDataAPI.savedSuccess();
+
+		return responseDataAPI;
 	}
 
-	@PatchMapping(UrlConstant.URL_COMPANY_TRANSLATION_BY_ID)
-	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, @PathVariable UUID id,
-			@CurrentUser UserPrincipal userPrincipal){
-		CompanyTranslation companyTranslation = companyTranslationService.update(companyTranslationRequest, id, userPrincipal);
-		return new BaseDataResponse(companyTranslationService.convertCompanyResponse(companyTranslation));
-	}
+//	@PatchMapping(UrlConstant.URL_COMPANY_TRANSLATION_BY_ID)
+//	@ResponseBody
+//	public BaseDataResponse update(@Valid @RequestBody CompanyTranslationRequest companyTranslationRequest, @PathVariable UUID id,
+//			@CurrentUser UserPrincipal userPrincipal){
+//		CompanyTranslation companyTranslation = companyTranslationService.update(companyTranslationRequest, id, userPrincipal);
+//		return new BaseDataResponse(companyTranslationService.convertCompanyResponse(companyTranslation));
+//	}
 }

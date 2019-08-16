@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
+import com.japanwork.model.CompanyTranslation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID>{
 	public Company findByUserAndDeletedAt(User user, Timestamp deletedAt);
 	public Company findByUser(User user);
 	public Page<Company> findAllByIdInAndDeletedAt(Pageable page, Iterable<UUID> ids, Timestamp deletedAt);
+
+//	public CompanyTranslation findByCompanyAndDeletedAt(Company company, Timestamp deletedAt);
 }

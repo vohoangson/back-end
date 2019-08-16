@@ -13,38 +13,44 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "favorite")
+@Where(clause = "deleted_at IS NULL")
 public class Favorite {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
 	@ManyToOne
     @JoinColumn(name = "candidate_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Candidate candidate;
-	
+
 	@ManyToOne
     @JoinColumn(name = "job_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Job job;
-	
+
 	@ManyToOne
     @JoinColumn(name = "company_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Company company;
-	
+
 	@ManyToOne
     @JoinColumn(name = "translator_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Translator translator;
-	
+
 	@Column(name = "favorite_type")
 	private String favoriteType;
-	
+
 	@JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;

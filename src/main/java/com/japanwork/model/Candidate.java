@@ -20,104 +20,113 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="candidate")
+@Where(clause = "deleted_at IS NULL")
 public class Candidate {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
 	@OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @Where(clause = "deleted_at IS NULL")
 	private User user;
-	
-	@Column(name="name")
+
+	@Column(name="name", nullable = false, length = 128)
 	private String fullName;
-	
-	@Column(name="dob")
+
+	@Column(name="dob", nullable = false)
 	private Date dateOfBirth;
-	
-	@Column(name="gender")
+
+	@Column(name="gender", nullable = false)
 	private String gender;
-	
-	@Column(name="marital")
+
+	@Column(name="marital", length = 64)
 	private String marital;
-	
+
 	@ManyToOne
     @JoinColumn(name = "residental_city_id")
+    @Where(clause = "deleted_at IS NULL")
     private City residentalCity;
 
     @ManyToOne
-    @JoinColumn(name = "residental_district_id")   
+    @JoinColumn(name = "residental_district_id")
+    @Where(clause = "deleted_at IS NULL")
     private District residentalDistrict;
-    
+
     @Column(name="residental_address")
     private String residentalAddres;
-    
+
     @Column(name="avatar_url")
     private String avatar;
-    
-    @Column(name="introduction")
+
+    @Column(name="introduction", length = 2000)
     private String introduction;
-    
+
     @Column(name="japanese_level")
     private int japaneseLevel;
-    
+
     @ManyToOne
     @JoinColumn(name = "expected_working_city_id")
+    @Where(clause = "deleted_at IS NULL")
     private City wishWorkingCity;
 
     @ManyToOne
-    @JoinColumn(name = "expected_working_district_id")   
+    @JoinColumn(name = "expected_working_district_id")
+    @Where(clause = "deleted_at IS NULL")
     private District wishWorkingDistrict;
-    
+
     @Column(name="expected_working_address")
     private String wishWorkingAddress;
-    
+
     @ManyToOne
     @JoinColumn(name="expected_business_type_id")
+    @Where(clause = "deleted_at IS NULL")
     private Business wishBusiness;
-    
+
     @ManyToOne
     @JoinColumn(name="expected_level_id")
+    @Where(clause = "deleted_at IS NULL")
     private Level wishLevel;
-    
+
     @ManyToOne
     @JoinColumn(name="expected_contract_type_id")
+    @Where(clause = "deleted_at IS NULL")
     private Contract wishContract;
 
     @Column(name="expected_salary")
     private float wishSalary;
-    
-    @OneToMany
+
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name="candidate_id")
-    @Where(clause = "deleted_at is null")
+    @Where(clause = "deleted_at IS NULL")
 	private Set<Academy> academies;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name="candidate_id")
-    @Where(clause = "deleted_at is null")
+    @Where(clause = "deleted_at IS NULL")
 	private Set<Experience> experiences;
-    
-    @OneToMany
+
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name="candidate_id")
-    @Where(clause = "deleted_at is null")
+    @Where(clause = "deleted_at IS NULL")
 	private Set<LanguageCertificate> languageCertificates;
-    
+
     @Column(name="status")
     private String status;
 
     @Column(name="status_info")
     private int statusInfo;
-    
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
-    
+
 	public UUID getId() {
 		return id;
 	}
@@ -141,7 +150,7 @@ public class Candidate {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	
+
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
@@ -165,7 +174,7 @@ public class Candidate {
 	public void setMarital(String marital) {
 		this.marital = marital;
 	}
-	
+
 	public City getResidentalCity() {
 		return residentalCity;
 	}
@@ -293,7 +302,7 @@ public class Candidate {
 	public void setLanguageCertificates(Set<LanguageCertificate> languageCertificates) {
 		this.languageCertificates = languageCertificates;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -372,7 +381,7 @@ public class Candidate {
 	public Candidate(UUID id) {
 		this.id = id;
 	}
-	
+
 	public Candidate() {
 
 	}

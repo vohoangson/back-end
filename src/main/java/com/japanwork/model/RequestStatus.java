@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -15,41 +17,45 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="request_status")
+@Where(clause = "deleted_at IS NULL")
 public class RequestStatus {
-	
+
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
-	@Column(name = "creator_id")
+
+	@Column(name = "creator_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private UUID creatorId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "request_translation_id")
+    @Where(clause = "deleted_at IS NULL")
 	private RequestTranslation requestTranslation;
-	
+
 	@OneToOne
     @JoinColumn(name = "translator_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Translator translator;
-	
-	@Column(name = "reason")
+
+	@Column(name = "reason", length = 1000)
 	private String reason;
-	
+
 	@Column(name = "status")
 	private String status;
-	
+
 	@Column(name = "created_at")
 	private Timestamp createdAt;
-	
+
 	public UUID getId() {
 		return id;
 	}
-	
+
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
+
 	public UUID getCreatorId() {
 		return creatorId;
 	}
@@ -77,11 +83,11 @@ public class RequestStatus {
 	public String getReason() {
 		return reason;
 	}
-	
+
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -89,11 +95,11 @@ public class RequestStatus {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
-	
+
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
@@ -115,5 +121,5 @@ public class RequestStatus {
 
 	public RequestStatus() {
 	}
-	
+
 }

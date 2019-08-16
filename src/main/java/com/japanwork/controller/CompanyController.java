@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.japanwork.payload.response.*;
+import com.japanwork.support.CommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,10 +29,6 @@ import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.Company;
 import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.CompanyRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
-import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CompanyService;
@@ -40,10 +38,14 @@ import com.japanwork.service.UserService;
 public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
+
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(UrlConstant.URL_COMPANIES)
+    @Autowired
+    private CommonSupport commonSupport;
+
+    @GetMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
 	public BaseDataMetaResponse listCompany(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
@@ -59,13 +61,13 @@ public class CompanyController {
 
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_COMPANY_IDS)
 	@ResponseBody
 	public BaseDataMetaResponse listCompanyByIds(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(name = "ids") Set<UUID> ids) {
-		
+
 		Page<Company> pages = companyService.companiesByIds(ids, page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
@@ -78,6 +80,22 @@ public class CompanyController {
 
 		return new BaseDataMetaResponse(list, pageInfo);
 	}
+
+//	@GetMapping(UrlConstant.URL_COMPANY)
+//    @ResponseBody
+//    public BaseSuccessResponse show(
+//            @PathVariable UUID id,
+//            @RequestParam UUID language_id
+//    ) throws BadRequestException {
+//        commonSupport.loadLanguage(language_id);
+//
+//        Company company = companyService.show(id, language_id);
+//        return new BaseSuccessResponse(
+//                "success",
+//                companyService.convertCompanyResponse(company),
+//                null
+//        );
+//    }
 
 	@PostMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody

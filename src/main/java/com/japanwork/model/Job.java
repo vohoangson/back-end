@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -15,43 +17,50 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="job")
+@Where(clause = "deleted_at IS NULL")
 public class Job {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
 
-	@Column(name="name")
+	@Column(name="name", nullable = false, length = 128)
     private String name;
 
 	@ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Company company;
 
 	@ManyToOne
 	@JoinColumn(name = "business_id")
+    @Where(clause = "deleted_at IS NULL")
     private Business businesses;
 
 	@ManyToOne
     @JoinColumn(name = "contract_type_id")
+    @Where(clause = "deleted_at IS NULL")
     private Contract contract;
 
 	@ManyToOne
     @JoinColumn(name = "level_id")
+    @Where(clause = "deleted_at IS NULL")
     private Level level;
 
 	@ManyToOne
     @JoinColumn(name = "work_place_city_id")
+    @Where(clause = "deleted_at IS NULL")
     private City city;
 
 	@ManyToOne
     @JoinColumn(name = "work_place_district_id")
+    @Where(clause = "deleted_at IS NULL")
     private District district;
 
     @Column(name="work_place_address")
     private String address;
 
-    @Column(name="description")
+    @Column(name="description", length = 2000)
     private String desc;
 
     @Column(name="required_education")

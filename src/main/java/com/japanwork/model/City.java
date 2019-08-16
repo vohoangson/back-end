@@ -12,35 +12,38 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "city")
+@Where(clause = "deleted_at IS NULL")
 public class City {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
     @JsonProperty("country_code")
-    @Column(name="country_code")
+    @Column(name="country_code", unique = true)
 	private String countryCode;
-	
+
 	@Column(name="name_vi")
     private String vi;
-    
+
     @Column(name="name_ja")
     private String ja;
-    
+
     @Column(name="description")
     private String desc;
-    
+
     @JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
@@ -124,7 +127,7 @@ public class City {
 	public City(UUID id) {
 		this.id = id;
 	}
-	
+
 	public City() {
 
 	}

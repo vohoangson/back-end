@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -14,27 +16,31 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "conversation")
+@Where(clause = "deleted_at IS NULL")
 public class Conversation {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
 	@OneToOne
     @JoinColumn(name = "company_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Company company;
-	
+
 	@OneToOne
     @JoinColumn(name = "candidate_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Candidate candidate;
-	
+
 	@OneToOne
     @JoinColumn(name = "translator_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Translator translator;
-	
+
 	@JoinColumn(name = "created_at")
 	private Timestamp createdAt;
-	
+
 	@JoinColumn(name = "deleted_at")
 	private Timestamp deletedAt;
 
@@ -98,5 +104,5 @@ public class Conversation {
 
 	public Conversation() {
 
-	}	
+	}
 }

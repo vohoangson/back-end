@@ -3,19 +3,16 @@ package com.japanwork.model;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name="company_translation")
+@Table(
+        name="company_translation",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"company_id", "language_id"})}
+)
+@Where(clause = "deleted_at IS NULL")
 public class CompanyTranslation {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -82,7 +79,15 @@ public class CompanyTranslation {
 		this.translator = translator;
 	}
 
-	public String getName() {
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public String getName() {
 		return name;
 	}
 
@@ -145,14 +150,13 @@ public class CompanyTranslation {
 		this.translator = translator;
 		this.name = name;
 		this.introduction = introduction;
-		this.address = address;
-		this.status = status;
-		this.createdAt = createdAt;
+        this.address = address;
+        this.status = status;
+        this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
 	}
 
 	public CompanyTranslation() {
-
 	}
 }

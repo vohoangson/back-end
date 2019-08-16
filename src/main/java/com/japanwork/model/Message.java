@@ -13,36 +13,40 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "message")
+@Where(clause = "deleted_at IS NULL")
 public class Message {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private long id;
-	
+
 	@Column(name = "sender_id")
+    @Where(clause = "deleted_at IS NULL")
 	private UUID senderId;
-	
+
 	@Column(name = "content")
 	private String content;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "conversation_id")
+	@JoinColumn(name = "conversation_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private Conversation conversation;
-	
+
 	@Column(name = "is_read")
 	private boolean isRead;
-	
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
@@ -125,5 +129,5 @@ public class Message {
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;
 	}
-	
+
 }

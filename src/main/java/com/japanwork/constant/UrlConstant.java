@@ -37,7 +37,7 @@ public class UrlConstant {
 	public static final String URL_COUNTRIES = "/v1/countries";
 	public static final String URL_COUNTRY = "/v1/countries/{id}";
 	public static final String URL_COUNTRIES_CITIES = "/v1/countries/{code}/cities";
-	
+
 	//City
 	public static final String URL_CITIES = "/v1/cities";
 	public static final String URL_CITIES_BATCH = "/v1/cities/batch";
@@ -54,6 +54,9 @@ public class UrlConstant {
 	public static final String URL_COMPANY_DEL = "/v1/companies/{id}/delete";
 	public static final String URL_COMPANY_JOB_APPLICATION = "/v1/companies/{id}/job_applications";
 	public static final String URL_COMPANY_REQUEST = "/v1/companies/{id}/requests";
+
+	//Company Translation
+    public static final String URL_COMPANY_TRANSLATION = "/v1/companies/{id}/company_translations";
 
 	//Job
 	public static final String URL_JOBS = "/v1/jobs";
@@ -133,8 +136,4 @@ public class UrlConstant {
 	public static final String URL_TRANSLATORS_UNDEL = "/v1/translators/{id}/undelete";
 	public static final String URL_TRANSLATORS_JOB_APPLICATIONS = "/v1/translators/{id}/job_applications";
 	public static final String URL_TRANSLATORS_REQUESTS = "/v1/translators/{id}/requests";
-
-	//Company Translation
-    public static final String URL_COMPANY_TRANSLATION = "/v1/company_translations";
-    public static final String URL_COMPANY_TRANSLATION_BY_ID = "/v1/company_translations/{id}";
 }
