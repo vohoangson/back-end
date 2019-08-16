@@ -11,7 +11,7 @@ public class CandidateTranslationRequest {
     @JsonProperty("language_id")
     private UUID languageId;
 
-    @NotBlank(message = "name_not_blank")
+    @NotBlank
     @JsonProperty("full_name")
     @Size(max = 128)
     private String fullName;
@@ -21,7 +21,7 @@ public class CandidateTranslationRequest {
     @Size(max = 255)
     private String residentalAddress;
 
-    @NotBlank(message = "introduction_not_blank")
+    @NotBlank
     @Size(max = 1000)
     private String introduction;
 

@@ -35,26 +35,26 @@ public class CandidateResponse {
     @JsonProperty("japanese_level")
     private int japaneseLevel;
     
-    @JsonProperty("wish_working_city_id")
-    private UUID wishWorkingCityId;
+    @JsonProperty("expected_working_city_id")
+    private UUID expectedWorkingCityId;
 
-    @JsonProperty("wish_working_district_id") 
-    private UUID wishWorkingDistrictId;
+    @JsonProperty("expected_working_district_id") 
+    private UUID expectedWorkingDistrictId;
     
-    @JsonProperty("wish_working_address")
-    private String wishWorkingAddress;
+    @JsonProperty("expected_working_address")
+    private String expectedWorkingAddress;
     
-    @JsonProperty("wish_business_id")
-    private UUID wishBusinessId;
+    @JsonProperty("expected_business_id")
+    private UUID expectedBusinessId;
     
-    @JsonProperty("wish_level_id")
-    private UUID wishLevelId;
+    @JsonProperty("expected_level_id")
+    private UUID expectedLevelId;
     
-    @JsonProperty("wish_contract_id")
-    private UUID wishContractId;
+    @JsonProperty("expected_contract_id")
+    private UUID expectedContractId;
 
-    @JsonProperty("wish_salary")
-    private float wishSalary;
+    @JsonProperty("expected_salary")
+    private float expectedSalary;
     
 	private Set<AcademyResponse> academies;
 
@@ -151,60 +151,60 @@ public class CandidateResponse {
 		this.japaneseLevel = japaneseLevel;
 	}
 
-	public UUID getWishWorkingCityId() {
-		return wishWorkingCityId;
+	public UUID getExpectedWorkingCityId() {
+		return expectedWorkingCityId;
 	}
 
-	public void setWishWorkingCityId(UUID wishWorkingCityId) {
-		this.wishWorkingCityId = wishWorkingCityId;
+	public void setExpectedWorkingCityId(UUID expectedWorkingCityId) {
+		this.expectedWorkingCityId = expectedWorkingCityId;
 	}
 
-	public UUID getWishWorkingDistrictId() {
-		return wishWorkingDistrictId;
+	public UUID getExpectedWorkingDistrictId() {
+		return expectedWorkingDistrictId;
 	}
 
-	public void setWishWorkingDistrictId(UUID wishWorkingDistrictId) {
-		this.wishWorkingDistrictId = wishWorkingDistrictId;
+	public void setExpectedWorkingDistrictId(UUID expectedWorkingDistrictId) {
+		this.expectedWorkingDistrictId = expectedWorkingDistrictId;
 	}
 
-	public String getWishWorkingAddress() {
-		return wishWorkingAddress;
+	public String getExpectedWorkingAddress() {
+		return expectedWorkingAddress;
 	}
 
-	public void setWishWorkingAddress(String wishWorkingAddress) {
-		this.wishWorkingAddress = wishWorkingAddress;
+	public void setExpectedWorkingAddress(String expectedWorkingAddress) {
+		this.expectedWorkingAddress = expectedWorkingAddress;
 	}
 
-	public UUID getWishBusinessId() {
-		return wishBusinessId;
+	public UUID getExpectedBusinessId() {
+		return expectedBusinessId;
 	}
 
-	public void setWishBusinessId(UUID wishBusinessId) {
-		this.wishBusinessId = wishBusinessId;
+	public void setExpectedBusinessId(UUID expectedBusinessId) {
+		this.expectedBusinessId = expectedBusinessId;
 	}
 
-	public UUID getWishLevelId() {
-		return wishLevelId;
+	public UUID getExpectedLevelId() {
+		return expectedLevelId;
 	}
 
-	public void setWishLevelId(UUID wishLevelId) {
-		this.wishLevelId = wishLevelId;
+	public void setExpectedLevelId(UUID expectedLevelId) {
+		this.expectedLevelId = expectedLevelId;
 	}
 
-	public UUID getWishContractId() {
-		return wishContractId;
+	public UUID getExpectedContractId() {
+		return expectedContractId;
 	}
 
-	public void setWishContractId(UUID wishContractId) {
-		this.wishContractId = wishContractId;
+	public void setExpectedContractId(UUID expectedContractId) {
+		this.expectedContractId = expectedContractId;
 	}
 
-	public float getWishSalary() {
-		return wishSalary;
+	public float getExpectedSalary() {
+		return expectedSalary;
 	}
 
-	public void setWishSalary(float wishSalary) {
-		this.wishSalary = wishSalary;
+	public void setExpectedSalary(float expectedSalary) {
+		this.expectedSalary = expectedSalary;
 	}
 
 	public Set<AcademyResponse> getAcademies() {
@@ -233,11 +233,10 @@ public class CandidateResponse {
 
 	public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital,
 			UUID residentalCityId, UUID residentalDistrictId, String residentalAddres, String avatar,
-			String introduction, int japaneseLevel, UUID wishWorkingCityId, UUID wishWorkingDistrictId,
-			String wishWorkingAddress, UUID wishBusinessId, UUID wishLevelId, UUID wishContractId, float wishSalary,
-			Set<AcademyResponse> academies, Set<ExperienceResponse> experiences,
+			String introduction, int japaneseLevel, UUID expectedWorkingCityId, UUID expectedWorkingDistrictId,
+			String expectedWorkingAddress, UUID expectedBusinessId, UUID expectedLevelId, UUID expectedContractId,
+			float expectedSalary, Set<AcademyResponse> academies, Set<ExperienceResponse> experiences,
 			Set<LanguageCertificateResponse> languageCertificates) {
-		super();
 		this.id = id;
 		this.fullName = fullName;
 		this.dateOfBirth = dateOfBirth;
@@ -249,19 +248,19 @@ public class CandidateResponse {
 		this.avatar = avatar;
 		this.introduction = introduction;
 		this.japaneseLevel = japaneseLevel;
-		this.wishWorkingCityId = wishWorkingCityId;
-		this.wishWorkingDistrictId = wishWorkingDistrictId;
-		this.wishWorkingAddress = wishWorkingAddress;
-		this.wishBusinessId = wishBusinessId;
-		this.wishLevelId = wishLevelId;
-		this.wishContractId = wishContractId;
-		this.wishSalary = wishSalary;
+		this.expectedWorkingCityId = expectedWorkingCityId;
+		this.expectedWorkingDistrictId = expectedWorkingDistrictId;
+		this.expectedWorkingAddress = expectedWorkingAddress;
+		this.expectedBusinessId = expectedBusinessId;
+		this.expectedLevelId = expectedLevelId;
+		this.expectedContractId = expectedContractId;
+		this.expectedSalary = expectedSalary;
 		this.academies = academies;
 		this.experiences = experiences;
 		this.languageCertificates = languageCertificates;
 	}
 
 	public CandidateResponse() {
-		super();
+
 	}
 }

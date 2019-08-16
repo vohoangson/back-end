@@ -3,17 +3,27 @@ package com.japanwork.payload.request;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RequestTranslationRequest {
+	@NotNull
 	@JsonProperty("objectable_id")
 	private Set<UUID> objectableId;
 	
+	@NotBlank
+	@Size(max = 128)
 	@JsonProperty("request_type")
 	private String requestType;
 	
+	@NotBlank
+	@Size(max = 2000)
 	private String desc;
 	
+	@NotNull
 	@JsonProperty("language_id")
 	private Set<UUID> languageId;
 

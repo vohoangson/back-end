@@ -1,15 +1,12 @@
 package com.japanwork.exception;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -22,6 +19,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.payload.response.BaseErrorResponse;
 import com.japanwork.payload.response.BaseErrorsResponse;
@@ -82,34 +80,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
       HttpHeaders headers, HttpStatus status, WebRequest request) {
 		List<ObjectError> listError = ex.getBindingResult().getAllErrors();
-		String code = listError.get(listError.size()-1).getDefaultMessage();
-		String msg = "";
-		Properties prop = new Properties();
-	    InputStream input = null;
+		ObjectError objectError = listError.get(listError.size()-1);
+		String error = CommonFunction.convertToSnakeCase(objectError.getCode());
+		String fieldName = CommonFunction.convertToSnakeCase(((FieldError) objectError).getField());
+		String resource = CommonFunction.convertToSnakeCase(objectError.getObjectName());
+		
+		BaseErrorResponse baseErrorResponse = CommonFunction.getErrorFromYAML(resource, fieldName, error, "errors.yml");
 
-	    try {
-	        input = new FileInputStream("src/main/resources/validate.properties");
-
-	        // load a properties file
-	        prop.load(input);
-	        msg = prop.getProperty(code);
-
-            //text.replaceAll("([^_A-Z])([A-Z])", "$1_$2").toLowerCase();
-
-	    } catch (IOException e) {
-	        ex.printStackTrace();
-	    } finally {
-	        if (input != null) {
-	            try {
-	                input.close();
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    }
-		BaseErrorResponse error = new BaseErrorResponse(code, msg);
-
-	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
+	    return new ResponseEntity<Object>(baseErrorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

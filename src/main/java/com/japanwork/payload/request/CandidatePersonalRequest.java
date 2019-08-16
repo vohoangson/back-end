@@ -5,42 +5,47 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CandidatePersonalRequest {	
-	@NotBlank(message = "full_name_required")
+	@NotBlank
+	@Size(max = 128)
 	@JsonProperty("full_name")
 	private String fullName;
 	
-	@NotNull(message = "date_of_birth_required")
+	@NotNull
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
 	
-	@NotBlank(message = "gender_required")
+	@NotBlank
 	private String gender;
 	
-	@NotBlank(message = "marital_required")
+	@NotBlank
 	private String marital;
 	
-	@NotNull(message = "residental_city_required")
+	@NotNull
 	@JsonProperty("residental_city_id")
     private UUID residentalCityId;
 
-	@NotNull(message = "residental_district_required")
-	@JsonProperty("residental_district_id") 
+	@NotNull
+	@JsonProperty("residental_district_id")
     private UUID residentalDistrictId;
     
-	@NotBlank(message = "residental_address_required")
+	@NotBlank
 	@JsonProperty("residental_address")
-    private String residentalAddres;
+    private String residentalAddress;
 
-	@NotBlank(message = "avatar_required")
+	@NotBlank
+	@Size(max = 1000)
     private String avatar;
     
+	@NotBlank
+	@Size(max = 2000)
     private String introduction;
     
-    @JsonProperty("japanese_level")
+    @JsonProperty
     private int japaneseLevel;
 
 	public String getFullName() {
@@ -91,12 +96,12 @@ public class CandidatePersonalRequest {
 		this.residentalDistrictId = residentalDistrictId;
 	}
 
-	public String getResidentalAddres() {
-		return residentalAddres;
+	public String getResidentalAddress() {
+		return residentalAddress;
 	}
 
-	public void setResidentalAddres(String residentalAddres) {
-		this.residentalAddres = residentalAddres;
+	public void setResidentalAddress(String residentalAddress) {
+		this.residentalAddress = residentalAddress;
 	}
 
 	public String getAvatar() {

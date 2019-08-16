@@ -7,34 +7,44 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TranslatorRequest {
-	@NotBlank(message = "name_translator_required")
+	@NotBlank
+	@Size(min = 8, max = 128)
 	private String name;
 	
-	@NotBlank(message = "gender_required")
+	@NotBlank
 	private String gender;
 	
-	@NotNull(message = "date_of_birth_required")
+	@NotNull
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
 	
-	@NotNull(message = "city_required")
+	@NotNull
 	@JsonProperty("city_id")
 	private UUID cityId;
-	@NotNull(message = "district_required")
+	
+	@NotNull
 	@JsonProperty("district_id")
 	private UUID districtId;
-	@NotBlank(message = "address_required")
+	
+	@NotBlank
+	@Size(max = 128)
 	private String address;
+	
+	@NotBlank
+	@Size(max = 2000)
 	private String introduction;
-	@NotBlank(message = "avatar_required")
+	
+	@NotBlank
+	@Size(max = 1000)
 	private String avatar;
 	
 	@JsonProperty("japanese_level")
-	@NotNull(message = "japanese_level_required")
+	@NotNull
 	@Min(1)
 	@Max(5)
 	private int japaneseLevel;

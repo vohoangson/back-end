@@ -117,7 +117,7 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_PERSONAL = "/v1/candidates/{id}/personal";
 
 	//Candidate expected
-	public static final String URL_CANDIDATE_WISH = "/v1/candidates/{id}/wish";
+	public static final String URL_CANDIDATE_EXPECTED = "/v1/candidates/{id}/expected";
 
 	//Candidate experience
 	public static final String URL_CANDIDATE_EXPERIENCE = "/v1/candidates/{id}/experience";

@@ -68,35 +68,35 @@ public class Candidate {
 
     @ManyToOne
     @JoinColumn(name = "expected_working_city_id")
-    @Where(clause = "deleted_at IS NULL")
-    private City wishWorkingCity;
+	@Where(clause = "deleted_at IS NULL")
+    private City expectedWorkingCity;
 
     @ManyToOne
     @JoinColumn(name = "expected_working_district_id")
     @Where(clause = "deleted_at IS NULL")
-    private District wishWorkingDistrict;
-
+    private District expectedWorkingDistrict;
+    
     @Column(name="expected_working_address")
-    private String wishWorkingAddress;
-
+    private String expectedWorkingAddress;
+    
     @ManyToOne
     @JoinColumn(name="expected_business_type_id")
     @Where(clause = "deleted_at IS NULL")
-    private Business wishBusiness;
-
+    private Business expectedBusiness;
+    
     @ManyToOne
     @JoinColumn(name="expected_level_id")
     @Where(clause = "deleted_at IS NULL")
-    private Level wishLevel;
-
+    private Level expectedLevel;
+    
     @ManyToOne
     @JoinColumn(name="expected_contract_type_id")
     @Where(clause = "deleted_at IS NULL")
-    private Contract wishContract;
+    private Contract expectedContract;
 
     @Column(name="expected_salary")
-    private float wishSalary;
-
+    private float expectedSalary;
+    
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="candidate_id")
     @Where(clause = "deleted_at IS NULL")
@@ -222,61 +222,60 @@ public class Candidate {
 	public void setJapaneseLevel(int japaneseLevel) {
 		this.japaneseLevel = japaneseLevel;
 	}
-
-	public City getWishWorkingCity() {
-		return wishWorkingCity;
+	public City getExpectedWorkingCity() {
+		return expectedWorkingCity;
 	}
 
-	public void setWishWorkingCity(City wishWorkingCity) {
-		this.wishWorkingCity = wishWorkingCity;
+	public void setExpectedWorkingCity(City expectedWorkingCity) {
+		this.expectedWorkingCity = expectedWorkingCity;
 	}
 
-	public District getWishWorkingDistrict() {
-		return wishWorkingDistrict;
+	public District getExpectedWorkingDistrict() {
+		return expectedWorkingDistrict;
 	}
 
-	public void setWishWorkingDistrict(District wishWorkingDistrict) {
-		this.wishWorkingDistrict = wishWorkingDistrict;
+	public void setExpectedWorkingDistrict(District expectedWorkingDistrict) {
+		this.expectedWorkingDistrict = expectedWorkingDistrict;
 	}
 
-	public String getWishWorkingAddress() {
-		return wishWorkingAddress;
+	public String getExpectedWorkingAddress() {
+		return expectedWorkingAddress;
 	}
 
-	public void setWishWorkingAddress(String wishWorkingAddress) {
-		this.wishWorkingAddress = wishWorkingAddress;
+	public void setExpectedWorkingAddress(String expectedWorkingAddress) {
+		this.expectedWorkingAddress = expectedWorkingAddress;
 	}
 
-	public Business getWishBusiness() {
-		return wishBusiness;
+	public Business getExpectedBusiness() {
+		return expectedBusiness;
 	}
 
-	public void setWishBusiness(Business wishBusiness) {
-		this.wishBusiness = wishBusiness;
+	public void setExpectedBusiness(Business expectedBusiness) {
+		this.expectedBusiness = expectedBusiness;
 	}
 
-	public Level getWishLevel() {
-		return wishLevel;
+	public Level getExpectedLevel() {
+		return expectedLevel;
 	}
 
-	public void setWishLevel(Level wishLevel) {
-		this.wishLevel = wishLevel;
+	public void setExpectedLevel(Level expectedLevel) {
+		this.expectedLevel = expectedLevel;
 	}
 
-	public Contract getWishContract() {
-		return wishContract;
+	public Contract getExpectedContract() {
+		return expectedContract;
 	}
 
-	public void setWishContract(Contract wishContract) {
-		this.wishContract = wishContract;
+	public void setExpectedContract(Contract expectedContract) {
+		this.expectedContract = expectedContract;
 	}
 
-	public float getWishSalary() {
-		return wishSalary;
+	public float getExpectedSalary() {
+		return expectedSalary;
 	}
 
-	public void setWishSalary(float wishSalary) {
-		this.wishSalary = wishSalary;
+	public void setExpectedSalary(float expectedSalary) {
+		this.expectedSalary = expectedSalary;
 	}
 
 	public Set<Academy> getAcademies() {
@@ -345,10 +344,11 @@ public class Candidate {
 
 	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital,
 			City residentalCity, District residentalDistrict, String residentalAddres, String avatar,
-			String introduction, int japaneseLevel, City wishWorkingCity, District wishWorkingDistrict,
-			String wishWorkingAddress, Business wishBusiness, Level wishLevel, Contract wishContract, float wishSalary,
-			Set<Academy> academies, Set<Experience> experiences, Set<LanguageCertificate> languageCertificates,
-			String status, int statusInfo, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+			String introduction, int japaneseLevel, City expectedWorkingCity, District expectedWorkingDistrict,
+			String expectedWorkingAddress, Business expectedBusiness, Level expectedLevel, Contract expectedContract,
+			float expectedSalary, Set<Academy> academies, Set<Experience> experiences,
+			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createdAt,
+			Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
 		this.user = user;
 		this.fullName = fullName;
@@ -361,13 +361,13 @@ public class Candidate {
 		this.avatar = avatar;
 		this.introduction = introduction;
 		this.japaneseLevel = japaneseLevel;
-		this.wishWorkingCity = wishWorkingCity;
-		this.wishWorkingDistrict = wishWorkingDistrict;
-		this.wishWorkingAddress = wishWorkingAddress;
-		this.wishBusiness = wishBusiness;
-		this.wishLevel = wishLevel;
-		this.wishContract = wishContract;
-		this.wishSalary = wishSalary;
+		this.expectedWorkingCity = expectedWorkingCity;
+		this.expectedWorkingDistrict = expectedWorkingDistrict;
+		this.expectedWorkingAddress = expectedWorkingAddress;
+		this.expectedBusiness = expectedBusiness;
+		this.expectedLevel = expectedLevel;
+		this.expectedContract = expectedContract;
+		this.expectedSalary = expectedSalary;
 		this.academies = academies;
 		this.experiences = experiences;
 		this.languageCertificates = languageCertificates;

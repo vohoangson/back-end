@@ -29,7 +29,7 @@ import com.japanwork.model.Candidate;
 import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
-import com.japanwork.payload.request.CandidateWishRequest;
+import com.japanwork.payload.request.CandidateExpectedRequest;
 import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.BaseMessageResponse;
@@ -69,15 +69,15 @@ public class CandidateController {
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	
-	@PatchMapping(UrlConstant.URL_CANDIDATE_WISH)
+	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPECTED)
 	@ResponseBody
-	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateWishRequest candidateWishRequest, 
+	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateExpectedRequest candidateExpectedRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
 		if(!checkPermission(userPrincipal, id)) {
 			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
 		}
 		
-		Candidate candidate = candidateService.updateWish(candidateWishRequest, id, userPrincipal);
+		Candidate candidate = candidateService.updateWish(candidateExpectedRequest, id, userPrincipal);
 		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
 	}
 	

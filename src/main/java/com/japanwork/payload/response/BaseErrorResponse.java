@@ -2,22 +2,27 @@ package com.japanwork.payload.response;
 
 public class BaseErrorResponse {
 	private String code;
-	private Object message;
+	private String message;
+	
 	public String getCode() {
 		return code;
 	}
+	
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public Object getMessage() {
+	
+	public String getMessage() {
 		return message;
 	}
-	public void setMessage(Object message) {
+	
+	public void setMessage(String message) {
 		this.message = message;
 	}
-	public BaseErrorResponse(String code, Object message) {
-		super();
+	
+	public BaseErrorResponse(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}
+	
 }
