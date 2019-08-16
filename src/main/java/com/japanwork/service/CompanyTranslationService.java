@@ -20,31 +20,29 @@ import com.japanwork.security.UserPrincipal;
 
 @Service
 public class CompanyTranslationService {
-	@Autowired
-	private CompanyTranslationRepository companyTranslationRepository;
+    @Autowired
+    private CompanyTranslationRepository companyTranslationRepository;
 
-	@Autowired
-	private CompanyService companyService;
+    @Autowired
+    private CompanyService companyService;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private TranslatorService translatorService;
+    @Autowired
+    private TranslatorService translatorService;
 
-	public CompanyTranslation save(
-	        Company company,
-            Translator translator,
+    public CompanyTranslation save(
+            Company company,
             Language language,
             CompanyTranslationRequest companyRequest
     ) throws ServerError{
-		try {
-			Date date           = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
+        try {
+            Date date           = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
 
-			CompanyTranslation companyTranslation = new CompanyTranslation();
+            CompanyTranslation companyTranslation = new CompanyTranslation();
             companyTranslation.setCompany(company);
-            companyTranslation.setTranslator(translator);
             companyTranslation.setLanguage(language);
             companyTranslation.setName(companyRequest.getName());
             companyTranslation.setAddress(companyRequest.getAddress());

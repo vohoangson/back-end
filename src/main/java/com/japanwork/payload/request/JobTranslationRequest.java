@@ -8,14 +8,6 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class JobTranslationRequest {
-    @NotNull(message = "job_required")
-    @JsonProperty("job_id")
-    private UUID jobId;
-
-    @NotNull(message = "translator_required")
-    @JsonProperty("translator_id")
-    private UUID translatorId;
-
     @NotNull(message = "language_required")
     @JsonProperty("language_id")
     private UUID languageId;
@@ -48,14 +40,6 @@ public class JobTranslationRequest {
 
     @JsonProperty("japanese_level_requirement")
     private int japaneseLevelRequirement;
-
-    public UUID getJobId() {
-        return jobId;
-    }
-
-    public UUID getTranslatorId() {
-        return translatorId;
-    }
 
     public UUID getLanguageId() {
         return languageId;
@@ -91,14 +75,6 @@ public class JobTranslationRequest {
 
     public int getJapaneseLevelRequirement() {
         return japaneseLevelRequirement;
-    }
-
-    public void setJobId(UUID jobId) {
-        this.jobId = jobId;
-    }
-
-    public void setTranslatorId(UUID translatorId) {
-        this.translatorId = translatorId;
     }
 
     public void setLanguageId(UUID languageId) {
