@@ -19,9 +19,8 @@ public class AcademyTranslation {
     private UUID id;
 
     @ManyToOne
-    @Column(name = "academy", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-    private UUID academyId;
+    private Academy academy;
 
     @OneToOne
     @JoinColumn(name = "language_id", nullable = false)
@@ -51,12 +50,20 @@ public class AcademyTranslation {
         this.id = id;
     }
 
-    public UUID getAcademyId() {
-        return academyId;
+    public Academy getAcademy() {
+        return academy;
     }
 
-    public void setAcademyId(UUID academyId) {
-        this.academyId = academyId;
+    public void setAcademy(Academy academy) {
+        this.academy = academy;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public String getAcademyCenterName() {
@@ -97,13 +104,5 @@ public class AcademyTranslation {
 
     public void setDeletedAt(Timestamp deletedAt) {
         this.deletedAt = deletedAt;
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
     }
 }

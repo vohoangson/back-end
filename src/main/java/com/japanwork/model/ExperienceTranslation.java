@@ -19,9 +19,8 @@ public class ExperienceTranslation {
     private UUID id;
 
     @ManyToOne
-    @Column(name = "experience_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-    private UUID experienceId;
+    private Experience experience;
 
     @OneToOne
     @JoinColumn(name = "language_id", nullable = false)
@@ -51,12 +50,12 @@ public class ExperienceTranslation {
         this.id = id;
     }
 
-    public UUID getExperienceId() {
-        return experienceId;
+    public Experience getExperience() {
+        return experience;
     }
 
-    public void setExperienceId(UUID experienceId) {
-        this.experienceId = experienceId;
+    public void setExperience(Experience experience) {
+        this.experience = experience;
     }
 
     public Language getLanguage() {
