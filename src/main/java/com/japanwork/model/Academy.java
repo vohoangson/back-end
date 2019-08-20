@@ -14,43 +14,43 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="academy")
+@Table(name = "academy")
 @Where(clause = "deleted_at IS NULL")
 public class Academy {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
+    @Column(name = "id")
 	private UUID id;
 
-	@Column(name="candidate_id", nullable = false)
+	@Column(name = "candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
 	private UUID candidateId;
 
-	@Column(name="academy_center_name", nullable = false, length = 128)
+	@Column(name = "academy_center_name", nullable = false, length = 128)
 	private String academyCenterName;
 
-	@Column(name="major_name", nullable = false, length = 128)
+	@Column(name = "major_name", nullable = false, length = 128)
 	private String majorName;
 
-	@Column(name="grade", length = 32)
+	@Column(name = "grade", length = 32)
 	private float grade;
 
-	@Column(name="grade_system", length = 64)
+	@Column(name = "grade_system", length = 64)
 	private int gradeSystem;
 
-	@Column(name="start_date")
+	@Column(name = "start_date")
 	private Date startDate;
 
-	@Column(name="end_date")
+	@Column(name = "end_date")
 	private Date endDate;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name="deleted_at")
+    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
 	public UUID getId() {

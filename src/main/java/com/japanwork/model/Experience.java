@@ -28,10 +28,10 @@ public class Experience {
     @Where(clause = "deleted_at IS NULL")
 	private UUID candidateId;
 
-	@Column(name="organizaion")
+	@Column(name = "organizaion")
 	private String organizaion;
 
-	@Column(name="description", length = 2000)
+	@Column(name = "description", length = 2000)
 	private String desc;
 
 	@ManyToOne
@@ -42,19 +42,19 @@ public class Experience {
     @JoinColumn(name = "business_id")
 	private Business business;
 
-	@Column(name="start_date")
+	@Column(name = "start_date")
 	private Date startDate;
 
-	@Column(name="end_date")
+	@Column(name = "end_date")
 	private Date endDate;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name="deleted_at")
+    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
 	public UUID getId() {
