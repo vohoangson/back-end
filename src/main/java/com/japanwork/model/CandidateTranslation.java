@@ -20,15 +20,10 @@ public class CandidateTranslation {
     @Column(name = "id")
     private UUID id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
     private Candidate candidate;
-
-//    @OneToOne
-//    @JoinColumn(name = "translator_id")
-//    @Where(clause = "deleted_at IS NULL")
-//    private Translator translator;
 
     @OneToOne
     @JoinColumn(name = "language_id", nullable = false)
@@ -38,31 +33,14 @@ public class CandidateTranslation {
     @Column(name = "name", nullable = false, length = 128)
     private String fullName;
 
-//    @Column(name = "date_of_birth", nullable = false)
-//    private Date dateOfBirth;
-//
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "gender", nullable = false)
-//    private Gender gender;
-//
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "marital")
-//    private Marital marital;
-
     @Column(name = "residental_address")
     private String residentalAddres;
 
     @Column(name = "introduction", length = 1000)
     private String introduction;
 
-//    @Column(name = "japanese_level")
-//    private int japaneseLevel;
-
     @Column(name = "expected_working_address")
     private String expectedWorkingAddress;
-
-//    @Column(name = "expected_salary")
-//    private float expectedSalary;
 
     @Column(name="created_at")
     private Timestamp createdAt;
