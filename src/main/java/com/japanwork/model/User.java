@@ -1,6 +1,7 @@
 package com.japanwork.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Where;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Where(clause = "deleted_at IS NULL")
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
@@ -28,12 +30,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 128)
     private String name;
 
     @Email
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @JsonIgnore
@@ -52,29 +54,29 @@ public class User {
     @JsonIgnore
     @JsonProperty("provider_id")
     private String providerId;
-    
+
     private String role;
-    
+
     @JsonProperty("property_id")
     @Column(name="property_id")
     private UUID propertyId;
-    
+
     @OneToOne
     @JoinColumn(name = "country_id")
     private Country country;
-    
+
     @JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
-    
+
     public UUID getId() {
         return id;
     }
@@ -129,7 +131,7 @@ public class User {
     public String getProviderId() {
         return providerId;
     }
-    
+
     @JsonIgnore
     public void setProviderId(String providerId) {
         this.providerId = providerId;
@@ -142,7 +144,7 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
 	public UUID getPropertyId() {
 		return propertyId;
 	}
@@ -150,7 +152,7 @@ public class User {
 	public void setPropertyId(UUID propertyId) {
 		this.propertyId = propertyId;
 	}
-	
+
 	public Country getCountry() {
 		return country;
 	}
@@ -212,7 +214,7 @@ public class User {
 //		this.updateDate = updateDate;
 //		this.isDelete = isDelete;
 //	}
-	
+
 	public User() {
 		super();
 	}

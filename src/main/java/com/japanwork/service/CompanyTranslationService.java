@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
+import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.model.Business;
-import com.japanwork.model.Company;
-import com.japanwork.model.CompanyTranslation;
 import com.japanwork.payload.request.CompanyTranslationRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
@@ -21,38 +20,42 @@ import com.japanwork.security.UserPrincipal;
 
 @Service
 public class CompanyTranslationService {
-	@Autowired
-	private CompanyTranslationRepository companyTranslationRepository;
+    @Autowired
+    private CompanyTranslationRepository companyTranslationRepository;
 
-	@Autowired
-	private CompanyService companyService;
+    @Autowired
+    private CompanyService companyService;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private TranslatorService translatorService;
+    @Autowired
+    private TranslatorService translatorService;
 
-	public CompanyTranslation save(CompanyTranslationRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
-		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
+    public CompanyTranslation save(
+            Company company,
+            Language language,
+            CompanyTranslationRequest companyRequest
+    ) throws ServerError{
+        try {
+            Date date           = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
 
-			CompanyTranslation company = new CompanyTranslation();
-			company.setCompany(new Company(companyRequest.getCompanyId()));
-			company.setTranslator(translatorService.findTranslatorByUser(userService.findById(userPrincipal.getId())));
-			company.setName(companyRequest.getName());
-			company.setAddress(companyRequest.getAddress());
-			company.setIntroduction(companyRequest.getIntroduction());
-			company.setStatus(1);
-			company.setCreatedAt(timestamp);
-			company.setUpdatedAt(timestamp);
-			company.setDeletedAt(null);
+            CompanyTranslation companyTranslation = new CompanyTranslation();
+            companyTranslation.setCompany(company);
+            companyTranslation.setLanguage(language);
+            companyTranslation.setName(companyRequest.getName());
+            companyTranslation.setAddress(companyRequest.getAddress());
+            companyTranslation.setIntroduction(companyRequest.getIntroduction());
+            companyTranslation.setStatus(1);
+            companyTranslation.setCreatedAt(timestamp);
+            companyTranslation.setUpdatedAt(timestamp);
+            companyTranslation.setDeletedAt(null);
 
-			CompanyTranslation result = companyTranslationRepository.save(company);
+			CompanyTranslation result = companyTranslationRepository.save(companyTranslation);
 			return result;
 		} catch (Exception e) {
-			throw new ServerError(MessageConstant.CREATE_COMPANY_TRANSLATE_FAIL);
+			throw new BadRequestException(MessageConstant.CREATE_COMPANY_TRANSLATE_FAIL);
 		}
 	}
 

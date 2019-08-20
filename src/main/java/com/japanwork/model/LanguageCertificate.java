@@ -14,36 +14,40 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="language_certificate")
+@Where(clause = "deleted_at IS NULL")
 public class LanguageCertificate {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private UUID id;
-    
-	@Column(name = "candidate_id")
+
+	@Column(name = "candidate_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private UUID candidateId;
-	
+
     @Column(name="score")
     private int score;
-    
+
     @ManyToOne
     @JoinColumn(name = "language_certificate_type_id")
+    @Where(clause = "deleted_at IS NULL")
     private LanguageCertificateType languageCertificateType;
-    
-    @Column(name="taken_date")
+
+    @Column(name="taken_date", nullable = false)
     private Date takenDate;
-    
+
     @JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     @Column(name="deleted_at")
     private Timestamp deletedAt;
@@ -127,7 +131,7 @@ public class LanguageCertificate {
 	public LanguageCertificate(UUID id) {
 		this.id = id;
 	}
-	
+
 	public LanguageCertificate() {
 
 	}

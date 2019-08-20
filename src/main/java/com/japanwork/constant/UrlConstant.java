@@ -37,7 +37,7 @@ public class UrlConstant {
 	public static final String URL_COUNTRIES = "/v1/countries";
 	public static final String URL_COUNTRY = "/v1/countries/{id}";
 	public static final String URL_COUNTRIES_CITIES = "/v1/countries/{code}/cities";
-	
+
 	//City
 	public static final String URL_CITIES = "/v1/cities";
 	public static final String URL_CITIES_BATCH = "/v1/cities/batch";
@@ -55,13 +55,16 @@ public class UrlConstant {
 	public static final String URL_COMPANY_JOB_APPLICATION = "/v1/companies/{id}/job_applications";
 	public static final String URL_COMPANY_REQUEST = "/v1/companies/{id}/requests";
 
+	//Company Translation
+    public static final String URL_COMPANY_TRANSLATION = "/v1/companies/{id}/company_translations";
+
 	//Job
 	public static final String URL_JOBS = "/v1/jobs";
 	public static final String URL_JOB = "/v1/jobs/{id}";
 	public static final String URL_JOB_UNDELETE = "/v1/jobs/{id}/undelete";
 
 	//Job Translation
-    public static final String URL_JOB_TRANSLATION = "v1/job_translations";
+    public static final String URL_JOB_TRANSLATION = "/v1/job/{id}/job_translations";
 
 	//Job Application
     public static final String URL_JOB_APPLICATIONS_CANDIDATE_JOIN = "/v1/jobs/{id}/apply";
@@ -120,7 +123,7 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_EXPERIENCE = "/v1/candidates/{id}/experience";
 
 	//Candidate translation
-    public static final String URL_CANDIDATE_TRANSLATION = "/v1/v1/candidates/{id}/candidate_translations";
+    public static final String URL_CANDIDATE_TRANSLATION = "/v1/candidates/{id}/candidate_translations";
 
 	//Upload file on AWS
 	public static final String URL_AMW = "/v1/storages";
@@ -133,8 +136,4 @@ public class UrlConstant {
 	public static final String URL_TRANSLATORS_UNDEL = "/v1/translators/{id}/undelete";
 	public static final String URL_TRANSLATORS_JOB_APPLICATIONS = "/v1/translators/{id}/job_applications";
 	public static final String URL_TRANSLATORS_REQUESTS = "/v1/translators/{id}/requests";
-
-	//Company Translation
-    public static final String URL_COMPANY_TRANSLATION = "/v1/company_translations";
-    public static final String URL_COMPANY_TRANSLATION_BY_ID = "/v1/company_translations/{id}";
 }

@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -16,61 +18,65 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="translator")
+@Where(clause = "deleted_at IS NULL")
 public class Translator {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
+
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @Where(clause = "deleted_at IS NULL")
     private User user;
-    
-    @Column(name="name")
+
+    @Column(name="name", nullable = false, length = 128)
     private String name;
-    
-    @Column(name="gender")
+
+    @Column(name="gender", nullable = false)
     private String gender;
-    
-    @Column(name="dob")
+
+    @Column(name="dob", nullable = false)
     private Date dateOfBirth;
-    
+
     @ManyToOne
     @JoinColumn(name = "city_id")
+    @Where(clause = "deleted_at IS NULL")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "district_id")   
+    @JoinColumn(name = "district_id")
+    @Where(clause = "deleted_at IS NULL")
     private District district;
-    
-    @Column(name="address")
+
+    @Column(name="address", nullable = false)
     private String address;
-    
-    @Column(name="introduction")
+
+    @Column(name="introduction", nullable = false, length = 2000)
     private String introduction;
-    
+
     @Column(name="avatar_url")
     private String avatar;
-    
-    @Column(name="japanese_level")
+
+    @Column(name="japanese_level", nullable = false)
     private int japaneseLevel;
-    
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
-    
+
 	public UUID getId() {
 		return id;
 	}
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -122,7 +128,7 @@ public class Translator {
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -154,31 +160,31 @@ public class Translator {
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
-	
+
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-	
+
 	public Timestamp getUpdatedAt() {
 		return updatedAt;
 	}
-	
+
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
 	public Timestamp getDeletedAt() {
 		return deletedAt;
 	}
-	
+
 	public void setDeletedAt(Timestamp deletedAt) {
 		this.deletedAt = deletedAt;
 	}
-	
+
 	public Translator() {
-		
-	} 
-	
+
+	}
+
 	public Translator(UUID id, User user, String name, String gender, Date dateOfBirth, City city, District district,
 			String address, String introduction, String avatar, int japaneseLevel, Timestamp createdAt,
 			Timestamp updatedAt, Timestamp deletedAt) {

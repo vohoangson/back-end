@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -15,29 +17,33 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="job_application_status")
+@Where(clause = "deleted_at IS NULL")
 public class JobApplicationStatus {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-	
-	@Column(name = "creator_id")
+
+	@Column(name = "creator_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private UUID creatorId;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "job_application_id")
+	@JoinColumn(name = "job_application_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
 	private JobApplication jobApplication;
-	
+
 	@OneToOne
     @JoinColumn(name = "translator_id")
+    @Where(clause = "deleted_at IS NULL")
 	private Translator translator;
-	
-	@Column(name = "reason")
+
+	@Column(name = "reason", length = 1000)
 	private String reason;
-	
+
 	@Column(name = "status")
 	private String status;
-	
+
 	@Column(name = "created_at")
 	private Timestamp createdAt;
 

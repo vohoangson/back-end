@@ -2,7 +2,9 @@ package com.japanwork.controller;
 
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.Candidate;
 import com.japanwork.model.CandidateTranslation;
+import com.japanwork.model.Language;
 import com.japanwork.payload.request.CandidateTranslationRequest;
 import com.japanwork.payload.response.BaseSuccessResponse;
 import com.japanwork.service.CandidateTranslationService;
@@ -27,19 +29,22 @@ public class CandidateTranslationController {
 
     @PostMapping(UrlConstant.URL_CANDIDATE_TRANSLATION)
     @ResponseBody
-    public BaseSuccessResponse create(
+    public ResponseDataAPI create(
             @PathVariable UUID id,
             @Valid @RequestBody CandidateTranslationRequest candidateTranslationRequest
     ) throws BadRequestException {
-        commonSupport.loadCandidate(id);
-        commonSupport.loadTranslator(candidateTranslationRequest.getTranslatorId());
-        commonSupport.loadLanguage(candidateTranslationRequest.getLanguageId());
+        Candidate candidate = commonSupport.loadCandidate(id);
+        Language language   = commonSupport.loadLanguage(candidateTranslationRequest.getLanguageId());
 
-        CandidateTranslation candidateTranslation = candidateTranslationService.save(id, candidateTranslationRequest);
-        return new BaseSuccessResponse(
-                "success",
-                null,
-                null
+        CandidateTranslation candidateTranslation = candidateTranslationService.save(
+                candidate,
+                language,
+                candidateTranslationRequest
         );
+
+        ResponseDataAPI responseDataAPI = new ResponseDataAPI();
+        responseDataAPI.savedSuccess();
+
+        return responseDataAPI;
     }
 }

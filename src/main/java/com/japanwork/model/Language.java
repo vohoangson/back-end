@@ -3,29 +3,30 @@ package com.japanwork.model;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Where;
 
 @Entity
+@Where(clause = "deleted_at IS NULL")
 public class Language {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+	@Column(nullable = false, length = 128)
     private String name;
-    
+
+    @Column(nullable = false, length = 16)
     private String code;
-    
+
     @JsonIgnore
     private Timestamp createdAt;
-    
+
     @JsonIgnore
     private Timestamp updatedAt;
-    
+
     @JsonIgnore
     private Timestamp deletedAt;
 
@@ -94,5 +95,5 @@ public class Language {
 	public Language() {
 
 	}
-	    
+
 }

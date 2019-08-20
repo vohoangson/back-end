@@ -2,12 +2,18 @@ package com.japanwork.model;
 
 import com.japanwork.constant.EnumConstant.Gender;
 import com.japanwork.constant.EnumConstant.Marital;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Table(
+        name="candidate_translation",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"candidate_id", "language_id"})}
+)
+@Where(clause = "deleted_at IS NULL")
 public class CandidateTranslation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,30 +21,33 @@ public class CandidateTranslation {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "candidate_id")
+    @JoinColumn(name = "candidate_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Candidate candidate;
 
-    @OneToOne
-    @JoinColumn(name = "translator_id")
-    private Translator translator;
+//    @OneToOne
+//    @JoinColumn(name = "translator_id")
+//    @Where(clause = "deleted_at IS NULL")
+//    private Translator translator;
 
     @OneToOne
-    @JoinColumn(name = "language_id")
+    @JoinColumn(name = "language_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Language language;
 
     @Column(name = "name", nullable = false, length = 128)
     private String fullName;
 
-    @Column(name = "date_of_birth", nullable = false)
-    private Date dateOfBirth;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
-    private Gender gender;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "marital")
-    private Marital marital;
+//    @Column(name = "date_of_birth", nullable = false)
+//    private Date dateOfBirth;
+//
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "gender", nullable = false)
+//    private Gender gender;
+//
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "marital")
+//    private Marital marital;
 
     @Column(name = "residental_address")
     private String residentalAddres;
@@ -46,14 +55,14 @@ public class CandidateTranslation {
     @Column(name = "introduction", length = 1000)
     private String introduction;
 
-    @Column(name = "japanese_level")
-    private int japaneseLevel;
+//    @Column(name = "japanese_level")
+//    private int japaneseLevel;
 
     @Column(name = "expected_working_address")
     private String expectedWorkingAddress;
 
-    @Column(name = "expected_salary")
-    private float expectedSalary;
+//    @Column(name = "expected_salary")
+//    private float expectedSalary;
 
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -72,28 +81,12 @@ public class CandidateTranslation {
         return candidate;
     }
 
-    public Translator getTranslator() {
-        return translator;
-    }
-
     public Language getLanguage() {
         return language;
     }
 
     public String getFullName() {
         return fullName;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public Marital getMarital() {
-        return marital;
     }
 
     public String getResidentalAddres() {
@@ -104,16 +97,8 @@ public class CandidateTranslation {
         return introduction;
     }
 
-    public int getJapaneseLevel() {
-        return japaneseLevel;
-    }
-
     public String getExpectedWorkingAddress() {
         return expectedWorkingAddress;
-    }
-
-    public float getExpectedSalary() {
-        return expectedSalary;
     }
 
     public Timestamp getCreatedAt() {
@@ -136,28 +121,12 @@ public class CandidateTranslation {
         this.candidate = candidate;
     }
 
-    public void setTranslator(Translator translator) {
-        this.translator = translator;
-    }
-
     public void setLanguage(Language language) {
         this.language = language;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void setMarital(Marital marital) {
-        this.marital = marital;
     }
 
     public void setResidentalAddres(String residentalAddres) {
@@ -168,16 +137,8 @@ public class CandidateTranslation {
         this.introduction = introduction;
     }
 
-    public void setJapaneseLevel(int japaneseLevel) {
-        this.japaneseLevel = japaneseLevel;
-    }
-
     public void setExpectedWorkingAddress(String expectedWorkingAddress) {
         this.expectedWorkingAddress = expectedWorkingAddress;
-    }
-
-    public void setExpectedSalary(float expectedSalary) {
-        this.expectedSalary = expectedSalary;
     }
 
     public void setCreatedAt(Timestamp createdAt) {
@@ -192,27 +153,18 @@ public class CandidateTranslation {
         this.deletedAt = deletedAt;
     }
 
-    public CandidateTranslation(Candidate candidate, Translator translator, Language language, String fullName, Date dateOfBirth,
-                                Gender gender, Marital marital, String residentalAddres, String introduction, int japaneseLevel,
-                                String expectedWorkingAddress, float expectedSalary,
-                                Timestamp createdAt, Timestamp updatedAt) {
+    public CandidateTranslation(Candidate candidate, Language language, String fullName, String residentalAddres, String introduction,
+                                String expectedWorkingAddress, Timestamp createdAt, Timestamp updatedAt) {
         this.candidate = candidate;
-        this.translator = translator;
         this.language = language;
         this.fullName = fullName;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.marital = marital;
         this.residentalAddres = residentalAddres;
         this.introduction = introduction;
-        this.japaneseLevel = japaneseLevel;
         this.expectedWorkingAddress = expectedWorkingAddress;
-        this.expectedSalary = expectedSalary;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public CandidateTranslation() {
-
     }
 }

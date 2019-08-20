@@ -12,16 +12,16 @@ public class JobTranslation {
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 
-	@OneToOne
+	@ManyToOne
     private Job job;
 
-	@OneToOne
+	@ManyToOne
     private Translator translator;
 
-    @OneToOne
+    @ManyToOne
     private Language language;
 
-    @Column(name = "work_place_address", length = 255)
+    @Column(name = "work_place_address")
     private String address;
 
     @Column(name = "name", nullable = false, length = 128)
@@ -30,16 +30,16 @@ public class JobTranslation {
     @Column(name = "description", length = 2000)
     private String description;
 
-    @Column(name = "required_education", length = 255)
+    @Column(name = "required_education", length = 2000)
     private String requiredEducation;
 
-    @Column(name = "required_experience", nullable = false, length = 255)
+    @Column(name = "required_experience", nullable = false, length = 2000)
     private String requiredExperience;
 
-    @Column(name = "benefit", length = 1000)
+    @Column(name = "benefit", length = 2000)
     private String benefit;
 
-    @Column(name = "required_language", nullable = false, length = 128)
+    @Column(name = "required_language", nullable = false, length = 1000)
     private String requiredLanguage;
 
     private int japaneseLevelRequirement;

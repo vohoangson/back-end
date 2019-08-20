@@ -1,5 +1,7 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
@@ -17,46 +19,53 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="job_application")
+@Where(clause = "deleted_at IS NULL")
 public class JobApplication {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
 	private UUID id;
-    
+
     @OneToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Job job;
-    
+
     @OneToOne
-    @JoinColumn(name = "candidate_id")
+    @JoinColumn(name = "candidate_id", nullable = false)
+    @Where(clause = "deleted_at IS NULL")
     private Candidate candidate;
-    
+
     @OneToOne
     @JoinColumn(name = "translator_id")
+    @Where(clause = "deleted_at IS NULL")
     private Translator translator;
-    
+
     @OneToOne
     @JoinColumn(name="candidate_support_conversaion_id")
+    @Where(clause = "deleted_at IS NULL")
     private Conversation candidateSupportConversaion;
-    
+
     @OneToOne
     @JoinColumn(name="company_support_conversation_id")
+    @Where(clause = "deleted_at IS NULL")
     private Conversation companySupportConversation;
-    
+
     @OneToOne
     @JoinColumn(name="all_conversation_id")
+    @Where(clause = "deleted_at IS NULL")
     private Conversation allConversation;
-    
+
     @OneToMany(mappedBy = "jobApplication")
     @OrderBy("createdAt DESC")
     private Set<JobApplicationStatus> jobApplicationStatus;
-    
+
     @Column(name="created_at")
     private Timestamp createdAt;
-    
+
     @Column(name="updated_at")
     private Timestamp updatedAt;
-    
+
     @Column(name="deleted_at")
     private Timestamp deletedAt;
 
