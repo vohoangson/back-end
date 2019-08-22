@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.Level;
 import com.japanwork.payload.request.LevelRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.LevelService;
 
 @Controller
@@ -24,15 +24,15 @@ public class LevelController {
 	
 	@GetMapping(UrlConstant.URL_LEVELS)
 	@ResponseBody
-	public BaseDataResponse listLevel() {
-		List<Level> list = levelService.findAllByIsDelete();
-		return new BaseDataResponse(list);
+	public ResponseDataAPI index() {
+		List<Level> list = levelService.index();
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_LEVELS)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody LevelRequest levelRequest) {		
-		Level level = levelService.save(levelRequest);
-		return new BaseDataResponse(level);
+	public ResponseDataAPI create(@Valid @RequestBody LevelRequest levelRequest) {		
+		Level level = levelService.create(levelRequest);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, level, null, null);
 	}
 }

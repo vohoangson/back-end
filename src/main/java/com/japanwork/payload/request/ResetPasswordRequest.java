@@ -5,16 +5,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class ResetPasswordRequest {
-	@NotBlank(message = "email_required")
-    @Email(message = "invalid_email_format")
+	@NotBlank
+    @Email
     private String email;
 
-    @NotBlank(message = "password_required")
-    @Size(min=8,message = "invalid_password_length")
+    @NotBlank
+    @Size(min=8, max=32)
     private String password;
 
-    @NotBlank(message = "code_reset_required")
-    @Size(min=6, max = 6,message = "invalid_code_reset_length")
+    @NotBlank
+    @Size(min=6, max = 6)
     private String code;
 
 	public String getEmail() {

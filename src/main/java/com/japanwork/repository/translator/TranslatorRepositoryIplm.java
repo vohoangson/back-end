@@ -193,4 +193,10 @@ public class TranslatorRepositoryIplm implements TranslatorRepository{
 		return findAllByIdInAndDeletedAt( page, ids, deletedAt);
 	}
 
+	@Override
+	public Translator findByUserIdAndDeletedAt(UUID id, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByUserIdAndDeletedAt( id, deletedAt);
+	}
+
 }

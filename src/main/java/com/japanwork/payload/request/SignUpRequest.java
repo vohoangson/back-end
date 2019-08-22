@@ -11,23 +11,24 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SignUpRequest {
-    @NotBlank(message = "username_required")
+    @NotBlank
+    @Size(min=8, max=128)
     private String name;
 
-    @NotBlank(message = "email_required")
-    @Email(message = "invalid_email_format")
+    @NotBlank
+    @Email
     private String email;
 
-    @NotBlank(message = "password_required")
-    @Size(min=8,message = "invalid_password_length")
+    @NotBlank
+    @Size(min=8, max=32)
     private String password;
 
-//    @NotNull(message = "country_required")
+    @NotNull
     @JsonProperty("country_id")
     private UUID countryId;
     
-    @NotBlank(message = "role_required")
-    @Pattern(regexp = "COMPANY|CANDIDATE|TRANSLATOR",message = "invalid_role_format")
+    @NotBlank
+    @Pattern(regexp = "COMPANY|CANDIDATE|TRANSLATOR")
     private String role;
     
     public String getName() {

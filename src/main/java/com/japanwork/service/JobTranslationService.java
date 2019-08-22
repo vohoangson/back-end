@@ -1,19 +1,19 @@
 package com.japanwork.service;
 
-import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.BadRequestException;
-import com.japanwork.model.*;
-import com.japanwork.payload.request.JobTranslationRequest;
-import com.japanwork.repository.job_translation.JobTranslationRepository;
-import com.japanwork.exception.ServerError;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.sql.Timestamp;
-import java.util.Date;
+import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.MessageConstant;
+import com.japanwork.exception.ServerError;
+import com.japanwork.model.Job;
+import com.japanwork.model.JobTranslation;
+import com.japanwork.model.Language;
+import com.japanwork.payload.request.JobTranslationRequest;
+import com.japanwork.repository.job_translation.JobTranslationRepository;
 
 @Service
 public class JobTranslationService {
@@ -23,17 +23,11 @@ public class JobTranslationService {
     @Autowired
     private JobTranslationRepository jobTranslationRepository;
 
-    @Autowired
-    private UserService userService;
-
     public JobTranslation save(
             Job job,
             Language language,
             JobTranslationRequest jobTranslationRequest) throws ServerError {
         try {
-            Date date = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
             JobTranslation jobTranslation = new JobTranslation();
             jobTranslation.setJob(job);
             jobTranslation.setLanguage(language);
@@ -45,13 +39,13 @@ public class JobTranslationService {
             jobTranslation.setRequiredLanguage(jobTranslationRequest.getRequiredLanguage());
             jobTranslation.setJapaneseLevelRequirement(jobTranslationRequest.getJapaneseLevelRequirement());
             jobTranslation.setBenefit(jobTranslationRequest.getBenefit());
-            jobTranslation.setCreatedAt(timestamp);
-            jobTranslation.setUpdatedAt(timestamp);
+            jobTranslation.setCreatedAt(CommonFunction.dateTimeNow());
+            jobTranslation.setUpdatedAt(null);
 
             JobTranslation result = jobTranslationRepository.save(jobTranslation);
             return result;
         } catch (Exception e) {
-            throw new BadRequestException(MessageConstant.CREATED_SUCCESS);
+            throw new ServerError(MessageConstant.JOB_TRANSLATE_CREATE_FAIL);
         }
     }
 }

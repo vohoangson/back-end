@@ -1,7 +1,5 @@
 package com.japanwork.model;
 
-import org.hibernate.annotations.Where;
-
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -11,7 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "academy")
@@ -22,9 +24,10 @@ public class Academy {
     @Column(name = "id")
 	private UUID id;
 
-	@Column(name = "candidate_id", nullable = false)
+	@ManyToOne
+    @JoinColumn(name="candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-	private UUID candidateId;
+	private Candidate candidate;
 
 	@Column(name = "academy_center_name", nullable = false, length = 128)
 	private String academyCenterName;
@@ -61,12 +64,12 @@ public class Academy {
 		this.id = id;
 	}
 
-	public UUID getCandidateId() {
-		return candidateId;
+	public Candidate getCandidate() {
+		return candidate;
 	}
 
-	public void setCandidateId(UUID candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
 	}
 
 	public String getAcademyCenterName() {
@@ -141,10 +144,10 @@ public class Academy {
 		this.deletedAt = deletedAt;
 	}
 
-	public Academy(UUID id, UUID candidateId, String academyCenterName, String majorName, float grade, int gradeSystem,
+	public Academy(UUID id, Candidate candidate, String academyCenterName, String majorName, float grade, int gradeSystem,
 			Date startDate, Date endDate, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
-		this.candidateId = candidateId;
+		this.candidate = candidate;
 		this.academyCenterName = academyCenterName;
 		this.majorName = majorName;
 		this.grade = grade;

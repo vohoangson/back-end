@@ -2,7 +2,6 @@ package com.japanwork.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
@@ -30,11 +29,10 @@ import com.japanwork.model.Experience;
 import com.japanwork.model.LanguageCertificate;
 import com.japanwork.model.LanguageCertificateType;
 import com.japanwork.model.Level;
-import com.japanwork.model.User;
 import com.japanwork.payload.request.AcademyRequest;
+import com.japanwork.payload.request.CandidateExpectedRequest;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
-import com.japanwork.payload.request.CandidateWishRequest;
 import com.japanwork.payload.request.ExperienceRequest;
 import com.japanwork.payload.request.LanguageCertificateRequest;
 import com.japanwork.payload.response.CandidateResponse;
@@ -58,12 +56,9 @@ public class CandidateService {
 	@Autowired
 	private LanguageCertificateService languageCertificateService;
 	
-	public Candidate savePersonal(CandidatePersonalRequest candidatePersonalRequest, UserPrincipal userPrincipal)
+	public Candidate create(CandidatePersonalRequest candidatePersonalRequest, UserPrincipal userPrincipal)
 			throws ServerError{
 		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
 			Candidate candidate = new Candidate();
 			candidate.setUser(userService.findById(userPrincipal.getId()));
 			candidate.setFullName(candidatePersonalRequest.getFullName());
@@ -72,14 +67,14 @@ public class CandidateService {
 			candidate.setMarital(candidatePersonalRequest.getMarital());
 			candidate.setResidentalCity(new City(candidatePersonalRequest.getResidentalCityId()));
 			candidate.setResidentalDistrict(new District(candidatePersonalRequest.getResidentalDistrictId()));
-			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
+			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddress());
 			candidate.setAvatar(candidatePersonalRequest.getAvatar());
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(1);
-			candidate.setCreatedAt(timestamp);
-			candidate.setUpdatedAt(timestamp);
+			candidate.setCreatedAt(CommonFunction.dateTimeNow());
+			candidate.setUpdatedAt(null);
 			candidate.setDeletedAt(null);
 			
 			Candidate result = candidateRepository.save(candidate);
@@ -90,102 +85,70 @@ public class CandidateService {
 		}
 	}
 	
-	public Candidate updatePersonal(CandidatePersonalRequest candidatePersonalRequest, UUID id, 
-			UserPrincipal userPrincipal) throws ResourceNotFoundException, ServerError{
-			try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Candidate candidate = new Candidate();
-			
-			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
-				candidate = this.findByIdAndIsDelete(id);
-			} else {
-				candidate = candidateRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-			}
-	
+	public Candidate updatePersonal(CandidatePersonalRequest candidatePersonalRequest, Candidate candidate) 
+			throws ServerError{
+		try {	
 			candidate.setFullName(candidatePersonalRequest.getFullName());
 			candidate.setDateOfBirth(candidatePersonalRequest.getDateOfBirth());
 			candidate.setGender(candidatePersonalRequest.getGender());
 			candidate.setMarital(candidatePersonalRequest.getMarital());
 			candidate.setResidentalCity(new City(candidatePersonalRequest.getResidentalCityId()));
 			candidate.setResidentalDistrict(new District(candidatePersonalRequest.getResidentalDistrictId()));
-			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddres());
+			candidate.setResidentalAddres(candidatePersonalRequest.getResidentalAddress());
 			candidate.setAvatar(candidatePersonalRequest.getAvatar());
 			candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
 			candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			candidate.setUpdatedAt(timestamp);
+			candidate.setUpdatedAt(CommonFunction.dateTimeNow());
 			
 			Candidate result = candidateRepository.save(candidate);	
 			return result;
-		} catch (ResourceNotFoundException e) {
-			throw e;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CANDIDATE_UPDATE_PERSONAL_FAIL);
 		}
 	}
 	
-	public Candidate updateWish(CandidateWishRequest candidateWishRequest, UUID id,UserPrincipal userPrincipal) 
-			throws ResourceNotFoundException, ServerError{
-		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Candidate candidate = new Candidate();
-			
-			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CADIDATE")) {
-				candidate = this.findByIdAndIsDelete(id);
-			} else {
-				candidate = candidateRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-			}
-	
-			candidate.setWishWorkingCity(new City(candidateWishRequest.getWishWorkingCityId()));
-			candidate.setWishWorkingDistrict(new District(candidateWishRequest.getWishWorkingDistrictId()));
-			candidate.setWishWorkingAddress(candidateWishRequest.getWishWorkingAddress());
-			candidate.setWishBusiness(new Business(candidateWishRequest.getWishBusinessId()));
-			candidate.setWishLevel(new Level(candidateWishRequest.getWishLevelId()));
-			candidate.setWishContract(new Contract(candidateWishRequest.getWishContractId()));
-			candidate.setWishSalary(candidateWishRequest.getWishSalary());
+	public Candidate updateExpected(CandidateExpectedRequest candidateExpectedRequest, Candidate candidate) 
+			throws ServerError{
+		try {	
+			candidate.setExpectedWorkingCity(new City(candidateExpectedRequest.getExpectedWorkingCityId()));
+			candidate.setExpectedWorkingDistrict(new District(candidateExpectedRequest.getExpectedWorkingDistrictId()));
+			candidate.setExpectedWorkingAddress(candidateExpectedRequest.getExpectedWorkingAddress());
+			candidate.setExpectedBusiness(new Business(candidateExpectedRequest.getExpectedBusinessId()));
+			candidate.setExpectedLevel(new Level(candidateExpectedRequest.getExpectedLevelId()));
+			candidate.setExpectedContract(new Contract(candidateExpectedRequest.getExpectedContractId()));
+			candidate.setExpectedSalary(candidateExpectedRequest.getExpectedSalary());
 			candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
 			candidate.setStatusInfo(2);
-			candidate.setUpdatedAt(timestamp);
+			candidate.setUpdatedAt(CommonFunction.dateTimeNow());
 			
 			Candidate result = candidateRepository.save(candidate);	
 			return result;
-		} catch (ResourceNotFoundException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new ServerError(MessageConstant.CANDIDATE_UPDATE_WISH_FAIL);
+			throw new ServerError(MessageConstant.CANDIDATE_UPDATE_RESIDENTAL_FAIL);
 		}
 	}
 	
-	@Transactional(rollbackFor=Exception.class,propagation= Propagation.REQUIRES_NEW)
-	public Candidate updateExperience(CandidateExperienceRequest candidateExperienceRequest, @PathVariable UUID id, UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	@Transactional(rollbackFor=Exception.class, propagation= Propagation.REQUIRES_NEW)
+	public Candidate updateExperience(CandidateExperienceRequest candidateExperienceRequest, Candidate candidate) 
+			throws ServerError{
 		try {	
-			this.deleteExperiencer(id);
-		
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
+			this.deleteExperiencer(candidate.getId());
 			
 			if(!candidateExperienceRequest.getAcademies().isEmpty()) {
 				List<Academy> listAcademy = new ArrayList<>();
 				for (AcademyRequest academyRequest : candidateExperienceRequest.getAcademies()) {
 					Academy academy = new Academy();
 					
-					academy.setCandidateId(id);
+					academy.setCandidate(candidate);
 					academy.setAcademyCenterName(academyRequest.getAcademyCenterName());
 					academy.setMajorName(academyRequest.getMajorName());
 					academy.setGrade(academyRequest.getGrade());
 					academy.setGradeSystem(academyRequest.getGradeSystem());
 					academy.setStartDate(academyRequest.getStartDate());
 					academy.setEndDate(academyRequest.getEndDate());
-					academy.setCreatedAt(timestamp);
-					academy.setUpdatedAt(timestamp);
+					academy.setCreatedAt(CommonFunction.dateTimeNow());
+					academy.setUpdatedAt(CommonFunction.dateTimeNow());
 					academy.setDeletedAt(null);
 					
 					listAcademy.add(academy);
@@ -199,15 +162,15 @@ public class CandidateService {
 				for (ExperienceRequest experienceRequest : candidateExperienceRequest.getExperiences()) {
 					Experience experience = new Experience();
 					
-					experience.setCandidateId(id);
+					experience.setCandidate(candidate);
 					experience.setOrganizaion(experienceRequest.getOrganizaion());
 					experience.setDesc(experienceRequest.getDesc());
 					experience.setLevel(new Level(experienceRequest.getLevelId()));
 					experience.setBusiness(new Business(experienceRequest.getBusinessId()));
 					experience.setStartDate(experienceRequest.getStartDate());
 					experience.setEndDate(experienceRequest.getEndDate());
-					experience.setCreatedAt(timestamp);
-					experience.setUpdatedAt(timestamp);
+					experience.setCreatedAt(CommonFunction.dateTimeNow());
+					experience.setUpdatedAt(CommonFunction.dateTimeNow());
 					experience.setDeletedAt(null);
 					
 					listExperience.add(experience);
@@ -222,12 +185,12 @@ public class CandidateService {
 				for (LanguageCertificateRequest languageCertificateRequest : candidateExperienceRequest.getLanguageCertificates()) {
 					LanguageCertificate languageCertificate = new LanguageCertificate();
 	
-					languageCertificate.setCandidateId(id);
+					languageCertificate.setCandidate(candidate);
 					languageCertificate.setScore(languageCertificateRequest.getScore());
 					languageCertificate.setLanguageCertificateType(new LanguageCertificateType(languageCertificateRequest.getLanguageCertificateTypeId()));
 					languageCertificate.setTakenDate(languageCertificateRequest.getTakenDate());
-					languageCertificate.setCreatedAt(timestamp);
-					languageCertificate.setUpdatedAt(timestamp);
+					languageCertificate.setCreatedAt(CommonFunction.dateTimeNow());
+					languageCertificate.setUpdatedAt(CommonFunction.dateTimeNow());
 					languageCertificate.setDeletedAt(null);
 					
 					listLanguageCertificate.add(languageCertificate);
@@ -238,8 +201,6 @@ public class CandidateService {
 			}
 				
 			return candidate;
-		} catch (ResourceNotFoundException e) {
-			throw e;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CANDIDATE_UPDATE_EXPERIENCE_FAIL);
 		}
@@ -247,8 +208,7 @@ public class CandidateService {
 	
 	public Candidate isDel(UUID id, Timestamp deletedAt) throws ResourceNotFoundException, ServerError{
 		try {
-			Candidate candidate = candidateRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			Candidate candidate = candidateRepository.findById(id).get();
 			candidate.setDeletedAt(deletedAt);
 			candidateRepository.save(candidate);
 			Candidate result = candidateRepository.findByIdAndDeletedAt(id, null);	
@@ -263,46 +223,14 @@ public class CandidateService {
 			}
 			
 		}
-		
 	}
 	
-	public Candidate findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
-		if(candidate == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
-			
-		return candidate;
-	}
-	
-	public Candidate myCandidate(UserPrincipal userPrincipal) throws ResourceNotFoundException{
-		Candidate candidate = candidateRepository.findByUserAndDeletedAt(userService.findById(userPrincipal.getId()), null);
-		if(candidate == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
-			
-		return candidate;
-	}
-	
-	public boolean checkCandidateByUser(User user){
-		Candidate candidate = candidateRepository.findByUser(user);
-		if(candidate == null) {
-			return false;
-		}
-		 return true;
-	}
-	
-	public List<Candidate> findAllByIsDelete() {
-		List<Candidate> listCandidate = candidateRepository.findAllByDeletedAt(null);
-		return listCandidate;
-	}
-	
-	public Page<Candidate> findAllByIsDelete(int page, int paging) throws ResourceNotFoundException{
+	public Page<Candidate> index(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Candidate> pages = candidateRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
@@ -312,7 +240,7 @@ public class CandidateService {
 			return pages;
 
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	private void deleteExperiencer(UUID id) {
@@ -336,29 +264,29 @@ public class CandidateService {
 		candidateResponse.setIntroduction(candidate.getIntroduction());
 		candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
 		
-		if(candidate.getWishWorkingCity() != null) {
-			candidateResponse.setWishWorkingCityId(candidate.getWishWorkingCity().getId());
+		if(candidate.getExpectedWorkingCity() != null) {
+			candidateResponse.setExpectedWorkingCityId(candidate.getExpectedWorkingCity().getId());
 		}
 		
-		if(candidate.getWishWorkingDistrict() != null) {
-			candidateResponse.setWishWorkingDistrictId(candidate.getWishWorkingDistrict().getId());
+		if(candidate.getExpectedWorkingDistrict() != null) {
+			candidateResponse.setExpectedWorkingDistrictId(candidate.getExpectedWorkingDistrict().getId());
 		}
 		
-		candidateResponse.setWishWorkingAddress(candidate.getWishWorkingAddress());
+		candidateResponse.setExpectedWorkingAddress(candidate.getExpectedWorkingAddress());
 		
-		if(candidate.getWishBusiness() != null) {
-			candidateResponse.setWishBusinessId(candidate.getWishBusiness().getId());
+		if(candidate.getExpectedBusiness() != null) {
+			candidateResponse.setExpectedBusinessId(candidate.getExpectedBusiness().getId());
 		}
 		
-		if(candidate.getWishLevel() != null) {
-			candidateResponse.setWishLevelId(candidate.getWishLevel().getId());
+		if(candidate.getExpectedLevel() != null) {
+			candidateResponse.setExpectedLevelId(candidate.getExpectedLevel().getId());
 		}
 		
-		if(candidate.getWishContract() != null) {
-			candidateResponse.setWishContractId(candidate.getWishContract().getId());
+		if(candidate.getExpectedContract() != null) {
+			candidateResponse.setExpectedContractId(candidate.getExpectedContract().getId());
 		}
 		
-		candidateResponse.setWishSalary(candidate.getWishSalary());
+		candidateResponse.setExpectedSalary(candidate.getExpectedSalary());
 
 		candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
 		candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));

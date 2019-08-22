@@ -10,9 +10,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
+import com.japanwork.controller.ResponseDataAPI;
+import com.japanwork.payload.response.ErrorResponse;
 
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
@@ -22,8 +23,12 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
-        BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_401, MessageConstant.ERROR_401_MSG);
-        BaseDataResponse baseDataResponse = new BaseDataResponse(baseMessageResponse);
-        httpServletResponse.getWriter().write(CommonFunction.convertToJSONString(baseDataResponse));
+        ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.UNAUTHORIZED, "errors.yml");
+        ResponseDataAPI responseDataAPI = new ResponseDataAPI(
+														CommonConstant.ResponseDataAPIStatus.FAILURE, 
+														null, 
+														null, 
+														error);
+        httpServletResponse.getWriter().write(CommonFunction.convertToJSONString(responseDataAPI));
     }
 }

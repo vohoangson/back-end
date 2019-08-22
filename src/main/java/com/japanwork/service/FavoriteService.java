@@ -1,7 +1,5 @@
 package com.japanwork.service;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ServerError;
@@ -18,9 +17,9 @@ import com.japanwork.model.Candidate;
 import com.japanwork.model.Favorite;
 import com.japanwork.model.Job;
 import com.japanwork.model.User;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.repository.favorite.FavoriteRepository;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.support.CommonSupport;
 
 @Service
 public class FavoriteService {
@@ -28,10 +27,7 @@ public class FavoriteService {
 	private FavoriteRepository favoriteRepository;
 	
 	@Autowired
-	private JobService jobService;
-	
-	@Autowired
-	private CandidateService candidateService;
+	private CommonSupport commonSupport;
 	
 	@Autowired
 	private UserService userService;
@@ -39,51 +35,33 @@ public class FavoriteService {
 	@PersistenceContext 
 	private EntityManager entityManager;
 	
-	public BaseMessageResponse canidateUnFavoriteJob(UUID id, UserPrincipal userPrincipal) {
+	public Favorite destroy(Job job, UserPrincipal userPrincipal) {
 		try {
-			Job job = jobService.findByIdAndIsDelete(id);
-			Candidate candidate = candidateService.myCandidate(userPrincipal);
-			
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
+			Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
 			
 			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndDeletedAt(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, null);
-			favorite.setDeletedAt(timestamp);
+			favorite.setDeletedAt(CommonFunction.dateTimeNow());
 			
-			favoriteRepository.save(favorite);
-			BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
-															MessageConstant.CANDIDATE_UN_FAVORITE_JOB_SUCCESS, 
-															MessageConstant.CANDIDATE_UN_FAVORITE_JOB_SUCCESS_MSG
-															);
-			return baseMessageResponse;
+			Favorite result = favoriteRepository.save(favorite);
+			return result;
 		} catch (Exception e) {
-			throw new ServerError(MessageConstant.CANDIDATE_UN_FAVORITE_JOB_FAIL);
+			throw new ServerError(MessageConstant.CANDIDATE_UNFAVORITE_JOB_FAIL);
 		}		
 	}
 	
-	public BaseMessageResponse canidateFavoriteJob(UUID id, UserPrincipal userPrincipal) throws ServerError{
+	public Favorite create(Job job, UserPrincipal userPrincipal) throws ServerError{
 		try {
-			Job obj = findFavoriteJob(userPrincipal, id);
-			if(obj == null) {
-				Date date = new Date();
-				Timestamp timestamp = new Timestamp(date.getTime());
+			Job obj = findFavoriteJob(userPrincipal, job.getId());
+			if(obj == null) {Favorite favorite = new Favorite();
 				
-				Favorite favorite = new Favorite();
-				
-				favorite.setCandidate(candidateService.myCandidate(userPrincipal));
-				
-				Job job = jobService.findByIdAndIsDelete(id);
+				favorite.setCandidate(commonSupport.loadCandidateByUser(userPrincipal.getId()));
 				favorite.setJob(job);
-				
 				favorite.setFavoriteType(CommonConstant.FavoriteType.CANDIDATE_JOB);
-				favorite.setCreatedAt(timestamp);
+				favorite.setCreatedAt(CommonFunction.dateTimeNow());
 				favorite.setDeletedAt(null);
 				
-				favoriteRepository.save(favorite);
-				BaseMessageResponse baseMessageResponse = new BaseMessageResponse(
-																MessageConstant.CANDIDATE_FAVORITE_JOB_SUCCESS, 
-																MessageConstant.CANDIDATE_FAVORITE_JOB_SUCCESS_MSG);
-				return baseMessageResponse;
+				Favorite result = favoriteRepository.save(favorite);
+				return result;
 			} else {
 				throw new ServerError(MessageConstant.CANDIDATE_FAVORITE_JOB_FAIL);
 			}
@@ -92,7 +70,7 @@ public class FavoriteService {
 		}		
 	}
 	
-	public List<Job> listFavoriteJob(UserPrincipal userPrincipal) {
+	public List<Job> index(UserPrincipal userPrincipal) {
 		User user = userService.findByIdAndIsDelete(userPrincipal.getId());
 		
 		StringBuilder sql = new StringBuilder();
@@ -105,7 +83,7 @@ public class FavoriteService {
 		sql.append("	j.deletedAt is null ");
 		sql.append("	AND fa.deletedAt is null ");
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-			Candidate candidate = candidateService.myCandidate(userPrincipal);
+			Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
 			sql.append("	AND fa.candidate.id = '" + candidate.getId() + "' ");
 			sql.append("	AND fa.favoriteType = '" + CommonConstant.FavoriteType.CANDIDATE_JOB + "' ");
 		}
@@ -127,7 +105,7 @@ public class FavoriteService {
 		sql.append("	AND j.id = '" + id + "' ");
 		sql.append("	AND fa.deletedAt is null ");
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-			Candidate candidate = candidateService.myCandidate(userPrincipal);
+			Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
 			sql.append("	AND fa.candidate.id = '" + candidate.getId() + "' ");
 			sql.append("	AND fa.favoriteType = '" + CommonConstant.FavoriteType.CANDIDATE_JOB + "' ");
 		}

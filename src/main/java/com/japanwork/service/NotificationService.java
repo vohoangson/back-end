@@ -1,8 +1,6 @@
 package com.japanwork.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,15 +12,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Notification;
 import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
-import com.japanwork.payload.request.MarkReadNotificationReuqest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
+import com.japanwork.payload.request.MarkReadNotificationRequest;
 import com.japanwork.payload.response.NotificationResponse;
 import com.japanwork.repository.notification.NotificationRepository;
 import com.japanwork.security.UserPrincipal;
@@ -35,28 +34,27 @@ public class NotificationService {
 	@Autowired
 	private NotificationRepository notificationRepository;
 
-	@Autowired
-	private UserService userService;
-
-	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content, String type, UUID userId) 
-			throws ForbiddenException{
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
+	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content, 
+			String type, UUID userId) throws ForbiddenException{
 		Notification notification = new Notification();
 		notification.setSenderId(senderId);
 		notification.setObjectableId(objectableId);
 		notification.setNotificationType(type);
-		notification.setCreatedAt(timestamp);
+		notification.setCreatedAt(CommonFunction.dateTimeNow());
 		notification.setContent(content);
 		notification.setReceiverId(receiverId);
 		notification.setDeletedAt(null);
 		Notification result = notificationRepository.save(notification);
-		BaseDataResponse response = new BaseDataResponse(this.convertNotificationResponse(result, conversationId));
-		rabbitTemplate.convertAndSend("notifications/"+userId, ""+userId, response);
+		ResponseDataAPI responseDataAPI = new ResponseDataAPI(
+													CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+													this.convertNotificationResponse(result, conversationId), 
+													null, 
+													null);
+		rabbitTemplate.convertAndSend("notifications/"+userId, ""+userId, responseDataAPI);
 	}
-	public BaseDataMetaResponse notifications(UserPrincipal userPrincipal, int page, int paging) throws ResourceNotFoundException{
+	public ResponseDataAPI index(User user, int page, int paging) 
+			throws ResourceNotFoundException{
 		try {
-			User user = userService.getUser(userPrincipal);
 			Page<Notification> pages = notificationRepository.findByReceiverIdAndDeletedAt(
 			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), user.getPropertyId(), null);
 			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
@@ -69,30 +67,29 @@ public class NotificationService {
 				}
 			}
 			
-			return new BaseDataMetaResponse(list, pageInfo);
+			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, pageInfo, null);
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public int unreadNumber(UserPrincipal userPrincipal) throws ResourceNotFoundException{
+	public int countNotificationUnread(User user) throws ResourceNotFoundException{
 		try {
-			User user = userService.getUser(userPrincipal);
 			int num = notificationRepository.countByReceiverIdAndIsReadAndDeletedAt(user.getPropertyId(), false, null);
 			return num;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
 	@Transactional
-	public void markReads(UserPrincipal userPrincipal, MarkReadNotificationReuqest markReadNotificationReuqest) {
-		notificationRepository.updateIsReadByIdInAndDeletedAt(true, markReadNotificationReuqest.getNotificationIds());
+	public void update(UserPrincipal userPrincipal, MarkReadNotificationRequest markReadNotificationRequest) {
+		notificationRepository.updateIsReadByIdInAndDeletedAt(true, markReadNotificationRequest.getNotificationIds());
 	}
 	
 	@Transactional
-	public void markAllReads(UserPrincipal userPrincipal) {
-		notificationRepository.updateIsReadByReceiverIdAndDeletedAt(true, userService.getUser(userPrincipal).getPropertyId());
+	public void updateAllRead(User user) {
+		notificationRepository.updateIsReadByReceiverIdAndDeletedAt(true, user.getPropertyId());
 	}
 	public NotificationResponse convertNotificationResponse(Notification notification, UUID conversationId) {
 		NotificationResponse notificationResponse = new NotificationResponse();

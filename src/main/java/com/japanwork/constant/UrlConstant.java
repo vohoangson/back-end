@@ -51,7 +51,6 @@ public class UrlConstant {
 	public static final String URL_COMPANY_UNDELETE = "/v1/companies/{id}/undelete";
 	public static final String URL_MY_COMPANY = "/v1/companies/my_company";
 	public static final String URL_COMPANY_JOB = "/v1/companies/{id}/jobs";
-	public static final String URL_COMPANY_DEL = "/v1/companies/{id}/delete";
 	public static final String URL_COMPANY_JOB_APPLICATION = "/v1/companies/{id}/job_applications";
 	public static final String URL_COMPANY_REQUEST = "/v1/companies/{id}/requests";
 
@@ -107,7 +106,7 @@ public class UrlConstant {
 	public static final String URL_MY_CANDIDATE = "/v1/candidates/my_candidate";
 	public static final String URL_CANDIDATE = "/v1/candidates/{id}";
 	public static final String URL_CANDIDATE_UNDELETE = "/v1/candidates/{id}/undelete";
-	public static final String URL_CANDIDATES_JOB_FAVORITE = "/v1/candidates/job/{id}/favorite";
+	public static final String URL_CANDIDATES_JOB_FAVORITE = "/v1/candidates/jobs/{id}/favorite";
 	public static final String URL_CANDIDATES_JOB_FAVORITES = "/v1/candidates/jobs/favorite";
 	public static final String URL_CANDIDATES_JOB_APPLICATIONS = "/v1/candidates/{id}/job_applications";
 	public static final String URL_CANDIDATES_REQUESTS = "/v1/candidates/{id}/requests";
@@ -117,7 +116,7 @@ public class UrlConstant {
 	public static final String URL_CANDIDATE_PERSONAL = "/v1/candidates/{id}/personal";
 
 	//Candidate expected
-	public static final String URL_CANDIDATE_WISH = "/v1/candidates/{id}/wish";
+	public static final String URL_CANDIDATE_EXPECTED = "/v1/candidates/{id}/expected";
 
 	//Candidate experience
 	public static final String URL_CANDIDATE_EXPERIENCE = "/v1/candidates/{id}/experience";

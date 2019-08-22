@@ -24,9 +24,10 @@ public class Experience {
     @Column(name="id")
 	private UUID id;
 
-    @Column(name = "candidate_id", nullable = false)
+	@ManyToOne
+    @JoinColumn(name="candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-	private UUID candidateId;
+	private Candidate candidate;
 
 	@Column(name = "organizaion")
 	private String organizaion;
@@ -65,12 +66,12 @@ public class Experience {
 		this.id = id;
 	}
 
-	public UUID getCandidateId() {
-		return candidateId;
+	public Candidate getCandidate() {
+		return candidate;
 	}
 
-	public void setCandidateId(UUID candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
 	}
 
 	public String getOrganizaion() {
@@ -145,11 +146,11 @@ public class Experience {
 		this.deletedAt = deletedAt;
 	}
 
-	public Experience(UUID id, UUID candidateId, String organizaion, String desc, Level level, Business business,
+	public Experience(UUID id, Candidate candidate, String organizaion, String desc, Level level, Business business,
 			Date startDate, Date endDate, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		super();
 		this.id = id;
-		this.candidateId = candidateId;
+		this.candidate = candidate;
 		this.organizaion = organizaion;
 		this.desc = desc;
 		this.level = level;

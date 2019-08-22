@@ -1,0 +1,202 @@
+confirm_register_expired:
+  code:
+  message: Confirm Register Fail! Confirm expired registration!
+confirm_register_invalid:
+  code:
+  message: Confirm Register Fail! Registration confirmation does not exist!
+company_not_found:
+  code:
+  message: Company was not found!
+language_not_found:
+  code:
+  message: Language was not found!
+job_not_found:
+  code:
+  message: Job was not found!
+translator_not_found:
+  code:
+  message: Translator was not found!
+candidate_not_found:
+  code:
+  message: Candidate was not found!
+conversation_not_found:
+  code:
+  message: Conversation was not found!
+job_application_not_found:
+  code:
+  message: Job application was not found!
+request_translation_not_found:
+  code:
+  message: Request translation was not found!
+user_not_found:
+  code:
+  message: User was not found!
+page_not_found:
+  code:
+  message: Page was not found!
+forbidden_error:
+  code:
+  message: Access Denied You don’t have permission to access!  
+unauthorized:
+  code:
+  message: You do not have permission to access this page!
+internal_server_error:
+  code:
+  message: Internal server error!
+#Candidate
+candidate_create_failed:
+  code:
+  message: Create candidate failed!
+candidate_update_personal_failed:
+  code:
+  message: Update candidate personal failed!  
+candidate_update_residental_failed:
+  code:
+  message: Update candidate residental failed!
+candidate_update_experience_failed:
+  code:
+  message: Update candidate experience failed!
+candidate_delete_failed:
+  code:
+  message: Delete candidate failed!
+candidate_undelete_failed:
+  code:
+  message: Undelete candidate failed!
+#Company 
+company_update_failed:
+  code:
+  message: Update company failed!
+company_create_failed:
+  code:
+  message: Create company failed!
+company_delete_failed:
+  code:
+  message: Delete company failed!
+company_undelete_failed:
+  code:
+  message: Undelete company failed!
+#Company translation
+company_translation_update_failed:
+  code:
+  message: Update company translation failed!
+company_translation_create_failed:
+  code:
+  message: Create company translation failed!
+#Candiate favorite job
+candidate_favorite_job_failed:
+  code:
+  message: Candidate favorite job failed!
+candidate_unfavorite_job_failed:
+  code:
+  message: Candidate unfavorite job failed!
+#Request translation
+request_translation_forbidden_error:
+  code:
+  message: Access Denied You don’t have permission to access!
+request_translation_create_fail:
+  code:
+  message: Create request translation failed!
+request_translation_translator_join_fail:
+  code:
+  message: Translator join fail, another translator joined!
+request_translation_owner_accept_apply_fail:
+  code:
+  message: Owner accept apply fail!
+request_translation_confirm_finish_fail:
+  code:
+  message: Translator confirm finish fail!
+request_translation_accept_finish_fail:
+  code:
+  message: Owner accept finish fail!
+request_translation_refuse_finish_fail:
+  code:
+  message: Owner refuse finish fail!
+request_translation_reject_fail:
+  code:
+  message: reject fail!
+request_translation_cancel_fail:
+  code:
+  message: cancel fail!
+request_translation_already:
+  code:
+  message: Request translation is already!
+#Job application
+job_application_forbidden_error:
+  code:
+  message: The company reject or cancel you, please choose another job!
+job_application_reject_fail:
+  code:
+  message: Company reject candidate failed!
+job_application_cancel_fail:
+  code:
+  message: Cancel failed!
+job_application_company_accept_apply_candidate_fail:
+  code:
+  message: Company accept apply candidate failed!
+job_application_company_approve_candidate_fail:
+  code:
+  message: Company approve candidate failed!
+job_application_candidate_apply_job_fail:
+  code:
+  message: Candidate apply job failed!
+#Job
+job_update_failed:
+  code:
+  message: Update job failed!
+job_create_failed:
+  code:
+  message: Create job failed!
+job_delete_failed:
+  code:
+  message: Delete job failed!
+job_undelete_failed:
+  code:
+  message: Undelete job failed!
+#Job translation
+job_translation_update_failed:
+  code:
+  message: Update job translation failed!
+job_translation_create_failed:
+  code:
+  message: Create job translation failed!
+#Translator
+translator_update_failed:
+  code:
+  message: Update translator failed!
+translator_create_failed:
+  code:
+  message: Create translator failed!
+translator_delete_failed:
+  code:
+  message: Delete translator failed!
+translator_undelete_failed:
+  code:
+  message: Undelete translator failed!
+#User
+register_failed:
+  code:
+  message: Register_failed!
+change_password_failed:
+  code:
+  message: Change password failed!
+change_property_id_failed:
+  code:
+  message: Change property id failed!
+reset_password_failed:
+  code:
+  message: Reset password failed!
+login_fail:
+  code: 123
+  message: Incorrect email or password!
+login_oauth2_fail:
+  code:
+  message: Incorrect email or password!
+old_password_not_correct:
+  code:
+  message: Old password is not correct!
+email_does_not_exist:
+  code:
+  message: Email does not exist!
+reset_password_incorrect_code:
+  code:
+  message: Incorrect code reset password!

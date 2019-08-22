@@ -9,8 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.common.CommonFunction;
 import com.japanwork.model.District;
 import com.japanwork.payload.request.DistrictRequest;
 import com.japanwork.payload.request.ListDistrictRequest;
@@ -21,37 +20,28 @@ public class DistrictService {
 	@Autowired
 	private DistrictRepository districtRepository;
 	
-	public District save(DistrictRequest districtRequest) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+	public List<District> index() {
+		List<District> list = districtRepository.findAllByDeletedAt(null);
+		return list;
+	}
+	
+	public District create(DistrictRequest districtRequest) {		
 		District district = new District();
 		district.setCity(district.getCity());
 		district.setJa(districtRequest.getJa());
 		district.setVi(districtRequest.getVi());
 		district.setDesc(districtRequest.getDesc());
-		district.setCreatedAt(timestamp);
-		district.setUpdatedAt(timestamp);
+		district.setCreatedAt(CommonFunction.dateTimeNow());
+		district.setUpdatedAt(null);
 		district.setDeletedAt(null);
 		
 		District result = districtRepository.save(district);
 		return result;
 	}
 	
-	public List<District> findAllByIsDelete() {
-		List<District> list = districtRepository.findAllByDeletedAt(null);
-		return list;
-	}
 	public List<District> findAllByCityIdAndIsDelete(UUID id){
 		List<District> list = districtRepository.findAllByCityIdAndDeletedAt(id, null);
 		return list;
-	}
-	public District findByIdAndIsDelete(UUID id) {
-		District district = districtRepository.findByIdAndDeletedAt(id, null);
-		if(district == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
-		return district;
 	}
 	
 	public List<District> saves(ListDistrictRequest listDistrictRequest) {
