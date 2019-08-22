@@ -20,7 +20,7 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
@@ -48,7 +48,7 @@ public class JobService {
 	private CompanyService companyService;
 	
 	public ResponseDataAPI index(JobFilterRequest jobFilterRequest, int page, int paging) 
-			throws ResourceNotFoundException2{
+			throws ResourceNotFoundException{
 		try {	
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT DISTINCT j ");
@@ -173,16 +173,16 @@ public class JobService {
 					pageInfo, 
 					null);
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public Page<Job> indexByCompany(int page, int paging, UUID id) throws ResourceNotFoundException2{
+	public Page<Job> indexByCompany(int page, int paging, UUID id) throws ResourceNotFoundException{
 		try {
 			Page<Job> pages = jobRepository.findAllByCompanyIdAndDeletedAt(PageRequest.of(page-1, paging), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	

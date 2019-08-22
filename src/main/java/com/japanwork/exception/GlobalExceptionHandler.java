@@ -28,8 +28,8 @@ import com.japanwork.payload.response.ErrorResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(ResourceNotFoundException2.class)
-	public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException2 ex, WebRequest request) {
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
 		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}

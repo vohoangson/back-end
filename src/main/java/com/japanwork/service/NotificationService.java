@@ -17,7 +17,7 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Notification;
 import com.japanwork.model.PageInfo;
 import com.japanwork.model.User;
@@ -53,7 +53,7 @@ public class NotificationService {
 		rabbitTemplate.convertAndSend("notifications/"+userId, ""+userId, responseDataAPI);
 	}
 	public ResponseDataAPI index(User user, int page, int paging) 
-			throws ResourceNotFoundException2{
+			throws ResourceNotFoundException{
 		try {
 			Page<Notification> pages = notificationRepository.findByReceiverIdAndDeletedAt(
 			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), user.getPropertyId(), null);
@@ -69,16 +69,16 @@ public class NotificationService {
 			
 			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, pageInfo, null);
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public int countNotificationUnread(User user) throws ResourceNotFoundException2{
+	public int countNotificationUnread(User user) throws ResourceNotFoundException{
 		try {
 			int num = notificationRepository.countByReceiverIdAndIsReadAndDeletedAt(user.getPropertyId(), false, null);
 			return num;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	

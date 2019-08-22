@@ -13,7 +13,7 @@ import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.Message;
 import com.japanwork.model.User;
@@ -97,13 +97,13 @@ public class MessageService {
 		return result;
 	}
 	
-	public Page<Message> index(Conversation conversation, int page, int paging) throws ResourceNotFoundException2{
+	public Page<Message> index(Conversation conversation, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Message> pages = messageRepository.findByConversationAndDeletedAt(
 			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), conversation, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	

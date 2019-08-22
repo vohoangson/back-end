@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.Academy;
 import com.japanwork.model.Business;
@@ -206,14 +206,14 @@ public class CandidateService {
 		}
 	}
 	
-	public Candidate isDel(UUID id, Timestamp deletedAt) throws ResourceNotFoundException2, ServerError{
+	public Candidate isDel(UUID id, Timestamp deletedAt) throws ResourceNotFoundException, ServerError{
 		try {
 			Candidate candidate = candidateRepository.findById(id).get();
 			candidate.setDeletedAt(deletedAt);
 			candidateRepository.save(candidate);
 			Candidate result = candidateRepository.findByIdAndDeletedAt(id, null);	
 			return result;
-		} catch (ResourceNotFoundException2 e) {
+		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
 			if(deletedAt != null) {
@@ -225,22 +225,22 @@ public class CandidateService {
 		}
 	}
 	
-	public Page<Candidate> index(int page, int paging) throws ResourceNotFoundException2{
+	public Page<Candidate> index(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Candidate> pages = candidateRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public Page<Candidate> candidatesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException2{
+	public Page<Candidate> candidatesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Candidate> pages = candidateRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids, null);
 			return pages;
 
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	private void deleteExperiencer(UUID id) {

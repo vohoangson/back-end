@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.BadRequestException;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.Business;
 import com.japanwork.model.Company;

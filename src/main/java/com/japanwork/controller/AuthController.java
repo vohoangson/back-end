@@ -26,7 +26,7 @@ import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.payload.request.LoginRequest;
 import com.japanwork.payload.response.AuthResponse;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
@@ -74,14 +74,14 @@ public class AuthController {
     }
     
     @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
-    public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException2{
+    public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException{
     	final String result = userService.validateVerificationToken(token);
     	if (result.equals("valid")) {
             return new RedirectView("http://datvo.io/login");
         } else if(result.equals("expired")) {
-            throw new ResourceNotFoundException2(MessageConstant.CONFIRM_REGISTER_EXPIRED);
+            throw new ResourceNotFoundException(MessageConstant.CONFIRM_REGISTER_EXPIRED);
         } else {
-            throw new ResourceNotFoundException2(MessageConstant.CONFIRM_REGISTER_INVALID);
+            throw new ResourceNotFoundException(MessageConstant.CONFIRM_REGISTER_INVALID);
         }    	
     }
     

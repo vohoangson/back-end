@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.exception.ResourceNotFoundException2;
+import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.City;
 import com.japanwork.model.District;
@@ -71,21 +71,21 @@ public class TranslatorService {
 		return result;
 	}
 	
-	public Page<Translator> index(int page, int paging) throws ResourceNotFoundException2{
+	public Page<Translator> index(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Translator> pages = translatorRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public Page<Translator> translatorsByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException2{
+	public Page<Translator> translatorsByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Translator> pages = translatorRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids,null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
