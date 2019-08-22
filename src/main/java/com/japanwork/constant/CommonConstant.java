@@ -2,6 +2,11 @@ package com.japanwork.constant;
 
 public class CommonConstant {
 	
+	public interface ResponseDataAPIStatus {
+        String SUCCESS = "success";
+        String FAILURE = "failure";
+    }
+	
 	public interface StatusTranslate {
         String UNTRANSLATED = "UNTRANSLATED";
         String TRANSLATING = "TRANSLATING";

@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.District;
 import com.japanwork.payload.request.DistrictRequest;
 import com.japanwork.payload.request.ListDistrictRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.DistrictService;
 
 @Controller
@@ -27,29 +27,29 @@ public class DistrictController {
 	
 	@GetMapping(UrlConstant.URL_DISTRICTS)
 	@ResponseBody
-	public BaseDataResponse listDistrict() {
-		List<District> list = districtService.findAllByIsDelete();
-		return new BaseDataResponse(list);
-	}
-	
-	@GetMapping(UrlConstant.URL_CITIES_DISTRICTS)
-	@ResponseBody
-	public BaseDataResponse listDistrictByCity(@PathVariable UUID id) {
-		List<District> list = districtService.findAllByCityIdAndIsDelete(id);
-		return new BaseDataResponse(list);
+	public ResponseDataAPI index() {
+		List<District> list = districtService.index();
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_DISTRICTS)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody DistrictRequest districtRequest) {		
-		District district = districtService.save(districtRequest);
-		return new BaseDataResponse(district);
+	public ResponseDataAPI create(@Valid @RequestBody DistrictRequest districtRequest) {		
+		District district = districtService.create(districtRequest);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, district, null, null);
+	}
+	
+	@GetMapping(UrlConstant.URL_CITIES_DISTRICTS)
+	@ResponseBody
+	public ResponseDataAPI listDistrictByCity(@PathVariable UUID id) {
+		List<District> list = districtService.findAllByCityIdAndIsDelete(id);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_DISTRICTS_BATCH)
 	@ResponseBody
-	public BaseDataResponse createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {		
+	public ResponseDataAPI createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {		
 		List<District> list =  districtService.saves(listDistrictRequest);
-		return new BaseDataResponse(list);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 }

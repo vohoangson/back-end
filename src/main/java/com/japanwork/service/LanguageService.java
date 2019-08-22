@@ -15,7 +15,7 @@ public class LanguageService {
 	@Autowired
 	private LanguageRepository languageRepository;
 	
-	public List<Language> findAllByIsDelete() {
+	public List<Language> index() {
 		List<Language> list = languageRepository.findAllByDeletedAt(null);
 		return list;
 	}

@@ -1,8 +1,6 @@
 package com.japanwork.controller;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -21,23 +19,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.PageInfo;
+import com.japanwork.payload.request.CandidateExpectedRequest;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
-import com.japanwork.payload.request.CandidateExpectedRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CandidateService;
-import com.japanwork.service.UserService;
+import com.japanwork.support.CommonSupport;
 
 @Controller
 public class CandidateController {
@@ -45,58 +42,75 @@ public class CandidateController {
 	private CandidateService candidateService;
 	
 	@Autowired
-	private UserService userService;
+	private CommonSupport commonSupport;
 	
 	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONALS)
 	@ResponseBody
-	public BaseDataResponse createCandidatePersonal (@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
+	public ResponseDataAPI create(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
-		if(candidateService.checkCandidateByUser(userService.findById(userPrincipal.getId()))) {
-			throw new BadRequestException(MessageConstant.CANDIDATE_ALREADY, MessageConstant.CADIDATE_ALREADY_MSG);
-		}
-		Candidate candidate = candidateService.savePersonal(candidatePersonalRequest, userPrincipal);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+		Candidate candidate = candidateService.create(candidatePersonalRequest, userPrincipal);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
 	@ResponseBody
-	public BaseDataResponse updateCandidatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, 
+	public ResponseDataAPI updatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
-		if(!checkPermission(userPrincipal, id)) {
-			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+		Candidate candidate = commonSupport.loadCandidateById(id);
+		if(!checkPermission(userPrincipal, candidate)) {
+			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
-		Candidate candidate = candidateService.updatePersonal(candidatePersonalRequest, id, userPrincipal);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+		
+		candidate = candidateService.updatePersonal(candidatePersonalRequest, candidate);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPECTED)
 	@ResponseBody
-	public BaseDataResponse updateCandidateWish(@Valid @RequestBody CandidateExpectedRequest candidateExpectedRequest, 
+	public ResponseDataAPI updateExpected(@Valid @RequestBody CandidateExpectedRequest candidateExpectedRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
-		if(!checkPermission(userPrincipal, id)) {
-			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+		Candidate candidate = commonSupport.loadCandidateById(id);
+		if(!checkPermission(userPrincipal, candidate)) {
+			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
 		
-		Candidate candidate = candidateService.updateWish(candidateExpectedRequest, id, userPrincipal);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+		candidate = candidateService.updateExpected(candidateExpectedRequest, candidate);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE)
 	@ResponseBody
-	public BaseDataResponse updateCandidateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
+	public ResponseDataAPI updateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{	
-		if(!checkPermission(userPrincipal, id)) {
-			throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+		Candidate candidate = commonSupport.loadCandidateById(id);
+		if(!checkPermission(userPrincipal, candidate)) {
+			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
-		Candidate candidate = candidateService.updateExperience(candidateExperienceRequest, id, userPrincipal);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+		candidate = candidateService.updateExperience(candidateExperienceRequest, candidate);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATES)
 	@ResponseBody
-	public BaseDataMetaResponse listCandidate(@RequestParam(defaultValue = "1", name = "page") int page,
+	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging){	
-		Page<Candidate> pages = candidateService.findAllByIsDelete(page, paging);
+		Page<Candidate> pages = candidateService.index(page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		
 		List<CandidateResponse> list = new ArrayList<CandidateResponse>();
@@ -107,13 +121,16 @@ public class CandidateController {
 			}
 		}
 		
-		BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
-		return response;
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				list, 
+				pageInfo, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE_IDS)
 	@ResponseBody
-	public BaseDataMetaResponse listCandidateByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+	public ResponseDataAPI listCandidateByIds(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(name = "ids") Set<UUID> ids) {
 		Page<Candidate> pages = candidateService.candidatesByIds(ids, page, paging);
@@ -126,49 +143,57 @@ public class CandidateController {
 			}
 		}
 
-		return new BaseDataMetaResponse(list, pageInfo);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				list, 
+				pageInfo, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
-	public BaseDataResponse findCadidateByIdAndIsDelete(@PathVariable UUID id){		
-		Candidate candidate = candidateService.findByIdAndIsDelete(id);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+	public ResponseDataAPI show(@PathVariable UUID id){		
+		Candidate candidate = commonSupport.loadCandidateById(id);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_MY_CANDIDATE)
 	@ResponseBody
-	public BaseDataResponse myCandidate(@CurrentUser UserPrincipal userPrincipal){		
-		Candidate candidate = candidateService.myCandidate(userPrincipal);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+	public ResponseDataAPI myCandidate(@CurrentUser UserPrincipal userPrincipal){		
+		Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
 	@DeleteMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
-		candidateService.isDel(id, timestamp);
-		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.CANDIDATE_DELETE_SUCCESS, MessageConstant.CANDIDATE_DELETE_SUCCESS_MSG);
-		return new BaseDataResponse(baseMessageResponse);
+	public ResponseDataAPI destroy(@PathVariable UUID id) {		
+		candidateService.isDel(id, CommonFunction.dateTimeNow());
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_CANDIDATE_UNDELETE)
 	@ResponseBody
-	public BaseDataResponse favoriteJob(@PathVariable UUID id) {		
+	public ResponseDataAPI undelete(@PathVariable UUID id) {		
 		Candidate candidate = candidateService.isDel(id, null);
-		return new BaseDataResponse(candidateService.convertCandiateResponse(candidate));
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				candidateService.convertCandiateResponse(candidate), 
+				null, 
+				null);
 	}
 	
-	private boolean checkPermission(UserPrincipal userPrincipal, UUID id) {
-		if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_CANDIDATE")) {		
-			Candidate candidate = candidateService.findByIdAndIsDelete(id);
-			if(!candidate.getUser().getId().equals(userPrincipal.getId())) {
-				return false;
-			}
+	private boolean checkPermission(UserPrincipal userPrincipal, Candidate candidate) {
+		if(!candidate.getUser().getId().equals(userPrincipal.getId())) {
+			return false;
 		}
-		
 		return true;
 	}
 }

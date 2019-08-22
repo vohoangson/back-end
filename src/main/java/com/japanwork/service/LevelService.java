@@ -1,15 +1,11 @@
 package com.japanwork.service;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.common.CommonFunction;
 import com.japanwork.model.Level;
 import com.japanwork.payload.request.LevelRequest;
 import com.japanwork.repository.level.LevelRepository;
@@ -19,33 +15,21 @@ public class LevelService {
 	@Autowired
 	private LevelRepository levelRepository;
 	
-	public List<Level> findAllByIsDelete() {
+	public List<Level> index() {
 		List<Level> list = levelRepository.findAllByDeletedAt(null);
 		return list;
 	}
-	
-	public Level findByIdAndIsDelete(UUID id) {
-		Level level = levelRepository.findByIdAndDeletedAt(id, null);
-		if(level == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}
-		return level;
-	}
-	
-	public Level save(LevelRequest levelRequest) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		
+
+	public Level create(LevelRequest levelRequest) {
 		Level level = new Level();
 		level.setJa(levelRequest.getJa());
 		level.setVi(levelRequest.getVi());
 		level.setDesc(levelRequest.getDesc());
-		level.setCreatedAt(timestamp);
-		level.setUpdatedAt(timestamp);
+		level.setCreatedAt(CommonFunction.dateTimeNow());
+		level.setUpdatedAt(null);
 		level.setDeletedAt(null);
 		
 		Level result = levelRepository.save(level);
-		
 		return result;
 	}
 }

@@ -4,16 +4,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
+import com.japanwork.controller.ResponseDataAPI;
+import com.japanwork.payload.response.ErrorResponse;
 
 @Controller
 public class Error403 {
 	@RequestMapping(value = "/403")
 	@ResponseBody
-	public BaseDataResponse error403() {
-		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.ERROR_403, MessageConstant.ERROR_403_MSG);
-		return new BaseDataResponse(baseMessageResponse);
+	public ResponseDataAPI error403() {
+		ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.FORBIDDEN_ERROR, "errors.yml");
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, error);
 	}
 }

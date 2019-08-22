@@ -15,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,19 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.exception.ResourceNotFoundException;
-import com.japanwork.model.User;
-import com.japanwork.payload.request.ChangePasswordRequest;
+import com.japanwork.exception.ResourceNotFoundException2;
 import com.japanwork.payload.request.LoginRequest;
-import com.japanwork.payload.request.MailForgetPasswordRequest;
-import com.japanwork.payload.request.ResetPasswordRequest;
-import com.japanwork.payload.request.SignUpRequest;
 import com.japanwork.payload.response.AuthResponse;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
+import com.japanwork.payload.response.ErrorResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.TokenProvider;
 import com.japanwork.security.UserPrincipal;
@@ -72,32 +66,22 @@ public class AuthController {
 
             String token = tokenProvider.createToken(authentication);
             AuthResponse authResponse = new AuthResponse(token);
-            return ResponseEntity.ok(new BaseDataResponse(authResponse));
+            return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null, null));
         } catch(BadCredentialsException e){
-            return ResponseEntity.badRequest().body(new BaseMessageResponse(MessageConstant.LOGIN_FAIL, 
-            		MessageConstant.LOGIN_FAIL_MSG));
+        	ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.LOGIN_FAIL, "errors.yml");
+            return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, error));
         }
-    }
-
-    @PostMapping(value = UrlConstant.URL_REGISTER)
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
-        if(userService.existsByEmail(signUpRequest.getEmail())) {
-            BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.EMAIL_ALREADY, 
-            		MessageConstant.EMAIL_ALREADY_MSG);
-            return ResponseEntity.badRequest().body(baseMessageResponse);
-        }
-        return userService.registerUser(signUpRequest, request);
     }
     
     @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
-    public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException{
+    public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException2{
     	final String result = userService.validateVerificationToken(token);
     	if (result.equals("valid")) {
             return new RedirectView("http://datvo.io/login");
         } else if(result.equals("expired")) {
-            throw new ResourceNotFoundException("Confirm Register Fail! Confirm expired registration.");
+            throw new ResourceNotFoundException2(MessageConstant.CONFIRM_REGISTER_EXPIRED);
         } else {
-            throw new ResourceNotFoundException("Confirm Register Fail! Registration confirmation does not exist.");
+            throw new ResourceNotFoundException2(MessageConstant.CONFIRM_REGISTER_INVALID);
         }    	
     }
     
@@ -111,10 +95,10 @@ public class AuthController {
     public ResponseEntity<?> oauth2LoginRedirect(@RequestParam("token") String token, @RequestParam("error") String error) {
     	if(!token.isEmpty()) {
     		AuthResponse authResponse = new AuthResponse(token);        	
-            return ResponseEntity.ok(new BaseDataResponse(authResponse));
+            return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null, null));
     	}else{
-    		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.LOGIN_OAUTH2_FAIL, error);
-    		return ResponseEntity.badRequest().body(baseMessageResponse);
+    		ErrorResponse err = CommonFunction.getErrorFromErrors(MessageConstant.LOGIN_OAUTH2_FAIL, "errors.yml");
+    		return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, err));
     	}
     	        
     }
@@ -128,36 +112,8 @@ public class AuthController {
 //	  	}
 //	}
     
-    @DeleteMapping(value = UrlConstant.URL_USER)
-    public BaseMessageResponse deleteUserByEmail(@RequestParam("email") String email) {
-    	return userService.deleteUserByEmail(email);    
-    }
-    
-    @GetMapping(value = UrlConstant.URL_USER)
-    public BaseDataResponse getUser(@CurrentUser UserPrincipal userPrincipal) {    	
-    	User user = userService.getUser(userPrincipal);
-    	user.setRole(user.getRole().replaceAll("ROLE_", ""));
-    	return new BaseDataResponse(userService.converUserResponse(user));
-    }
-    
-    @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)
-    public BaseMessageResponse changePassword(@CurrentUser UserPrincipal userPrincipal, 
-    		@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
-    	return userService.changePassword(userPrincipal, changePasswordRequest);    
-    }
-    
-    @PostMapping(value = UrlConstant.URL_USER_FORGET_PASSWORD)
-    public BaseMessageResponse forgetPassword(@Valid @RequestBody MailForgetPasswordRequest mailForgetPasswordRequest) {
-    	return userService.forgetPassword(mailForgetPasswordRequest);    
-    }
-    
-    @PostMapping(value = UrlConstant.URL_USER_RESET_PASSWORD)
-    public BaseMessageResponse resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
-    	return userService.resetPassword(resetPasswordRequest);    
-    }
-    
     @GetMapping(value = UrlConstant.URL_NOTIFICATIONS_ENDPOINT)
-    public BaseDataResponse websocket(@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseDataAPI websocket(@CurrentUser UserPrincipal userPrincipal) {
     	rabbitAdmin = new RabbitAdmin(connectionFactory);
     	String exchangeName = "notifications/"+userPrincipal.getId();
     	String queueName = CommonFunction.generateCode(8);
@@ -170,6 +126,6 @@ public class AuthController {
                 exchangeName,
                 ""+userPrincipal.getId(),
                 null));
-        return new BaseDataResponse(queueName);
+        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, queueName, null, null);
     }
 }

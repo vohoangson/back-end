@@ -178,9 +178,9 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public Company findByUserAndDeletedAt(User user, Timestamp deletedAt) {
+	public Company findByUserIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByUserAndDeletedAt(user, deletedAt);
+		return findByUserIdAndDeletedAt(id, deletedAt);
 	}
 	
 	@Override

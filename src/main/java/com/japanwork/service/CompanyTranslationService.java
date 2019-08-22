@@ -1,18 +1,19 @@
 package com.japanwork.service;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
-import com.japanwork.exception.BadRequestException;
-import com.japanwork.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ForbiddenException;
-import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.BadRequestException;
+import com.japanwork.exception.ResourceNotFoundException2;
 import com.japanwork.exception.ServerError;
+import com.japanwork.model.Business;
+import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.Language;
 import com.japanwork.payload.request.CompanyTranslationRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
@@ -38,9 +39,6 @@ public class CompanyTranslationService {
             CompanyTranslationRequest companyRequest
     ) throws ServerError{
         try {
-            Date date           = new Date();
-            Timestamp timestamp = new Timestamp(date.getTime());
-
             CompanyTranslation companyTranslation = new CompanyTranslation();
             companyTranslation.setCompany(company);
             companyTranslation.setLanguage(language);
@@ -48,57 +46,43 @@ public class CompanyTranslationService {
             companyTranslation.setAddress(companyRequest.getAddress());
             companyTranslation.setIntroduction(companyRequest.getIntroduction());
             companyTranslation.setStatus(1);
-            companyTranslation.setCreatedAt(timestamp);
-            companyTranslation.setUpdatedAt(timestamp);
+            companyTranslation.setCreatedAt(CommonFunction.dateTimeNow());
+            companyTranslation.setUpdatedAt(null);
             companyTranslation.setDeletedAt(null);
 
 			CompanyTranslation result = companyTranslationRepository.save(companyTranslation);
 			return result;
 		} catch (Exception e) {
-			throw new BadRequestException(MessageConstant.CREATE_COMPANY_TRANSLATE_FAIL);
+			throw new BadRequestException(MessageConstant.COMPANY_TRANSLATE_CREATE_FAIL);
 		}
 	}
 
-	public CompanyTranslation update(CompanyTranslationRequest companyTranslationRequest, UUID id, UserPrincipal userPrincipal)
-			throws ResourceNotFoundException, ForbiddenException, ServerError{
-		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-
-			CompanyTranslation company = new CompanyTranslation();
-
-			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_TRANSLATOR")) {
-				company = companyTranslationRepository.findByIdAndDeletedAt(id, null);
-				if(company == null) {
-					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-				}
-				if(!(company.getTranslator()).getUser().getId().equals(userPrincipal.getId())) {
-					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
-				}
-			} else {
-				company = companyTranslationRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-			}
-
-			company.setName(companyTranslationRequest.getName());
-			company.setAddress(companyTranslationRequest.getAddress());
-			company.setIntroduction(companyTranslationRequest.getIntroduction());
-			company.setStatus(1);
-			company.setUpdatedAt(timestamp);
-
-			CompanyTranslation result = companyTranslationRepository.save(company);
-			return result;
-		} catch (ResourceNotFoundException e) {
-			throw e;
-		} catch (ForbiddenException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ServerError(MessageConstant.UPDATE_COMPANY_TRANSLATE_FAIL);
-		}
-	}
+//	public CompanyTranslation update(CompanyTranslationRequest companyTranslationRequest, UUID id, UserPrincipal userPrincipal)
+//			throws ResourceNotFoundException2, ServerError{
+//		try {
+//			CompanyTranslation company = companyTranslationRepository.findByIdAndDeletedAt(id, null);
+//
+//			if(company == null) {
+//				throw new ResourceNotFoundException2(MessageConstant.ERROR_404_MSG);
+//			}
+//
+//			company.setName(companyTranslationRequest.getName());
+//			company.setAddress(companyTranslationRequest.getAddress());
+//			company.setIntroduction(companyTranslationRequest.getIntroduction());
+//			company.setStatus(1);
+//			company.setUpdatedAt(CommonFunction.dateTimeNow());
+//
+//			CompanyTranslation result = companyTranslationRepository.save(company);
+//			return result;
+//		} catch (ResourceNotFoundException2 e) {
+//			throw e;
+//		} catch (Exception e) {
+//			throw new ServerError(MessageConstant.UPDATE_COMPANY_TRANSLATE_FAIL);
+//		}
+//	}
 
 	public CompanyResponse convertCompanyResponse(CompanyTranslation companyTranslation) {
-		Company company = companyService.findById(companyTranslation.getCompany().getId());
+		Company company = companyTranslation.getCompany();
 		CompanyResponse companyResponse = new CompanyResponse(
 				company.getId(),
 				companyTranslation.getName(),

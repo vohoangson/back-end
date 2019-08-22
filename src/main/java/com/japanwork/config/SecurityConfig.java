@@ -178,7 +178,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		).hasRole("ADMIN")
                     .antMatchers(HttpMethod.PATCH,
                 		UrlConstant.URL_COMPANY_UNDELETE,
-                		UrlConstant.URL_JOB,
                 		UrlConstant.URL_CANDIDATE
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.POST,

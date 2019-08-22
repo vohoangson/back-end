@@ -12,7 +12,7 @@ import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.japanwork.payload.response.BaseErrorResponse;
+import com.japanwork.payload.response.ErrorResponse;
 
 public class CommonFunction {
 	public static String convertToJSONString(Object ob) {
@@ -65,15 +65,7 @@ public class CommonFunction {
 		return input.replaceAll("([^_A-Z])([A-Z])", "$1_$2").toLowerCase();
 	}
 	
-	public static String setCode(String resource, String field, String error) {
-		return convertToSnakeCase(resource) + "." + convertToSnakeCase(field) + "." + convertToSnakeCase(error) + ".code";
-	}
-	
-	public static String setMessage(String resource, String field, String error) {
-		return convertToSnakeCase(resource) + "." + convertToSnakeCase(field) + "." + convertToSnakeCase(error) + ".message";
-	}
-	
-	public static BaseErrorResponse getErrorFromYAML(String resource, String fieldName, String error, String nameFile) {
+	public static ErrorResponse getErrorFromValidation(String resource, String fieldName, String error, String nameFile) {
 		ReadYAML readYAML = new ReadYAML();
 		Map<String, Object> errors= readYAML.getValueFromYAML(nameFile);
 		Map<String, Object> fields = (Map<String, Object>) errors.get(resource);
@@ -81,7 +73,17 @@ public class CommonFunction {
 		Map<String, Object> objError = (Map<String, Object>) objErrors.get(error);
 		String code = (String) objError.get("code");
 		String message = (String) objError.get("message");
-		BaseErrorResponse baseErrorResponse = new BaseErrorResponse(code, message);
-		return baseErrorResponse;
+		ErrorResponse errorResponse = new ErrorResponse(code, message);
+		return errorResponse;
+	}
+	
+	public static ErrorResponse getErrorFromErrors(String error, String nameFile) {
+		ReadYAML readYAML = new ReadYAML();
+		Map<String, Object> errors= readYAML.getValueFromYAML(nameFile);
+		Map<String, Object> objError = (Map<String, Object>) errors.get(error);
+		String code = (String) objError.get("code");
+		String message = (String) objError.get("message");
+		ErrorResponse errorResponse = new ErrorResponse(code, message);
+		return errorResponse;
 	}
 }

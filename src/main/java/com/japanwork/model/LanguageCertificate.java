@@ -24,10 +24,11 @@ public class LanguageCertificate {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private UUID id;
-
-	@Column(name = "candidate_id", nullable = false)
+	
+	@ManyToOne
+    @JoinColumn(name="candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-	private UUID candidateId;
+	private Candidate candidate;
 
     @Column(name="score")
     private int score;
@@ -60,12 +61,12 @@ public class LanguageCertificate {
 		this.id = id;
 	}
 
-	public UUID getCandidateId() {
-		return candidateId;
+	public Candidate getCandidate() {
+		return candidate;
 	}
 
-	public void setCandidateId(UUID candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
 	}
 
 	public int getScore() {
@@ -116,10 +117,10 @@ public class LanguageCertificate {
 		this.deletedAt = deletedAt;
 	}
 
-	public LanguageCertificate(UUID id, UUID candidateId, int score, LanguageCertificateType languageCertificateType,
+	public LanguageCertificate(UUID id, Candidate candidate, int score, LanguageCertificateType languageCertificateType,
 			Date takenDate, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
-		this.candidateId = candidateId;
+		this.candidate = candidate;
 		this.score = score;
 		this.languageCertificateType = languageCertificateType;
 		this.takenDate = takenDate;

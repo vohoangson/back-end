@@ -188,9 +188,9 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	}
 
 	@Override
-	public Candidate findByUserAndDeletedAt(User user, Timestamp deletedAt) {
+	public Candidate findByUserIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
-		return findByUserAndDeletedAt(user, deletedAt);
+		return findByUserIdAndDeletedAt(id, deletedAt);
 	}
 
 	@Override

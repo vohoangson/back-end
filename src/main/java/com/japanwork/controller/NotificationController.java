@@ -8,50 +8,55 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.payload.request.MarkReadNotificationReuqest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseSuccessResponse;
+import com.japanwork.model.User;
+import com.japanwork.payload.request.MarkReadNotificationRequest;
 import com.japanwork.payload.response.UnreadsNumberNotificationResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.NotificationService;
+import com.japanwork.support.CommonSupport;
 
 @Controller
 public class NotificationController {	
 	@Autowired
 	private NotificationService notificationService;
 
+	@Autowired
+	private CommonSupport commonSupport;
+	
 	@GetMapping(UrlConstant.URL_NOTIFICATIONS)
 	@ResponseBody
-	public BaseDataMetaResponse notifications(@RequestParam(defaultValue = "1", name = "page") int page,
+	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@CurrentUser UserPrincipal userPrincipal) {
-		
-		return notificationService.notifications(userPrincipal, page, paging);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		return notificationService.index(user, page, paging);
 	} 
 	
 	@GetMapping(UrlConstant.URL_NOTIFICATIONS_UNREADS_NUMBER)
 	@ResponseBody
-	public BaseDataResponse unreadNumber( @CurrentUser UserPrincipal userPrincipal) {
-		int num = notificationService.unreadNumber(userPrincipal);
+	public ResponseDataAPI countNotificationUnread( @CurrentUser UserPrincipal userPrincipal) {
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		int num = notificationService.countNotificationUnread(user);
 		UnreadsNumberNotificationResponse obj = new UnreadsNumberNotificationResponse(num);
-		return new BaseDataResponse(obj);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, obj, null, null);
 	} 
 	
 	@PatchMapping(UrlConstant.URL_NOTIFICATIONS_MARK_ALL_READ)
 	@ResponseBody
-	public BaseSuccessResponse markAllRead( @CurrentUser UserPrincipal userPrincipal) {
-		notificationService.markAllReads(userPrincipal);
-		return new BaseSuccessResponse("Success",null,null);
+	public ResponseDataAPI updateAllRead( @CurrentUser UserPrincipal userPrincipal) {
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		notificationService.updateAllRead(user);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 	} 
 	
 	@PatchMapping(UrlConstant.URL_NOTIFICATIONS_MARK_READS)
 	@ResponseBody
-	public BaseSuccessResponse markReads( @CurrentUser UserPrincipal userPrincipal, 
-			@RequestBody MarkReadNotificationReuqest markReadNotificationReuqest) {
-		notificationService.markReads(userPrincipal, markReadNotificationReuqest);
-		return new BaseSuccessResponse("Success",null,null);
+	public ResponseDataAPI update( @CurrentUser UserPrincipal userPrincipal, 
+			@RequestBody MarkReadNotificationRequest markReadNotificationRequest) {
+		notificationService.update(userPrincipal, markReadNotificationRequest);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 	}
 }

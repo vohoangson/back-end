@@ -97,18 +97,15 @@ public class Candidate {
     @Column(name="expected_salary")
     private float expectedSalary;
     
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="candidate_id")
+    @OneToMany(orphanRemoval = true, mappedBy="candidate")
     @Where(clause = "deleted_at IS NULL")
 	private Set<Academy> academies;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="candidate_id")
+    @OneToMany(orphanRemoval = true, mappedBy="candidate")
     @Where(clause = "deleted_at IS NULL")
 	private Set<Experience> experiences;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="candidate_id")
+    @OneToMany(orphanRemoval = true, mappedBy="candidate")
     @Where(clause = "deleted_at IS NULL")
 	private Set<LanguageCertificate> languageCertificates;
 
@@ -283,7 +280,8 @@ public class Candidate {
 	}
 
 	public void setAcademies(Set<Academy> academies) {
-		this.academies = academies;
+		this.academies.clear();
+		this.academies.addAll(academies);
 	}
 
 	public Set<Experience> getExperiences() {
@@ -291,7 +289,8 @@ public class Candidate {
 	}
 
 	public void setExperiences(Set<Experience> experiences) {
-		this.experiences = experiences;
+		this.experiences.clear();
+		this.experiences.addAll(experiences);
 	}
 
 	public Set<LanguageCertificate> getLanguageCertificates() {
@@ -299,7 +298,8 @@ public class Candidate {
 	}
 
 	public void setLanguageCertificates(Set<LanguageCertificate> languageCertificates) {
-		this.languageCertificates = languageCertificates;
+		this.languageCertificates.clear();
+		this.languageCertificates.addAll(languageCertificates);
 	}
 
 	public String getStatus() {

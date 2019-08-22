@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Academy;
 import com.japanwork.payload.response.AcademyResponse;
 import com.japanwork.repository.academy.AcademyRepository;
@@ -41,7 +40,7 @@ public class AcademyService {
 		return list;
 	}
 	
-	public void del(UUID id) throws ResourceNotFoundException{		
+	public void del(UUID id) {		
 		List<Academy> listAcademy = academyRepository.findByCandidateId(id);
 		if(listAcademy.size() > 0) {
 			academyRepository.deleteAll(listAcademy);

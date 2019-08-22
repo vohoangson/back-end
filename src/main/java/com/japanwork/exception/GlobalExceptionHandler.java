@@ -20,41 +20,35 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
-import com.japanwork.payload.response.BaseErrorResponse;
-import com.japanwork.payload.response.BaseErrorsResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
+import com.japanwork.controller.ResponseDataAPI;
+import com.japanwork.payload.response.ErrorResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(ResourceNotFound.class)
-    public ResponseEntity<?> resourceNotFound(ResourceNotFound exception, WebRequest request) {
-        BaseErrorsResponse error = new BaseErrorsResponse(exception.getCode(), exception.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
 
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_404, ex.getMessage());
+	@ExceptionHandler(ResourceNotFoundException2.class)
+	public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException2 ex, WebRequest request) {
+		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> badRequestException(BadRequestException ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(ex.getCode(), ex.getMessage());
+		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(ForbiddenException.class)
 	public ResponseEntity<?> forbiddenException(ForbiddenException ex, WebRequest request) {
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.ERROR_403, ex.getMessage());
+		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
 	@ExceptionHandler(ServerError.class)
 	public ResponseEntity<?> serverError(ServerError ex, WebRequest request) {
-		System.out.println(ex.getMessage());
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, ex.getMessage());
+		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -65,14 +59,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	    String msg =
 	      ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-	    BaseErrorResponse error = new BaseErrorResponse(code, msg);
+	    ErrorResponse error = new ErrorResponse(code, msg);
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-		System.out.println(ex.getMessage());
-		BaseMessageResponse error = new BaseMessageResponse(MessageConstant.SERVER_ERROR, MessageConstant.SERVER_ERROR_MSG);
+		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -85,14 +78,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		String fieldName = CommonFunction.convertToSnakeCase(((FieldError) objectError).getField());
 		String resource = CommonFunction.convertToSnakeCase(objectError.getObjectName());
 		
-		BaseErrorResponse baseErrorResponse = CommonFunction.getErrorFromYAML(resource, fieldName, error, "errors.yml");
-
-	    return new ResponseEntity<Object>(baseErrorResponse, HttpStatus.BAD_REQUEST);
+		ErrorResponse errorResponse = CommonFunction.getErrorFromValidation(resource, fieldName, error, "validation.yml");
+		
+		ResponseDataAPI ResponseDataAPI = new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, 
+				null, null, errorResponse);
+	    return new ResponseEntity<Object>(ResponseDataAPI, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.ERROR_404, MessageConstant.ERROR_404_MSG);
+		ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.PAGE_NOT_FOUND, "errors.yml");
 		return new ResponseEntity<Object>(error, HttpStatus.NOT_FOUND);
 	}
 
@@ -100,7 +95,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMissingServletRequestParameter(
 	  MissingServletRequestParameterException ex, HttpHeaders headers,
 	  HttpStatus status, WebRequest request) {
-	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, ex.getParameterName() + " parameter is missing");
+		ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, ex.getParameterName() + " parameter is missing");
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 
@@ -113,7 +108,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	      " method is not supported for this request. Supported methods are ");
 	    ex.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
 
-	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, builder.toString());
+	    ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, builder.toString());
 	    return new ResponseEntity<Object>(error, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
@@ -125,7 +120,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	    builder.append(" media type is not supported. Supported media types are ");
 	    ex.getSupportedMediaTypes().forEach(t -> builder.append(t + ", "));
 
-	    BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, builder.toString());
+	    ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, builder.toString());
 	    return new ResponseEntity<Object>(error, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 	}
 
@@ -133,7 +128,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
 			HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		BaseErrorResponse error = new BaseErrorResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
+		ErrorResponse error = new ErrorResponse(MessageConstant.INVALID_INPUT, ex.getMessage());
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	}
 }

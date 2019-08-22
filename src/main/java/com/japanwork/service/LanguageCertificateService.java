@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.LanguageCertificate;
 import com.japanwork.payload.response.LanguageCertificateResponse;
 import com.japanwork.repository.language_certificate.LanguageCertificateRepository;
@@ -39,7 +38,7 @@ public class LanguageCertificateService {
 		return list;
 	}
 	
-	public void del(UUID id) throws ResourceNotFoundException{		
+	public void del(UUID id) {		
 		List<LanguageCertificate> listLanguageCertificate = languageCertificateRepository.findByCandidateId(id);
 		if(listLanguageCertificate.size() > 0) {
 			languageCertificateRepository.deleteAll(listLanguageCertificate);

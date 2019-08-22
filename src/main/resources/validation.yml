@@ -1,0 +1,600 @@
+#sign up request
+sign_up_request: 
+  country_id: 
+    not_null: 
+      code: SUR0101
+      message: Country must not be null
+  email: 
+    not_blank: 
+      code: SUR0201
+      message: Email must not be blank
+    email:
+      code: SUR0202
+      message: Email must be a well-formed email address
+  name: 
+    not_blank: 
+      code: SUR0301
+      message: Name must not be blank
+    size:
+      code: SUR0302
+      message: Name size must be between 8 and 128
+  password: 
+    not_blank: 
+      code: SUR0401
+      message: Password must not be blank
+    size:
+      code: SUR0402
+      message: Password size must be between 8 and 32
+  role: 
+    not_blank: 
+      code: SUR0501
+      message: Role must not be blank
+    pattern:
+      code: SUR0502
+      message: Role must match COMPANY|CANDIDATE|TRANSLATOR
+
+#Login request
+login_request:
+  email: 
+    not_blank: 
+      code: LOR0101
+      message: Email must not be blank
+    email:
+      code: LOR0102
+      message: Email must be a well-formed email address
+  password: 
+    not_blank: 
+      code: LOR0201
+      message: Password must not be blank
+    size:
+      code: LOR0202
+      message: Password size must be between 8 and 32
+
+#Mail forget password request     
+mail_forget_password_request:
+  email: 
+    not_blank: 
+      code: MFP0101
+      message: Email must not be blank
+    email:
+      code: MFP0102
+      message: Email must be a well-formed email address 
+#Reset password request
+reset_password_request:
+  email: 
+    not_blank: 
+      code: RPR0101
+      message: Email must not be blank
+    email:
+      code: RPR0102
+      message: Email must be a well-formed email address
+  password: 
+    not_blank: 
+      code: RPR0201
+      message: Password must not be blank
+    size:
+      code: RPR0202
+      message: Password size must be between 8 and 32
+  code: 
+    not_blank: 
+      code: RPR0301
+      message: Code must not be blank
+    size:
+      code: RPR0302
+      message: Code size must be equal 6
+      
+#Change password request
+change_password_request:
+  old_password: 
+    not_blank: 
+      code: PAS0101
+      message: Old password must not be blank
+    size:
+      code: PAS0102
+      message: Old password size must be between 8 and 32
+  new_password: 
+    not_blank: 
+      code: PAS0201
+      message: New password must not be blank
+    size:
+      code: PAS0202
+      message: New password size must be between 8 and 32
+      
+#Candidate personal request
+candidate_personal_request:
+  full_name:
+    not_blank:
+      code: CPR0101
+      message: Fullname must not be blank
+    size:
+      code: CPR0102
+      message: Fullname size must be max 128
+  date_of_birth:
+    not_null:
+      code: CPR0201
+      message: Date of birth must not be null
+  gender:
+    not_blank:
+      code: CPR0301
+      message: Gender must not be blank
+  marital:
+    not_blank:
+      code: CPR0401
+      message: Marital must not be blank
+  residental_city_id:
+    not_null:
+      code: CPR0501
+      message: Residental city must not be null
+  residental_district_id:
+    not_null:
+      code: CPR0601
+      message: Residental district must not be null
+  residental_address:
+    not_blank:
+      code: CPR0701
+      message: Residental address must not be blank
+  avatar:
+    not_blank:
+      code: CPR0801
+      message: Avatar must not be blank
+    size:
+      code: CPR0802
+      message: Avatar size must be max 1000 
+  introduction:
+    not_blank:
+      code: COR0901
+      message: Introduction must not be blank
+    size:
+      code: COR0902
+      message: introduction size must be max 2000
+#Candidate expected request:      
+candidate_expected_request:
+  expected_working_city_id:
+    not_null:
+      code: CER0101
+      message: Expected working city must not be null
+  expected_working_district_id:
+    not_null:
+      code: CER0201
+      message: Expected working district must not be null
+  expected_working_address:
+    not_blank:
+      code: CER0301
+      message: Expected working address must not be blank
+    size:
+      code: CER0302
+      message: Expected working address size must be max 128
+  expected_business_id:
+    not_null:
+      code: CER0401
+      message: Expected business must not be null
+  expected_level_id:
+    not_null:
+      code: CER0501
+      message: Expected level must not be null
+  expected_contract_id:
+    not_null:
+      code: CER0601
+      message: Expected contract must not be null
+  expected_salary:
+    not_null:
+      code: CER0701
+      message: Expected salary must not be null
+      
+#Candidate translation request:      
+candidate_translation_request:
+  language_id:
+    not_null:
+      code: CTR0201
+      message: Language must not be null
+  full_name:
+    not_blank:
+      code: CTR0301
+      message: Fullname must not be blank
+    size:
+      code: CTR0302
+      message: Fullname size must be max 128
+  residental_address:
+    not_blank:
+      code: CTR0401
+      message: Residental address must not be blank
+    size:
+      code: CTR0402
+      message: Residental address size must be max 255
+  introduction:
+    not_blank:
+      code: CTR0501
+      message: Introduction must not be blank
+    size:
+      code: CTR0502
+      message: Introduction size must be max 1000
+  expected_working_address:
+    not_blank:
+      code: CTR0601
+      message: Expected working address must not be blank
+    size:
+      code: CTR0602
+      message: Expected working size must be max 1000
+
+#Company translation request:      
+company_translation_request:
+  language_id:
+    not_null:
+      code: COT0101
+      message: Language must not be null
+  name:
+    not_blank:
+      code: COT0201
+      message: Name must not be blank
+    size:
+      code: COT0202
+      message: Fullname size must be max 128
+  address:
+    not_blank:
+      code: COT301
+      message: Address must not be blank
+    size:
+      code: COT0302
+      message: Residental address size must be max 255
+
+#Job translation request:      
+job_translation_request:
+  language_id:
+    not_null:
+      code: JTR0101
+      message: Language must not be null
+  name:
+    not_blank:
+      code: JTR0201
+      message: Name must not be blank
+    size:
+      code: JTR0302
+      message: Fullname size must be max 128
+  address:
+    not_blank:
+      code: JTR0401
+      message: Address must not be blank
+    size:
+      code: JTR0402
+      message: Residental address size must be max 255
+  introduction:
+    not_blank:
+      code: JTR0501
+      message: Introduction must not be blank
+    size:
+      code: JTR0502
+      message: Introduction size must be max 1000
+  expected_working_address:
+    not_blank:
+      code: JTR0601
+      message: Expected working address must not be blank
+    size:
+      code: JTR0602
+      message: Expected working size must be max 1000
+
+#Company request      
+company_request:
+  name:
+    not_blank:
+      code: COR0101
+      message: Name must not be blank
+    size:
+      code: COR0102
+      message: Name size must be max 128
+  business_ids:
+    not_null:
+      code: COR0201
+      message: Business must not be null
+  city_id:
+    not_null:
+      code: COR0301
+      message: City must not be null
+  district_id:
+    not_null:
+      code: COR0401
+      message: District must not be null
+  address:
+    not_blank:
+      code: COR0501
+      message: Address must not be blank
+  logo:
+    not_blank:
+      code: COR0601
+      message: Logo must not be blank
+  cover_image:
+    not_blank:
+      code: COR0701
+      message: Cover image must not be blank
+    size:
+      code: COR0702
+      message: Cover image size must be max 1000
+  introduction:
+    not_blank:
+      code: COR0801
+      message: Introduction must not be blank
+    size:
+      code: COR0802
+      message: introduction size must be max 2000
+      
+#Job request      
+job_request:
+  name:
+    not_blank:
+      code: JOB0101
+      message: Name must not be blank
+    size:
+      code: JOB0102
+      message: Name size must be max 128
+  business_id:
+    not_null:
+      code: JOB0201
+      message: Business must not be null
+  contract_id:
+    not_null:
+      code: JOB0301
+      message: Contract must not be null
+  level_id:
+    not_null:
+      code: JOB0401
+      message: Level must not be null
+  desc:
+    not_blank:
+      code: JOB0501
+      message: Description must not be blank
+    size:
+      code: JOB0502
+      message: Description size must be max 1000
+  city_id:
+    not_null:
+      code: JOB0601
+      message: City must not be null
+  district_id:
+    not_null:
+      code: JOB0701
+      message: District must not be null
+  address:
+    not_blank:
+      code: JOB0801
+      message: Address must not be blank
+    size:
+      code: JOB0802
+      message: Address size must be max 128
+  benefits:
+    not_blank:
+      code: JOB0901
+      message: Benefits must not be blank
+    size:
+      code: JOB0902
+      message: Benefits size must be max 2000
+      
+#Academy request    
+academy_request:
+  academy_center_name:
+    not_blank:
+      code: ACM0101
+      message: Academy center name must not be blank
+    size:
+      code: ACM0102
+      message: Academy center name size must be max 128
+  major_name:
+    not_blank:
+      code: ACM0201
+      message: Major name must not be blank
+    size:
+      code: ACM0202
+      message: Major name size must be max 128
+  grade:
+    not_null:
+      code: ACM0301
+      message: Grade must not be null
+    min:
+      code: ACM0302
+      message: Grade size must be between 8 and 32
+  grade_system:
+    not_null:
+      code: ACM0401
+      message: Grade system must not be null
+    min:
+      code: ACM0402
+      message: Grade system size must be between 8 and 32
+  start_date:
+    not_null:
+      code: ACM0501
+      message: Start date must not be null
+  end_date:
+    not_null:
+      code: ACM0601
+      message: End date must not be null
+
+#Experience request     
+experience_request:
+  organizaion:
+    not_blank:
+      code: EXP0101
+      message: Organizaion must not be blank
+    size:
+      code: EXP0102
+      message: Organizaion size must be max 128
+  desc:
+    not_blank:
+      code: EXP0201
+      message: Description must not be blank
+    size:
+      code: EXP0203
+      message: Description size must be max 1000
+  level_id:
+    not_null:
+      code: EXP0301
+      message: Level must not be null
+  business_id:
+    not_null:
+      code: EXP0401
+      message: Business must not be null
+  start_date:
+    not_null:
+      code: EXP0501
+      message: Start date must not be null
+  end_date:
+    not_null:
+      code: EXP0601
+      message: End date must not be null
+
+#Language certificate request      
+language_certificate_request:
+  score:
+    not_null:
+      code: LCR0101
+      message: Score must not be null
+  language_certificate_type_id:
+    not_null:
+      code: LCR0201
+      message: Language certificate type must not be null
+  taken_date:
+    not_null:
+      code: LCR0301
+      message: Taken date must not be null
+      
+#Cancel job application request
+cancel_job_application_request:
+  reason:
+    not_blank:
+      code: CJA0101
+      message: Reason must not be blank
+    size:
+      code: CJA0102
+      message: Reason size must be max 1000
+      
+#Cancel request translation request
+cancel_request_translation_request:
+  reason:
+    not_blank:
+      code: CRT0101
+      message: Reason must not be blank
+    size:
+      code: CRT0102
+      message: Reason size must be max 1000
+      
+#Reject job application request
+reject_job_application_request:
+  reason:
+    not_blank:
+      code: RJA0101
+      message: Reason must not be blank
+    size:
+      code: RJA0102
+      message: Reason size must be max 1000
+      
+#Reject request translation request
+reject_request_translation_request:
+  reason:
+    not_blank:
+      code: RRT0101
+      message: Reason must not be blank
+    size:
+      code: RRT0102
+      message: Reason size must be max 1000
+      
+#Translator request      
+translator_request:
+  name:
+    not_blank:
+      code: TST0101
+      message: Name must not be blank
+    size:
+      code: TST0102
+      message: Name size must be between 8 and 128
+  gender:
+    not_blank:
+      code: TST0201
+      message: Gender must not be blank
+  date_of_birth:
+    not_null:
+      code: TST0301
+      message: Date of birth must not be null
+  city_id:
+    not_null:
+      code: TST0401
+      message: City must not be null
+  district_id:
+    not_null:
+      code: TST0501
+      message: District must not be null
+  address:
+    not_blank:
+      code: TST0601
+      message: Address must not be blank
+    size:
+      code: TST0602
+      message: Address size must be max 128
+  introduction:
+    not_blank:
+      code: TST0701
+      message: Introduction must not be blank
+    size:
+      code: TST0702
+      message: Introduction size must be max 2000
+  avatar:
+    not_blank:
+      code: TST0801
+      message: Avatar must not be blank
+    size:
+      code: TST0802
+      message: Avatar size must be max 1000
+  japanese_level:
+    not_blank:
+      code: TST0901
+      message: Japanese level must not be null      
+    min:
+      code: TST0902
+      message: Japanese level value must not be min 1
+    max:
+      code: TST0903
+      message: Japanese level value must not be max 5 
+      
+#Mark read notification request     
+mark_read_notification_request:
+  notification_ids:
+    not_null:
+      code: MRN0101
+      message: Notification must not be null
+
+#Message request      
+message_request:
+  content:
+    not_blank:
+      code: MSG0101
+      message: Content must not be blank
+    size:
+      code: MSG0102
+      message: Content size must be max 2000
+  type:
+    not_blank:
+      code: MSG0201
+      message: Type must not be blank
+    size:
+      code: MSG0202
+      message: Type size must be max 128
+  objectable_id:
+    not_null:
+      code: MSG0301
+      message: objectable_id must not be null
+
+#Request translation request     
+request_translation_request:
+  objectable_id:
+    not_null:
+      code: RTR0101
+      message: objectable_id must not be null
+  request_type:
+    not_blank:
+      code: RTR0201
+      message: Type must not be blank
+  desc:
+    not_blank:
+      code: RTR0301
+      message: Description must not be blank
+  language_id:
+    not_null:
+      code: RTR0401
+      message: Language must not be null 
+     

@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,13 +15,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
+import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.exception.ResourceNotFoundException2;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.Business;
 import com.japanwork.model.City;
+import com.japanwork.model.Company;
 import com.japanwork.model.Contract;
 import com.japanwork.model.District;
 import com.japanwork.model.Job;
@@ -30,7 +32,6 @@ import com.japanwork.model.Level;
 import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.UserPrincipal;
@@ -46,11 +47,8 @@ public class JobService {
 	@Autowired
 	private CompanyService companyService;
 	
-	@Autowired
-	private UserService userService;
-	
-	public BaseDataMetaResponse findAllByIsDelete(JobFilterRequest jobFilterRequest, int page, int paging) 
-			throws IllegalArgumentException{
+	public ResponseDataAPI index(JobFilterRequest jobFilterRequest, int page, int paging) 
+			throws ResourceNotFoundException2{
 		try {	
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT DISTINCT j ");
@@ -169,30 +167,31 @@ public class JobService {
 				}
 			}
 			
-			BaseDataMetaResponse response = new BaseDataMetaResponse(list, pageInfo);
-			return response;
+			return new ResponseDataAPI(
+					CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+					list, 
+					pageInfo, 
+					null);
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public Page<Job> findAllByCompanyIdAndIsDelete(int page, int paging, UUID id) throws IllegalArgumentException{
+	public Page<Job> indexByCompany(int page, int paging, UUID id) throws ResourceNotFoundException2{
 		try {
 			Page<Job> pages = jobRepository.findAllByCompanyIdAndDeletedAt(PageRequest.of(page-1, paging), id, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException2(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
-	public Job save(JobRequest jobRequest, UserPrincipal userPrincipal) throws ServerError{
+	public Job create(JobRequest jobRequest, Company company) throws ServerError{
 		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
 			
 			Job job = new Job();
 			job.setName(jobRequest.getName());
-			job.setCompany(companyService.findByUserAndIsDelete(userService.findById(userPrincipal.getId()), null));
+			job.setCompany(company);
 			job.setBusinesses(new Business(jobRequest.getBusinessId()));
 			job.setContract(new Contract(jobRequest.getContractId()));
 			job.setLevel(new Level(jobRequest.getLevelId()));
@@ -209,8 +208,8 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);		
-			job.setCreatedAt(timestamp);
-			job.setUpdatedAt(timestamp);
+			job.setCreatedAt(CommonFunction.dateTimeNow());
+			job.setUpdatedAt(null);
 			job.setDeletedAt(null);
 			
 			Job result = jobRepository.save(job);		
@@ -220,26 +219,11 @@ public class JobService {
 		}
 	}
 	
-	public Job update(JobRequest jobRequest, UUID id, UserPrincipal userPrincipal) 
-			throws ResourceNotFoundException, ForbiddenException, ServerError{
+	public Job update(JobRequest jobRequest, Job job, UserPrincipal userPrincipal) 
+			throws ForbiddenException, ServerError{
 		try {
-			Date date = new Date();
-			Timestamp timestamp = new Timestamp(date.getTime());
-			
-			Job job = new Job();
-			
-			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
-				job = jobRepository.findByIdAndDeletedAt(id, null);
-				if(job == null) {
-					throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-				}
-				
-				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
-				}
-			} else {
-				job = jobRepository.findById(id)
-						.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
+			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
 	
 			job.setName(jobRequest.getName());
@@ -259,12 +243,10 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			job.setUpdatedAt(timestamp);
+			job.setUpdatedAt(CommonFunction.dateTimeNow());
 			
 			Job result = jobRepository.save(job);		
 			return result;
-		}catch (ResourceNotFoundException e) {
-			throw e;
 		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
@@ -272,42 +254,25 @@ public class JobService {
 		}
 	}
 	
-	public Job isDel(UUID id, UserPrincipal userPrincipal, Timestamp deletedAt) 
-			throws ResourceNotFoundException, ForbiddenException, ServerError{
+	public Job isDel(Job job, UserPrincipal userPrincipal, Timestamp deletedAt) 
+			throws ForbiddenException, ServerError{
 		try {
-			Job job = jobRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException(MessageConstant.ERROR_404_MSG));
-			
-			if(userService.findById(userPrincipal.getId()).getRole().equals("ROLE_COMPANY")) {
-				if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-					throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
-				}
+			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
 			
 			job.setDeletedAt(deletedAt);
-			jobRepository.save(job);
-			Job result = jobRepository.findByIdAndDeletedAt(id, null);
+			Job result = jobRepository.save(job);
 			return result;
-		}catch (ResourceNotFoundException e) {
-			throw e;
 		}catch (ForbiddenException e) {
 			throw e;
 		}catch (Exception e) {
 			if(deletedAt != null) {
 				throw new ServerError(MessageConstant.JOB_DELETE_FAIL);
 			} else {
-				throw new ServerError(MessageConstant.JOB_UN_DELETE_FAIL);
+				throw new ServerError(MessageConstant.JOB_UNDELETE_FAIL);
 			}
-			
 		}
-	}
-	
-	public Job findByIdAndIsDelete(UUID id) throws ResourceNotFoundException{
-		Job job = jobRepository.findByIdAndDeletedAt(id, null);
-		if(job == null) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
-		}	
-		return job;
 	}
 	
 	public JobResponse convertJobResponse(Job job) {
