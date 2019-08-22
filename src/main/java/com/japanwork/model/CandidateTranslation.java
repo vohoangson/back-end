@@ -1,12 +1,20 @@
 package com.japanwork.model;
 
-import com.japanwork.constant.EnumConstant.Gender;
-import com.japanwork.constant.EnumConstant.Marital;
-import org.hibernate.annotations.Where;
-
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(
@@ -20,15 +28,10 @@ public class CandidateTranslation {
     @Column(name = "id")
     private UUID id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
     private Candidate candidate;
-
-//    @OneToOne
-//    @JoinColumn(name = "translator_id")
-//    @Where(clause = "deleted_at IS NULL")
-//    private Translator translator;
 
     @OneToOne
     @JoinColumn(name = "language_id", nullable = false)
@@ -38,31 +41,14 @@ public class CandidateTranslation {
     @Column(name = "name", nullable = false, length = 128)
     private String fullName;
 
-//    @Column(name = "date_of_birth", nullable = false)
-//    private Date dateOfBirth;
-//
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "gender", nullable = false)
-//    private Gender gender;
-//
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "marital")
-//    private Marital marital;
-
     @Column(name = "residental_address")
     private String residentalAddres;
 
     @Column(name = "introduction", length = 1000)
     private String introduction;
 
-//    @Column(name = "japanese_level")
-//    private int japaneseLevel;
-
     @Column(name = "expected_working_address")
     private String expectedWorkingAddress;
-
-//    @Column(name = "expected_salary")
-//    private float expectedSalary;
 
     @Column(name="created_at")
     private Timestamp createdAt;

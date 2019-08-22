@@ -3,22 +3,34 @@ package com.japanwork.payload.request;
 import java.sql.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ExperienceRequest {
+	@NotBlank
+	@Size(max = 128)
 	private String organizaion;
 	
+	@NotBlank
+	@Size(max = 1000)
 	private String desc;
 	
+	@NotNull
 	@JsonProperty("level_id")
 	private UUID levelId;
 	
+	@NotNull
     @JsonProperty("business_id")
 	private UUID businessId;
 	
+	@NotNull
 	@JsonProperty("start_date")
 	private Date startDate;
 	
+	@NotNull
 	@JsonProperty("end_date")
 	private Date endDate;
 

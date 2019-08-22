@@ -1,8 +1,6 @@
 package com.japanwork.controller;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -21,20 +19,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.japanwork.constant.MessageConstant;
+import com.japanwork.common.CommonFunction;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.PageInfo;
 import com.japanwork.model.Translator;
 import com.japanwork.payload.request.TranslatorRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.TranslatorResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.TranslatorService;
-import com.japanwork.service.UserService;
+import com.japanwork.support.CommonSupport;
 
 @Controller
 public class TranslatorController {
@@ -42,25 +38,25 @@ public class TranslatorController {
 	private TranslatorService translatorService;
 	
 	@Autowired
-	private UserService userService;
+    private CommonSupport commonSupport;
 	
 	@PostMapping(UrlConstant.URL_TRANSLATORS)
 	@ResponseBody
-	public BaseDataResponse createTranslator (@Valid @RequestBody TranslatorRequest translatorRequest,
-			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
-		if(translatorService.checkTranslatorByUser(userService.findById(userPrincipal.getId()))) {
-			throw new BadRequestException(MessageConstant.TRANSLATOR_ALREADY, MessageConstant.TRANSLATOR_ALREADY_MSG);
-		}
-		
-		Translator translator = translatorService.save(translatorRequest, userPrincipal);
-		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+	public ResponseDataAPI create(@Valid @RequestBody TranslatorRequest translatorRequest,
+			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{		
+		Translator translator = translatorService.create(translatorRequest, userPrincipal);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				translatorService.convertTranslatorResponse(translator), 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATORS)
 	@ResponseBody
-	public BaseDataMetaResponse listTranslator (@RequestParam(defaultValue = "1", name = "page") int page, 
+	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page, 
 			@RequestParam(defaultValue = "25", name = "paging") int paging){
-		Page<Translator> pages = translatorService.findAllByIsDelete(page, paging);
+		Page<Translator> pages = translatorService.index(page, paging);
 		
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<TranslatorResponse> list = new ArrayList<TranslatorResponse>();
@@ -71,12 +67,16 @@ public class TranslatorController {
 			}
 		}
 		
-		return new BaseDataMetaResponse(list, pageInfo);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				list, 
+				pageInfo, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATOR_IDS)
 	@ResponseBody
-	public BaseDataMetaResponse listTranslatorByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+	public ResponseDataAPI listTranslatorByIds(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(name = "ids") Set<UUID> ids) {
 		
@@ -90,45 +90,67 @@ public class TranslatorController {
 			}
 		}
 
-		return new BaseDataMetaResponse(list, pageInfo);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				list, 
+				pageInfo, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
-	public BaseDataResponse updateTranslator(@Valid @RequestBody TranslatorRequest translatorRequest, 
+	public ResponseDataAPI updateTranslator(@Valid @RequestBody TranslatorRequest translatorRequest, 
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		Translator translator = translatorService.update(translatorRequest, id, userPrincipal);
-		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+		Translator translator = commonSupport.loadTranslatorById(id);
+		translator = translatorService.update(translatorRequest, translator, userPrincipal);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				translatorService.convertTranslatorResponse(translator), 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
-	public BaseDataResponse findTranslatorByIdAndIsDelete(@PathVariable UUID id){		
-		Translator translator = translatorService.findByIdAndIsDelete(id);
-		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+	public ResponseDataAPI findTranslatorByIdAndIsDelete(@PathVariable UUID id){		
+		Translator translator = commonSupport.loadTranslatorById(id);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				translatorService.convertTranslatorResponse(translator), 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_MY_TRANSLATOR)
 	@ResponseBody
-	public BaseDataResponse myTranslator(@CurrentUser UserPrincipal userPrincipal){		
-		Translator translator = translatorService.myTranslator(userPrincipal);
-		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+	public ResponseDataAPI myTranslator(@CurrentUser UserPrincipal userPrincipal){		
+		Translator translator = commonSupport.loadTranslatorByUser(userPrincipal.getId());
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				translatorService.convertTranslatorResponse(translator), 
+				null, 
+				null);
 	}
 	
 	@DeleteMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		translatorService.isDel(id, timestamp);
-		BaseMessageResponse deleteResponse = new BaseMessageResponse(MessageConstant.TRANSLATOR_DELETE_SUCCESS, MessageConstant.TRANSLATOR_DELETE_SUCCESS_MSG);
-		return new BaseDataResponse(deleteResponse);
+	public ResponseDataAPI del(@PathVariable UUID id) {
+		translatorService.isDel(id, CommonFunction.dateTimeNow());
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				null, 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_TRANSLATORS_UNDEL)
 	@ResponseBody
-	public BaseDataResponse unDel(@PathVariable UUID id) {		
+	public ResponseDataAPI unDel(@PathVariable UUID id) {		
 		Translator translator = translatorService.isDel(id, null);
-		return new BaseDataResponse(translatorService.convertTranslatorResponse(translator));
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				translatorService.convertTranslatorResponse(translator), 
+				null, 
+				null);
 	}
 }

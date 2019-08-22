@@ -5,36 +5,42 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 public class CompanyRequest {
-	@NotBlank(message = "name_company_required")
+	@NotBlank
+	@Size(max = 128)
 	private String name;
 	
 	private int scale;
 	
 	@JsonProperty("business_ids")
-	@NotNull(message = "businesses_required")
+	@NotNull
 	private Set<UUID> businessIds;
 	
 	@JsonProperty("city_id")
-	@NotNull(message = "city_required")
+	@NotNull
 	private UUID cityId;
 	
 	@JsonProperty("district_id")
-	@NotNull(message = "district_required")
+	@NotNull
 	private UUID districtId;
 	
-	@NotBlank(message = "address_required")
+	@NotBlank
+	@Size(max = 128)
 	private String address;
 	
-	@NotBlank(message = "logo_required")
+	@NotBlank
 	private String logo;
 	
 	@JsonProperty("cover_image")
-	@NotBlank(message = "cover_image_required")
+	@NotBlank
+	@Size(max = 1000)
 	private String coverImage;
 	
+	@NotBlank
+	@Size(max = 2000)
 	private String introduction;
 
 	public String getName() {

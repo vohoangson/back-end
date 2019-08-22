@@ -20,20 +20,21 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.RequestStatus;
 import com.japanwork.model.RequestTranslation;
+import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
 import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.RequestTranslationService;
-import com.japanwork.service.UserService;
+import com.japanwork.support.CommonSupport;
 
 @Controller
 public class RequestTranslationController {
@@ -42,85 +43,149 @@ public class RequestTranslationController {
 	private RequestTranslationService requestTranslationService;
 	
 	@Autowired
-	private UserService userService;
+	private CommonSupport commonSupport;
 	
 	@PostMapping(UrlConstant.URL_REQUEST_TRANSLATIONS)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody RequestTranslationRequest requestTranslationRequest, 
+	public ResponseDataAPI create(@Valid @RequestBody RequestTranslationRequest requestTranslationRequest, 
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		List<RequestTranslationResponse> response = null;
 		if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
-			if(requestTranslationService.checkRequestTranslationByCandidate(requestTranslationRequest, userPrincipal)){
-				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY, MessageConstant.REQUEST_TRANSLATION_ALREADY_MSG);
+			Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
+			if(requestTranslationService.checkRequestTranslation(requestTranslationRequest, candidate.getId())){
+				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY);
 			}
-			response = requestTranslationService.createRequestTranslationCanidate(requestTranslationRequest, userPrincipal);
+			response = requestTranslationService.createRequestTranslationCanidate(requestTranslationRequest, candidate);
 		} else {
-			if(requestTranslationService.checkRequestTranslationByCompany(requestTranslationRequest, userPrincipal)){
-				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY, MessageConstant.REQUEST_TRANSLATION_ALREADY_MSG);
+			Company company = commonSupport.loadCompanyByUser(userPrincipal.getId());
+			if(requestTranslationService.checkRequestTranslation(requestTranslationRequest, company.getId())){
+				throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_ALREADY);
 			}
 			if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY)) {
-				response = requestTranslationService.createRequestTranslationCompany(requestTranslationRequest, userPrincipal);
+				response = requestTranslationService.createRequestTranslationCompany(requestTranslationRequest, company);
 			} else if(requestTranslationRequest.getRequestType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB)) {
-				response = requestTranslationService.createRequestTranslationJob(requestTranslationRequest, userPrincipal);
+				response = requestTranslationService.createRequestTranslationJob(requestTranslationRequest, company);
 			} else {
-				response = requestTranslationService.createRequestTranslationJobApplication(requestTranslationRequest, userPrincipal);
+				response = requestTranslationService.createRequestTranslationJobApplication(requestTranslationRequest, company);
 			}
 		}
-		return new BaseDataResponse(response);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_TRANSLATOR_JOIN)
 	@ResponseBody
-	public BaseDataResponse translatorJoinRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		RequestTranslationResponse response = requestTranslationService.translatorJoinRequestTranslation(id, userPrincipal);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI translatorJoinRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		Translator translator = commonSupport.loadTranslatorByUser(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.translatorJoinRequestTranslation(
+																							requestTranslation, 
+																							translator);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ACCEPT_APPLY)
 	@ResponseBody
-	public BaseDataResponse ownerAcceptApllyRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		RequestTranslationResponse response = requestTranslationService.ownerAcceptApllyRequestTranslation(id, userPrincipal);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI ownerAcceptApllyRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.ownerAcceptApllyRequestTranslation(
+																								requestTranslation, 
+																								user);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_CONFIRM_FINISHED)
 	@ResponseBody
-	public BaseDataResponse translatorConfirmFinishedRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		RequestTranslationResponse response = requestTranslationService.translatorConfirmFinishedRequestTranslation(id, userPrincipal);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI translatorConfirmFinishedRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.translatorConfirmFinishedRequestTranslation(
+																								requestTranslation, 
+																								user);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_ACCEPT_FINISHED)
 	@ResponseBody
-	public BaseDataResponse ownerAcceptFinishRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		RequestTranslationResponse response = requestTranslationService.ownerAcceptFinishRequestTranslation(id, userPrincipal);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI ownerAcceptFinishRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.ownerAcceptFinishRequestTranslation(
+																									requestTranslation,
+																									user);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_REFUSE_FINISHED)
 	@ResponseBody
-	public BaseDataResponse ownerRefuseFinishRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		RequestTranslationResponse response = requestTranslationService.ownerRefuseFinishRequestTranslation(id, userPrincipal);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI ownerRefuseFinishRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.ownerRefuseFinishRequestTranslation(
+																										requestTranslation, 
+																										user);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_CANCEL)
 	@ResponseBody
-	public BaseDataResponse cancelRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, @RequestBody CancelRequestTranslationRequest reasonCancel){
-		RequestTranslationResponse response = requestTranslationService.cancelRequestTranslation(id, userPrincipal, reasonCancel);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI cancelRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, @RequestBody CancelRequestTranslationRequest reasonCancel){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.cancelRequestTranslation(
+																				requestTranslation, 
+																				user, 
+																				reasonCancel);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@PatchMapping(UrlConstant.URL_REQUEST_TRANSLATIONS_REJECT)
 	@ResponseBody
-	public BaseDataResponse rejectRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, @RequestBody RejectRequestTranslationRequest reasonReject){
-		RequestTranslationResponse response = requestTranslationService.rejectRequestTranslation(id, userPrincipal, reasonReject);
-		return new BaseDataResponse(response);
+	public ResponseDataAPI rejectRequestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal, @RequestBody RejectRequestTranslationRequest reasonReject){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		RequestTranslationResponse response = requestTranslationService.rejectRequestTranslation(
+																								requestTranslation, 
+																								user, 
+																								reasonReject);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				response, 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS)
 	@ResponseBody
-	public BaseDataMetaResponse requestTranslations(
+	public ResponseDataAPI requestTranslations(
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "name") String name,
@@ -136,38 +201,52 @@ public class RequestTranslationController {
 		filterRequest.setLanguageIds(languageIds);
 		filterRequest.setPostDate(postDate);
 		filterRequest.setYourRequest(yourRequest);
-		User user = userService.getUser(userPrincipal);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
 		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-			return requestTranslationService.requestTranslationsByCompany(userPrincipal, filterRequest, page, paging);
+			return requestTranslationService.requestTranslationsByCompany(user, filterRequest, page, paging);
 		} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
 			if(yourRequest) {
-				return requestTranslationService.requestTranslationsByTranslator(userPrincipal, filterRequest, page, paging);
+				return requestTranslationService.requestTranslationsByTranslator(user, filterRequest, page, paging);
 			} else {
-				return requestTranslationService.newRequestTranslations(userPrincipal, filterRequest, page, paging);
+				return requestTranslationService.newRequestTranslations(user, filterRequest, page, paging);
 			}
 		} else {
-			return requestTranslationService.requestTranslationsByCandidate(userPrincipal, filterRequest, page, paging);
+			return requestTranslationService.requestTranslationsByCandidate(user, filterRequest, page, paging);
 		}
 		
 	}
 	
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATION)
 	@ResponseBody
-	public BaseDataResponse requestTranslation(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
-		RequestTranslation requestTranslation = requestTranslationService.requestTranslation(id, userPrincipal);
+	public ResponseDataAPI show(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+		RequestTranslation requestTranslation = commonSupport.loadRequestTransationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		requestTranslationService.checkPermission(requestTranslation, user);
 		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				requestTranslationService.convertRequestTranslationResponse(requestTranslation, status), 
+				null, 
+				null);
 	}
 	
 	@GetMapping(UrlConstant.URL_JOB_APPLICATIONS_REQUEST)
 	@ResponseBody
-	public BaseDataResponse requestTranslationByJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
+	public ResponseDataAPI requestTranslationByJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		RequestTranslation requestTranslation = requestTranslationService.requestTranslationByJobApplication(id, userPrincipal);
 		if(requestTranslation == null) {
-			return new BaseDataResponse(null);
+			return new ResponseDataAPI(
+					CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+					null, 
+					null, 
+					null);
 		}
 		
 		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-		return new BaseDataResponse(requestTranslationService.convertRequestTranslationResponse(requestTranslation, status));
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				requestTranslationService.convertRequestTranslationResponse(requestTranslation, status), 
+				null, 
+				null);
 	}
 }

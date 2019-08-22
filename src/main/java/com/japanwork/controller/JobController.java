@@ -1,8 +1,6 @@
 package com.japanwork.controller;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,28 +19,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.common.CommonFunction;
-import com.japanwork.constant.MessageConstant;
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.model.Company;
 import com.japanwork.model.Job;
 import com.japanwork.model.PageInfo;
 import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
-import com.japanwork.payload.response.BaseDataMetaResponse;
-import com.japanwork.payload.response.BaseDataResponse;
-import com.japanwork.payload.response.BaseMessageResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.JobService;
+import com.japanwork.support.CommonSupport;
 
 @Controller
 public class JobController {
 	@Autowired
 	private JobService jobService;
 
+	@Autowired
+    private CommonSupport commonSupport;
+	
 	@GetMapping(UrlConstant.URL_JOBS)
 	@ResponseBody
-	public BaseDataMetaResponse listJob(@RequestParam(defaultValue = "1", name = "page") int page,
+	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "job_name") String jobName,
 			@RequestParam(defaultValue = "", name = "company_name") String companyName,
@@ -62,14 +62,14 @@ public class JobController {
 		jobFilterRequest.setLevelIds(CommonFunction.listParam(levelIds));
 		jobFilterRequest.setMinSalary(minSalary);
 		jobFilterRequest.setPostTime(postTime);
-		return jobService.findAllByIsDelete(jobFilterRequest, page, paging);
+		return jobService.index(jobFilterRequest, page, paging);
 	}
 
 	@GetMapping(UrlConstant.URL_COMPANY_JOB)
 	@ResponseBody
-	public BaseDataMetaResponse listJobByCompny(@RequestParam(defaultValue = "1", name = "page") int page,
+	public ResponseDataAPI indexByCompany(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging, @PathVariable UUID id) {
-		Page<Job> pages = jobService.findAllByCompanyIdAndIsDelete(page, paging, id);
+		Page<Job> pages = jobService.indexByCompany(page, paging, id);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 
 		List<JobResponse> list = new ArrayList<JobResponse>();
@@ -80,47 +80,72 @@ public class JobController {
 			}
 		}
 
-		return new BaseDataMetaResponse(list, pageInfo);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				list, 
+				pageInfo, 
+				null);
 	}
 
 	@PostMapping(UrlConstant.URL_JOBS)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody JobRequest jobRequest, @CurrentUser UserPrincipal userPrincipal) {
-		Job job = jobService.save(jobRequest, userPrincipal);
-		return new BaseDataResponse(jobService.convertJobResponse(job));
+	public ResponseDataAPI create(@Valid @RequestBody JobRequest jobRequest, @CurrentUser UserPrincipal userPrincipal) {
+		Company company = commonSupport.loadCompanyByUser(userPrincipal.getId());
+		Job job = jobService.create(jobRequest, company);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				jobService.convertJobResponse(job), 
+				null, 
+				null);
 	}
 
 	@GetMapping(UrlConstant.URL_JOB)
 	@ResponseBody
-	public BaseDataResponse findJobByIdAndIsDelete(@PathVariable UUID id){
-		Job job = jobService.findByIdAndIsDelete(id);
-		return new BaseDataResponse(jobService.convertJobResponse(job));
+	public ResponseDataAPI show(@PathVariable UUID id){
+		Job job = commonSupport.loadJobById(id);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				jobService.convertJobResponse(job), 
+				null, 
+				null);
 	}
 
 	@PatchMapping(UrlConstant.URL_JOB)
 	@ResponseBody
-	public BaseDataResponse update(@Valid @RequestBody JobRequest jobRequest, @PathVariable UUID id,
+	public ResponseDataAPI update(@Valid @RequestBody JobRequest jobRequest, @PathVariable UUID id,
 			@CurrentUser UserPrincipal userPrincipal) {
-		Job job = jobService.update(jobRequest, id, userPrincipal);
-		return new BaseDataResponse(jobService.convertJobResponse(job));
+		Job job = commonSupport.loadJobById(id);
+		job = jobService.update(jobRequest, job, userPrincipal);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				jobService.convertJobResponse(job), 
+				null, 
+				null);
 	}
 
 	@DeleteMapping(UrlConstant.URL_JOB)
 	@ResponseBody
-	public BaseDataResponse del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-		jobService.isDel(id, userPrincipal, timestamp);
-		BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.JOB_DELETE_SUCCESS, MessageConstant.JOB_DELETE_SUCCESS_MSG);
-		return new BaseDataResponse(baseMessageResponse);
+	public ResponseDataAPI del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		Job job = commonSupport.loadJobById(id);
+		jobService.isDel(job, userPrincipal, CommonFunction.dateTimeNow());
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				null, 
+				null, 
+				null);
 
 	}
 
 	@PatchMapping(UrlConstant.URL_JOB_UNDELETE)
 	@ResponseBody
-	public BaseDataResponse unDel(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
-		Job job = jobService.isDel(id, userPrincipal, null);
-		return new BaseDataResponse(jobService.convertJobResponse(job));
+	public ResponseDataAPI unDel(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
+		Job job = commonSupport.loadJobById(id);
+		job = jobService.isDel(job, userPrincipal, null);
+		return new ResponseDataAPI(
+				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
+				jobService.convertJobResponse(job), 
+				null, 
+				null);
 	}
 
 

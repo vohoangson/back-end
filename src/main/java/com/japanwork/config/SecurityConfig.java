@@ -163,7 +163,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     	.hasAnyRole("CANDIDATE","ADMIN")
                     .antMatchers(HttpMethod.PATCH,
                 		UrlConstant.URL_CANDIDATE_PERSONAL,
-                		UrlConstant.URL_CANDIDATE_WISH)
+                		UrlConstant.URL_CANDIDATE_EXPECTED)
                     	.hasAnyRole("CANDIDATE","ADMIN")
                 	.antMatchers(HttpMethod.DELETE,
                 		UrlConstant.URL_JOB
@@ -178,7 +178,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		).hasRole("ADMIN")
                     .antMatchers(HttpMethod.PATCH,
                 		UrlConstant.URL_COMPANY_UNDELETE,
-                		UrlConstant.URL_JOB,
                 		UrlConstant.URL_CANDIDATE
                 		).hasRole("ADMIN")
                     .antMatchers( HttpMethod.POST,

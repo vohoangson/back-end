@@ -5,12 +5,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class LoginRequest {
-    @NotBlank(message = "email_required")
-    @Email(message = "invalid_email_format")
+    @NotBlank
+    @Email
     private String email;
     
-    @NotBlank(message = "password_required")
-    @Size(min=8,message = "invalid_password_length")
+    @NotBlank
+    @Size(min=8, max=32)
 	private String password;
 
 	public String getEmail() {

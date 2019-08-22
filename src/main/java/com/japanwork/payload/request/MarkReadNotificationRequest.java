@@ -2,9 +2,12 @@ package com.japanwork.payload.request;
 
 import java.util.Set;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MarkReadNotificationReuqest {
+public class MarkReadNotificationRequest {
+	@NotNull
 	@JsonProperty("notification_ids")
 	private Set<Long> notificationIds;
 

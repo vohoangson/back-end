@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.model.Experience;
 import com.japanwork.payload.response.ExperienceResponse;
 import com.japanwork.repository.experience.ExperienceRepository;
@@ -41,7 +40,7 @@ public class ExperienceService {
 		return list;
 	}
 	
-	public void del(UUID id) throws ResourceNotFoundException{		
+	public void del(UUID id) {		
 		List<Experience> listExperience = experienceRepository.findByCandidateId(id);
 		if(listExperience.size() > 0) {
 			experienceRepository.deleteAll(listExperience);

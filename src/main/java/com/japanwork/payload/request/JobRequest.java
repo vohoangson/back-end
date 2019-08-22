@@ -5,22 +5,24 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JobRequest {	
-	@NotBlank(message = "name_job_required")
+	@NotBlank
+	@Size(max = 128)
 	private String name;
 	
-	@NotNull(message = "businesses_required")
+	@NotNull
 	@JsonProperty("business_id")
 	private UUID businessId;
 	
-	@NotNull(message = "contract_required")
+	@NotNull
 	@JsonProperty("contract_id")
 	private UUID contractId;
 	
-	@NotNull(message = "level_required")
+	@NotNull
 	@JsonProperty("level_id")
 	private UUID levelId;
 	
@@ -36,17 +38,20 @@ public class JobRequest {
 	@JsonProperty("required_language")
 	private String requiredLanguage;
 	
+	@NotBlank
+	@Size(max = 1000)
 	private String desc;
 	
-	@NotNull(message = "city_required")
+	@NotNull
 	@JsonProperty("city_id")
 	private UUID cityId;
 	
-	@NotNull(message = "district_required")
+	@NotNull
 	@JsonProperty("district_id")
 	private UUID districtId;
 	
-	@NotBlank(message = "address_required")
+	@NotBlank
+	@Size(max = 128)
 	private String address;
 	
     @JsonProperty("expiring_date")
@@ -58,7 +63,8 @@ public class JobRequest {
 	@JsonProperty("max_salary")
 	private float maxSalary;
 	
-	@NotBlank(message = "benefits_required")
+	@NotBlank
+	@Size(max = 2000)
 	private String benefits;
 
 	public String getName() {

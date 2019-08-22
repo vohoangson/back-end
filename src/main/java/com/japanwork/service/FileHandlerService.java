@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,12 +19,10 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.BadRequestException;
-import com.japanwork.payload.response.BaseMessageResponse;
 
 @Component
-public class AmazonService {
+public class FileHandlerService {
 
 	private String awsS3AudioBucket;
     private AmazonS3 amazonS3;
@@ -35,7 +31,7 @@ public class AmazonService {
     private String endpointUrl;
 
     @Autowired
-    public AmazonService(Region awsRegion, AWSCredentialsProvider awsCredentialsProvider, String awsS3AudioBucket) 
+    public FileHandlerService(Region awsRegion, AWSCredentialsProvider awsCredentialsProvider, String awsS3AudioBucket) 
     {
         this.amazonS3 = AmazonS3ClientBuilder.standard()
                 .withCredentials(awsCredentialsProvider)
@@ -43,7 +39,7 @@ public class AmazonService {
         this.awsS3AudioBucket = awsS3AudioBucket;
     }
     
-    public String uploadFile(MultipartFile multipartFile,HttpServletResponse httpServletResponse) 
+    public String uploadFile(MultipartFile multipartFile) 
     		throws BadRequestException{
         String fileUrl = "";
         try {
@@ -86,11 +82,9 @@ public class AmazonService {
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
-    public BaseMessageResponse deleteFileFromS3Bucket(String fileUrl, HttpServletResponse httpServletResponse) {
+    public void deleteFileFromS3Bucket(String fileUrl) {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
         amazonS3.deleteObject(new DeleteObjectRequest(this.awsS3AudioBucket, fileName));
-        BaseMessageResponse baseMessageResponse = new BaseMessageResponse(MessageConstant.DELETE_FILE_AWS, MessageConstant.DEL_SUCCESS);
-        return baseMessageResponse;
     }
 
 }

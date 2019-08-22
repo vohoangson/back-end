@@ -24,14 +24,15 @@ public class Experience {
     @Column(name="id")
 	private UUID id;
 
-    @Column(name = "candidate_id", nullable = false)
+	@ManyToOne
+    @JoinColumn(name="candidate_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-	private UUID candidateId;
+	private Candidate candidate;
 
-	@Column(name="organizaion")
+	@Column(name = "organizaion")
 	private String organizaion;
 
-	@Column(name="description", length = 2000)
+	@Column(name = "description", length = 2000)
 	private String desc;
 
 	@ManyToOne
@@ -42,19 +43,19 @@ public class Experience {
     @JoinColumn(name = "business_id")
 	private Business business;
 
-	@Column(name="start_date")
+	@Column(name = "start_date")
 	private Date startDate;
 
-	@Column(name="end_date")
+	@Column(name = "end_date")
 	private Date endDate;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name="deleted_at")
+    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
 	public UUID getId() {
@@ -65,12 +66,12 @@ public class Experience {
 		this.id = id;
 	}
 
-	public UUID getCandidateId() {
-		return candidateId;
+	public Candidate getCandidate() {
+		return candidate;
 	}
 
-	public void setCandidateId(UUID candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
 	}
 
 	public String getOrganizaion() {
@@ -145,11 +146,11 @@ public class Experience {
 		this.deletedAt = deletedAt;
 	}
 
-	public Experience(UUID id, UUID candidateId, String organizaion, String desc, Level level, Business business,
+	public Experience(UUID id, Candidate candidate, String organizaion, String desc, Level level, Business business,
 			Date startDate, Date endDate, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		super();
 		this.id = id;
-		this.candidateId = candidateId;
+		this.candidate = candidate;
 		this.organizaion = organizaion;
 		this.desc = desc;
 		this.level = level;

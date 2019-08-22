@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.model.City;
 import com.japanwork.payload.request.CityRequest;
 import com.japanwork.payload.request.ListCityRequest;
-import com.japanwork.payload.response.BaseDataResponse;
 import com.japanwork.service.CityService;
 
 @Controller
@@ -27,29 +27,29 @@ public class CityController {
 	
 	@GetMapping(UrlConstant.URL_CITIES)
 	@ResponseBody
-	public BaseDataResponse listCity() {
-		List<City> list = cityService.findAllByIsDelete();
-		return new BaseDataResponse(list);
-	}
-	
-	@GetMapping(UrlConstant.URL_COUNTRIES_CITIES)
-	@ResponseBody
-	public BaseDataResponse listCityByCountry(@PathVariable String code) {
-		List<City> list = cityService.listCityByCountry(code);
-		return new BaseDataResponse(list);
+	public ResponseDataAPI index() {
+		List<City> list = cityService.index();
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_CITIES)
 	@ResponseBody
-	public BaseDataResponse create(@Valid @RequestBody CityRequest cityRequest) {		
-		City city = cityService.save(cityRequest);
-		return new BaseDataResponse(city);
+	public ResponseDataAPI create(@Valid @RequestBody CityRequest cityRequest) {		
+		City city = cityService.create(cityRequest);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, city, null, null);
+	}
+	
+	@GetMapping(UrlConstant.URL_COUNTRIES_CITIES)
+	@ResponseBody
+	public ResponseDataAPI listCityByCountry(@PathVariable String code) {
+		List<City> list = cityService.listCityByCountry(code);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 	
 	@PostMapping(value = UrlConstant.URL_CITIES_BATCH)
 	@ResponseBody
-	public BaseDataResponse createList(@Valid @RequestBody ListCityRequest listCityRequest) {		
+	public ResponseDataAPI createList(@Valid @RequestBody ListCityRequest listCityRequest) {		
 		List<City> list =  cityService.saves(listCityRequest);
-		return new BaseDataResponse(list);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
 	}
 }

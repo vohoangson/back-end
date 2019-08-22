@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="request_status")
-@Where(clause = "deleted_at IS NULL")
 public class RequestStatus {
 
 	@Id

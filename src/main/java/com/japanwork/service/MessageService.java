@@ -1,7 +1,5 @@
 package com.japanwork.service;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
@@ -21,46 +20,28 @@ import com.japanwork.model.User;
 import com.japanwork.payload.request.MessageRequest;
 import com.japanwork.payload.response.MessageResponse;
 import com.japanwork.repository.message.MessageRepository;
-import com.japanwork.security.UserPrincipal;
+import com.japanwork.support.CommonSupport;
 
 @Service
 public class MessageService {
 	
 	@Autowired
-	private MessageRepository messageRepository;
-	
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private CompanyService companyService;
-
-	@Autowired
-	private CandidateService candidateService;
-
-	@Autowired
-	private TranslatorService translatorService;
-	
-	@Autowired
-	private ConversationService conversationService;
-	
+	private MessageRepository messageRepository;	
 	@Autowired
 	private NotificationService notificationService;
 	
+	@Autowired
+	private CommonSupport commonSupport;
+	
 	@Transactional
-	public Message addMessage(UserPrincipal userPrincipal, UUID id,
+	public Message create(User user, Conversation conversation,
 			MessageRequest messageRequest) throws ForbiddenException{
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
-
 		UUID senderId = null;
-		User user = userService.getUser(userPrincipal);
 
-		Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-			senderId = candidateService.myCandidate(userPrincipal).getId();
+			senderId = commonSupport.loadCandidateByUser(user.getId()).getId();
 			if(!conversation.getCandidate().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
 			if(conversation.getCompany() != null) {
 				this.addNotification(senderId, conversation.getId(), conversation.getCompany().getId(), messageRequest, 
@@ -74,9 +55,9 @@ public class MessageService {
 		}
 
 		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-			senderId = companyService.myCompany(userPrincipal).getId();
+			senderId = commonSupport.loadCompanyByUser(user.getId()).getId();
 			if(!conversation.getCompany().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
 			if(conversation.getCandidate() != null) {
 				this.addNotification(senderId, conversation.getId(), conversation.getCandidate().getId(), messageRequest, 
@@ -90,9 +71,9 @@ public class MessageService {
 		}
 
 		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			senderId = translatorService.myTranslator(userPrincipal).getId();
+			senderId = commonSupport.loadTranslatorByUser(user.getId()).getId();
 			if(!conversation.getTranslator().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.ERROR_403_MSG);
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
 			
 			if(conversation.getCompany() != null) {
@@ -108,22 +89,21 @@ public class MessageService {
 		
 		Message message = new Message();
 		message.setSenderId(senderId);
-		message.setConversation(conversationService.findByIdAndIsDelete(id, null));
-		message.setCreatedAt(timestamp);
+		message.setConversation(conversation);
+		message.setCreatedAt(CommonFunction.dateTimeNow());
 		message.setContent(messageRequest.getContent());		
 		message.setDeletedAt(null);
 		Message result = messageRepository.save(message);
 		return result;
 	}
 	
-	public Page<Message> listMessage(UUID id, int page, int paging) throws ResourceNotFoundException{
+	public Page<Message> index(Conversation conversation, int page, int paging) throws ResourceNotFoundException{
 		try {
-			Conversation conversation = conversationService.findByIdAndIsDelete(id, null);
 			Page<Message> pages = messageRepository.findByConversationAndDeletedAt(
 			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), conversation, null);
 			return pages;
 		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.ERROR_404_MSG);
+			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
 	
