@@ -22,6 +22,10 @@ public class AcademyTranslation {
     @Where(clause = "deleted_at IS NULL")
     private Academy academy;
 
+    @ManyToOne
+    @Where(clause = "deleted_at IS NULL")
+    private CandidateTranslation candidateTranslation;
+
     @OneToOne
     @JoinColumn(name = "language_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
@@ -56,6 +60,14 @@ public class AcademyTranslation {
 
     public void setAcademy(Academy academy) {
         this.academy = academy;
+    }
+
+    public CandidateTranslation getCandidateTranslation() {
+        return candidateTranslation;
+    }
+
+    public void setCandidateTranslation(CandidateTranslation candidateTranslation) {
+        this.candidateTranslation = candidateTranslation;
     }
 
     public Language getLanguage() {
