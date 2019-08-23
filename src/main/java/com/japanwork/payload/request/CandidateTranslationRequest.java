@@ -12,14 +12,12 @@ public class CandidateTranslationRequest {
     @JsonProperty("language_id")
     private UUID languageId;
 
-    @NotBlank
     @JsonProperty("academy_translations")
     private List<AcademyTranslationRequest> academyTranslationRequests;
 
     @JsonProperty("experience_translations")
     private List<ExperienceTranslationRequest> experienceTranslationRequests;
 
-    @NotBlank
     @JsonProperty("full_name")
     @Size(max = 128)
     private String fullName;
