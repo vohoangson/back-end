@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
@@ -70,4 +72,16 @@ public class MessageController {
 				pageInfo, 
 				null);
 	}
+	
+	@PostMapping(UrlConstant.URL_CONVERSATION_UPLOAD_FILE)
+	@ResponseBody
+    public ResponseDataAPI uploadFile(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id,
+    		@RequestPart(value = "file") MultipartFile file, @RequestParam(value="type") String type, 
+    		@RequestParam(value="objectable_id") UUID objectableId){
+		Conversation conversation = commonSupport.loadConversationById(id);
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		
+		MessageResponse message = messageService.uploadFile(user, conversation, file, type, objectableId);
+        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, message, null, null);
+    }
 }

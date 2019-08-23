@@ -87,6 +87,7 @@ public class UrlConstant {
 
 	//Notification
 	public static final String URL_CONVERSATION= "/v1/conversations/{id}";
+	public static final String URL_CONVERSATION_UPLOAD_FILE= "/v1/conversations/{id}/upload_file";
 	public static final String URL_NOTIFICATIONS = "/v1/notifications";
 	public static final String URL_NOTIFICATIONS_UNREADS_NUMBER = "/v1/notifications/unreads_number";
 	public static final String URL_NOTIFICATIONS_MARK_ALL_READ = "/v1/notifications/mark_all_read";

@@ -53,7 +53,7 @@ public class FileHandlerService {
                 uploadFileTos3bucket(fileName, file);
             } else {
             	file.delete();
-            	throw new BadRequestException("The file is not properly formatted!");
+            	throw new BadRequestException("file_not_formated");
             }
             file.delete();
         } catch(BadRequestException ex) {
@@ -65,6 +65,32 @@ public class FileHandlerService {
         return fileUrl;
     }
 
+    public String uploadFileInMessage(MultipartFile multipartFile) 
+    		throws BadRequestException{
+        String fileUrl = "";
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+            
+//            String mimeType = Files.probeContentType(file.toPath());
+            
+//            if(mimeType.startsWith("image", 0)) {
+            	String fileName = generateFileName(multipartFile);
+                fileUrl = endpointUrl + "/" + this.awsS3AudioBucket + "/" + fileName;
+                uploadFileTos3bucket(fileName, file);
+//            } else {
+//            	file.delete();
+//            	throw new BadRequestException("file_not_formated");
+//            }
+            file.delete();
+        } catch(BadRequestException ex) {
+        	throw ex;
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        
+        return fileUrl;
+    }
+    
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);

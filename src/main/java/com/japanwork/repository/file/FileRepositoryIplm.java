@@ -1,6 +1,5 @@
-package com.japanwork.repository.academy;
+package com.japanwork.repository.file;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,94 +8,91 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.model.Academy;
+import com.japanwork.model.File;
 
-@Repository
-@Transactional
-public class AcademyRepositoryIplm implements AcademyRepository{
+public class FileRepositoryIplm implements FileRepository{
+
 	@Override
-	public List<Academy> findAll() {
+	public List<File> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Academy> findAll(Sort sort) {
+	public List<File> findAll(Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Academy> findAllById(Iterable<UUID> ids) {
+	public List<File> findAllById(Iterable<UUID> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Academy> List<S> saveAll(Iterable<S> entities) {
+	public <S extends File> List<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
-		return saveAll(entities);
+		return null;
 	}
 
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public <S extends Academy> S saveAndFlush(S entity) {
+	public <S extends File> S saveAndFlush(S entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteInBatch(Iterable<Academy> entities) {
+	public void deleteInBatch(Iterable<File> entities) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public Academy getOne(UUID id) {
+	public File getOne(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Academy> List<S> findAll(Example<S> example) {
+	public <S extends File> List<S> findAll(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Academy> List<S> findAll(Example<S> example, Sort sort) {
+	public <S extends File> List<S> findAll(Example<S> example, Sort sort) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<Academy> findAll(Pageable pageable) {
+	public Page<File> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Academy> S save(S entity) {
+	public <S extends File> S save(S entity) {
 		// TODO Auto-generated method stub
-		return save(entity);
+		return null;
 	}
 
 	@Override
-	public Optional<Academy> findById(UUID id) {
+	public Optional<File> findById(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -116,61 +112,49 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void delete(Academy entity) {
+	public void delete(File entity) {
 		// TODO Auto-generated method stub
-		delete(entity);
+		
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends Academy> entities) {
+	public void deleteAll(Iterable<? extends File> entities) {
 		// TODO Auto-generated method stub
-		deleteAll(entities);
+		
 	}
 
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public <S extends Academy> Optional<S> findOne(Example<S> example) {
+	public <S extends File> Optional<S> findOne(Example<S> example) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Academy> Page<S> findAll(Example<S> example, Pageable pageable) {
+	public <S extends File> Page<S> findAll(Example<S> example, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <S extends Academy> long count(Example<S> example) {
+	public <S extends File> long count(Example<S> example) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public <S extends Academy> boolean exists(Example<S> example) {
+	public <S extends File> boolean exists(Example<S> example) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public Academy findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
-		// TODO Auto-generated method stub
-		return findByIdAndDeletedAt(id, deletedAt);
-	}
-
-	@Override
-	public List<Academy> findByCandidateId(UUID id) {
-		// TODO Auto-generated method stub
-		return findByCandidateId(id);
 	}
 
 }

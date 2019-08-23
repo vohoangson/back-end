@@ -27,52 +27,52 @@ import com.japanwork.repository.notification.NotificationRepository;
 import com.japanwork.security.UserPrincipal;
 
 @Service
-public class NotificationService {	
-	@Autowired 
+public class NotificationService {
+	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	
+
 	@Autowired
 	private NotificationRepository notificationRepository;
 
-	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content, 
+	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content,
 			String type, UUID userId) throws ForbiddenException{
 		Notification notification = new Notification();
 		notification.setSenderId(senderId);
 		notification.setObjectableId(objectableId);
 		notification.setNotificationType(type);
-		notification.setCreatedAt(CommonFunction.dateTimeNow());
 		notification.setContent(content);
-		notification.setReceiverId(receiverId);
-		notification.setDeletedAt(null);
+        notification.setReceiverId(receiverId);
+        notification.setCreatedAt(CommonFunction.getCurrentDateTime());
+        notification.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		Notification result = notificationRepository.save(notification);
 		ResponseDataAPI responseDataAPI = new ResponseDataAPI(
-													CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-													this.convertNotificationResponse(result, conversationId), 
-													null, 
+													CommonConstant.ResponseDataAPIStatus.SUCCESS,
+													this.convertNotificationResponse(result, conversationId),
+													null,
 													null);
 		rabbitTemplate.convertAndSend("notifications/"+userId, ""+userId, responseDataAPI);
 	}
-	public ResponseDataAPI index(User user, int page, int paging) 
+	public ResponseDataAPI index(User user, int page, int paging)
 			throws ResourceNotFoundException{
 		try {
 			Page<Notification> pages = notificationRepository.findByReceiverIdAndDeletedAt(
 			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), user.getPropertyId(), null);
 			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-			
+
 			List<NotificationResponse> list = new ArrayList<NotificationResponse>();
-			
+
 			if(pages.getContent().size() > 0) {
 				for (Notification notification : pages.getContent()) {
 					list.add(this.convertNotificationResponse(notification, null));
 				}
 			}
-			
+
 			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, pageInfo, null);
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	public int countNotificationUnread(User user) throws ResourceNotFoundException{
 		try {
 			int num = notificationRepository.countByReceiverIdAndIsReadAndDeletedAt(user.getPropertyId(), false, null);
@@ -81,12 +81,12 @@ public class NotificationService {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	@Transactional
 	public void update(UserPrincipal userPrincipal, MarkReadNotificationRequest markReadNotificationRequest) {
 		notificationRepository.updateIsReadByIdInAndDeletedAt(true, markReadNotificationRequest.getNotificationIds());
 	}
-	
+
 	@Transactional
 	public void updateAllRead(User user) {
 		notificationRepository.updateIsReadByReceiverIdAndDeletedAt(true, user.getPropertyId());

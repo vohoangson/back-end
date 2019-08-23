@@ -19,46 +19,42 @@ import com.japanwork.repository.district.DistrictRepository;
 public class DistrictService {
 	@Autowired
 	private DistrictRepository districtRepository;
-	
+
 	public List<District> index() {
 		List<District> list = districtRepository.findAllByDeletedAt(null);
 		return list;
 	}
-	
-	public District create(DistrictRequest districtRequest) {		
+
+	public District create(DistrictRequest districtRequest) {
 		District district = new District();
 		district.setCity(district.getCity());
 		district.setJa(districtRequest.getJa());
 		district.setVi(districtRequest.getVi());
 		district.setDesc(districtRequest.getDesc());
-		district.setCreatedAt(CommonFunction.dateTimeNow());
-		district.setUpdatedAt(null);
-		district.setDeletedAt(null);
-		
+		district.setCreatedAt(CommonFunction.getCurrentDateTime());
+		district.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
 		District result = districtRepository.save(district);
 		return result;
 	}
-	
+
 	public List<District> findAllByCityIdAndIsDelete(UUID id){
 		List<District> list = districtRepository.findAllByCityIdAndDeletedAt(id, null);
 		return list;
 	}
-	
+
 	public List<District> saves(ListDistrictRequest listDistrictRequest) {
-		Date date = new Date();
-		Timestamp timestamp = new Timestamp(date.getTime());
 		List<District> listDistrict = new ArrayList<>();
 		for (DistrictRequest districtRequest : listDistrictRequest.getDistricts()){
 			District obj = new District();
-			
+
 			obj.setCity(districtRequest.getCity());
 			obj.setJa(districtRequest.getJa());
 			obj.setVi(districtRequest.getVi());
 			obj.setDesc(districtRequest.getDesc());
-			obj.setCreatedAt(timestamp);
-			obj.setUpdatedAt(timestamp);
-			obj.setDeletedAt(null);
-			
+			obj.setCreatedAt(CommonFunction.getCurrentDateTime());
+			obj.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
 			listDistrict.add(obj);
 		}
 		List<District> result = districtRepository.saveAll(listDistrict);

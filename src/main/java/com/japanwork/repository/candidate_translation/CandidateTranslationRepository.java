@@ -1,4 +1,4 @@
-package com.japanwork.repository.CandidateTranslation;
+package com.japanwork.repository.candidate_translation;
 
 import com.japanwork.model.Candidate;
 import com.japanwork.model.CandidateTranslation;

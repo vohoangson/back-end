@@ -46,9 +46,8 @@ public class CompanyTranslationService {
             companyTranslation.setAddress(companyRequest.getAddress());
             companyTranslation.setIntroduction(companyRequest.getIntroduction());
             companyTranslation.setStatus(1);
-            companyTranslation.setCreatedAt(CommonFunction.dateTimeNow());
-            companyTranslation.setUpdatedAt(null);
-            companyTranslation.setDeletedAt(null);
+            companyTranslation.setCreatedAt(CommonFunction.getCurrentDateTime());
+            companyTranslation.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
 			CompanyTranslation result = companyTranslationRepository.save(companyTranslation);
 			return result;

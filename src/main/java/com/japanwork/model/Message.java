@@ -10,10 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "message")
@@ -40,6 +43,10 @@ public class Message {
 	@Column(name = "is_read")
 	private boolean isRead;
 
+	@OneToOne(mappedBy = "message")
+    @OrderBy("createdAt DESC")
+    private File file;
+	
     @Column(name="created_at")
     private Timestamp createdAt;
 
@@ -91,6 +98,14 @@ public class Message {
 		this.isRead = isRead;
 	}
 
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -119,12 +134,14 @@ public class Message {
 	}
 
 	public Message(long id, UUID senderId, String content, Conversation conversation, boolean isRead,
-			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+			File file, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+		super();
 		this.id = id;
 		this.senderId = senderId;
 		this.content = content;
 		this.conversation = conversation;
 		this.isRead = isRead;
+		this.file = file;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deletedAt = deletedAt;

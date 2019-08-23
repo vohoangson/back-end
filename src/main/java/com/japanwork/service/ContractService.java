@@ -14,23 +14,22 @@ import com.japanwork.repository.contract.ContractRepository;
 public class ContractService {
 	@Autowired
 	private ContractRepository contractRepository;
-	
+
 	public List<Contract> index() {
 		List<Contract> list = contractRepository.findAllByDeletedAt(null);
 		return list;
 	}
-	
-	public Contract create(ContractRequest contractRequest) {		
+
+	public Contract create(ContractRequest contractRequest) {
 		Contract contract = new Contract();
 		contract.setJa(contractRequest.getJa());
 		contract.setVi(contractRequest.getVi());
 		contract.setDesc(contractRequest.getDesc());
-		contract.setCreatedAt(CommonFunction.dateTimeNow());
-		contract.setUpdatedAt(null);
-		contract.setDeletedAt(null);
-		
+		contract.setCreatedAt(CommonFunction.getCurrentDateTime());
+		contract.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
 		Contract result = contractRepository.save(contract);
-		
+
 		return result;
 	}
 }

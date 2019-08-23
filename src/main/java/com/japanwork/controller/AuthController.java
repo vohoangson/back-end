@@ -40,16 +40,16 @@ import com.japanwork.service.UserService;
 public class AuthController {
 	private RabbitAdmin rabbitAdmin;
 
-	@Autowired 
+	@Autowired
 	private ConnectionFactory connectionFactory;
-	
-	
+
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private TokenProvider tokenProvider;
-    
+
     @Autowired
     private UserService userService;
 
@@ -68,11 +68,11 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(token);
             return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null, null));
         } catch(BadCredentialsException e){
-        	ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.LOGIN_FAIL, "errors.yml");
+        	ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.LOGIN_FAIL, "errors.yml");
             return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, error));
         }
     }
-    
+
     @GetMapping(value = UrlConstant.URL_CONFIRM_ACCOUNT)
     public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException{
     	final String result = userService.validateVerificationToken(token);
@@ -82,27 +82,27 @@ public class AuthController {
             throw new ResourceNotFoundException(MessageConstant.CONFIRM_REGISTER_EXPIRED);
         } else {
             throw new ResourceNotFoundException(MessageConstant.CONFIRM_REGISTER_INVALID);
-        }    	
+        }
     }
-    
+
     @GetMapping(value = UrlConstant.URL_RESEND_REGISTRATION_TOKEN)
-    public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken, 
+    public ConfirmRegistrationTokenResponse resendRegistrationToken(@RequestParam("token") final String existingToken,
     		HttpServletRequest request) {
         return userService.resendRegistrationToken(existingToken, request);
     }
-    
+
     @GetMapping(value = UrlConstant.URL_OAUTH2_LOGIN)
     public ResponseEntity<?> oauth2LoginRedirect(@RequestParam("token") String token, @RequestParam("error") String error) {
     	if(!token.isEmpty()) {
-    		AuthResponse authResponse = new AuthResponse(token);        	
+    		AuthResponse authResponse = new AuthResponse(token);
             return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null, null));
     	}else{
-    		ErrorResponse err = CommonFunction.getErrorFromErrors(MessageConstant.LOGIN_OAUTH2_FAIL, "errors.yml");
+    		ErrorResponse err = CommonFunction.getExceptionError(MessageConstant.LOGIN_OAUTH2_FAIL, "errors.yml");
     		return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, err));
     	}
-    	        
+
     }
-    
+
 //    @GetMapping(value = UrlConstant.URL_OAUTH2_LOGIN)
 //    public RedirectView oauth2LoginRedirect(@RequestParam("token") String token, @RequestParam("error") String error) {
 //    	if(!token.isEmpty()) {
@@ -111,7 +111,7 @@ public class AuthController {
 //	  		return new RedirectView("http://datvo.io/login?error="+error);
 //	  	}
 //	}
-    
+
     @GetMapping(value = UrlConstant.URL_NOTIFICATIONS_ENDPOINT)
     public ResponseDataAPI websocket(@CurrentUser UserPrincipal userPrincipal) {
     	rabbitAdmin = new RabbitAdmin(connectionFactory);

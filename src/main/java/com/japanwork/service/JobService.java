@@ -38,18 +38,18 @@ import com.japanwork.security.UserPrincipal;
 
 @Service
 public class JobService {
-	@PersistenceContext 
+	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private JobRepository jobRepository;
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
-	public ResponseDataAPI index(JobFilterRequest jobFilterRequest, int page, int paging) 
+
+	public ResponseDataAPI index(JobFilterRequest jobFilterRequest, int page, int paging)
 			throws ResourceNotFoundException{
-		try {	
+		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT DISTINCT j ");
 			sql.append("    FROM Job j ");
@@ -57,7 +57,7 @@ public class JobService {
 			sql.append("	INNER JOIN j.businesses b ");
 			sql.append("	INNER JOIN j.contract con ");
 			sql.append("	INNER JOIN j.level lev ");
-			sql.append("	INNER JOIN j.city city ");			
+			sql.append("	INNER JOIN j.city city ");
 			sql.append("	WHERE ");
 			sql.append("	j.deletedAt is null ");
 			if(jobFilterRequest != null) {
@@ -74,7 +74,7 @@ public class JobService {
 					if(jobFilterRequest.getBusinessIds().size() == 1) {
 						sql.append("b.id = '" + jobFilterRequest.getBusinessIds().get(0) + "' ");
 					}
-					
+
 					if(jobFilterRequest.getBusinessIds().size() > 1) {
 						sql.append("( b.id = '" + jobFilterRequest.getBusinessIds().get(0) + "' ");
 						for(int i = 1; i< jobFilterRequest.getBusinessIds().size(); i++) {
@@ -83,13 +83,13 @@ public class JobService {
 						sql.append(" )");
 					}
 				}
-				
+
 				if(jobFilterRequest.getContractIds() != null) {
 					sql.append(" AND ");
 					if(jobFilterRequest.getContractIds().size() == 1) {
 						sql.append("con.id = '" + jobFilterRequest.getContractIds().get(0) + "' ");
 					}
-					
+
 					if(jobFilterRequest.getContractIds().size() > 1) {
 						sql.append("( con.id = '" + jobFilterRequest.getContractIds().get(0) + "' ");
 						for(int i = 1; i< jobFilterRequest.getContractIds().size(); i++) {
@@ -103,7 +103,7 @@ public class JobService {
 					if(jobFilterRequest.getLevelIds().size() == 1) {
 						sql.append("lev.id = '" + jobFilterRequest.getLevelIds().get(0) + "' ");
 					}
-					
+
 					if(jobFilterRequest.getLevelIds().size() > 1) {
 						sql.append("( lev.id = '" + jobFilterRequest.getLevelIds().get(0) + "' ");
 						for(int i = 1; i< jobFilterRequest.getLevelIds().size(); i++) {
@@ -117,7 +117,7 @@ public class JobService {
 					if(jobFilterRequest.getCityIds().size() == 1) {
 						sql.append("city.id = '" + jobFilterRequest.getCityIds().get(0) + "' ");
 					}
-					
+
 					if(jobFilterRequest.getCityIds().size() > 1) {
 						sql.append("( city.id = '" + jobFilterRequest.getCityIds().get(0) + "' ");
 						for(int i = 1; i< jobFilterRequest.getCityIds().size(); i++) {
@@ -126,13 +126,13 @@ public class JobService {
 						sql.append(" ) ");
 					}
 				}
-				
+
 				if(jobFilterRequest.getMinSalary() != 0) {
 					sql.append(" AND ");
 					sql.append(" (j.minSalary > " + jobFilterRequest.getMinSalary());
 					sql.append(" OR j.maxSalary > " + jobFilterRequest.getMinSalary() + ")");
 				}
-				
+
 				if(!jobFilterRequest.getPostTime().isEmpty()) {
 					sql.append(" AND ");
 					try {
@@ -143,12 +143,12 @@ public class JobService {
 				}
 				sql.append(" ORDER BY j.createdAt ASC ");
 			}
-			
+
 			List<Job> pages = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).setFirstResult((page-1)*paging)
 					.setMaxResults(paging).getResultList();
-			
+
 			long totalElements = ((List<Job>)entityManager.createQuery(sql.toString(), Job.class).getResultList()).size();
-			
+
 			int totalPage = (int)totalElements / paging;
 			if((totalElements % paging) > 0) {
 				totalPage ++;
@@ -156,27 +156,27 @@ public class JobService {
 			if(totalPage == 0) {
 				totalPage = 1;
 			}
-			
+
 			PageInfo pageInfo = new PageInfo(page, totalPage, totalElements);
-			
+
 			List<JobResponse> list = new ArrayList<JobResponse>();
-			
+
 			if(pages.size() > 0) {
 				for (Job job : pages) {
 					list.add(convertJobResponse(job));
 				}
 			}
-			
+
 			return new ResponseDataAPI(
-					CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-					list, 
-					pageInfo, 
+					CommonConstant.ResponseDataAPIStatus.SUCCESS,
+					list,
+					pageInfo,
 					null);
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	public Page<Job> indexByCompany(int page, int paging, UUID id) throws ResourceNotFoundException{
 		try {
 			Page<Job> pages = jobRepository.findAllByCompanyIdAndDeletedAt(PageRequest.of(page-1, paging), id, null);
@@ -185,10 +185,10 @@ public class JobService {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	public Job create(JobRequest jobRequest, Company company) throws ServerError{
 		try {
-			
+
 			Job job = new Job();
 			job.setName(jobRequest.getName());
 			job.setCompany(company);
@@ -207,25 +207,24 @@ public class JobService {
 			job.setApplicationDeadline(jobRequest.getApplicationDeadline());
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
-			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);		
-			job.setCreatedAt(CommonFunction.dateTimeNow());
-			job.setUpdatedAt(null);
-			job.setDeletedAt(null);
-			
-			Job result = jobRepository.save(job);		
+			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
+			job.setCreatedAt(CommonFunction.getCurrentDateTime());
+			job.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
+			Job result = jobRepository.save(job);
 			return result;
 		}catch (Exception e) {
 			throw new ServerError(MessageConstant.JOB_CREATE_FAIL);
 		}
 	}
-	
-	public Job update(JobRequest jobRequest, Job job, UserPrincipal userPrincipal) 
+
+	public Job update(JobRequest jobRequest, Job job, UserPrincipal userPrincipal)
 			throws ForbiddenException, ServerError{
 		try {
 			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
 				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
-	
+
 			job.setName(jobRequest.getName());
 			job.setBusinesses(new Business(jobRequest.getBusinessId()));
 			job.setContract(new Contract(jobRequest.getContractId()));
@@ -243,9 +242,9 @@ public class JobService {
 			job.setMinSalary(jobRequest.getMinSalary());
 			job.setMaxSalary(jobRequest.getMaxSalary());
 			job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			job.setUpdatedAt(CommonFunction.dateTimeNow());
-			
-			Job result = jobRepository.save(job);		
+			job.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
+			Job result = jobRepository.save(job);
 			return result;
 		}catch (ForbiddenException e) {
 			throw e;
@@ -253,14 +252,14 @@ public class JobService {
 			throw new ServerError(MessageConstant.JOB_UPDATE_FAIL);
 		}
 	}
-	
-	public Job isDel(Job job, UserPrincipal userPrincipal, Timestamp deletedAt) 
+
+	public Job isDel(Job job, UserPrincipal userPrincipal, Timestamp deletedAt)
 			throws ForbiddenException, ServerError{
 		try {
 			if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
 				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
-			
+
 			job.setDeletedAt(deletedAt);
 			Job result = jobRepository.save(job);
 			return result;
@@ -274,14 +273,14 @@ public class JobService {
 			}
 		}
 	}
-	
+
 	public JobResponse convertJobResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
 				job.getId(),
-				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getId(), 
-				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(), 
-				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(), 
-				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(), 
+				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getId(),
+				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(),
+				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(),
+				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(),
 				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreatedAt());
 		return jobResponse;
 	}

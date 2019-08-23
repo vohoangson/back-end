@@ -26,11 +26,13 @@ import com.japanwork.security.UserPrincipal;
 public class TranslatorService {
 	@Autowired
 	private TranslatorRepository translatorRepository;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	public Translator create(TranslatorRequest translatorRequest, UserPrincipal userPrincipal) {
+	    Timestamp timestamp = CommonFunction.getCurrentDateTime();
+
 		Translator translator = new Translator();
 		translator.setUser(userService.findById(userPrincipal.getId()));
 		translator.setName(translatorRequest.getName());
@@ -42,16 +44,15 @@ public class TranslatorService {
 		translator.setAvatar(translatorRequest.getAvatar());
 		translator.setIntroduction(translatorRequest.getIntroduction());
 		translator.setJapaneseLevel(translatorRequest.getJapaneseLevel());
-		translator.setCreatedAt(CommonFunction.dateTimeNow());
-		translator.setUpdatedAt(null);
-		translator.setDeletedAt(null);
-		
-		Translator result = translatorRepository.save(translator);		
+		translator.setCreatedAt(timestamp);
+		translator.setUpdatedAt(timestamp);
+
+		Translator result = translatorRepository.save(translator);
 		userService.changePropertyId(userPrincipal.getId(), result.getId());
 		return result;
 	}
-	
-	public Translator update(TranslatorRequest translatorRequest, Translator translator, UserPrincipal userPrincipal) 
+
+	public Translator update(TranslatorRequest translatorRequest, Translator translator, UserPrincipal userPrincipal)
 			throws ForbiddenException{
 		if(!translator.getUser().getId().equals(userPrincipal.getId())) {
 			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
@@ -65,12 +66,12 @@ public class TranslatorService {
 		translator.setAvatar(translatorRequest.getAvatar());
 		translator.setIntroduction(translatorRequest.getIntroduction());
 		translator.setJapaneseLevel(translatorRequest.getJapaneseLevel());
-		translator.setUpdatedAt(CommonFunction.dateTimeNow());
-		
-		Translator result = translatorRepository.save(translator);		
+		translator.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
+		Translator result = translatorRepository.save(translator);
 		return result;
 	}
-	
+
 	public Page<Translator> index(int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Translator> pages = translatorRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
@@ -79,7 +80,7 @@ public class TranslatorService {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	public Page<Translator> translatorsByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
 		try {
 			Page<Translator> pages = translatorRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids,null);
@@ -88,13 +89,13 @@ public class TranslatorService {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	public Translator isDel(UUID id, Timestamp deletedAt){
 		try {
 		Translator translator = translatorRepository.findById(id).get();
 		translator.setDeletedAt(deletedAt);
 		translatorRepository.save(translator);
-		
+
 		Translator result = translatorRepository.findByIdAndDeletedAt(id, null);
 		return result;
 		} catch (Exception e) {
@@ -103,21 +104,21 @@ public class TranslatorService {
 			} else {
 				throw new ServerError(MessageConstant.TRANSLATOR_UNDELETE_FAIL);
 			}
-			
+
 		}
 	}
-	
+
 	public TranslatorResponse convertTranslatorResponse(Translator translator) {
 		TranslatorResponse translatorResponse = new TranslatorResponse(
 				translator.getId(),
-				translator.getName(), 
+				translator.getName(),
 				translator.getGender(),
 				translator.getDateOfBirth(),
-				translator.getCity().getId(), 
-				translator.getDistrict().getId(), 
+				translator.getCity().getId(),
+				translator.getDistrict().getId(),
 				translator.getAddress(),
-				translator.getIntroduction(), 
-				translator.getAvatar(), 
+				translator.getIntroduction(),
+				translator.getAvatar(),
 				translator.getJapaneseLevel());
 		return translatorResponse;
 	}

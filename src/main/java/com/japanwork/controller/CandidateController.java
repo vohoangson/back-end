@@ -40,94 +40,94 @@ import com.japanwork.support.CommonSupport;
 public class CandidateController {
 	@Autowired
 	private CandidateService candidateService;
-	
+
 	@Autowired
 	private CommonSupport commonSupport;
-	
+
 	@PostMapping(UrlConstant.URL_CANDIDATE_PERSONALS)
 	@ResponseBody
 	public ResponseDataAPI create(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		Candidate candidate = candidateService.create(candidatePersonalRequest, userPrincipal);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
 	@ResponseBody
-	public ResponseDataAPI updatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest, 
+	public ResponseDataAPI updatePersonal(@Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
 		Candidate candidate = commonSupport.loadCandidateById(id);
 		if(!checkPermission(userPrincipal, candidate)) {
 			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
-		
+
 		candidate = candidateService.updatePersonal(candidatePersonalRequest, candidate);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPECTED)
 	@ResponseBody
-	public ResponseDataAPI updateExpected(@Valid @RequestBody CandidateExpectedRequest candidateExpectedRequest, 
+	public ResponseDataAPI updateExpected(@Valid @RequestBody CandidateExpectedRequest candidateExpectedRequest,
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
 		Candidate candidate = commonSupport.loadCandidateById(id);
 		if(!checkPermission(userPrincipal, candidate)) {
 			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
-		
+
 		candidate = candidateService.updateExpected(candidateExpectedRequest, candidate);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE)
 	@ResponseBody
 	public ResponseDataAPI updateExperience(@Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
-			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{	
+			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException{
 		Candidate candidate = commonSupport.loadCandidateById(id);
 		if(!checkPermission(userPrincipal, candidate)) {
 			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
 		candidate = candidateService.updateExperience(candidateExperienceRequest, candidate);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CANDIDATES)
 	@ResponseBody
 	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
-			@RequestParam(defaultValue = "25", name = "paging") int paging){	
+			@RequestParam(defaultValue = "25", name = "paging") int paging){
 		Page<Candidate> pages = candidateService.index(page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-		
+
 		List<CandidateResponse> list = new ArrayList<CandidateResponse>();
-		
+
 		if(pages.getContent().size() > 0) {
 			for (Candidate candidate : pages.getContent()) {
 				list.add(candidateService.convertCandiateResponse(candidate));
 			}
 		}
-		
+
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CANDIDATE_IDS)
 	@ResponseBody
 	public ResponseDataAPI listCandidateByIds(@RequestParam(defaultValue = "1", name = "page") int page,
@@ -144,52 +144,52 @@ public class CandidateController {
 		}
 
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
-	public ResponseDataAPI show(@PathVariable UUID id){		
+	public ResponseDataAPI show(@PathVariable UUID id){
 		Candidate candidate = commonSupport.loadCandidateById(id);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_MY_CANDIDATE)
 	@ResponseBody
-	public ResponseDataAPI myCandidate(@CurrentUser UserPrincipal userPrincipal){		
+	public ResponseDataAPI myCandidate(@CurrentUser UserPrincipal userPrincipal){
 		Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	@DeleteMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
-	public ResponseDataAPI destroy(@PathVariable UUID id) {		
-		candidateService.isDel(id, CommonFunction.dateTimeNow());
+	public ResponseDataAPI destroy(@PathVariable UUID id) {
+		candidateService.isDel(id, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_CANDIDATE_UNDELETE)
 	@ResponseBody
-	public ResponseDataAPI undelete(@PathVariable UUID id) {		
+	public ResponseDataAPI undelete(@PathVariable UUID id) {
 		Candidate candidate = candidateService.isDel(id, null);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				candidateService.convertCandiateResponse(candidate), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				candidateService.convertCandiateResponse(candidate),
+				null,
 				null);
 	}
-	
+
 	private boolean checkPermission(UserPrincipal userPrincipal, Candidate candidate) {
 		if(!candidate.getUser().getId().equals(userPrincipal.getId())) {
 			return false;

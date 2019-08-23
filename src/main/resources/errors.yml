@@ -200,3 +200,7 @@ email_does_not_exist:
 reset_password_incorrect_code:
   code:
   message: Incorrect code reset password!
+#upload file
+file_not_formated:
+  code:
+  message: The file is not properly formatted!

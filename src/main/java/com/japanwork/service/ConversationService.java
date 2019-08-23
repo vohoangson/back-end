@@ -19,44 +19,43 @@ public class ConversationService {
 
 	@Autowired
 	private ConversationRepository conversationRepository;
-	
+
 	@Autowired
 	private TranslatorService translatorService;
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private CandidateService candidateService;
-	
+
 	@Transactional
 	public Conversation create(Translator translator, Company company, Candidate candidate) {
 		Conversation conversation = new Conversation();
 		conversation.setTranslator(translator);
 		conversation.setCandidate(candidate);
 		conversation.setCompany(company);
-		conversation.setCreatedAt(CommonFunction.dateTimeNow());
-		conversation.setDeletedAt(null);
-		
-		Conversation result = conversationRepository.save(conversation);			
+		conversation.setCreatedAt(CommonFunction.getCurrentDateTime());
+
+		Conversation result = conversationRepository.save(conversation);
 		return result;
 	}
-	
+
 	public ConversationResponse convertConversationResponse(Conversation conversation) {
 		CompanyResponse companyResponse = new CompanyResponse();
 		if(conversation.getCompany() != null) {
 			companyResponse = companyService.convertCompanyResponse(conversation.getCompany());
 		}
-		
+
 		CandidateResponse candidateResponse = new CandidateResponse();
-		
+
 		if(conversation.getCandidate() != null) {
 			candidateResponse = candidateService.convertCandiateResponse(conversation.getCandidate());
 		}
-		
+
 		ConversationResponse conversationResponse = new ConversationResponse(
 				conversation.getId(),
-				companyResponse, 
+				companyResponse,
 				candidateResponse,
 				translatorService.convertTranslatorResponse(conversation.getTranslator()));
 		return conversationResponse;

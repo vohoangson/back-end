@@ -22,6 +22,10 @@ public class ExperienceTranslation {
     @Where(clause = "deleted_at IS NULL")
     private Experience experience;
 
+    @ManyToOne
+    @Where(clause = "deleted_at IS NULL")
+    private CandidateTranslation candidateTranslation;
+
     @OneToOne
     @JoinColumn(name = "language_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
@@ -56,6 +60,14 @@ public class ExperienceTranslation {
 
     public void setExperience(Experience experience) {
         this.experience = experience;
+    }
+
+    public CandidateTranslation getCandidateTranslation() {
+        return candidateTranslation;
+    }
+
+    public void setCandidateTranslation(CandidateTranslation candidateTranslation) {
+        this.candidateTranslation = candidateTranslation;
     }
 
     public Language getLanguage() {

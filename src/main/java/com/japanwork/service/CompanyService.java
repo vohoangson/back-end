@@ -46,9 +46,8 @@ public class CompanyService {
 			company.setLogoUrl(companyRequest.getLogo());
 			company.setIntroduction(companyRequest.getIntroduction());
 			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			company.setCreatedAt(CommonFunction.dateTimeNow());
-			company.setUpdatedAt(null);
-			company.setDeletedAt(null);
+			company.setCreatedAt(CommonFunction.getCurrentDateTime());
+			company.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
 			Company result = companyRepository.save(company);
 			userService.changePropertyId(userPrincipal.getId(), result.getId());
@@ -74,7 +73,7 @@ public class CompanyService {
 			company.setLogoUrl(companyRequest.getLogo());
 			company.setIntroduction(companyRequest.getIntroduction());
 			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			company.setUpdatedAt(CommonFunction.dateTimeNow());
+			company.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
 			Company result = companyRepository.save(company);
 			return result;
@@ -93,7 +92,7 @@ public class CompanyService {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-	
+
 	public Company isDel(UUID id, Timestamp deletedAt) throws ServerError{
 		try {
 			Company company = companyRepository.findById(id).get();

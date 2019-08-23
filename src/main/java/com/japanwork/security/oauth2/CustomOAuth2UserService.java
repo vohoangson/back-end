@@ -30,7 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserService userService;
-    
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
@@ -80,10 +80,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else {
         	throw new ServerError(MessageConstant.INTERNAL_SERVER_ERROR);
         }
-        
+
         user.setIsEnabled(true);
         user.setDeletedAt(null);
-        user.setCreatedAt(CommonFunction.dateTimeNow());
+        user.setCreatedAt(CommonFunction.getCurrentDateTime());
         user.setUpdatedAt(null);
         return userService.save(user);
     }
