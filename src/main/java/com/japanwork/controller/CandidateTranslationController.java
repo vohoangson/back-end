@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.Candidate;
-import com.japanwork.model.CandidateTranslation;
 import com.japanwork.model.Language;
 import com.japanwork.payload.request.CandidateTranslationRequest;
 import com.japanwork.service.CandidateTranslationService;
@@ -37,7 +36,7 @@ public class CandidateTranslationController {
         Candidate candidate = commonSupport.loadCandidateById(id);
         Language language   = commonSupport.loadLanguageById(candidateTranslationRequest.getLanguageId());
 
-        CandidateTranslation candidateTranslation = candidateTranslationService.save(
+        candidateTranslationService.save(
                 candidate,
                 language,
                 candidateTranslationRequest

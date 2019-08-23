@@ -55,9 +55,9 @@ public class CompanyController {
 		}
 
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
 
@@ -78,9 +78,9 @@ public class CompanyController {
 		}
 
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
 
@@ -106,9 +106,9 @@ public class CompanyController {
 			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		Company company = companyService.create(companyRequest, userPrincipal);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				companyService.convertCompanyResponse(company), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				companyService.convertCompanyResponse(company),
+				null,
 				null);
 	}
 
@@ -117,9 +117,9 @@ public class CompanyController {
 	public ResponseDataAPI show(@PathVariable UUID id){
 		Company company = commonSupport.loadCompanyById(id);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				companyService.convertCompanyResponse(company), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				companyService.convertCompanyResponse(company),
+				null,
 				null);
 	}
 
@@ -128,9 +128,9 @@ public class CompanyController {
 	public ResponseDataAPI myCompany(@CurrentUser UserPrincipal userPrincipal){
 		Company company =  commonSupport.loadCompanyByUser(userPrincipal.getId());
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				companyService.convertCompanyResponse(company), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				companyService.convertCompanyResponse(company),
+				null,
 				null);
 	}
 
@@ -141,20 +141,20 @@ public class CompanyController {
 		Company company = commonSupport.loadCompanyById(id);
 		company = companyService.update(companyRequest, company, userPrincipal);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				companyService.convertCompanyResponse(company), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				companyService.convertCompanyResponse(company),
+				null,
 				null);
 	}
 
 	@DeleteMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
 	public ResponseDataAPI destroy(@PathVariable UUID id) {
-		companyService.isDel(id, CommonFunction.dateTimeNow());
+		companyService.isDel(id, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				null, 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				null,
+				null,
 				null);
 	}
 
@@ -163,9 +163,9 @@ public class CompanyController {
 	public ResponseDataAPI unDel(@PathVariable UUID id) {
 		Company company =  companyService.isDel(id, null);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				companyService.convertCompanyResponse(company), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				companyService.convertCompanyResponse(company),
+				null,
 				null);
 	}
 }

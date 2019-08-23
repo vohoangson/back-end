@@ -17,7 +17,6 @@ import com.japanwork.model.Academy;
 @Repository
 @Transactional
 public class AcademyRepositoryIplm implements AcademyRepository{
-
 	@Override
 	public List<Academy> findAll() {
 		// TODO Auto-generated method stub
@@ -45,7 +44,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -57,13 +56,13 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteInBatch(Iterable<Academy> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -135,7 +134,7 @@ public class AcademyRepositoryIplm implements AcademyRepository{
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

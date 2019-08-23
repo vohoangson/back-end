@@ -40,26 +40,26 @@ import com.japanwork.security.UserPrincipal;
 
 @Service
 public class UserService {
-	
+
     @Autowired
     private VerificationTokenRepository tokenRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private ForgetPasswordRepository forgetPasswordRepository;
-    
+
     @Autowired
     private EmailSenderService emailSenderService;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
     public static final String TOKEN_VALID = "valid";
-    
+
 	public String validateVerificationToken(String token) {
         final VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) {
@@ -80,21 +80,21 @@ public class UserService {
         userRepository.save(user);
         return TOKEN_VALID;
     }
-	
+
 	public boolean existsByEmail(String email) {
 		return userRepository.existsByEmail(email);
 	}
-	
+
 	public Optional<User> findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-	
+
 	public User save(User user) {
 		return userRepository.save(user);
 	}
-	
+
 	public ResponseEntity<?> registerUser(SignUpRequest signUpRequest, HttpServletRequest request) throws ServerError{
-		try {       
+		try {
 	        User user = new User();
 	        user.setName(signUpRequest.getName());
 	        user.setEmail(signUpRequest.getEmail());
@@ -108,49 +108,49 @@ public class UserService {
 	        } else {
 	        	user.setCountry(new Country(UUID.fromString("e3d9ee07-553e-4a5a-826d-f9177d24e60e")));
 	        }
-	        
-	        user.setCreatedAt(CommonFunction.dateTimeNow());
+
+	        user.setCreatedAt(CommonFunction.getCurrentDateTime());
 	        user.setUpdatedAt(null);
 	        user.setDeletedAt(null);
 	        User result = userRepository.save(user);
-	        
+
 	        final VerificationToken newToken = this.generateNewVerificationToken(user);
-	        
+
 	        String content = "To confirm your account, please click here : "
 	                +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
 	        this.sendEmail(user.getEmail(), "Complete Registration!", content);
-	        
-	        
+
+
 	        URI location = ServletUriComponentsBuilder
 	                .fromCurrentContextPath().path("/user/me")
 	                .buildAndExpand(result.getId()).toUri();
-	
+
 	        return ResponseEntity.created(location)
 	                .body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null));
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.REGISTER_FAIL);
 		}
 	}
-	
+
 	public ConfirmRegistrationTokenResponse resendRegistrationToken(String existingToken, HttpServletRequest request) {
 		final VerificationToken newToken = this.generateNewVerificationToken(existingToken);
         final User user = this.getUser(newToken.getToken());
         String content = "To confirm your account, please click here : "
                 +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
         this.sendEmail(user.getEmail(), "Complete Registration!", content);
-        
+
         ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Please confirm your email!","");
         return api;
 	}
-	
+
 	public User findById(UUID id) {
 		return userRepository.findById(id).get();
 	}
-		
+
 	public User findByIdAndIsDelete(UUID id) {
 		return userRepository.findByIdAndDeletedAt(id, null);
 	}
-	
+
 	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{
 		try {
 			User user = userRepository.findByIdAndDeletedAt(userId, null);
@@ -160,15 +160,15 @@ public class UserService {
 			throw new ServerError(MessageConstant.CHANGE_PROPERTY_ID_FAIL);
 		}
 	}
-	
-	public ResponseDataAPI changePassword(UserPrincipal userPrincipal, 
+
+	public ResponseDataAPI changePassword(UserPrincipal userPrincipal,
 			ChangePasswordRequest changePasswordRequest) throws ServerError, BadRequestException{
 		try {
 			boolean checkOldPassword = BCrypt.checkpw(changePasswordRequest.getOldPassword(), userPrincipal.getPassword());
 			if(checkOldPassword) {
 				User user = userRepository.findByIdAndDeletedAt(userPrincipal.getId(), null);
 				user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
-				
+
 				userRepository.save(user);
 				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 			} else {
@@ -180,8 +180,8 @@ public class UserService {
 			throw new ServerError(MessageConstant.CHANGE_PASSWORD_FAIL);
 		}
 	}
-	
-	public ResponseDataAPI forgetPassword(MailForgetPasswordRequest mailForgetPasswordRequest) 
+
+	public ResponseDataAPI forgetPassword(MailForgetPasswordRequest mailForgetPasswordRequest)
 		throws BadRequestException, ServerError{
 		try {
 			User user = this.findUserByEmail(mailForgetPasswordRequest.getEmail());
@@ -192,19 +192,19 @@ public class UserService {
 				if(fp != null) {
 					forgetPasswordRepository.delete(fp);
 				}
-				
+
 				String code = CommonFunction.generateCode(6);
-				
+
 				ForgetPassword forgetPassword = new ForgetPassword();
 				forgetPassword.setCode(code);
 				forgetPassword.setUser(user);
-				forgetPassword.setCreatedAt(CommonFunction.dateTimeNow());
-				
+				forgetPassword.setCreatedAt(CommonFunction.getCurrentDateTime());
+
 				ForgetPassword result = forgetPasswordRepository.save(forgetPassword);
 				if(result != null) {
 					this.sendEmail(user.getEmail(), "Reset the password!", "Confirmation code is: " + code);
 				}
-				
+
 				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 			}
 		} catch(BadRequestException e) {
@@ -213,24 +213,24 @@ public class UserService {
 			throw new ServerError(MessageConstant.RESET_PASSWORD_FAIL);
 		}
 	}
-	
-	public ResponseDataAPI resetPassword(ResetPasswordRequest resetPasswordRequest) 
+
+	public ResponseDataAPI resetPassword(ResetPasswordRequest resetPasswordRequest)
 			throws BadRequestException, ServerError{
 		try {
 			User user = this.findUserByEmail(resetPasswordRequest.getEmail());
 			if(user == null) {
 				throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST);
 			} else {
-				ForgetPassword forgetPassword = forgetPasswordRepository.findByUserIdAndCode(user.getId(), 
+				ForgetPassword forgetPassword = forgetPasswordRepository.findByUserIdAndCode(user.getId(),
 						resetPasswordRequest.getCode());
 				if(forgetPassword == null) {
 					throw new BadRequestException(MessageConstant.RESET_FORGET_PASSWORD_INCORRECT_CODE);
 				}
 				forgetPasswordRepository.delete(forgetPasswordRepository.findByUserId(user.getId()));
-				
-				user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));	
+
+				user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
 				userRepository.save(user);
-				
+
 				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
 			}
 		} catch (BadRequestException e) {
@@ -239,11 +239,11 @@ public class UserService {
 			throw new ServerError(MessageConstant.RESET_PASSWORD_FAIL);
 		}
 	}
-	
+
 	private User findUserByEmail(String email) {
 		return userRepository.findByEmail(email).get();
 	}
-	
+
 	private void sendEmail(String to, String subject, String content) {
     	SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(to);
@@ -252,13 +252,13 @@ public class UserService {
         mailMessage.setText(content);
         emailSenderService.sendEmail(mailMessage);
     }
-	
+
 	private VerificationToken generateNewVerificationToken(User user) {
         VerificationToken vToken = new VerificationToken(UUID.randomUUID().toString(), user);
         vToken = tokenRepository.save(vToken);
         return vToken;
     }
-	
+
 	private VerificationToken generateNewVerificationToken(String token) {
 		VerificationToken vToken = tokenRepository.findByToken(token);
         vToken.updateToken(UUID.randomUUID()
@@ -266,7 +266,7 @@ public class UserService {
         vToken = tokenRepository.save(vToken);
         return vToken;
     }
-	
+
 	private User getUser(final String verificationToken) {
         final VerificationToken token = tokenRepository.findByToken(verificationToken);
         if (token != null) {

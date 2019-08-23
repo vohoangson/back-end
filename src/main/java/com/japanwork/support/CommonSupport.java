@@ -2,6 +2,7 @@ package com.japanwork.support;
 
 import java.util.UUID;
 
+import com.japanwork.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,21 +10,14 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
-import com.japanwork.model.Candidate;
-import com.japanwork.model.Company;
-import com.japanwork.model.Conversation;
-import com.japanwork.model.Job;
-import com.japanwork.model.JobApplication;
-import com.japanwork.model.Language;
-import com.japanwork.model.RequestTranslation;
-import com.japanwork.model.Translator;
-import com.japanwork.model.User;
 import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.repository.conversation.ConversationRepository;
+import com.japanwork.repository.academy.AcademyRepository;
+import com.japanwork.repository.experience.ExperienceRepository;
+import com.japanwork.repository.language.LanguageRepository;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.repository.job_application.JobApplicationRepository;
-import com.japanwork.repository.language.LanguageRepository;
 import com.japanwork.repository.request_translation.RequestTranslationRepository;
 import com.japanwork.repository.translator.TranslatorRepository;
 import com.japanwork.repository.user.UserRepository;
@@ -47,16 +41,22 @@ public class CommonSupport {
 
     @Autowired
     private ConversationRepository conversationRepository;
-    
+
     @Autowired
     private JobApplicationRepository jobApplicationRepository;
-    
+
     @Autowired
     private RequestTranslationRepository requestTranslationRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
+    @Autowired
+    private AcademyRepository academyRepository;
+
+    @Autowired
+    private ExperienceRepository experienceRepository;
+
     public Company loadCompanyById(UUID id) throws ResourceNotFoundException {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
         if(company == null) {
@@ -76,7 +76,7 @@ public class CommonSupport {
         }
         return company;
     }
-    
+
     public Language loadLanguageById(UUID id) throws ResourceNotFoundException {
         Language language = languageRepository.findByIdAndDeletedAt(id, null);
         if(language == null) {
@@ -116,7 +116,7 @@ public class CommonSupport {
         }
         return translator;
     }
-    
+
     public Candidate loadCandidateById(UUID id) throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
         if(candidate == null) {
@@ -126,7 +126,7 @@ public class CommonSupport {
         }
         return candidate;
     }
-    
+
     public Candidate loadCandidateByUser(UUID userId) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByUserIdAndDeletedAt(userId, null);
 		if(candidate == null) {
@@ -134,10 +134,10 @@ public class CommonSupport {
                     MessageConstant.CANDIDATE_NOT_FOUND
             );
 		}
-			
+
 		return candidate;
 	}
-    
+
     public Conversation loadConversationById(UUID id) throws ResourceNotFoundException {
     	Conversation conversation = conversationRepository.findByIdAndDeletedAt(id, null);
         if(conversation == null) {
@@ -147,8 +147,8 @@ public class CommonSupport {
         }
         return conversation;
     }
-    
-    public JobApplication loadJobApplicationById(UUID id, UUID userId) 
+
+    public JobApplication loadJobApplicationById(UUID id, UUID userId)
     		throws ResourceNotFoundException, ForbiddenException {
     	JobApplication jobApplication = jobApplicationRepository.findByIdAndDeletedAt(id, null);
         if(jobApplication == null) {
@@ -172,7 +172,7 @@ public class CommonSupport {
 		}
         return jobApplication;
     }
-    
+
     public RequestTranslation loadRequestTransationById(UUID id) throws ResourceNotFoundException {
     	RequestTranslation requestTranslation = requestTranslationRepository.findByIdAndDeletedAt(id, null);
         if(requestTranslation == null) {
@@ -182,7 +182,7 @@ public class CommonSupport {
         }
         return requestTranslation;
     }
-    
+
     public User loadUserById(UUID id) throws ResourceNotFoundException {
     	User user = userRepository.findByIdAndDeletedAt(id, null);
         if(user == null) {
@@ -191,5 +191,25 @@ public class CommonSupport {
             );
         }
         return user;
+    }
+
+    public Academy loadAcademy(UUID id) throws ResourceNotFoundException {
+        Academy academy = academyRepository.findByIdAndDeletedAt(id, null);
+        if(academy== null) {
+            throw new ResourceNotFoundException(
+                    MessageConstant.ACADEMY_NOT_FOUND
+            );
+        }
+        return academy;
+    }
+
+    public Experience loadExperience(UUID id) throws ResourceNotFoundException {
+        Experience experience = experienceRepository.findByIdAndDeletedAt(id, null);
+        if(experience== null) {
+            throw new ResourceNotFoundException(
+                    MessageConstant.EXPERIENCE_NOT_FOUND
+            );
+        }
+        return experience;
     }
 }
