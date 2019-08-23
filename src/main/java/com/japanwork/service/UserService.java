@@ -126,7 +126,7 @@ public class UserService {
 	                .buildAndExpand(result.getId()).toUri();
 
 	        return ResponseEntity.created(location)
-	                .body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null));
+	                .body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", ""));
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.REGISTER_FAIL);
 		}
@@ -170,7 +170,7 @@ public class UserService {
 				user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
 
 				userRepository.save(user);
-				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
 			} else {
 				throw new BadRequestException(MessageConstant.CHANGE_PASSWORD_NOT_CORRECT);
 			}
@@ -205,7 +205,7 @@ public class UserService {
 					this.sendEmail(user.getEmail(), "Reset the password!", "Confirmation code is: " + code);
 				}
 
-				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
 			}
 		} catch(BadRequestException e) {
 			throw e;
@@ -231,7 +231,7 @@ public class UserService {
 				user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
 				userRepository.save(user);
 
-				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
 			}
 		} catch (BadRequestException e) {
 			throw e;

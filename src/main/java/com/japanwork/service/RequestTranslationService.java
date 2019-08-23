@@ -521,8 +521,8 @@ public class RequestTranslationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public ResponseDataAPI requestTranslationsByCandidate(User user, RequestTranslationFilterRequest filterRequest,
@@ -560,8 +560,8 @@ public class RequestTranslationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public ResponseDataAPI requestTranslationsByTranslator(User user, RequestTranslationFilterRequest filterRequest,
@@ -607,8 +607,8 @@ public class RequestTranslationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public ResponseDataAPI newRequestTranslations(User user, RequestTranslationFilterRequest filterRequest, int page, int paging)
@@ -655,8 +655,8 @@ public class RequestTranslationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public void checkPermission(RequestTranslation requestTranslation, User user)

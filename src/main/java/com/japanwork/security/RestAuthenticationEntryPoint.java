@@ -26,8 +26,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.UNAUTHORIZED, "errors.yml");
         ResponseDataAPI responseDataAPI = new ResponseDataAPI(
 														CommonConstant.ResponseDataAPIStatus.FAILURE,
-														null,
-														null,
 														error);
         httpServletResponse.getWriter().write(CommonFunction.convertToJSONString(responseDataAPI));
     }
