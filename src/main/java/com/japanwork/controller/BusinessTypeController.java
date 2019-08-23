@@ -21,19 +21,23 @@ import com.japanwork.service.BusinessTypeService;
 public class BusinessTypeController {
 	@Autowired
 	private BusinessTypeService businessTypeService;
-	
-	
+
+
 	@GetMapping(UrlConstant.URL_BUSINESSES)
 	@ResponseBody
 	public ResponseDataAPI index() {
 		List<Business> list = businessTypeService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null);
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_BUSINESSES)
 	@ResponseBody
 	public ResponseDataAPI create(@Valid @RequestBody BusinessRequest businessTypeRequest) {
 		Business business = businessTypeService.create(businessTypeRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, business, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                business,
+                ""
+        );
 	}
 }

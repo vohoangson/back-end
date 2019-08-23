@@ -21,12 +21,20 @@ public class FileHandlerController {
     @PostMapping(UrlConstant.URL_AMW)
     public ResponseDataAPI create(@RequestPart(value = "file") MultipartFile file){
         String url = fileHandlerService.uploadFile(file);
-        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, url, null, null);
+        return new ResponseDataAPI(
+                CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                url,
+                ""
+        );
     }
 
     @DeleteMapping(UrlConstant.URL_AMW)
     public ResponseDataAPI destroy(@RequestParam("url") String fileUrl) {
     	fileHandlerService.deleteFileFromS3Bucket(fileUrl);
-    	return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+    	return new ResponseDataAPI(
+    	        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                "",
+                ""
+        );
     }
 }

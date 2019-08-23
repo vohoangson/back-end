@@ -57,8 +57,8 @@ public class CompanyController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_COMPANY_IDS)
@@ -80,8 +80,8 @@ public class CompanyController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 //	@GetMapping(UrlConstant.URL_COMPANY)
@@ -107,9 +107,9 @@ public class CompanyController {
 		Company company = companyService.create(companyRequest, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				companyService.convertCompanyResponse(company),
-				null,
-				null);
+                companyService.convertCompanyResponse(company),
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_COMPANY)
@@ -119,8 +119,8 @@ public class CompanyController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				companyService.convertCompanyResponse(company),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_MY_COMPANY)
@@ -130,8 +130,8 @@ public class CompanyController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				companyService.convertCompanyResponse(company),
-				null,
-				null);
+				""
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_COMPANY)
@@ -143,8 +143,8 @@ public class CompanyController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				companyService.convertCompanyResponse(company),
-				null,
-				null);
+				""
+        );
 	}
 
 	@DeleteMapping(UrlConstant.URL_COMPANY)
@@ -153,9 +153,9 @@ public class CompanyController {
 		companyService.isDel(id, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				null,
-				null,
-				null);
+				"",
+				""
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_COMPANY_UNDELETE)
@@ -165,7 +165,7 @@ public class CompanyController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				companyService.convertCompanyResponse(company),
-				null,
-				null);
+				""
+        );
 	}
 }

@@ -23,33 +23,49 @@ import com.japanwork.service.CityService;
 public class CityController {
 	@Autowired
 	private CityService cityService;
-	
-	
+
+
 	@GetMapping(UrlConstant.URL_CITIES)
 	@ResponseBody
 	public ResponseDataAPI index() {
 		List<City> list = cityService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_CITIES)
 	@ResponseBody
-	public ResponseDataAPI create(@Valid @RequestBody CityRequest cityRequest) {		
+	public ResponseDataAPI create(@Valid @RequestBody CityRequest cityRequest) {
 		City city = cityService.create(cityRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, city, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                city,
+                ""
+        );
 	}
-	
+
 	@GetMapping(UrlConstant.URL_COUNTRIES_CITIES)
 	@ResponseBody
 	public ResponseDataAPI listCityByCountry(@PathVariable String code) {
 		List<City> list = cityService.listCityByCountry(code);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_CITIES_BATCH)
 	@ResponseBody
-	public ResponseDataAPI createList(@Valid @RequestBody ListCityRequest listCityRequest) {		
+	public ResponseDataAPI createList(@Valid @RequestBody ListCityRequest listCityRequest) {
 		List<City> list =  cityService.saves(listCityRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
 }

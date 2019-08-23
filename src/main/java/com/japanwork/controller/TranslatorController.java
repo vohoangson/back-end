@@ -48,8 +48,8 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				translatorService.convertTranslatorResponse(translator),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_TRANSLATORS)
@@ -70,8 +70,8 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_TRANSLATOR_IDS)
@@ -93,8 +93,8 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_TRANSLATOR)
@@ -106,8 +106,8 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				translatorService.convertTranslatorResponse(translator),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_TRANSLATOR)
@@ -117,8 +117,8 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				translatorService.convertTranslatorResponse(translator),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_MY_TRANSLATOR)
@@ -128,8 +128,8 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				translatorService.convertTranslatorResponse(translator),
-				null,
-				null);
+				""
+        );
 	}
 
 	@DeleteMapping(UrlConstant.URL_TRANSLATOR)
@@ -138,9 +138,9 @@ public class TranslatorController {
 		translatorService.isDel(id, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				null,
-				null,
-				null);
+				"",
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_TRANSLATORS_UNDEL)
@@ -150,7 +150,7 @@ public class TranslatorController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				translatorService.convertTranslatorResponse(translator),
-				null,
-				null);
+				""
+        );
 	}
 }

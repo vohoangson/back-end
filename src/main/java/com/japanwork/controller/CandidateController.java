@@ -52,8 +52,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
@@ -69,8 +69,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPECTED)
@@ -86,8 +86,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE)
@@ -102,8 +102,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_CANDIDATES)
@@ -124,8 +124,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_CANDIDATE_IDS)
@@ -146,8 +146,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_CANDIDATE)
@@ -157,8 +157,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_MY_CANDIDATE)
@@ -168,15 +168,19 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	@DeleteMapping(UrlConstant.URL_CANDIDATE)
 	@ResponseBody
 	public ResponseDataAPI destroy(@PathVariable UUID id) {
 		candidateService.isDel(id, CommonFunction.getCurrentDateTime());
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                "",
+                ""
+        );
 	}
 
 	@PatchMapping(UrlConstant.URL_CANDIDATE_UNDELETE)
@@ -186,8 +190,8 @@ public class CandidateController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				candidateService.convertCandiateResponse(candidate),
-				null,
-				null);
+				""
+        );
 	}
 
 	private boolean checkPermission(UserPrincipal userPrincipal, Candidate candidate) {
