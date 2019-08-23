@@ -3,7 +3,9 @@ package com.japanwork.payload.response;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.File;
 
 public class MessageResponse {
 	private long id;
@@ -15,6 +17,8 @@ public class MessageResponse {
 	
 	@JsonProperty("conversation_id")
 	private UUID conversationId;
+	
+	private File file;
 	
 	@JsonProperty("is_read")
 	private boolean isRead;
@@ -58,6 +62,15 @@ public class MessageResponse {
 		return createAt;
 	}
 
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	@JsonIgnore
 	public boolean isRead() {
 		return isRead;
 	}
@@ -70,11 +83,13 @@ public class MessageResponse {
 		this.createAt = createAt;
 	}
 
-	public MessageResponse(long id, UUID senderId, String content, UUID conversationId, boolean isRead, Timestamp createAt) {
+	public MessageResponse(long id, UUID senderId, String content, UUID conversationId, File file, boolean isRead,
+			Timestamp createAt) {
 		this.id = id;
 		this.senderId = senderId;
 		this.content = content;
 		this.conversationId = conversationId;
+		this.file = file;
 		this.isRead = isRead;
 		this.createAt = createAt;
 	}
