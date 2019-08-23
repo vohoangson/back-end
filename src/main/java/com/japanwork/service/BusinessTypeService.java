@@ -14,22 +14,21 @@ import com.japanwork.repository.business_type.BusinessTypeRepository;
 public class BusinessTypeService {
 	@Autowired
 	private BusinessTypeRepository businessTypeRepository;
-	
-	public Business create(BusinessRequest businessTypeRequest) {		
+
+	public Business create(BusinessRequest businessTypeRequest) {
 		Business businessType = new Business();
 		businessType.setJa(businessTypeRequest.getJa());
 		businessType.setVi(businessTypeRequest.getVi());
 		businessType.setDesc(businessTypeRequest.getDesc());
-		businessType.setCreatedAt(CommonFunction.dateTimeNow());
-		businessType.setUpdatedAt(null);
-		businessType.setDeletedAt(null);
-		
-		Business result = businessTypeRepository.save(businessType);	
+		businessType.setCreatedAt(CommonFunction.getCurrentDateTime());
+		businessType.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
+		Business result = businessTypeRepository.save(businessType);
 		return result;
 	}
-	
+
 	public List<Business> index() {
 		List<Business> list = businessTypeRepository.findAllByDeletedAt(null);
 		return list;
-	} 
+	}
 }

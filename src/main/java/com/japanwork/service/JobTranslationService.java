@@ -39,8 +39,8 @@ public class JobTranslationService {
             jobTranslation.setRequiredLanguage(jobTranslationRequest.getRequiredLanguage());
             jobTranslation.setJapaneseLevelRequirement(jobTranslationRequest.getJapaneseLevelRequirement());
             jobTranslation.setBenefit(jobTranslationRequest.getBenefit());
-            jobTranslation.setCreatedAt(CommonFunction.dateTimeNow());
-            jobTranslation.setUpdatedAt(null);
+            jobTranslation.setCreatedAt(CommonFunction.getCurrentDateTime());
+            jobTranslation.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
             JobTranslation result = jobTranslationRepository.save(jobTranslation);
             return result;

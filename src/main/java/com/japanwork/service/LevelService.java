@@ -14,7 +14,7 @@ import com.japanwork.repository.level.LevelRepository;
 public class LevelService {
 	@Autowired
 	private LevelRepository levelRepository;
-	
+
 	public List<Level> index() {
 		List<Level> list = levelRepository.findAllByDeletedAt(null);
 		return list;
@@ -25,10 +25,9 @@ public class LevelService {
 		level.setJa(levelRequest.getJa());
 		level.setVi(levelRequest.getVi());
 		level.setDesc(levelRequest.getDesc());
-		level.setCreatedAt(CommonFunction.dateTimeNow());
-		level.setUpdatedAt(null);
-		level.setDeletedAt(null);
-		
+		level.setCreatedAt(CommonFunction.getCurrentDateTime());
+		level.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
 		Level result = levelRepository.save(level);
 		return result;
 	}

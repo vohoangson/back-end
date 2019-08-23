@@ -36,50 +36,50 @@ import com.japanwork.support.CommonSupport;
 public class TranslatorController {
 	@Autowired
 	private TranslatorService translatorService;
-	
+
 	@Autowired
     private CommonSupport commonSupport;
-	
+
 	@PostMapping(UrlConstant.URL_TRANSLATORS)
 	@ResponseBody
 	public ResponseDataAPI create(@Valid @RequestBody TranslatorRequest translatorRequest,
-			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{		
+			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
 		Translator translator = translatorService.create(translatorRequest, userPrincipal);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				translatorService.convertTranslatorResponse(translator), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				translatorService.convertTranslatorResponse(translator),
+				null,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_TRANSLATORS)
 	@ResponseBody
-	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page, 
+	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging){
 		Page<Translator> pages = translatorService.index(page, paging);
-		
+
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<TranslatorResponse> list = new ArrayList<TranslatorResponse>();
-		
+
 		if(pages.getContent().size() > 0) {
 			for (Translator translator : pages.getContent()) {
 				list.add(translatorService.convertTranslatorResponse(translator));
 			}
 		}
-		
+
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_TRANSLATOR_IDS)
 	@ResponseBody
 	public ResponseDataAPI listTranslatorByIds(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(name = "ids") Set<UUID> ids) {
-		
+
 		Page<Translator> pages = translatorService.translatorsByIds(ids, page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<TranslatorResponse> list = new ArrayList<TranslatorResponse>();
@@ -91,66 +91,66 @@ public class TranslatorController {
 		}
 
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
-	public ResponseDataAPI updateTranslator(@Valid @RequestBody TranslatorRequest translatorRequest, 
+	public ResponseDataAPI updateTranslator(@Valid @RequestBody TranslatorRequest translatorRequest,
 			@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
 		Translator translator = commonSupport.loadTranslatorById(id);
 		translator = translatorService.update(translatorRequest, translator, userPrincipal);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				translatorService.convertTranslatorResponse(translator), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				translatorService.convertTranslatorResponse(translator),
+				null,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
-	public ResponseDataAPI findTranslatorByIdAndIsDelete(@PathVariable UUID id){		
+	public ResponseDataAPI findTranslatorByIdAndIsDelete(@PathVariable UUID id){
 		Translator translator = commonSupport.loadTranslatorById(id);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				translatorService.convertTranslatorResponse(translator), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				translatorService.convertTranslatorResponse(translator),
+				null,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_MY_TRANSLATOR)
 	@ResponseBody
-	public ResponseDataAPI myTranslator(@CurrentUser UserPrincipal userPrincipal){		
+	public ResponseDataAPI myTranslator(@CurrentUser UserPrincipal userPrincipal){
 		Translator translator = commonSupport.loadTranslatorByUser(userPrincipal.getId());
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				translatorService.convertTranslatorResponse(translator), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				translatorService.convertTranslatorResponse(translator),
+				null,
 				null);
 	}
-	
+
 	@DeleteMapping(UrlConstant.URL_TRANSLATOR)
 	@ResponseBody
 	public ResponseDataAPI del(@PathVariable UUID id) {
-		translatorService.isDel(id, CommonFunction.dateTimeNow());
+		translatorService.isDel(id, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				null, 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				null,
+				null,
 				null);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_TRANSLATORS_UNDEL)
 	@ResponseBody
-	public ResponseDataAPI unDel(@PathVariable UUID id) {		
+	public ResponseDataAPI unDel(@PathVariable UUID id) {
 		Translator translator = translatorService.isDel(id, null);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				translatorService.convertTranslatorResponse(translator), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				translatorService.convertTranslatorResponse(translator),
+				null,
 				null);
 	}
 }

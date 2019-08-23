@@ -23,11 +23,11 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
-        ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.UNAUTHORIZED, "errors.yml");
+        ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.UNAUTHORIZED, "errors.yml");
         ResponseDataAPI responseDataAPI = new ResponseDataAPI(
-														CommonConstant.ResponseDataAPIStatus.FAILURE, 
-														null, 
-														null, 
+														CommonConstant.ResponseDataAPIStatus.FAILURE,
+														null,
+														null,
 														error);
         httpServletResponse.getWriter().write(CommonFunction.convertToJSONString(responseDataAPI));
     }

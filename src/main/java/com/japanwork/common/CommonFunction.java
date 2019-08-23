@@ -35,8 +35,8 @@ public class CommonFunction {
 		}
 		return null;
 	}
-	
-	public static String generateCode(int lenght) {	 
+
+	public static String generateCode(int lenght) {
 	    List<CharacterRule> rules = Arrays.asList(new CharacterRule(EnglishCharacterData.UpperCase, 1),
 				new CharacterRule(EnglishCharacterData.LowerCase, 1));
 
@@ -44,28 +44,28 @@ public class CommonFunction {
 		String code = generator.generatePassword(lenght, rules);
 		return code;
 	}
-	
+
 	public static boolean checkRole(String role) {
 		if(!role.isEmpty()) {
-			if(!role.equalsIgnoreCase("COMPANY") && !role.equalsIgnoreCase("CANDIDATE") 
+			if(!role.equalsIgnoreCase("COMPANY") && !role.equalsIgnoreCase("CANDIDATE")
 					&& !role.equalsIgnoreCase("TRANSLATOR") && !role.equalsIgnoreCase("ADMIN")) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	public static Timestamp dateTimeNow() {
+
+	public static Timestamp getCurrentDateTime() {
 		Date date = new Date();
 		Timestamp timestamp = new Timestamp(date.getTime());
 		return timestamp;
 	}
-	
+
 	public static String convertToSnakeCase(String input) {
 		return input.replaceAll("([^_A-Z])([A-Z])", "$1_$2").toLowerCase();
 	}
-	
-	public static ErrorResponse getErrorFromValidation(String resource, String fieldName, String error, String nameFile) {
+
+	public static ErrorResponse getValidationError(String resource, String fieldName, String error, String nameFile) {
 		ReadYAML readYAML = new ReadYAML();
 		Map<String, Object> errors= readYAML.getValueFromYAML(nameFile);
 		Map<String, Object> fields = (Map<String, Object>) errors.get(resource);
@@ -76,8 +76,8 @@ public class CommonFunction {
 		ErrorResponse errorResponse = new ErrorResponse(code, message);
 		return errorResponse;
 	}
-	
-	public static ErrorResponse getErrorFromErrors(String error, String nameFile) {
+
+	public static ErrorResponse getExceptionError(String error, String nameFile) {
 		ReadYAML readYAML = new ReadYAML();
 		Map<String, Object> errors= readYAML.getValueFromYAML(nameFile);
 		Map<String, Object> objError = (Map<String, Object>) errors.get(error);

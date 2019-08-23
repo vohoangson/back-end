@@ -15,7 +15,7 @@ public class Error403 {
 	@RequestMapping(value = "/403")
 	@ResponseBody
 	public ResponseDataAPI error403() {
-		ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.FORBIDDEN_ERROR, "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.FORBIDDEN_ERROR, "errors.yml");
 		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, error);
 	}
 }

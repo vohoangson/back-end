@@ -39,7 +39,7 @@ public class JobController {
 
 	@Autowired
     private CommonSupport commonSupport;
-	
+
 	@GetMapping(UrlConstant.URL_JOBS)
 	@ResponseBody
 	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
@@ -81,9 +81,9 @@ public class JobController {
 		}
 
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo,
 				null);
 	}
 
@@ -93,9 +93,9 @@ public class JobController {
 		Company company = commonSupport.loadCompanyByUser(userPrincipal.getId());
 		Job job = jobService.create(jobRequest, company);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				jobService.convertJobResponse(job), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				jobService.convertJobResponse(job),
+				null,
 				null);
 	}
 
@@ -104,9 +104,9 @@ public class JobController {
 	public ResponseDataAPI show(@PathVariable UUID id){
 		Job job = commonSupport.loadJobById(id);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				jobService.convertJobResponse(job), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				jobService.convertJobResponse(job),
+				null,
 				null);
 	}
 
@@ -117,9 +117,9 @@ public class JobController {
 		Job job = commonSupport.loadJobById(id);
 		job = jobService.update(jobRequest, job, userPrincipal);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				jobService.convertJobResponse(job), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				jobService.convertJobResponse(job),
+				null,
 				null);
 	}
 
@@ -127,11 +127,11 @@ public class JobController {
 	@ResponseBody
 	public ResponseDataAPI del(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		Job job = commonSupport.loadJobById(id);
-		jobService.isDel(job, userPrincipal, CommonFunction.dateTimeNow());
+		jobService.isDel(job, userPrincipal, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				null, 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				null,
+				null,
 				null);
 
 	}
@@ -142,9 +142,9 @@ public class JobController {
 		Job job = commonSupport.loadJobById(id);
 		job = jobService.isDel(job, userPrincipal, null);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				jobService.convertJobResponse(job), 
-				null, 
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				jobService.convertJobResponse(job),
+				null,
 				null);
 	}
 

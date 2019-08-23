@@ -73,9 +73,8 @@ public class CandidateService {
             candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
             candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
             candidate.setStatusInfo(1);
-            candidate.setCreatedAt(CommonFunction.dateTimeNow());
-            candidate.setUpdatedAt(null);
-            candidate.setDeletedAt(null);
+            candidate.setCreatedAt(CommonFunction.getCurrentDateTime());
+            candidate.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
             Candidate result = candidateRepository.save(candidate);
             userService.changePropertyId(userPrincipal.getId(), result.getId());
@@ -99,7 +98,7 @@ public class CandidateService {
             candidate.setIntroduction(candidatePersonalRequest.getIntroduction());
             candidate.setJapaneseLevel(candidatePersonalRequest.getJapaneseLevel());
             candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-            candidate.setUpdatedAt(CommonFunction.dateTimeNow());
+            candidate.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
             Candidate result = candidateRepository.save(candidate);
             return result;
@@ -120,7 +119,7 @@ public class CandidateService {
             candidate.setExpectedSalary(candidateExpectedRequest.getExpectedSalary());
             candidate.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
             candidate.setStatusInfo(2);
-            candidate.setUpdatedAt(CommonFunction.dateTimeNow());
+            candidate.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
             Candidate result = candidateRepository.save(candidate);
             return result;
@@ -147,8 +146,8 @@ public class CandidateService {
                     academy.setGradeSystem(academyRequest.getGradeSystem());
                     academy.setStartDate(academyRequest.getStartDate());
                     academy.setEndDate(academyRequest.getEndDate());
-                    academy.setCreatedAt(CommonFunction.dateTimeNow());
-                    academy.setUpdatedAt(CommonFunction.dateTimeNow());
+                    academy.setCreatedAt(CommonFunction.getCurrentDateTime());
+                    academy.setUpdatedAt(CommonFunction.getCurrentDateTime());
                     academy.setDeletedAt(null);
 
                     listAcademy.add(academy);
@@ -169,8 +168,8 @@ public class CandidateService {
                     experience.setBusiness(new Business(experienceRequest.getBusinessId()));
                     experience.setStartDate(experienceRequest.getStartDate());
                     experience.setEndDate(experienceRequest.getEndDate());
-                    experience.setCreatedAt(CommonFunction.dateTimeNow());
-                    experience.setUpdatedAt(CommonFunction.dateTimeNow());
+                    experience.setCreatedAt(CommonFunction.getCurrentDateTime());
+                    experience.setUpdatedAt(CommonFunction.getCurrentDateTime());
                     experience.setDeletedAt(null);
 
                     listExperience.add(experience);
@@ -189,8 +188,8 @@ public class CandidateService {
                     languageCertificate.setScore(languageCertificateRequest.getScore());
                     languageCertificate.setLanguageCertificateType(new LanguageCertificateType(languageCertificateRequest.getLanguageCertificateTypeId()));
                     languageCertificate.setTakenDate(languageCertificateRequest.getTakenDate());
-                    languageCertificate.setCreatedAt(CommonFunction.dateTimeNow());
-                    languageCertificate.setUpdatedAt(CommonFunction.dateTimeNow());
+                    languageCertificate.setCreatedAt(CommonFunction.getCurrentDateTime());
+                    languageCertificate.setUpdatedAt(CommonFunction.getCurrentDateTime());
                     languageCertificate.setDeletedAt(null);
 
                     listLanguageCertificate.add(languageCertificate);

@@ -30,25 +30,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> badRequestException(BadRequestException ex, WebRequest request) {
-		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(ForbiddenException.class)
 	public ResponseEntity<?> forbiddenException(ForbiddenException ex, WebRequest request) {
-		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 
 	@ExceptionHandler(ServerError.class)
 	public ResponseEntity<?> serverError(ServerError ex, WebRequest request) {
-		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-		ErrorResponse error = CommonFunction.getErrorFromErrors(ex.getMessage(), "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(ex.getMessage(), "errors.yml");
 		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -77,17 +77,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		String error = CommonFunction.convertToSnakeCase(objectError.getCode());
 		String fieldName = CommonFunction.convertToSnakeCase(((FieldError) objectError).getField());
 		String resource = CommonFunction.convertToSnakeCase(objectError.getObjectName());
-		
-		ErrorResponse errorResponse = CommonFunction.getErrorFromValidation(resource, fieldName, error, "validation.yml");
-		
-		ResponseDataAPI ResponseDataAPI = new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, 
+
+		ErrorResponse errorResponse = CommonFunction.getValidationError(resource, fieldName, error, "validation.yml");
+
+		ResponseDataAPI ResponseDataAPI = new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE,
 				null, null, errorResponse);
 	    return new ResponseEntity<Object>(ResponseDataAPI, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
-		ErrorResponse error = CommonFunction.getErrorFromErrors(MessageConstant.PAGE_NOT_FOUND, "errors.yml");
+		ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.PAGE_NOT_FOUND, "errors.yml");
 		return new ResponseEntity<Object>(error, HttpStatus.NOT_FOUND);
 	}
 

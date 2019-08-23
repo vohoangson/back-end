@@ -15,27 +15,26 @@ import com.japanwork.repository.language_certificate_type.LanguageCertificateTyp
 public class LanguageCertificateTypeService {
 	@Autowired
 	private LanguageCertificateTypeRepository languageCertificateTypeRepository;
-	
+
 	public LanguageCertificateType create(LanguageCertificateTypeRequest languageCertificateTypeRequest) {
 		LanguageCertificateType LanguageCertificateType = new LanguageCertificateType();
 		LanguageCertificateType.setJa(languageCertificateTypeRequest.getJa());
 		LanguageCertificateType.setVi(languageCertificateTypeRequest.getVi());
 		LanguageCertificateType.setDesc(languageCertificateTypeRequest.getDesc());
-		LanguageCertificateType.setCreatedAt(CommonFunction.dateTimeNow());
-		LanguageCertificateType.setUpdatedAt(null);
-		LanguageCertificateType.setDeletedAt(null);
-		
+		LanguageCertificateType.setCreatedAt(CommonFunction.getCurrentDateTime());
+		LanguageCertificateType.setUpdatedAt(CommonFunction.getCurrentDateTime());
+
 		LanguageCertificateType result = languageCertificateTypeRepository.save(LanguageCertificateType);
 		return result;
 	}
-	
+
 	public List<LanguageCertificateType> index() {
 		List<LanguageCertificateType> list = languageCertificateTypeRepository.findAllByDeletedAt(null);
 		return list;
 	}
-	
+
 	public LanguageCertificateType show(UUID id) {
-		LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndDeletedAt(id, null);	
+		LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndDeletedAt(id, null);
 		return languageCertificateType;
 	}
 }

@@ -1,5 +1,6 @@
 package com.japanwork.service;
 
+import com.japanwork.common.CommonFunction;
 import com.japanwork.model.CandidateTranslation;
 import com.japanwork.model.Experience;
 import com.japanwork.model.ExperienceTranslation;
@@ -28,17 +29,14 @@ public class ExperienceTranslationService {
     ) {
         Experience experience = commonSupport.loadExperience(experienceTranslationRequest.getExperienceId());
 
-        Date date = new Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
-
         ExperienceTranslation experienceTranslation = new ExperienceTranslation();
         experienceTranslation.setExperience(experience);
         experienceTranslation.setCandidateTranslation(candidateTranslation);
         experienceTranslation.setLanguage(language);
         experienceTranslation.setOrganization(experienceTranslationRequest.getOrganization());
         experienceTranslation.setDescription(experienceTranslationRequest.getDescription());
-        experienceTranslation.setCreatedAt(timestamp);
-        experienceTranslation.setUpdatedAt(timestamp);
+        experienceTranslation.setCreatedAt(CommonFunction.getCurrentDateTime());
+        experienceTranslation.setUpdatedAt(CommonFunction.getCurrentDateTime());
 
         experienceTranslationRepository.save(experienceTranslation);
     }

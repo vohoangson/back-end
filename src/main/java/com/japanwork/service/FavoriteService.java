@@ -25,41 +25,41 @@ import com.japanwork.support.CommonSupport;
 public class FavoriteService {
 	@Autowired
 	private FavoriteRepository favoriteRepository;
-	
+
 	@Autowired
 	private CommonSupport commonSupport;
-	
+
 	@Autowired
 	private UserService userService;
-	
-	@PersistenceContext 
+
+	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	public Favorite destroy(Job job, UserPrincipal userPrincipal) {
 		try {
 			Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
-			
+
 			Favorite favorite = favoriteRepository.findByJobAndCandidateAndFavoriteTypeAndDeletedAt(job, candidate, CommonConstant.FavoriteType.CANDIDATE_JOB, null);
-			favorite.setDeletedAt(CommonFunction.dateTimeNow());
-			
+			favorite.setDeletedAt(CommonFunction.getCurrentDateTime());
+
 			Favorite result = favoriteRepository.save(favorite);
 			return result;
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CANDIDATE_UNFAVORITE_JOB_FAIL);
-		}		
+		}
 	}
-	
+
 	public Favorite create(Job job, UserPrincipal userPrincipal) throws ServerError{
 		try {
 			Job obj = findFavoriteJob(userPrincipal, job.getId());
 			if(obj == null) {Favorite favorite = new Favorite();
-				
+
 				favorite.setCandidate(commonSupport.loadCandidateByUser(userPrincipal.getId()));
 				favorite.setJob(job);
 				favorite.setFavoriteType(CommonConstant.FavoriteType.CANDIDATE_JOB);
-				favorite.setCreatedAt(CommonFunction.dateTimeNow());
+				favorite.setCreatedAt(CommonFunction.getCurrentDateTime());
 				favorite.setDeletedAt(null);
-				
+
 				Favorite result = favoriteRepository.save(favorite);
 				return result;
 			} else {
@@ -67,17 +67,17 @@ public class FavoriteService {
 			}
 		} catch (Exception e) {
 			throw new ServerError(MessageConstant.CANDIDATE_FAVORITE_JOB_FAIL);
-		}		
+		}
 	}
-	
+
 	public List<Job> index(UserPrincipal userPrincipal) {
 		User user = userService.findByIdAndIsDelete(userPrincipal.getId());
-		
+
 		StringBuilder sql = new StringBuilder();
-		
+
 		sql.append("SELECT DISTINCT j ");
 		sql.append("    FROM Job j ");
-		sql.append("	INNER JOIN Favorite fa ");	
+		sql.append("	INNER JOIN Favorite fa ");
 		sql.append("	ON fa.job.id = j.id ");
 		sql.append("	WHERE ");
 		sql.append("	j.deletedAt is null ");
@@ -90,15 +90,15 @@ public class FavoriteService {
 		List<Job> list = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).getResultList();
 		return list;
 	}
-	
+
 	public Job findFavoriteJob(UserPrincipal userPrincipal, UUID id) {
 		User user = userService.findByIdAndIsDelete(userPrincipal.getId());
-		
+
 		StringBuilder sql = new StringBuilder();
-		
+
 		sql.append("SELECT DISTINCT j ");
 		sql.append("    FROM Job j ");
-		sql.append("	INNER JOIN Favorite fa ");	
+		sql.append("	INNER JOIN Favorite fa ");
 		sql.append("	ON fa.job.id = j.id ");
 		sql.append("	WHERE ");
 		sql.append("	j.deletedAt is null ");
