@@ -19,6 +19,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.BadRequestException;
 
 @Component
@@ -53,7 +54,7 @@ public class FileHandlerService {
                 uploadFileTos3bucket(fileName, file);
             } else {
             	file.delete();
-            	throw new BadRequestException("file_not_formated");
+            	throw new BadRequestException(MessageConstant.FILE_NOT_FORMATED);
             }
             file.delete();
         } catch(BadRequestException ex) {
@@ -71,16 +72,16 @@ public class FileHandlerService {
         try {
             File file = convertMultiPartToFile(multipartFile);
             
-//            String mimeType = Files.probeContentType(file.toPath());
+            String mimeType = Files.probeContentType(file.toPath());
             
-//            if(mimeType.startsWith("image", 0)) {
+            if(mimeType.equals("application/pdf") || mimeType.equals("application/msword") || mimeType.startsWith("image", 0)) {
             	String fileName = generateFileName(multipartFile);
                 fileUrl = endpointUrl + "/" + this.awsS3AudioBucket + "/" + fileName;
                 uploadFileTos3bucket(fileName, file);
-//            } else {
-//            	file.delete();
-//            	throw new BadRequestException("file_not_formated");
-//            }
+            } else {
+            	file.delete();
+            	throw new BadRequestException(MessageConstant.FILE_NOT_FORMATED);
+            }
             file.delete();
         } catch(BadRequestException ex) {
         	throw ex;
