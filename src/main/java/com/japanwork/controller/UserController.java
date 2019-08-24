@@ -26,40 +26,44 @@ import com.japanwork.support.CommonSupport;
 public class UserController {
     @Autowired
     private CommonSupport commonSupport;
-    
+
     @GetMapping("/user/me")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return commonSupport.loadUserById(userPrincipal.getId());
     }
-    
+
     @Autowired
     private UserService userService;
-    
+
     @PostMapping(value = UrlConstant.URL_REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
         return userService.registerUser(signUpRequest, request);
     }
-    
+
     @GetMapping(value = UrlConstant.URL_USER)
-    public ResponseDataAPI getUser(@CurrentUser UserPrincipal userPrincipal) {    	
+    public ResponseDataAPI getUser(@CurrentUser UserPrincipal userPrincipal) {
     	User user = commonSupport.loadUserById(userPrincipal.getId());
     	user.setRole(user.getRole().replaceAll("ROLE_", ""));
-    	return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, user, null, null);
+    	return new ResponseDataAPI(
+    	        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                user,
+                ""
+        );
     }
-    
+
     @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)
-    public ResponseDataAPI changePassword(@CurrentUser UserPrincipal userPrincipal, 
+    public ResponseDataAPI changePassword(@CurrentUser UserPrincipal userPrincipal,
     		@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
-    	return userService.changePassword(userPrincipal, changePasswordRequest);    
+    	return userService.changePassword(userPrincipal, changePasswordRequest);
     }
-    
+
     @PostMapping(value = UrlConstant.URL_USER_FORGET_PASSWORD)
     public ResponseDataAPI forgetPassword(@Valid @RequestBody MailForgetPasswordRequest mailForgetPasswordRequest) {
-    	return userService.forgetPassword(mailForgetPasswordRequest);    
+    	return userService.forgetPassword(mailForgetPasswordRequest);
     }
-    
+
     @PostMapping(value = UrlConstant.URL_USER_RESET_PASSWORD)
     public ResponseDataAPI resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
-    	return userService.resetPassword(resetPasswordRequest);    
+    	return userService.resetPassword(resetPasswordRequest);
     }
 }

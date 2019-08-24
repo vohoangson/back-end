@@ -21,18 +21,26 @@ import com.japanwork.service.ContractService;
 public class ContractController {
 	@Autowired
 	private ContractService contractService;
-	
+
 	@GetMapping(value = UrlConstant.URL_CONTRACTS)
 	@ResponseBody
-	public ResponseDataAPI index() {		
+	public ResponseDataAPI index() {
 		List<Contract> list = contractService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_CONTRACTS)
 	@ResponseBody
-	public ResponseDataAPI create(@Valid @RequestBody ContractRequest contractRequest) {		
+	public ResponseDataAPI create(@Valid @RequestBody ContractRequest contractRequest) {
 		Contract contract =  contractService.create(contractRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, contract, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                contract,
+                ""
+        );
 	}
 }

@@ -48,8 +48,8 @@ public class NotificationService {
 		ResponseDataAPI responseDataAPI = new ResponseDataAPI(
 													CommonConstant.ResponseDataAPIStatus.SUCCESS,
 													this.convertNotificationResponse(result, conversationId),
-													null,
-													null);
+													""
+        );
 		rabbitTemplate.convertAndSend("notifications/"+userId, ""+userId, responseDataAPI);
 	}
 	public ResponseDataAPI index(User user, int page, int paging)
@@ -67,7 +67,11 @@ public class NotificationService {
 				}
 			}
 
-			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, pageInfo, null);
+			return new ResponseDataAPI(
+			        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                    list,
+                    pageInfo
+            );
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}

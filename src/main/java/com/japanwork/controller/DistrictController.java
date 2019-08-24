@@ -24,32 +24,47 @@ import com.japanwork.service.DistrictService;
 public class DistrictController {
 	@Autowired
 	private DistrictService districtService;
-	
+
 	@GetMapping(UrlConstant.URL_DISTRICTS)
 	@ResponseBody
 	public ResponseDataAPI index() {
 		List<District> list = districtService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_DISTRICTS)
 	@ResponseBody
-	public ResponseDataAPI create(@Valid @RequestBody DistrictRequest districtRequest) {		
+	public ResponseDataAPI create(@Valid @RequestBody DistrictRequest districtRequest) {
 		District district = districtService.create(districtRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, district, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                district,
+                ""
+        );
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CITIES_DISTRICTS)
 	@ResponseBody
 	public ResponseDataAPI listDistrictByCity(@PathVariable UUID id) {
 		List<District> list = districtService.findAllByCityIdAndIsDelete(id);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_DISTRICTS_BATCH)
 	@ResponseBody
-	public ResponseDataAPI createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {		
+	public ResponseDataAPI createList(@Valid @RequestBody ListDistrictRequest listDistrictRequest) {
 		List<District> list =  districtService.saves(listDistrictRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
 }

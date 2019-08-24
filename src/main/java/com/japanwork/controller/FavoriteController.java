@@ -25,13 +25,13 @@ import com.japanwork.support.CommonSupport;
 
 @Controller
 public class FavoriteController {
-	
+
 	@Autowired
 	private FavoriteService favoriteService;
-	
+
 	@Autowired
 	private JobService jobService;
-	
+
 	@Autowired
 	private CommonSupport commonSupport;
 	@PostMapping(UrlConstant.URL_CANDIDATES_JOB_FAVORITE)
@@ -40,24 +40,39 @@ public class FavoriteController {
 		Job job = commonSupport.loadJobById(id);
 		Favorite favorite = favoriteService.create(job, userPrincipal);
 		if(favorite != null) {
-			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+			return new ResponseDataAPI(
+			        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                    "",
+                    ""
+            );
 		} else {
-			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, null);
+			return new ResponseDataAPI(
+			        CommonConstant.ResponseDataAPIStatus.FAILURE,
+                    ""
+            );
 		}
 	}
-	
+
 	@DeleteMapping(UrlConstant.URL_CANDIDATES_JOB_FAVORITE)
 	@ResponseBody
-	public ResponseDataAPI destroy(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {		
+	public ResponseDataAPI destroy(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		Job job = commonSupport.loadJobById(id);
 		Favorite favorite = favoriteService.destroy(job, userPrincipal);
 		if(favorite != null) {
-			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+			return new ResponseDataAPI(
+			        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                    "",
+                    ""
+            );
 		} else {
-			return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, null);
+			return new ResponseDataAPI(
+			        CommonConstant.ResponseDataAPIStatus.FAILURE,
+                    "",
+                    ""
+            );
 		}
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CANDIDATES_JOB_FAVORITES)
 	@ResponseBody
 	public ResponseDataAPI index(@CurrentUser UserPrincipal userPrincipal) {
@@ -66,6 +81,10 @@ public class FavoriteController {
 		for (Job job : list) {
 			listJobResponses.add(jobService.convertJobResponse(job));
 		}
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, listJobResponses, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                listJobResponses,
+                ""
+        );
 	}
 }

@@ -40,7 +40,7 @@ public class ResponseDataAPI {
     public void setMeta(Object meta) {
         this.meta = meta;
     }
-    
+
     public void setStatusSuccess() {
         this.status = "success";
     }
@@ -49,19 +49,14 @@ public class ResponseDataAPI {
         this.status = "failure";
     }
 
-    public void savedSuccess() {
-        this.status = "success";
-        this.data   = "";
-        this.meta   = "";
-    }
-
-	public ResponseDataAPI(String status, Object data, Object meta, Object error) {
+	public ResponseDataAPI(String status, Object data, Object meta) {
 		this.status = status;
 		this.data = data;
-		this.error = error;
 		this.meta = meta;
 	}
 
-	public ResponseDataAPI() {
+	public ResponseDataAPI(String status, Object error) {
+        this.status = status;
+        this.error = error;
 	}
 }

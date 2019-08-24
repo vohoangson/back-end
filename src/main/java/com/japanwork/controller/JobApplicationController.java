@@ -33,19 +33,23 @@ import com.japanwork.support.CommonSupport;
 public class JobApplicationController {
 	@Autowired
 	private JobApplicationService jobApplicationService;
-	
+
 	@Autowired
 	private CommonSupport commonSupport;
-	
+
 	@PostMapping(UrlConstant.URL_JOB_APPLICATIONS_CANDIDATE_JOIN)
 	@ResponseBody
 	public ResponseDataAPI create(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		Job job = commonSupport.loadJobById(id);
 		Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.create(job, candidate);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, jobApplicationResponse, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                jobApplicationResponse,
+                ""
+        );
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_COMPANY_REJECT)
 	@ResponseBody
 	public ResponseDataAPI rejectCandidate(@Valid @RequestBody RejectJobApplicationRequest rejectJobApplicationRequest,
@@ -53,19 +57,27 @@ public class JobApplicationController {
 		JobApplication jobApplication = commonSupport.loadJobApplicationById(id, userPrincipal.getId());
 		JobApplicationResponse jobApplicationResponse = jobApplicationService
 															.rejectCandidate(
-																rejectJobApplicationRequest, 
+																rejectJobApplicationRequest,
 																jobApplication);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, jobApplicationResponse, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                jobApplicationResponse,
+                ""
+        );
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_COMPANY_ACCEPT_APPLY)
 	@ResponseBody
 	public ResponseDataAPI acceptApplyCandidate(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplication jobApplication = commonSupport.loadJobApplicationById(id, userPrincipal.getId());
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.acceptApplyCandidate(jobApplication);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, jobApplicationResponse, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                jobApplicationResponse,
+                ""
+        );
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_CANCEL)
 	@ResponseBody
 	public ResponseDataAPI cancelJobApplication(@Valid @RequestBody CancelJobApplicationRequest cancelJobApplicationRequest,
@@ -74,57 +86,65 @@ public class JobApplicationController {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		JobApplicationResponse jobApplicationResponse = jobApplicationService
 															.cancelJobApplication(
-																cancelJobApplicationRequest, 
-																jobApplication, 
+																cancelJobApplicationRequest,
+																jobApplication,
 																user);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, jobApplicationResponse, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                jobApplicationResponse,
+                ""
+        );
 	}
-	
+
 	@PatchMapping(UrlConstant.URL_JOB_APPLICATIONS_COMPANY_APPROVE)
 	@ResponseBody
 	public ResponseDataAPI approveJobApplication(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplication jobApplication = commonSupport.loadJobApplicationById(id, userPrincipal.getId());
 		JobApplicationResponse jobApplicationResponse = jobApplicationService.approveCandidate(jobApplication);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, jobApplicationResponse, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                jobApplicationResponse,
+                ""
+        );
 	}
-	
+
 	@GetMapping(UrlConstant.URL_COMPANY_JOB_APPLICATION)
 	@ResponseBody
-	public ResponseDataAPI indexByCompany(@CurrentUser UserPrincipal userPrincipal, 
+	public ResponseDataAPI indexByCompany(@CurrentUser UserPrincipal userPrincipal,
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		return jobApplicationService.indexByCompany(user, page, paging);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CANDIDATES_JOB_APPLICATIONS)
 	@ResponseBody
-	public ResponseDataAPI indexByCandidate(@CurrentUser UserPrincipal userPrincipal, 
+	public ResponseDataAPI indexByCandidate(@CurrentUser UserPrincipal userPrincipal,
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		return jobApplicationService.indexByCandidate(user, page, paging);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_TRANSLATORS_JOB_APPLICATIONS)
 	@ResponseBody
-	public ResponseDataAPI indexByTranslator(@CurrentUser UserPrincipal userPrincipal, 
+	public ResponseDataAPI indexByTranslator(@CurrentUser UserPrincipal userPrincipal,
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		return jobApplicationService.indexByTranslator(user, page, paging);
 	}
-	
-	
+
+
 	@GetMapping(UrlConstant.URL_JOB_APPLICATION)
 	@ResponseBody
 	public ResponseDataAPI show(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal) {
 		JobApplication jobApplication = commonSupport.loadJobApplicationById(id, userPrincipal.getId());
 		JobApplicationStatus status = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				jobApplicationService.convertApplicationResponse(jobApplication, status), 
-				null, 
-				null);
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				jobApplicationService.convertApplicationResponse(jobApplication, status),
+				""
+        );
 	}
 }

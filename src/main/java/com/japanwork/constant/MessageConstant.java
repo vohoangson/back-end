@@ -120,4 +120,7 @@ public class MessageConstant {
 	public static final String CHANGE_PASSWORD_NOT_CORRECT = "old_password_not_correct";
 	public static final String RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST = "email_does_not_exist";
 	public static final String RESET_FORGET_PASSWORD_INCORRECT_CODE = "reset_password_incorrect_code";
+	
+	//Upload file
+	public static final String FILE_NOT_FORMATED = "file_not_formated";
 }

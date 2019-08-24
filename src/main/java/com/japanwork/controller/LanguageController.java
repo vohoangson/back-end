@@ -16,12 +16,16 @@ import com.japanwork.service.LanguageService;
 public class LanguageController {
 	@Autowired
 	private LanguageService languageService;
-	
-	
+
+
 	@GetMapping(UrlConstant.URL_LANGUAGUES)
 	@ResponseBody
 	public ResponseDataAPI index() {
 		List<Language> list = languageService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
 }
