@@ -19,13 +19,13 @@ import com.japanwork.service.NotificationService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
-public class NotificationController {	
+public class NotificationController {
 	@Autowired
 	private NotificationService notificationService;
 
 	@Autowired
 	private CommonSupport commonSupport;
-	
+
 	@GetMapping(UrlConstant.URL_NOTIFICATIONS)
 	@ResponseBody
 	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
@@ -33,30 +33,42 @@ public class NotificationController {
 			@CurrentUser UserPrincipal userPrincipal) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		return notificationService.index(user, page, paging);
-	} 
-	
+	}
+
 	@GetMapping(UrlConstant.URL_NOTIFICATIONS_UNREADS_NUMBER)
 	@ResponseBody
 	public ResponseDataAPI countNotificationUnread( @CurrentUser UserPrincipal userPrincipal) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		int num = notificationService.countNotificationUnread(user);
 		UnreadsNumberNotificationResponse obj = new UnreadsNumberNotificationResponse(num);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, obj, null, null);
-	} 
-	
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                obj,
+                ""
+        );
+	}
+
 	@PatchMapping(UrlConstant.URL_NOTIFICATIONS_MARK_ALL_READ)
 	@ResponseBody
 	public ResponseDataAPI updateAllRead( @CurrentUser UserPrincipal userPrincipal) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		notificationService.updateAllRead(user);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
-	} 
-	
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                "",
+                ""
+        );
+	}
+
 	@PatchMapping(UrlConstant.URL_NOTIFICATIONS_MARK_READS)
 	@ResponseBody
-	public ResponseDataAPI update( @CurrentUser UserPrincipal userPrincipal, 
+	public ResponseDataAPI update( @CurrentUser UserPrincipal userPrincipal,
 			@RequestBody MarkReadNotificationRequest markReadNotificationRequest) {
 		notificationService.update(userPrincipal, markReadNotificationRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, null, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                "",
+                ""
+        );
 	}
 }

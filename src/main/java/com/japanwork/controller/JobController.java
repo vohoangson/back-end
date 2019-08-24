@@ -83,8 +83,8 @@ public class JobController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	@PostMapping(UrlConstant.URL_JOBS)
@@ -95,8 +95,8 @@ public class JobController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				jobService.convertJobResponse(job),
-				null,
-				null);
+				""
+        );
 	}
 
 	@GetMapping(UrlConstant.URL_JOB)
@@ -106,8 +106,7 @@ public class JobController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				jobService.convertJobResponse(job),
-				null,
-				null);
+				"");
 	}
 
 	@PatchMapping(UrlConstant.URL_JOB)
@@ -119,8 +118,8 @@ public class JobController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				jobService.convertJobResponse(job),
-				null,
-				null);
+				""
+        );
 	}
 
 	@DeleteMapping(UrlConstant.URL_JOB)
@@ -130,9 +129,9 @@ public class JobController {
 		jobService.isDel(job, userPrincipal, CommonFunction.getCurrentDateTime());
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				null,
-				null,
-				null);
+				"",
+				""
+        );
 
 	}
 
@@ -144,8 +143,8 @@ public class JobController {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				jobService.convertJobResponse(job),
-				null,
-				null);
+				""
+        );
 	}
 
 

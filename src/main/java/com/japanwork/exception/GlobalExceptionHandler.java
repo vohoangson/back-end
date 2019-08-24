@@ -80,9 +80,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 		ErrorResponse errorResponse = CommonFunction.getValidationError(resource, fieldName, error, "validation.yml");
 
-		ResponseDataAPI ResponseDataAPI = new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE,
-				null, null, errorResponse);
-	    return new ResponseEntity<Object>(ResponseDataAPI, HttpStatus.BAD_REQUEST);
+		ResponseDataAPI ResponseDataAPI = new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.FAILURE,
+                errorResponse
+        );
+
+		return new ResponseEntity<Object>(ResponseDataAPI, HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

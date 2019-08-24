@@ -32,30 +32,30 @@ import com.japanwork.service.MessageService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
-public class MessageController {	
+public class MessageController {
 	@Autowired
 	private MessageService messageService;
-	
+
 	@Autowired
 	private CommonSupport commonSupport;
-	
+
 	@PostMapping(UrlConstant.URL_CONVERSATION)
 	@ResponseBody
-	public ResponseDataAPI create(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id, 
+	public ResponseDataAPI create(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id,
 			@Valid @RequestBody MessageRequest messageRequest) {
 		Conversation conversation = commonSupport.loadConversationById(id);
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		Message message =  messageService.create(user, conversation, messageRequest);
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				messageService.convertMassageResponse(message), 
-				null, 
-				null);
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				messageService.convertMassageResponse(message),
+				""
+        );
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CONVERSATION)
 	@ResponseBody
-	public ResponseDataAPI index(@PathVariable UUID id, 
+	public ResponseDataAPI index(@PathVariable UUID id,
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@CurrentUser UserPrincipal userPrincipal) {
@@ -67,21 +67,25 @@ public class MessageController {
 			list.add(messageService.convertMassageResponse(message));
 		}
 		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS, 
-				list, 
-				pageInfo, 
-				null);
+				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+				list,
+				pageInfo
+        );
 	}
-	
+
 	@PostMapping(UrlConstant.URL_CONVERSATION_UPLOAD_FILE)
 	@ResponseBody
     public ResponseDataAPI uploadFile(@CurrentUser UserPrincipal userPrincipal, @PathVariable UUID id,
-    		@RequestPart(value = "file") MultipartFile file, @RequestParam(value="type") String type, 
+    		@RequestPart(value = "file") MultipartFile file, @RequestParam(value="type") String type,
     		@RequestParam(value="objectable_id") UUID objectableId){
 		Conversation conversation = commonSupport.loadConversationById(id);
 		User user = commonSupport.loadUserById(userPrincipal.getId());
-		
+
 		MessageResponse message = messageService.uploadFile(user, conversation, file, type, objectableId);
-        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, message, null, null);
+        return new ResponseDataAPI(
+                CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                message,
+                ""
+        );
     }
 }

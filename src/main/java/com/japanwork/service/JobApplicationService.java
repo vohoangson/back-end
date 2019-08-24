@@ -359,8 +359,8 @@ public class JobApplicationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public ResponseDataAPI indexByCandidate(User user, int page, int paging) {
@@ -378,8 +378,8 @@ public class JobApplicationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public ResponseDataAPI indexByTranslator(User user, int page, int paging) {
@@ -400,8 +400,8 @@ public class JobApplicationService {
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
-				pageInfo,
-				null);
+				pageInfo
+        );
 	}
 
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {

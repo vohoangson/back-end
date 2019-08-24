@@ -21,18 +21,26 @@ import com.japanwork.service.LevelService;
 public class LevelController {
 	@Autowired
 	private LevelService levelService;
-	
+
 	@GetMapping(UrlConstant.URL_LEVELS)
 	@ResponseBody
 	public ResponseDataAPI index() {
 		List<Level> list = levelService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_LEVELS)
 	@ResponseBody
-	public ResponseDataAPI create(@Valid @RequestBody LevelRequest levelRequest) {		
+	public ResponseDataAPI create(@Valid @RequestBody LevelRequest levelRequest) {
 		Level level = levelService.create(levelRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, level, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                level,
+                ""
+        );
 	}
 }

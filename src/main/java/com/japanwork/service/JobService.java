@@ -170,8 +170,8 @@ public class JobService {
 			return new ResponseDataAPI(
 					CommonConstant.ResponseDataAPIStatus.SUCCESS,
 					list,
-					pageInfo,
-					null);
+					pageInfo
+            );
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}

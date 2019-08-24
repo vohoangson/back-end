@@ -19,21 +19,29 @@ import com.japanwork.service.LanguageCertificateTypeService;
 
 @Controller
 public class LanguageCertificateTypeController {
-	
+
 	@Autowired
 	private LanguageCertificateTypeService languageCertificateTypeService;
-	
+
 	@GetMapping(UrlConstant.URL_LANGUAGUE_TYPES)
 	@ResponseBody
 	public ResponseDataAPI index() {
 		List<LanguageCertificateType> list = languageCertificateTypeService.index();
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, list, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                list,
+                ""
+        );
 	}
-	
+
 	@PostMapping(value = UrlConstant.URL_LANGUAGUE_TYPES)
 	@ResponseBody
-	public ResponseDataAPI create(@Valid @RequestBody LanguageCertificateTypeRequest languageCertificateTypeRequest) {		
+	public ResponseDataAPI create(@Valid @RequestBody LanguageCertificateTypeRequest languageCertificateTypeRequest) {
 		LanguageCertificateType obj = languageCertificateTypeService.create(languageCertificateTypeRequest);
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, obj, null, null);
+		return new ResponseDataAPI(
+		        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                obj,
+                ""
+        );
 	}
 }

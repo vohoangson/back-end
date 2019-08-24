@@ -16,6 +16,6 @@ public class Error403 {
 	@ResponseBody
 	public ResponseDataAPI error403() {
 		ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.FORBIDDEN_ERROR, "errors.yml");
-		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, error);
+		return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, error);
 	}
 }

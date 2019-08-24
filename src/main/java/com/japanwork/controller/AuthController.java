@@ -66,10 +66,10 @@ public class AuthController {
 
             String token = tokenProvider.createToken(authentication);
             AuthResponse authResponse = new AuthResponse(token);
-            return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null, null));
+            return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null));
         } catch(BadCredentialsException e){
         	ErrorResponse error = CommonFunction.getExceptionError(MessageConstant.LOGIN_FAIL, "errors.yml");
-            return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, error));
+            return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, error));
         }
     }
 
@@ -95,10 +95,10 @@ public class AuthController {
     public ResponseEntity<?> oauth2LoginRedirect(@RequestParam("token") String token, @RequestParam("error") String error) {
     	if(!token.isEmpty()) {
     		AuthResponse authResponse = new AuthResponse(token);
-            return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null, null));
+            return ResponseEntity.ok(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, authResponse, null));
     	}else{
     		ErrorResponse err = CommonFunction.getExceptionError(MessageConstant.LOGIN_OAUTH2_FAIL, "errors.yml");
-    		return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, null, null, err));
+    		return ResponseEntity.badRequest().body(new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.FAILURE, err));
     	}
 
     }
@@ -126,6 +126,10 @@ public class AuthController {
                 exchangeName,
                 ""+userPrincipal.getId(),
                 null));
-        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, queueName, null, null);
+        return new ResponseDataAPI(
+                CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                queueName,
+                ""
+        );
     }
 }
