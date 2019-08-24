@@ -186,7 +186,7 @@ reset_password_failed:
   code:
   message: Reset password failed!
 login_fail:
-  code: 123
+  code: 
   message: Incorrect email or password!
 login_oauth2_fail:
   code:
