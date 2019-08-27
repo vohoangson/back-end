@@ -47,15 +47,19 @@ public class CompanyService {
         Company company                       = commonSupport.loadCompanyById(id);
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
 
-        CompanyTranslationResponse companyTranslationResponse = new CompanyTranslationResponse(
-                companyTranslation.getId(),
-                companyTranslation.getName(),
-                companyTranslation.getIntroduction(),
-                companyTranslation.getAddress()
-        );
+//        CompanyTranslationResponse companyTranslationResponse = new CompanyTranslationResponse(
+//                companyTranslation.getId(),
+//                companyTranslation.getName(),
+//                companyTranslation.getIntroduction(),
+//                companyTranslation.getAddress()
+//        );
 
         CompanyResponse companyResponse = new CompanyResponse();
-        companyResponse.setCompanyTranslationResponse(companyTranslationResponse);
+        companyResponse.setId(id);
+        companyResponse.setName(companyTranslation.getName());
+        companyResponse.setIntroduction(companyTranslation.getIntroduction());
+        companyResponse.setAddress(companyTranslation.getAddress());
+//        companyResponse.setCompanyTranslationResponse(companyTranslationResponse);
         companyResponse.setScale(company.getScale());
         companyResponse.setBusinessIds(Business.listBusinessID(company.getBusinesses()));
         companyResponse.setCityId(company.getCity().getId());

@@ -52,9 +52,11 @@ public class JobResponse {
     @JsonProperty("expiring_date")
     private Date applicationDeadline;
     
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("min_salary")
 	private float minSalary;
 	
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("max_salary")
 	private float maxSalary;
 	
