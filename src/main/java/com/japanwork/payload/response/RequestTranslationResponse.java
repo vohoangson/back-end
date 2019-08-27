@@ -7,15 +7,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RequestTranslationResponse {
 	private UUID id;
+	
+    private String name;
     
-	@JsonProperty("owner_id")
-    private UUID ownerId;
+    private OwnerResponse owner;
 
 	@JsonProperty("objectable_id")
     private UUID objectableId;
     
-	@JsonProperty("translator_id")
-    private UUID translatorId;
+	@JsonProperty("translator")
+    private TranslatorResponse translatorResponse;
     
     private RequestTranslationStatusResponse status;
     
@@ -41,12 +42,20 @@ public class RequestTranslationResponse {
 		this.id = id;
 	}
 
-	public UUID getOwnerId() {
-		return ownerId;
+	public String getName() {
+		return name;
 	}
 
-	public void setOwnerId(UUID ownerId) {
-		this.ownerId = ownerId;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public OwnerResponse getOwner() {
+		return owner;
+	}
+
+	public void setOwner(OwnerResponse owner) {
+		this.owner = owner;
 	}
 
 	public UUID getObjectableId() {
@@ -57,12 +66,12 @@ public class RequestTranslationResponse {
 		this.objectableId = objectableId;
 	}
 
-	public UUID getTranslatorId() {
-		return translatorId;
+	public TranslatorResponse getTranslatorResponse() {
+		return translatorResponse;
 	}
 
-	public void setTranslatorId(UUID translatorId) {
-		this.translatorId = translatorId;
+	public void setTranslatorResponse(TranslatorResponse translatorResponse) {
+		this.translatorResponse = translatorResponse;
 	}
 
 	public RequestTranslationStatusResponse getStatus() {
@@ -113,13 +122,14 @@ public class RequestTranslationResponse {
 		this.desc = desc;
 	}
 
-	public RequestTranslationResponse(UUID id, UUID ownerId, UUID objectableId, UUID translatorId,
-			RequestTranslationStatusResponse status, String requestType, UUID conversationId, UUID languageId,
-			Timestamp createdAt, String desc) {
+	public RequestTranslationResponse(UUID id, String name, OwnerResponse owner, UUID objectableId,
+			TranslatorResponse translatorResponse, RequestTranslationStatusResponse status, String requestType,
+			UUID conversationId, UUID languageId, Timestamp createdAt, String desc) {
 		this.id = id;
-		this.ownerId = ownerId;
+		this.name = name;
+		this.owner = owner;
 		this.objectableId = objectableId;
-		this.translatorId = translatorId;
+		this.translatorResponse = translatorResponse;
 		this.status = status;
 		this.requestType = requestType;
 		this.conversationId = conversationId;

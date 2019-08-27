@@ -406,10 +406,10 @@ public class JobApplicationService {
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
-		ob.setJob(jobService.convertJobResponse(jobApplication.getJob()));
-		ob.setCandidate(candidateService.convertCandiateResponse(jobApplication.getCandidate()));
+		ob.setJob(jobService.jobShortResponse(jobApplication.getJob()));
+		ob.setCandidate(candidateService.candiateShortResponse(jobApplication.getCandidate()));
 		if(jobApplication.getTranslator() != null) {
-			ob.setTranslator(translatorService.convertTranslatorResponse(jobApplication.getTranslator()));
+			ob.setTranslator(translatorService.translatorShortResponse(jobApplication.getTranslator()));
 		}
 
 		if(jobApplication.getCandidateSupportConversaion() != null) {

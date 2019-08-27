@@ -1,5 +1,8 @@
 package com.japanwork.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.japanwork.common.CommonFunction;
 import com.japanwork.model.CandidateTranslation;
 import com.japanwork.model.Experience;
@@ -8,11 +11,6 @@ import com.japanwork.model.Language;
 import com.japanwork.payload.request.ExperienceTranslationRequest;
 import com.japanwork.repository.experience_translation.ExperienceTranslationRepository;
 import com.japanwork.support.CommonSupport;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Service
 public class ExperienceTranslationService {
