@@ -3,6 +3,7 @@ package com.japanwork.support;
 import java.util.UUID;
 
 import com.japanwork.model.*;
+import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,9 @@ import com.japanwork.repository.user.UserRepository;
 public class CommonSupport {
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private CompanyTranslationRepository companyTranslationRepository;
 
     @Autowired
     private LanguageRepository languageRepository;
@@ -65,6 +69,23 @@ public class CommonSupport {
             );
         }
         return company;
+    }
+
+    public CompanyTranslation loadCompanyTranslation(
+            Company company,
+            Language language
+    ) throws ResourceNotFoundException {
+        CompanyTranslation companyTranslation = companyTranslationRepository.findByCompanyAndLanguageAndDeletedAt(
+                company,
+                language,
+                null
+        );
+        if(companyTranslation == null) {
+            throw new ResourceNotFoundException(
+                    MessageConstant.COMPANY_TRANSLATION_NOT_FOUND
+            );
+        }
+        return companyTranslation;
     }
 
     public Company loadCompanyByUser(UUID userId) throws ResourceNotFoundException {
