@@ -1,10 +1,13 @@
 package com.japanwork.payload.response;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AcademyResponse {
+	private UUID id; 
+	
 	@JsonProperty("academy_center_name")
 	private String academyCenterName;
 	
@@ -21,6 +24,14 @@ public class AcademyResponse {
 	
 	@JsonProperty("end_date")
 	private Date endDate;
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public String getAcademyCenterName() {
 		return academyCenterName;
@@ -70,9 +81,9 @@ public class AcademyResponse {
 		this.endDate = endDate;
 	}
 
-	public AcademyResponse(String academyCenterName, String majorName, float grade, int gradeSystem, Date startDate,
-			Date endDate) {
-		super();
+	public AcademyResponse(UUID id, String academyCenterName, String majorName, float grade, int gradeSystem,
+			Date startDate, Date endDate) {
+		this.id = id;
 		this.academyCenterName = academyCenterName;
 		this.majorName = majorName;
 		this.grade = grade;
@@ -82,6 +93,5 @@ public class AcademyResponse {
 	}
 
 	public AcademyResponse() {
-		super();
 	}
 }

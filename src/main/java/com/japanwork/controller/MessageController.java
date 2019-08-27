@@ -45,7 +45,7 @@ public class MessageController {
 			@Valid @RequestBody MessageRequest messageRequest) {
 		Conversation conversation = commonSupport.loadConversationById(id);
 		User user = commonSupport.loadUserById(userPrincipal.getId());
-		Message message =  messageService.create(user, conversation, messageRequest);
+		Message message =  messageService.sendMessage(user, conversation, messageRequest);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				messageService.convertMassageResponse(message),

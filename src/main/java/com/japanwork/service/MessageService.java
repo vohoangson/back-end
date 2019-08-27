@@ -23,7 +23,6 @@ import com.japanwork.payload.request.MessageRequest;
 import com.japanwork.payload.response.MessageResponse;
 import com.japanwork.repository.file.FileRepository;
 import com.japanwork.repository.message.MessageRepository;
-import com.japanwork.support.CommonSupport;
 
 @Service
 public class MessageService {
@@ -32,9 +31,6 @@ public class MessageService {
 	private MessageRepository messageRepository;
 	@Autowired
 	private NotificationService notificationService;
-
-	@Autowired
-	private CommonSupport commonSupport;
 	
 	@Autowired
     private FileHandlerService fileHandlerService;
@@ -43,129 +39,24 @@ public class MessageService {
 	private FileRepository fileRepository;
 	
 	@Transactional
-	public Message create(User user, Conversation conversation,
+	public Message sendMessage(User user, Conversation conversation,
 			MessageRequest messageRequest) throws ForbiddenException{
-		UUID senderId = null;
-
-		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-			senderId = commonSupport.loadCandidateByUser(user.getId()).getId();
-			if(!conversation.getCandidate().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-			}
-			if(conversation.getCompany() != null) {
-				this.addNotification(senderId, conversation.getId(), conversation.getCompany().getId(), messageRequest,
-						conversation.getCompany().getUser().getId());
-			}
-
-			if(conversation.getTranslator() != null) {
-				this.addNotification(senderId, conversation.getId(), conversation.getTranslator().getId(), messageRequest,
-						conversation.getTranslator().getUser().getId());
-			}
-		}
-
-		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-			senderId = commonSupport.loadCompanyByUser(user.getId()).getId();
-			if(!conversation.getCompany().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-			}
-			if(conversation.getCandidate() != null) {
-				this.addNotification(senderId, conversation.getId(), conversation.getCandidate().getId(), messageRequest,
-						conversation.getCandidate().getUser().getId());
-			}
-
-			if(conversation.getTranslator() != null) {
-				this.addNotification(senderId, conversation.getId(), conversation.getTranslator().getId(), messageRequest,
-						conversation.getTranslator().getUser().getId());
-			}
-		}
-
-		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			senderId = commonSupport.loadTranslatorByUser(user.getId()).getId();
-			if(!conversation.getTranslator().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-			}
-
-			if(conversation.getCompany() != null) {
-				this.addNotification(senderId, conversation.getId(), conversation.getCompany().getId(), messageRequest,
-						conversation.getCompany().getUser().getId());
-			}
-
-			if(conversation.getCandidate() != null) {
-				this.addNotification(senderId, conversation.getId(), conversation.getCandidate().getId(), messageRequest,
-						conversation.getCandidate().getUser().getId());
-			}
-		}
-
-		Message message = new Message();
-		message.setSenderId(senderId);
-		message.setConversation(conversation);
-        message.setContent(messageRequest.getContent());
-        message.setCreatedAt(CommonFunction.getCurrentDateTime());
-        message.setUpdatedAt(CommonFunction.getCurrentDateTime());
-		Message result = messageRepository.save(message);
-		return result;
+		String content = messageRequest.getContent();
+		String type = messageRequest.getType();
+		UUID objectableId = messageRequest.getObjectableId();
+		
+		this.addNotification(user, conversation, content, type, objectableId);
+		return create(user, content, conversation);
 	}
 	
 	@Transactional
 	public MessageResponse uploadFile(User user, Conversation conversation, MultipartFile multipartFile, String type, UUID objectableId) 
 			throws ForbiddenException{
-		UUID senderId = null;
-
-		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-			senderId = commonSupport.loadCandidateByUser(user.getId()).getId();
-			if(!conversation.getCandidate().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-			}
-			if(conversation.getCompany() != null) {
-				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCompany().getId(), "", 
-						type, user.getId());
-			}
-			
-			if(conversation.getTranslator() != null) {
-				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getTranslator().getId(), "", 
-						type, user.getId());
-			}
-		}
-
-		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-			senderId = commonSupport.loadCompanyByUser(user.getId()).getId();
-			if(!conversation.getCompany().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-			}
-			if(conversation.getCandidate() != null) {
-				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCandidate().getId(), "", 
-						type, user.getId());
-			}
-			
-			if(conversation.getTranslator() != null) {
-				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getTranslator().getId(), "", 
-						type, user.getId());
-			}
-		}
-
-		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			senderId = commonSupport.loadTranslatorByUser(user.getId()).getId();
-			if(!conversation.getTranslator().getId().equals(senderId)) {
-				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-			}
-			
-			if(conversation.getCompany() != null) {
-				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCompany().getId(), "", 
-						type, user.getId());
-			}
-			
-			if(conversation.getCandidate() != null) {
-				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCandidate().getId(), "", 
-						type, user.getId());
-			}
-		}
+		String content = "You received new file(s)";
 		
-		Message message = new Message();
-		message.setContent("You received new file(s)");
-		message.setSenderId(senderId);
-		message.setConversation(conversation);
-		message.setCreatedAt(CommonFunction.getCurrentDateTime());
-		Message messageResult = messageRepository.save(message);
+		this.addNotification(user, conversation, content, type, objectableId);
+		
+		Message message = create(user, content, conversation);
 		
 		File file = new File();
 		file.setMessage(message);
@@ -175,8 +66,71 @@ public class MessageService {
 		file.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		File fileResult = fileRepository.save(file);
 		
-		MessageResponse messageResponse = this.convertMassageResponse(messageResult, fileResult);
+		MessageResponse messageResponse = this.convertMassageResponse(message, fileResult);
 		return messageResponse;
+	}
+	
+	public Message create(User user, String content, Conversation conversation) {
+		Message message = new Message();
+		message.setContent(content);
+		message.setSender(user);
+		message.setConversation(conversation);
+		message.setCreatedAt(CommonFunction.getCurrentDateTime());
+		Message messageResult = messageRepository.save(message);
+		return messageResult;
+	}
+	
+	
+	public void addNotification(User user, Conversation conversation, String content, String type, UUID objectableId) {
+		String role = user.getRole();
+		UUID senderId = user.getId();
+		
+		if(role.equals(CommonConstant.Role.CANDIDATE)) {
+			if(!conversation.getCandidate().getUser().equals(user)) {
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+			}
+			
+			if(conversation.getCompany() != null) {
+				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCompany().getUser().getId(), 
+						content, type);
+			}
+			
+			if(conversation.getTranslator() != null) {
+				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getTranslator().getUser().getId(), 
+						content, type);
+			}
+		}
+
+		if(role.equals(CommonConstant.Role.COMPANY)) {
+			if(!conversation.getCompany().getUser().equals(user)) {
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+			}
+			if(conversation.getCandidate() != null) {
+				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCandidate().getUser().getId(), 
+						content, type);
+			}
+			
+			if(conversation.getTranslator() != null) {
+				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getTranslator().getUser().getId(),
+						content, type);
+			}
+		}
+
+		if(role.equals(CommonConstant.Role.TRANSLATOR)) {
+			if(!conversation.getTranslator().getUser().equals(user)) {
+				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+			}
+			
+			if(conversation.getCompany() != null) {
+				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCompany().getUser().getId(), 
+						content, type);
+			}
+			
+			if(conversation.getCandidate() != null) {
+				notificationService.addNotification(senderId, conversation.getId(), objectableId, conversation.getCandidate().getUser().getId(), 
+						content, type);
+			}
+		}
 	}
 	
 	public Page<Message> index(Conversation conversation, int page, int paging) throws ResourceNotFoundException{
@@ -188,17 +142,11 @@ public class MessageService {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
 	}
-
-
-	public void addNotification(UUID senderId, UUID conversationId, UUID receiverId, MessageRequest messageRequest, UUID userId) {
-		notificationService.addNotification(senderId, conversationId, messageRequest.getObjectableId(), receiverId, messageRequest.getContent(),
-				messageRequest.getType(), userId);
-	}
 	
 	public MessageResponse convertMassageResponse(Message message, File file) {
 		MessageResponse messageResponse = new MessageResponse();
 		messageResponse.setId(message.getId());
-		messageResponse.setSenderId(message.getSenderId());
+		messageResponse.setSenderId(message.getSender().getId());
 		messageResponse.setConversationId(message.getConversation().getId());
 		messageResponse.setContent(message.getContent());
 		messageResponse.setCreateAt(message.getCreatedAt());
@@ -210,7 +158,7 @@ public class MessageService {
 	public MessageResponse convertMassageResponse(Message message) {
 		MessageResponse messageResponse = new MessageResponse();
 		messageResponse.setId(message.getId());
-		messageResponse.setSenderId(message.getSenderId());
+		messageResponse.setSenderId(message.getSender().getId());
 		messageResponse.setConversationId(message.getConversation().getId());
 		messageResponse.setContent(message.getContent());
 		messageResponse.setCreateAt(message.getCreatedAt());

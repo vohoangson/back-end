@@ -27,6 +27,7 @@ public class AcademyService {
 		if(academies != null) {
 			for (Academy academy : academies) {
 				AcademyResponse academyResponse = new AcademyResponse();
+				academyResponse.setId(academy.getId());
 				academyResponse.setAcademyCenterName(academy.getAcademyCenterName());
 				academyResponse.setMajorName(academy.getMajorName());
 				academyResponse.setGrade(academy.getGrade());

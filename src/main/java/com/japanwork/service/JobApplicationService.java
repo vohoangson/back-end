@@ -16,6 +16,7 @@ import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
@@ -74,13 +75,12 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE);
 
 		notificationService.addNotification(
-				result.getCandidate().getId(),
+				result.getCandidate().getUser().getId(),
 				null,
 				result.getId(),
-				result.getJob().getCompany().getId(),
+				result.getJob().getCompany().getUser().getId(),
 				CommonConstant.NotificationContent.CANDIDATE_JOINED,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				result.getJob().getCompany().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 		return this.convertApplicationResponse(jobApplication, status);
 	}
 
@@ -91,21 +91,21 @@ public class JobApplicationService {
 			throw new BadRequestException(MessageConstant.JOB_APPLIACTION_REJECT_FAIL);
 		}
 
+		Company company = jobApplication.getJob().getCompany();
 		JobApplicationStatus status = jobApplicationStatusService.save(
 				jobApplication,
 				CommonFunction.getCurrentDateTime(),
 				CommonConstant.StatusApplyJob.REJECT_CANDIDATE,
 				rejectJobApplicationRequest.getReason(),
-				jobApplication.getJob().getCompany().getId());
+				company.getId());
 
 		notificationService.addNotification(
-				jobApplication.getJob().getCompany().getId(),
+				company.getUser().getId(),
 				null,
 				jobApplication.getId(),
-				jobApplication.getCandidate().getId(),
+				jobApplication.getCandidate().getUser().getId(),
 				CommonConstant.NotificationContent.CONPANY_REJECT_APPLY,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getCandidate().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		JobApplication result = jobApplicationRepository.save(jobApplication);
@@ -114,6 +114,11 @@ public class JobApplicationService {
 
 	public JobApplicationResponse cancelJobApplication(CancelJobApplicationRequest cancelJobApplicationRequest,
 			JobApplication jobApplication, User user) {
+		UUID candidateUserId = jobApplication.getCandidate().getUser().getId();
+		UUID companyUserId = jobApplication.getJob().getCompany().getUser().getId();
+		UUID translatorUserId = jobApplication.getTranslator().getUser().getId();
+		UUID jobApplicationId = jobApplication.getId();
+		
 		JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		if(!jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN)
 				&& !jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.ON_GOING)) {
@@ -122,13 +127,12 @@ public class JobApplicationService {
 
 		if(jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN)) {
 			if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-				requestTranslationService.cancelRequestTranslation(jobApplication.getId(), user.getPropertyId(),
+				requestTranslationService.cancelRequestTranslation(jobApplicationId, user.getPropertyId(),
 						CommonConstant.NotificationContent.CANDIDATE_CANCEL);
 			} else {
-				requestTranslationService.cancelRequestTranslation(jobApplication.getId(), user.getPropertyId(),
+				requestTranslationService.cancelRequestTranslation(jobApplicationId, user.getPropertyId(),
 						CommonConstant.NotificationContent.COMPANY_CANCEL);
 			}
-
 		}
 
 		JobApplicationStatus status = jobApplicationStatusService.save(
@@ -137,24 +141,23 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.CANCELED,
 				cancelJobApplicationRequest.getReason(),
 				user.getPropertyId());
+		
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
 			notificationService.addNotification(
-					jobApplication.getCandidate().getId(),
+					candidateUserId,
 					null,
-					jobApplication.getId(),
-					jobApplication.getJob().getCompany().getId(),
+					jobApplicationId,
+					companyUserId,
 					CommonConstant.NotificationContent.CANDIDATE_CANCEL,
-					CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-					jobApplication.getJob().getCompany().getUser().getId());
+					CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 			if(jobApplication.getTranslator() != null) {
 				notificationService.addNotification(
-						jobApplication.getCandidate().getId(),
+						candidateUserId,
 						null,
-						jobApplication.getId(),
-						jobApplication.getTranslator().getId(),
+						jobApplicationId,
+						translatorUserId,
 						CommonConstant.NotificationContent.CANDIDATE_CANCEL,
-						CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-						jobApplication.getTranslator().getUser().getId());
+						CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 			}
 		} else {
 			String content = "";
@@ -164,23 +167,21 @@ public class JobApplicationService {
 				content = CommonConstant.NotificationContent.COMPANY_REFUSED_CANDIDATE;
 			}
 			notificationService.addNotification(
-					jobApplication.getJob().getCompany().getId(),
+					companyUserId,
 					null,
-					jobApplication.getId(),
-					jobApplication.getCandidate().getId(),
+					jobApplicationId,
+					candidateUserId,
 					content,
-					CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-					jobApplication.getCandidate().getUser().getId());
+					CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 			if(jobApplication.getTranslator() != null) {
 				notificationService.addNotification(
-						jobApplication.getJob().getCompany().getId(),
+						companyUserId,
 						null,
-						jobApplication.getId(),
-						jobApplication.getTranslator().getId(),
+						jobApplicationId,
+						translatorUserId,
 						content,
-						CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-						jobApplication.getTranslator().getUser().getId());
+						CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 			}
 		}
 
@@ -202,13 +203,12 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN);
 
 		notificationService.addNotification(
-				jobApplication.getJob().getCompany().getId(),
+				jobApplication.getJob().getCompany().getUser().getId(),
 				null,
 				jobApplication.getId(),
-				jobApplication.getCandidate().getId(),
+				jobApplication.getCandidate().getUser().getId(),
 				CommonConstant.NotificationContent.CONPANY_ACCEPTED_APPLY,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getCandidate().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		JobApplication result = jobApplicationRepository.save(jobApplication);
@@ -243,22 +243,20 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.ON_GOING);
 
 		notificationService.addNotification(
-				translator.getId(),
+				translator.getUser().getId(),
 				null,
 				jobApplication.getId(),
-				jobApplication.getCandidate().getId(),
+				jobApplication.getCandidate().getUser().getId(),
 				CommonConstant.NotificationContent.HELPER_JOINED,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getCandidate().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 		notificationService.addNotification(
-				translator.getId(),
+				translator.getUser().getId(),
 				null,
 				jobApplication.getId(),
-				jobApplication.getJob().getCompany().getId(),
+				jobApplication.getJob().getCompany().getUser().getId(),
 				CommonConstant.NotificationContent.HELPER_JOINED,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getJob().getCompany().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 	}
 
 	public void cancelRequestTranslation(JobApplication jobApplication, UUID userCreateId, String reason) {
@@ -268,24 +266,25 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.CANCELED_TRANSLATOR,
 				reason,
 				userCreateId);
+		
+		UUID translatorUserId = jobApplication.getTranslator().getUser().getId();
+		UUID jobApplicationId = jobApplication.getId();
+		
+		notificationService.addNotification(
+				translatorUserId,
+				null,
+				jobApplicationId,
+				jobApplication.getCandidate().getUser().getId(),
+				CommonConstant.NotificationContent.HELPER_CANCEL,
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 		notificationService.addNotification(
-				jobApplication.getTranslator().getId(),
+				translatorUserId,
 				null,
-				jobApplication.getId(),
-				jobApplication.getCandidate().getId(),
+				jobApplicationId,
+				jobApplication.getJob().getCompany().getUser().getId(),
 				CommonConstant.NotificationContent.HELPER_CANCEL,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getCandidate().getUser().getId());
-
-		notificationService.addNotification(
-				jobApplication.getTranslator().getId(),
-				null,
-				jobApplication.getId(),
-				jobApplication.getJob().getCompany().getId(),
-				CommonConstant.NotificationContent.HELPER_CANCEL,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getJob().getCompany().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		jobApplication.setTranslator(null);
@@ -311,23 +310,23 @@ public class JobApplicationService {
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		JobApplication result = jobApplicationRepository.save(jobApplication);
 
+		UUID companyUserId = jobApplication.getJob().getCompany().getUser().getId();
+		UUID jobApplicationId = jobApplication.getId();
 		notificationService.addNotification(
-				jobApplication.getJob().getCompany().getId(),
+				companyUserId,
 				null,
-				jobApplication.getId(),
-				jobApplication.getCandidate().getId(),
+				jobApplicationId,
+				jobApplication.getCandidate().getUser().getId(),
 				CommonConstant.NotificationContent.COMPANY_ACCEPTED_CANDIDATE,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getCandidate().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 
 		notificationService.addNotification(
-				jobApplication.getJob().getCompany().getId(),
+				companyUserId,
 				null,
-				jobApplication.getId(),
-				jobApplication.getTranslator().getId(),
+				jobApplicationId,
+				jobApplication.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.COMPANY_ACCEPTED_CANDIDATE,
-				CommonConstant.NotificationType.STATUS_JOB_APPLICATION,
-				jobApplication.getTranslator().getUser().getId());
+				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
 		return this.convertApplicationResponse(result, status);
 	}
 
