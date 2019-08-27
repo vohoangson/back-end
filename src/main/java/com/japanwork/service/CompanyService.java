@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
 
+import com.japanwork.model.*;
+import com.japanwork.payload.response.CompanyTranslationResponse;
+import com.japanwork.support.CommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +18,6 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.model.Business;
-import com.japanwork.model.City;
-import com.japanwork.model.Company;
-import com.japanwork.model.District;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
@@ -30,9 +29,44 @@ public class CompanyService {
 	private CompanyRepository companyRepository;
 
 	@Autowired
+    private CommonSupport commonSupport;
+
+	@Autowired
 	private UserService userService;
 
-	public Company create(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError{
+    public Page<Company> index(int page, int paging) throws ResourceNotFoundException {
+        try {
+            Page<Company> pages = companyRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
+            return pages;
+        } catch (IllegalArgumentException e) {
+            throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
+        }
+    }
+
+    public CompanyResponse show(UUID id, Language language) throws ResourceNotFoundException {
+        Company company                       = commonSupport.loadCompanyById(id);
+        CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
+
+        CompanyTranslationResponse companyTranslationResponse = new CompanyTranslationResponse(
+                companyTranslation.getId(),
+                companyTranslation.getName(),
+                companyTranslation.getIntroduction(),
+                companyTranslation.getAddress()
+        );
+
+        CompanyResponse companyResponse = new CompanyResponse();
+        companyResponse.setCompanyTranslationResponse(companyTranslationResponse);
+        companyResponse.setScale(company.getScale());
+        companyResponse.setBusinessIds(Business.listBusinessID(company.getBusinesses()));
+        companyResponse.setCityId(company.getCity().getId());
+        companyResponse.setDistrictId(company.getDistrict().getId());
+        companyResponse.setLogo(company.getLogoUrl());
+        companyResponse.setCoverImage(company.getCoverImageUrl());
+
+        return companyResponse;
+    }
+
+	public Company create(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError {
 		try {
 			Company company = new Company();
 			company.setUser(userService.findById(userPrincipal.getId()));
@@ -58,7 +92,7 @@ public class CompanyService {
 	}
 
 	public Company update(CompanyRequest companyRequest, Company company, UserPrincipal userPrincipal)
-			throws ForbiddenException, ServerError{
+			throws ForbiddenException, ServerError {
 		try {
 			if(!company.getUser().getId().equals(userPrincipal.getId())) {
 				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
@@ -84,16 +118,7 @@ public class CompanyService {
 		}
 	}
 
-	public Page<Company> index(int page, int paging) throws ResourceNotFoundException{
-		try {
-			Page<Company> pages = companyRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
-			return pages;
-		} catch (IllegalArgumentException e) {
-			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
-		}
-	}
-
-	public Company isDel(UUID id, Timestamp deletedAt) throws ServerError{
+	public Company isDel(UUID id, Timestamp deletedAt) throws ServerError {
 		try {
 			Company company = companyRepository.findById(id).get();
 			company.setDeletedAt(deletedAt);
@@ -110,7 +135,7 @@ public class CompanyService {
 		}
 	}
 
-	public Page<Company> companiesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException{
+	public Page<Company> companiesByIds(Set<UUID> ids, int page, int paging) throws ResourceNotFoundException {
 		try {
 			Page<Company> pages = companyRepository.findAllByIdInAndDeletedAt(PageRequest.of(page-1, paging), ids,null);
 			return pages;
