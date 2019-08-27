@@ -34,7 +34,6 @@ public class ConversationResponse {
 	}
 	public ConversationResponse(UUID id, CompanyResponse company, CandidateResponse candidate,
 			TranslatorResponse translator) {
-		super();
 		this.id = id;
 		this.company = company;
 		this.candidate = candidate;

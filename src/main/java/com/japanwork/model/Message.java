@@ -1,7 +1,6 @@
 package com.japanwork.model;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,9 +27,10 @@ public class Message {
     @Column(name="id")
 	private long id;
 
-	@Column(name = "sender_id")
+	@ManyToOne
+	@JoinColumn(name = "sender_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
-	private UUID senderId;
+	private User sender;
 
 	@Column(name = "content")
 	private String content;
@@ -66,12 +66,12 @@ public class Message {
 		this.id = id;
 	}
 
-	public UUID getSenderId() {
-		return senderId;
+	public User getSender() {
+		return sender;
 	}
 
-	public void setSenderId(UUID senderId) {
-		this.senderId = senderId;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
 	public String getContent() {
@@ -133,11 +133,10 @@ public class Message {
 	public Message() {
 	}
 
-	public Message(long id, UUID senderId, String content, Conversation conversation, boolean isRead,
+	public Message(long id, User sender, String content, Conversation conversation, boolean isRead,
 			File file, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
-		super();
 		this.id = id;
-		this.senderId = senderId;
+		this.sender = sender;
 		this.content = content;
 		this.conversation = conversation;
 		this.isRead = isRead;

@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ExperienceResponse {
+	private UUID id;
+	
 	private String organizaion;
 	
 	private String desc;
@@ -21,6 +23,14 @@ public class ExperienceResponse {
 	
 	@JsonProperty("end_date")
 	private Date endDate;
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public String getOrganizaion() {
 		return organizaion;
@@ -70,9 +80,9 @@ public class ExperienceResponse {
 		this.endDate = endDate;
 	}
 
-	public ExperienceResponse(String organizaion, String desc, UUID levelId, UUID businessId, Date startDate,
+	public ExperienceResponse(UUID id, String organizaion, String desc, UUID levelId, UUID businessId, Date startDate,
 			Date endDate) {
-		super();
+		this.id = id;
 		this.organizaion = organizaion;
 		this.desc = desc;
 		this.levelId = levelId;
@@ -82,6 +92,5 @@ public class ExperienceResponse {
 	}
 
 	public ExperienceResponse() {
-		super();
 	}
 }

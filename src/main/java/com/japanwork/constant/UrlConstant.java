@@ -86,7 +86,7 @@ public class UrlConstant {
 	public static final String URL_REQUEST_TRANSLATION = "/v1/requests/{id}";
 
 	//Notification
-	public static final String URL_CONVERSATION= "/v1/conversations/{id}";
+	public static final String URL_CONVERSATION= "/v1/conversations/{id}/messages";
 	public static final String URL_CONVERSATION_UPLOAD_FILE= "/v1/conversations/{id}/upload_file";
 	public static final String URL_NOTIFICATIONS = "/v1/notifications";
 	public static final String URL_NOTIFICATIONS_UNREADS_NUMBER = "/v1/notifications/unreads_number";
