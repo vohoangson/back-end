@@ -26,7 +26,6 @@ import javax.validation.constraints.NotNull;
         @UniqueConstraint(columnNames = "email")
 })
 public class User {
-	@JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
