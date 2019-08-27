@@ -41,6 +41,7 @@ import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
 import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
+import com.japanwork.payload.response.OwnerResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
 import com.japanwork.repository.request_status.RequestStatusRepository;
 import com.japanwork.repository.request_translation.RequestTranslationRepository;
@@ -76,23 +77,32 @@ public class RequestTranslationService {
 	@Autowired
     private CommonSupport commonSupport;
 
+	@Autowired
+	private TranslatorService translatorService;
+
 	@Transactional
 	public List<RequestTranslationResponse> createRequestTranslationCanidate(RequestTranslationRequest requestTranslationRequest,
 			Candidate candidate) throws ServerError, BadRequestException{
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+			OwnerResponse ownerResponse = new OwnerResponse(
+					candidate.getId(), 
+					candidate.getFullName(), 
+					candidate.getUser().getRole().replaceAll("ROLE_", ""), 
+					candidate.getAvatar());
+			
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
 				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
 					if(!candidate.getId().equals(objectableId)) {
 						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_CREATE_FAIL);
 					}
-					RequestTranslation resultRequest = this.save(candidate.getId(), objectableId, languageId,
+					RequestTranslation resultRequest = this.save(candidate.getFullName(), candidate.getId(), objectableId, languageId,
 							requestTranslationRequest);
 					RequestStatus requestTranslationStatus = requestStatusService.save(
 							resultRequest,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(resultRequest, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, resultRequest, requestTranslationStatus));
 				}
 			}
 
@@ -109,19 +119,26 @@ public class RequestTranslationService {
 			Company company) throws ServerError, BadRequestException{
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+
+			OwnerResponse ownerResponse = new OwnerResponse(
+					company.getId(), 
+					company.getName(), 
+					company.getUser().getRole().replaceAll("ROLE_", ""), 
+					company.getLogoUrl());
+			
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
 				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
 					if(!company.getId().equals(objectableId)) {
 						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_CREATE_FAIL);
 					}
 
-					RequestTranslation requestTranslation = this.save(company.getId(), objectableId, languageId,
+					RequestTranslation requestTranslation = this.save(company.getName(), company.getId(), objectableId, languageId,
 							requestTranslationRequest);
 					RequestStatus requestTranslationStatus = requestStatusService.save(
 							requestTranslation,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(requestTranslation, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, requestTranslation, requestTranslationStatus));
 				}
 			}
 
@@ -138,6 +155,13 @@ public class RequestTranslationService {
 			Company company) throws ServerError, BadRequestException{
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+
+			OwnerResponse ownerResponse = new OwnerResponse(
+					company.getId(), 
+					company.getName(), 
+					company.getUser().getRole().replaceAll("ROLE_", ""), 
+					company.getLogoUrl());
+
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
 				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
 					Job job = commonSupport.loadJobById(objectableId);
@@ -145,13 +169,14 @@ public class RequestTranslationService {
 						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_CREATE_FAIL);
 					}
 
-					RequestTranslation requestTranslation = this.save(company.getId(), objectableId, languageId,
+					RequestTranslation requestTranslation = this.save(job.getName(), company.getId(), objectableId, languageId,
 							requestTranslationRequest);
 					RequestStatus requestTranslationStatus = requestStatusService.save(
 							requestTranslation,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(requestTranslation, requestTranslationStatus));
+
+					list.add(this.convertRequestTranslationResponse(ownerResponse, requestTranslation, requestTranslationStatus));
 				}
 			}
 
@@ -168,6 +193,13 @@ public class RequestTranslationService {
 			Company company) throws ServerError, BadRequestException{
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
+
+			OwnerResponse ownerResponse = new OwnerResponse(
+					company.getId(), 
+					company.getName(), 
+					company.getUser().getRole().replaceAll("ROLE_", ""), 
+					company.getLogoUrl());
+			
 			for (UUID languageId : requestTranslationRequest.getLanguageId()) {
 				for (UUID objectableId : requestTranslationRequest.getObjectableId()) {
 					JobApplication jobApplication = commonSupport.loadJobApplicationById(objectableId, company.getUser().getId());
@@ -175,13 +207,13 @@ public class RequestTranslationService {
 						throw new BadRequestException(MessageConstant.REQUEST_TRANSLATION_CREATE_FAIL);
 					}
 
-					RequestTranslation requestTranslation = this.save(company.getId(), objectableId, languageId,
+					RequestTranslation requestTranslation = this.save(jobApplication.getJob().getName(), company.getId(), objectableId, languageId,
 							requestTranslationRequest);
 					RequestStatus requestTranslationStatus = requestStatusService.save(
 							requestTranslation,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(requestTranslation, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, requestTranslation, requestTranslationStatus));
 				}
 			}
 
@@ -193,9 +225,10 @@ public class RequestTranslationService {
 		}
 	}
 
-	public RequestTranslation save(UUID ownerId, UUID objectableId, UUID languageId,
+	public RequestTranslation save(String name, UUID ownerId, UUID objectableId, UUID languageId,
 			RequestTranslationRequest requestTranslationRequest) {
 		RequestTranslation requestTranslation = new RequestTranslation();
+		requestTranslation.setName(name);
 		requestTranslation.setOwnerId(ownerId);
 		requestTranslation.setObjectableId(objectableId);
 		requestTranslation.setLanguage(new Language(languageId));
@@ -235,7 +268,8 @@ public class RequestTranslationService {
 				CommonConstant.NotificationContent.HELPER_JOINED,
 				CommonConstant.NotificationType.STATUS_REQUEST);
 
-		return convertRequestTranslationResponse(requestTranslation, result);
+		
+		return convertRequestTranslationResponse(this.owner(requestTranslation), requestTranslation, result);
 	}
 
 	public RequestTranslationResponse ownerAcceptApllyRequestTranslation(RequestTranslation requestTranslation,
@@ -280,7 +314,7 @@ public class RequestTranslationService {
 			JobApplication jobApplication = commonSupport.loadJobApplicationById(requestTranslation.getObjectableId(), user.getId());
 			jobApplicationService.translatorJoinJobApplication(jobApplication, requestTranslation.getTranslator());
 		}
-		return convertRequestTranslationResponse(requestTranslation, result);
+		return convertRequestTranslationResponse(this.owner(requestTranslation), requestTranslation, result);
 	}
 
 	public RequestTranslationResponse translatorConfirmFinishedRequestTranslation(RequestTranslation requestTranslation,
@@ -308,7 +342,7 @@ public class RequestTranslationService {
 				this.userIdOfOwner(requestTranslation),
 				CommonConstant.NotificationContent.HELPER_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST);
-		return convertRequestTranslationResponse(requestTranslation, result);
+		return convertRequestTranslationResponse(this.owner(requestTranslation), requestTranslation, result);
 	}
 
 	public RequestTranslationResponse ownerAcceptFinishRequestTranslation(RequestTranslation requestTranslation,
@@ -336,7 +370,7 @@ public class RequestTranslationService {
 				requestTranslation.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST);
-		return convertRequestTranslationResponse(requestTranslation, result);
+		return convertRequestTranslationResponse(this.owner(requestTranslation), requestTranslation, result);
 	}
 
 	public RequestTranslationResponse ownerRefuseFinishRequestTranslation(RequestTranslation requestTranslation,
@@ -363,7 +397,7 @@ public class RequestTranslationService {
 				requestTranslation.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.OWNER_REFUSED_FINISHED,
 				CommonConstant.NotificationType.STATUS_REQUEST);
-		return convertRequestTranslationResponse(requestTranslation, result);
+		return convertRequestTranslationResponse(this.owner(requestTranslation), requestTranslation, result);
 	}
 
 	public RequestTranslationResponse rejectRequestTranslation(RequestTranslation requestTranslation,
@@ -400,7 +434,7 @@ public class RequestTranslationService {
 				timestamp,
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 
-		return convertRequestTranslationResponse(resultRequest, result);
+		return convertRequestTranslationResponse(this.owner(requestTranslation), resultRequest, result);
 	}
 
 	public RequestTranslationResponse cancelRequestTranslation(RequestTranslation requestTranslation,
@@ -440,7 +474,7 @@ public class RequestTranslationService {
 				timestamp,
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 
-		return convertRequestTranslationResponse(resultRequest, result);
+		return convertRequestTranslationResponse(this.owner(requestTranslation), resultRequest, result);
 	}
 
 	public void cancelRequestTranslation(UUID objectableId, UUID userCreateId, String content) {
@@ -501,10 +535,17 @@ public class RequestTranslationService {
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
+		Company company = commonSupport.loadCompanyByUser(user.getId());
+		OwnerResponse ownerResponse = new OwnerResponse(
+				company.getId(), 
+				company.getName(), 
+				company.getUser().getRole().replaceAll("ROLE_", ""), 
+				company.getLogoUrl());
+		
 		if(pages.getContent().size() > 0) {
 			for (RequestTranslation requestTranslation : pages.getContent()) {
 				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-				list.add(convertRequestTranslationResponse(requestTranslation, status));
+				list.add(convertRequestTranslationResponse(ownerResponse, requestTranslation, status));
 			}
 		}
 
@@ -540,10 +581,16 @@ public class RequestTranslationService {
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
+		Candidate candidate = commonSupport.loadCandidateByUser(user.getId());
+		OwnerResponse ownerResponse = new OwnerResponse(
+				candidate.getId(), 
+				candidate.getFullName(), 
+				candidate.getUser().getRole().replaceAll("ROLE_", ""), 
+				candidate.getAvatar());
 		if(pages.getContent().size() > 0) {
 			for (RequestTranslation requestTranslation : pages.getContent()) {
 				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-				list.add(convertRequestTranslationResponse(requestTranslation, status));
+				list.add(convertRequestTranslationResponse(ownerResponse, requestTranslation, status));
 			}
 		}
 
@@ -590,7 +637,7 @@ public class RequestTranslationService {
 
 		if(pages.getContent().size() > 0) {
 			for (RequestStatus requestStatus : pages.getContent()) {
-				list.add(convertRequestTranslationResponse(requestStatus.getRequestTranslation(), requestStatus));
+				list.add(convertRequestTranslationResponse(this.owner(requestStatus.getRequestTranslation()), requestStatus.getRequestTranslation(), requestStatus));
 			}
 		}
 
@@ -638,7 +685,7 @@ public class RequestTranslationService {
 		if(pages.getContent().size() > 0) {
 			for (RequestTranslation requestTranslation : pages.getContent()) {
 				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-				list.add(convertRequestTranslationResponse(requestTranslation, status));
+				list.add(convertRequestTranslationResponse(this.owner(requestTranslation), requestTranslation, status));
 			}
 		}
 
@@ -696,14 +743,15 @@ public class RequestTranslationService {
 		return false;
 	}
 
-	public RequestTranslationResponse convertRequestTranslationResponse(RequestTranslation requestTranslation,
+	public RequestTranslationResponse convertRequestTranslationResponse(OwnerResponse owner, RequestTranslation requestTranslation,
 			RequestStatus requestTranslationStatus) {
 		RequestTranslationResponse requestTranslationResponse = new RequestTranslationResponse();
 		requestTranslationResponse.setId(requestTranslation.getId());
-		requestTranslationResponse.setOwnerId(requestTranslation.getOwnerId());
+		requestTranslationResponse.setName(requestTranslation.getName());
+		requestTranslationResponse.setOwner(owner);
 		requestTranslationResponse.setObjectableId(requestTranslation.getObjectableId());
 		if(requestTranslation.getTranslator() != null) {
-			requestTranslationResponse.setTranslatorId(requestTranslation.getTranslator().getId());
+			requestTranslationResponse.setTranslatorResponse(translatorService.translatorShortResponse(requestTranslation.getTranslator()));
 		}
 
 		requestTranslationResponse.setStatus(requestStatusService.convertRequestTranslationStatusResponse(requestTranslationStatus));
@@ -754,6 +802,26 @@ public class RequestTranslationService {
 		}
 	}
 
+	public OwnerResponse owner(RequestTranslation requestTranslation) {
+		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
+			Candidate candidate = commonSupport.loadCandidateById(requestTranslation.getOwnerId());
+			OwnerResponse ownerResponse = new OwnerResponse(
+					candidate.getId(), 
+					candidate.getFullName(), 
+					candidate.getUser().getRole().replaceAll("ROLE_", ""), 
+					candidate.getAvatar());
+			return ownerResponse;
+		} else {
+			Company company = commonSupport.loadCompanyById(requestTranslation.getOwnerId());
+			OwnerResponse ownerResponse = new OwnerResponse(
+					company.getId(), 
+					company.getName(), 
+					company.getUser().getRole().replaceAll("ROLE_", ""), 
+					company.getLogoUrl());
+			return ownerResponse;
+		}
+	}
+	
 	public UUID receiverId(RequestTranslation requestTranslation) {
 		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
 			Candidate candidate = commonSupport.loadCandidateById(requestTranslation.getOwnerId());

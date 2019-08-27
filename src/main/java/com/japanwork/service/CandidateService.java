@@ -248,7 +248,7 @@ public class CandidateService {
         languageCertificateService.del(id);
     }
 
-    public CandidateResponse convertCandiateResponse(Candidate candidate) {
+    public CandidateResponse candiateFullResponse(Candidate candidate) {
         CandidateResponse candidateResponse = new CandidateResponse();
 
         candidateResponse.setId(candidate.getId());
@@ -290,6 +290,16 @@ public class CandidateService {
         candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
         candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
         candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
+
+        return candidateResponse;
+    }
+    
+    public CandidateResponse candiateShortResponse(Candidate candidate) {
+        CandidateResponse candidateResponse = new CandidateResponse();
+
+        candidateResponse.setId(candidate.getId());
+        candidateResponse.setFullName(candidate.getFullName());
+        candidateResponse.setAvatar(candidate.getAvatar());
 
         return candidateResponse;
     }

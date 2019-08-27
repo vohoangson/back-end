@@ -47,7 +47,7 @@ public class TranslatorController {
 		Translator translator = translatorService.create(translatorRequest, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				translatorService.convertTranslatorResponse(translator),
+				translatorService.translatorFullResponse(translator),
 				""
         );
 	}
@@ -63,7 +63,7 @@ public class TranslatorController {
 
 		if(pages.getContent().size() > 0) {
 			for (Translator translator : pages.getContent()) {
-				list.add(translatorService.convertTranslatorResponse(translator));
+				list.add(translatorService.translatorFullResponse(translator));
 			}
 		}
 
@@ -86,7 +86,7 @@ public class TranslatorController {
 
 		if(pages.getContent().size() > 0) {
 			for (Translator translator : pages.getContent()) {
-				list.add(translatorService.convertTranslatorResponse(translator));
+				list.add(translatorService.translatorFullResponse(translator));
 			}
 		}
 
@@ -105,7 +105,7 @@ public class TranslatorController {
 		translator = translatorService.update(translatorRequest, translator, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				translatorService.convertTranslatorResponse(translator),
+				translatorService.translatorFullResponse(translator),
 				""
         );
 	}
@@ -116,7 +116,7 @@ public class TranslatorController {
 		Translator translator = commonSupport.loadTranslatorById(id);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				translatorService.convertTranslatorResponse(translator),
+				translatorService.translatorFullResponse(translator),
 				""
         );
 	}
@@ -127,7 +127,7 @@ public class TranslatorController {
 		Translator translator = commonSupport.loadTranslatorByUser(userPrincipal.getId());
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				translatorService.convertTranslatorResponse(translator),
+				translatorService.translatorFullResponse(translator),
 				""
         );
 	}
@@ -149,7 +149,7 @@ public class TranslatorController {
 		Translator translator = translatorService.isDel(id, null);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				translatorService.convertTranslatorResponse(translator),
+				translatorService.translatorFullResponse(translator),
 				""
         );
 	}

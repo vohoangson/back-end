@@ -76,7 +76,7 @@ public class JobController {
 
 		if(pages.getContent().size() > 0) {
 			for (Job job : pages.getContent()) {
-				list.add(jobService.convertJobResponse(job));
+				list.add(jobService.jobFullResponse(job));
 			}
 		}
 
@@ -94,7 +94,7 @@ public class JobController {
 		Job job = jobService.create(jobRequest, company);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				jobService.convertJobResponse(job),
+				jobService.jobFullResponse(job),
 				""
         );
 	}
@@ -105,7 +105,7 @@ public class JobController {
 		Job job = commonSupport.loadJobById(id);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				jobService.convertJobResponse(job),
+				jobService.jobFullResponse(job),
 				"");
 	}
 
@@ -117,7 +117,7 @@ public class JobController {
 		job = jobService.update(jobRequest, job, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				jobService.convertJobResponse(job),
+				jobService.jobFullResponse(job),
 				""
         );
 	}
@@ -142,7 +142,7 @@ public class JobController {
 		job = jobService.isDel(job, userPrincipal, null);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				jobService.convertJobResponse(job),
+				jobService.jobFullResponse(job),
 				""
         );
 	}

@@ -3,8 +3,10 @@ package com.japanwork.payload.response;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TranslatorResponse {
 	private UUID id;
 	private String name;
@@ -18,6 +20,8 @@ public class TranslatorResponse {
 	private String address;
 	private String introduction;
 	private String avatar;
+	
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("japanese_level")
 	private int japaneseLevel;
 
@@ -103,7 +107,6 @@ public class TranslatorResponse {
 
 	public TranslatorResponse(UUID id, String name, String gender, Date dateOfBirth, UUID cityId, UUID districtId,
 			String address, String introduction, String avatar, int japaneseLevel) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.gender = gender;
@@ -114,5 +117,8 @@ public class TranslatorResponse {
 		this.introduction = introduction;
 		this.avatar = avatar;
 		this.japaneseLevel = japaneseLevel;
+	}
+
+	public TranslatorResponse() {
 	}
 }

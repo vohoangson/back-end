@@ -225,7 +225,7 @@ public class RequestTranslationController {
 		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				requestTranslationService.convertRequestTranslationResponse(requestTranslation, status),
+				requestTranslationService.convertRequestTranslationResponse(requestTranslationService.owner(requestTranslation), requestTranslation, status),
 				""
         );
 	}
@@ -245,7 +245,7 @@ public class RequestTranslationController {
 		RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				requestTranslationService.convertRequestTranslationResponse(requestTranslation, status),
+				requestTranslationService.convertRequestTranslationResponse(requestTranslationService.owner(requestTranslation), requestTranslation, status),
 				""
         );
 	}

@@ -4,8 +4,10 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobResponse {
 	private UUID id;
 	
@@ -20,6 +22,7 @@ public class JobResponse {
 	@JsonProperty("contract_id")
 	private UUID contractId;
 	
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("level_id")
 	private UUID levelId;
 	
@@ -216,7 +219,6 @@ public class JobResponse {
 			UUID levelId, int japaneseLevel, String requiredEducation, String requiredExperience,
 			String requiredLanguage, String desc, UUID cityId, UUID districtId, String address,
 			Date applicationDeadline, float minSalary, float maxSalary, String benefits, Timestamp createDate) {
-		super();
 		this.id = id;
 		this.companyResponse = companyResponse;
 		this.name = name;
@@ -237,6 +239,7 @@ public class JobResponse {
 		this.benefits = benefits;
 		this.createDate = createDate;
 	}
-	
-	
+
+	public JobResponse() {
+	}
 }

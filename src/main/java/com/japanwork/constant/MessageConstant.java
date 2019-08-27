@@ -6,6 +6,9 @@ public class MessageConstant {
 	//Company error response information
 	public static final String COMPANY_NOT_FOUND = "company_not_found";
 
+	//Company translation error response information
+    public static final String COMPANY_TRANSLATION_NOT_FOUND = "company_translation_not_found";
+
     //Language error response information
 	public static final String LANGUAGE_NOT_FOUND = "language_not_found";
 
@@ -120,7 +123,7 @@ public class MessageConstant {
 	public static final String CHANGE_PASSWORD_NOT_CORRECT = "old_password_not_correct";
 	public static final String RESET_FORGET_PASSWORD_EMAIL_NOT_EXIST = "email_does_not_exist";
 	public static final String RESET_FORGET_PASSWORD_INCORRECT_CODE = "reset_password_incorrect_code";
-	
+
 	//Upload file
 	public static final String FILE_NOT_FORMATED = "file_not_formated";
 }

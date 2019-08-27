@@ -29,7 +29,7 @@ public class CompanyTranslation {
     @Where(clause = "deleted_at IS NULL")
     private Translator translator;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "language_id")
     @Where(clause = "deleted_at IS NULL")
     private Language language;

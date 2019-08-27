@@ -4,8 +4,10 @@ import java.sql.Date;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CandidateResponse {
 	private UUID id;
 	

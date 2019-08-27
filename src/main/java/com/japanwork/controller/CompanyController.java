@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.japanwork.model.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -84,21 +85,21 @@ public class CompanyController {
         );
 	}
 
-//	@GetMapping(UrlConstant.URL_COMPANY)
-//    @ResponseBody
-//    public BaseSuccessResponse show(
-//            @PathVariable UUID id,
-//            @RequestParam UUID language_id
-//    ) throws BadRequestException {
-//        commonSupport.loadLanguage(language_id);
-//
-//        Company company = companyService.show(id, language_id);
-//        return new BaseSuccessResponse(
-//                "success",
-//                companyService.convertCompanyResponse(company),
-//                null
-//        );
-//    }
+	@GetMapping(UrlConstant.URL_COMPANY)
+    @ResponseBody
+    public ResponseDataAPI show(
+            @PathVariable UUID id,
+            @RequestParam UUID language_id
+    ) throws BadRequestException {
+        Language language = commonSupport.loadLanguageById(language_id);
+
+        CompanyResponse companyResponse = companyService.show(id, language);
+        return new ResponseDataAPI(
+                CommonConstant.ResponseDataAPIStatus.SUCCESS,
+                companyResponse,
+                ""
+        );
+    }
 
 	@PostMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
@@ -112,16 +113,16 @@ public class CompanyController {
         );
 	}
 
-	@GetMapping(UrlConstant.URL_COMPANY)
-	@ResponseBody
-	public ResponseDataAPI show(@PathVariable UUID id){
-		Company company = commonSupport.loadCompanyById(id);
-		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				companyService.convertCompanyResponse(company),
-				""
-        );
-	}
+//	@GetMapping(UrlConstant.URL_COMPANY)
+//	@ResponseBody
+//	public ResponseDataAPI show(@PathVariable UUID id){
+//		Company company = commonSupport.loadCompanyById(id);
+//		return new ResponseDataAPI(
+//				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+//				companyService.convertCompanyResponse(company),
+//				""
+//        );
+//	}
 
 	@GetMapping(UrlConstant.URL_MY_COMPANY)
 	@ResponseBody
