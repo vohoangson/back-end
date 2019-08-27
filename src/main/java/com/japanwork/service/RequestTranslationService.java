@@ -228,13 +228,12 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE);
 
 		notificationService.addNotification(
-				translator.getId(),
+				translator.getUser().getId(),
 				null,
 				requestTranslation.getId(),
-				requestTranslation.getOwnerId(),
+				this.userIdOfOwner(requestTranslation),
 				CommonConstant.NotificationContent.HELPER_JOINED,
-				CommonConstant.NotificationType.STATUS_REQUEST,
-				this.userIdOfOwner(requestTranslation));
+				CommonConstant.NotificationType.STATUS_REQUEST);
 
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
@@ -270,13 +269,13 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.ON_GOING);
 
 		notificationService.addNotification(
-				requestTranslation.getOwnerId(),
+				user.getId(),
 				null,
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(),
+				requestTranslation.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_APPLY,
-				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getTranslator().getUser().getId());
+				CommonConstant.NotificationType.STATUS_REQUEST);
+		
 		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION)) {
 			JobApplication jobApplication = commonSupport.loadJobApplicationById(requestTranslation.getObjectableId(), user.getId());
 			jobApplicationService.translatorJoinJobApplication(jobApplication, requestTranslation.getTranslator());
@@ -303,13 +302,12 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.REVIEWED);
 
 		notificationService.addNotification(
-				requestTranslation.getTranslator().getId(),
+				user.getId(),
 				null,
 				requestTranslation.getId(),
-				requestTranslation.getOwnerId(),
+				this.userIdOfOwner(requestTranslation),
 				CommonConstant.NotificationContent.HELPER_FINISHED,
-				CommonConstant.NotificationType.STATUS_REQUEST,
-				this.userIdOfOwner(requestTranslation));
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 
@@ -332,13 +330,12 @@ public class RequestTranslationService {
 				CommonConstant.RequestTranslationStatus.FINISHED);
 
 		notificationService.addNotification(
-				requestTranslation.getOwnerId(),
+				user.getId(),
 				null,
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(),
+				requestTranslation.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.OWNER_ACCEPTED_FINISHED,
-				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getTranslator().getUser().getId());
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 
@@ -360,13 +357,12 @@ public class RequestTranslationService {
 				timestamp,
 				CommonConstant.RequestTranslationStatus.ON_GOING);
 		notificationService.addNotification(
-				requestTranslation.getOwnerId(),
+				user.getId(),
 				null,
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(),
+				requestTranslation.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.OWNER_REFUSED_FINISHED,
-				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getTranslator().getUser().getId());
+				CommonConstant.NotificationType.STATUS_REQUEST);
 		return convertRequestTranslationResponse(requestTranslation, result);
 	}
 
@@ -388,13 +384,12 @@ public class RequestTranslationService {
 				requestTranslation.getOwnerId());
 
 		notificationService.addNotification(
-				requestTranslation.getOwnerId(),
+				user.getId(),
 				null,
 				requestTranslation.getId(),
-				requestTranslation.getTranslator().getId(),
+				requestTranslation.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.OWNER_REJECT_APPLY,
-				CommonConstant.NotificationType.STATUS_REQUEST,
-				requestTranslation.getTranslator().getUser().getId());
+				CommonConstant.NotificationType.STATUS_REQUEST);
 
 		requestTranslation.setTranslator(null);
 		requestTranslation.setUpdatedAt(timestamp);
@@ -454,25 +449,20 @@ public class RequestTranslationService {
 		if(list.size() > 0) {
 			for (RequestTranslation requestTranslation : list) {
 				RequestStatus requestTranslationStatus = requestTranslation.getRequestStatus().stream().findFirst().get();
-
-				Date date = new Date();
-				Timestamp timestamp = new Timestamp(date.getTime());
-
 				requestStatusService.save(
 						requestTranslation,
-						timestamp,
+						CommonFunction.getCurrentDateTime(),
 						CommonConstant.RequestTranslationStatus.CANCELED,
 						content,
 						userCreateId);
 				if(requestTranslationStatus.getStatus().equals(CommonConstant.RequestTranslationStatus.WAITING_FOR_OWNER_AGREE)) {
 					notificationService.addNotification(
-							userCreateId,
+							this.userIdOfOwner(requestTranslation),
 							null,
 							requestTranslation.getId(),
-							requestTranslation.getTranslator().getId(),
+							requestTranslation.getTranslator().getUser().getId(),
 							content,
-							CommonConstant.NotificationType.STATUS_REQUEST,
-							requestTranslation.getTranslator().getUser().getId());
+							CommonConstant.NotificationType.STATUS_REQUEST);
 				}
 			}
 		}
@@ -734,23 +724,21 @@ public class RequestTranslationService {
 		if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
 			userCreateId = requestTranslation.getTranslator().getId();
 			notificationService.addNotification(
-					userCreateId,
+					user.getId(),
 					null,
 					requestTranslation.getId(),
-					requestTranslation.getOwnerId(),
+					this.userIdOfOwner(requestTranslation),
 					CommonConstant.NotificationContent.HELPER_CANCEL,
-					CommonConstant.NotificationType.STATUS_REQUEST,
-					this.userIdOfOwner(requestTranslation));
+					CommonConstant.NotificationType.STATUS_REQUEST);
 		} else {
 			userCreateId = requestTranslation.getOwnerId();
 			notificationService.addNotification(
-					userCreateId,
+					user.getId(),
 					null,
 					requestTranslation.getId(),
-					requestTranslation.getTranslator().getId(),
+					requestTranslation.getTranslator().getUser().getId(),
 					CommonConstant.NotificationContent.OWNER_CANCEL,
-					CommonConstant.NotificationType.STATUS_REQUEST,
-					requestTranslation.getTranslator().getUser().getId());
+					CommonConstant.NotificationType.STATUS_REQUEST);
 		}
 
 		return userCreateId;

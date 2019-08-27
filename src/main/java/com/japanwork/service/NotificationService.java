@@ -35,7 +35,7 @@ public class NotificationService {
 	private NotificationRepository notificationRepository;
 
 	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content,
-			String type, UUID userId) throws ForbiddenException{
+			String type) throws ForbiddenException{
 		Notification notification = new Notification();
 		notification.setSenderId(senderId);
 		notification.setObjectableId(objectableId);
@@ -50,13 +50,14 @@ public class NotificationService {
 													this.convertNotificationResponse(result, conversationId),
 													""
         );
-		rabbitTemplate.convertAndSend("notifications/"+userId, ""+userId, responseDataAPI);
+		rabbitTemplate.convertAndSend("notifications/"+receiverId, ""+receiverId, responseDataAPI);
 	}
+	
 	public ResponseDataAPI index(User user, int page, int paging)
 			throws ResourceNotFoundException{
 		try {
 			Page<Notification> pages = notificationRepository.findByReceiverIdAndDeletedAt(
-			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), user.getPropertyId(), null);
+			        PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), user.getId(), null);
 			PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 
 			List<NotificationResponse> list = new ArrayList<NotificationResponse>();
