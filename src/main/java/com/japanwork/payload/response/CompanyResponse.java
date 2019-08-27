@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.CompanyTranslation;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompanyResponse {
@@ -19,6 +18,7 @@ public class CompanyResponse {
 
     private String name;
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int scale;
 
     @JsonProperty("business_ids")
@@ -137,7 +137,6 @@ public class CompanyResponse {
 
     public CompanyResponse(UUID id, String name, int scale, Set<UUID> businessIds, UUID cityId, UUID districtId,
             String address, String logo, String coverImage, String introduction) {
-        super();
         this.id = id;
         this.name = name;
         this.scale = scale;

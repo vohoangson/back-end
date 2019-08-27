@@ -51,7 +51,7 @@ public class CandidateController {
 		Candidate candidate = candidateService.create(candidatePersonalRequest, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}
@@ -68,7 +68,7 @@ public class CandidateController {
 		candidate = candidateService.updatePersonal(candidatePersonalRequest, candidate);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}
@@ -85,7 +85,7 @@ public class CandidateController {
 		candidate = candidateService.updateExpected(candidateExpectedRequest, candidate);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}
@@ -101,7 +101,7 @@ public class CandidateController {
 		candidate = candidateService.updateExperience(candidateExperienceRequest, candidate);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}
@@ -117,7 +117,7 @@ public class CandidateController {
 
 		if(pages.getContent().size() > 0) {
 			for (Candidate candidate : pages.getContent()) {
-				list.add(candidateService.convertCandiateResponse(candidate));
+				list.add(candidateService.candiateFullResponse(candidate));
 			}
 		}
 
@@ -139,7 +139,7 @@ public class CandidateController {
 
 		if(pages.getContent().size() > 0) {
 			for (Candidate candidate: pages.getContent()) {
-				list.add(candidateService.convertCandiateResponse(candidate));
+				list.add(candidateService.candiateFullResponse(candidate));
 			}
 		}
 
@@ -156,7 +156,7 @@ public class CandidateController {
 		Candidate candidate = commonSupport.loadCandidateById(id);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}
@@ -167,7 +167,7 @@ public class CandidateController {
 		Candidate candidate = commonSupport.loadCandidateByUser(userPrincipal.getId());
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}
@@ -189,7 +189,7 @@ public class CandidateController {
 		Candidate candidate = candidateService.isDel(id, null);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidateService.convertCandiateResponse(candidate),
+				candidateService.candiateFullResponse(candidate),
 				""
         );
 	}

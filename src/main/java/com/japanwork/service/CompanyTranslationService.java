@@ -1,14 +1,11 @@
 package com.japanwork.service;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.BadRequestException;
-import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.Business;
 import com.japanwork.model.Company;
@@ -17,21 +14,11 @@ import com.japanwork.model.Language;
 import com.japanwork.payload.request.CompanyTranslationRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
-import com.japanwork.security.UserPrincipal;
 
 @Service
 public class CompanyTranslationService {
     @Autowired
     private CompanyTranslationRepository companyTranslationRepository;
-
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TranslatorService translatorService;
 
     public CompanyTranslation save(
             Company company,

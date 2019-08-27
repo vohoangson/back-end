@@ -20,6 +20,9 @@ public class RequestTranslation {
     @Column(name="id")
 	private UUID id;
 
+	@Column(name = "name", nullable = false)
+	private String name;
+	
 	@Column(name = "owner_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
 	private UUID ownerId;
@@ -69,6 +72,14 @@ public class RequestTranslation {
 
 	public void setId(UUID id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public UUID getOwnerId() {
@@ -159,10 +170,11 @@ public class RequestTranslation {
 		this.deletedAt = deletedAt;
 	}
 
-	public RequestTranslation(UUID id, UUID ownerId, UUID objectableId, Translator translator, String objectableType,
-			String desc, Conversation conversation, Language language, Set<RequestStatus> requestStatus,
-			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+	public RequestTranslation(UUID id, String name, UUID ownerId, UUID objectableId, Translator translator,
+			String objectableType, String desc, Conversation conversation, Language language,
+			Set<RequestStatus> requestStatus, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
 		this.id = id;
+		this.name = name;
 		this.ownerId = ownerId;
 		this.objectableId = objectableId;
 		this.translator = translator;

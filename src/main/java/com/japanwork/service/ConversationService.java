@@ -50,14 +50,14 @@ public class ConversationService {
 		CandidateResponse candidateResponse = new CandidateResponse();
 
 		if(conversation.getCandidate() != null) {
-			candidateResponse = candidateService.convertCandiateResponse(conversation.getCandidate());
+			candidateResponse = candidateService.candiateShortResponse(conversation.getCandidate());
 		}
 
 		ConversationResponse conversationResponse = new ConversationResponse(
 				conversation.getId(),
 				companyResponse,
 				candidateResponse,
-				translatorService.convertTranslatorResponse(conversation.getTranslator()));
+				translatorService.translatorShortResponse(conversation.getTranslator()));
 		return conversationResponse;
 	}
 }

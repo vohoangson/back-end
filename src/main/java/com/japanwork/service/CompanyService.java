@@ -158,4 +158,12 @@ public class CompanyService {
 				company.getIntroduction());
 		return companyResponse;
 	}
+	
+	public CompanyResponse companyShortResponse(Company company) {
+		CompanyResponse companyResponse = new CompanyResponse();
+		companyResponse.setId(company.getId());
+		companyResponse.setName(company.getName());
+		companyResponse.setLogo(company.getLogoUrl());
+		return companyResponse;
+	}
 }

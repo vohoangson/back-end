@@ -163,7 +163,7 @@ public class JobService {
 
 			if(pages.size() > 0) {
 				for (Job job : pages) {
-					list.add(convertJobResponse(job));
+					list.add(jobFullResponse(job));
 				}
 			}
 
@@ -274,14 +274,36 @@ public class JobService {
 		}
 	}
 
-	public JobResponse convertJobResponse(Job job) {
+	public JobResponse jobFullResponse(Job job) {
 		JobResponse jobResponse = new JobResponse(
 				job.getId(),
-				companyService.convertCompanyResponse(job.getCompany()), job.getName(), job.getBusinesses().getId(),
-				job.getContract().getId(), job.getLevel().getId(), job.getJapaneseLevelRequirement(),
-				job.getRequiredEducation(), job.getRequiredExperience(), job.getRequiredLanguage(),
-				job.getDesc(), job.getCity().getId(), job.getDistrict().getId(), job.getAddress(),
-				job.getApplicationDeadline(), job.getMinSalary(), job.getMaxSalary(), job.getBenefits(), job.getCreatedAt());
+				companyService.companyShortResponse(job.getCompany()), 
+				job.getName(), 
+				job.getBusinesses().getId(),
+				job.getContract().getId(), 
+				job.getLevel().getId(), 
+				job.getJapaneseLevelRequirement(),
+				job.getRequiredEducation(), 
+				job.getRequiredExperience(), 
+				job.getRequiredLanguage(),
+				job.getDesc(), 
+				job.getCity().getId(), 
+				job.getDistrict().getId(), 
+				job.getAddress(),
+				job.getApplicationDeadline(), 
+				job.getMinSalary(), 
+				job.getMaxSalary(), 
+				job.getBenefits(), 
+				job.getCreatedAt());
+		return jobResponse;
+	}
+	
+	public JobResponse jobShortResponse(Job job) {
+		JobResponse jobResponse = new JobResponse();
+		jobResponse.setId(job.getId());
+		jobResponse.setCompanyResponse(companyService.companyShortResponse(job.getCompany())); 
+		jobResponse.setName(job.getName()); 
+		jobResponse.setCreateDate(job.getCreatedAt());
 		return jobResponse;
 	}
 }

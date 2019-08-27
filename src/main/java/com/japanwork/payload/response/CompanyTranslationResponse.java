@@ -1,8 +1,5 @@
 package com.japanwork.payload.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Set;
 import java.util.UUID;
 
 public class CompanyTranslationResponse {

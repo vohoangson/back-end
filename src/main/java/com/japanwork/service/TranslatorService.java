@@ -108,7 +108,7 @@ public class TranslatorService {
 		}
 	}
 
-	public TranslatorResponse convertTranslatorResponse(Translator translator) {
+	public TranslatorResponse translatorFullResponse(Translator translator) {
 		TranslatorResponse translatorResponse = new TranslatorResponse(
 				translator.getId(),
 				translator.getName(),
@@ -120,6 +120,14 @@ public class TranslatorService {
 				translator.getIntroduction(),
 				translator.getAvatar(),
 				translator.getJapaneseLevel());
+		return translatorResponse;
+	}
+	
+	public TranslatorResponse translatorShortResponse(Translator translator) {
+		TranslatorResponse translatorResponse = new TranslatorResponse();
+		translatorResponse.setId(translator.getId());
+		translatorResponse.setName(translator.getName());
+		translatorResponse.setAvatar(translator.getAvatar());
 		return translatorResponse;
 	}
 }
