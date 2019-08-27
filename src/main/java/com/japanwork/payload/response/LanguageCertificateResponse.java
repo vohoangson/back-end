@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LanguageCertificateResponse {
+	private UUID id;
+	
     private int score;
     
     @JsonProperty("language_certificate_type_id")
@@ -13,6 +15,14 @@ public class LanguageCertificateResponse {
     
     @JsonProperty("taken_date")
     private Date takenDate;
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public int getScore() {
 		return score;
@@ -38,14 +48,13 @@ public class LanguageCertificateResponse {
 		this.takenDate = takenDate;
 	}
 
-	public LanguageCertificateResponse(int score, UUID languageCertificateTypeId, Date takenDate) {
-		super();
+	public LanguageCertificateResponse(UUID id, int score, UUID languageCertificateTypeId, Date takenDate) {
+		this.id = id;
 		this.score = score;
 		this.languageCertificateTypeId = languageCertificateTypeId;
 		this.takenDate = takenDate;
 	}
 
 	public LanguageCertificateResponse() {
-		super();
 	}
 }

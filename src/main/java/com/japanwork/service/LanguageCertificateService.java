@@ -28,6 +28,7 @@ public class LanguageCertificateService {
 			for (LanguageCertificate languageCertificate : languageCertificates) {
 				LanguageCertificateResponse languageCertificateResponse = new LanguageCertificateResponse();
 				
+				languageCertificateResponse.setId(languageCertificate.getId());
 				languageCertificateResponse.setScore(languageCertificate.getScore());
 				languageCertificateResponse.setLanguageCertificateTypeId(languageCertificate.getLanguageCertificateType().getId());
 				languageCertificateResponse.setTakenDate(languageCertificate.getTakenDate());
