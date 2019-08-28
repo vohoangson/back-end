@@ -24,8 +24,11 @@ import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.AuthProvider;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.Country;
 import com.japanwork.model.ForgetPassword;
+import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
 import com.japanwork.payload.request.ChangePasswordRequest;
@@ -33,10 +36,12 @@ import com.japanwork.payload.request.MailForgetPasswordRequest;
 import com.japanwork.payload.request.ResetPasswordRequest;
 import com.japanwork.payload.request.SignUpRequest;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
+import com.japanwork.payload.response.ProfileResponse;
 import com.japanwork.repository.forget_password.ForgetPasswordRepository;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.support.CommonSupport;
 
 @Service
 public class UserService {
@@ -56,6 +61,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CommonSupport commonSupport;
+    
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
     public static final String TOKEN_VALID = "valid";
@@ -151,6 +159,33 @@ public class UserService {
 		return userRepository.findByIdAndDeletedAt(id, null);
 	}
 
+	public ProfileResponse getProfile(User user) {
+		String role = user.getRole();
+    	ProfileResponse profileResponse = new ProfileResponse();
+    	
+    	if(role.equals(CommonConstant.Role.COMPANY)) {
+    		Company company = commonSupport.loadCompanyByUser(user.getId());
+    		profileResponse.setId(company.getId());
+    		profileResponse.setName(company.getName());
+    		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+    		profileResponse.setAvatar(company.getLogoUrl());
+    	} else if(role.equals(CommonConstant.Role.CANDIDATE)) {
+    		Candidate candidate = commonSupport.loadCandidateByUser(user.getId());
+    		profileResponse.setId(candidate.getId());
+    		profileResponse.setName(candidate.getFullName());
+    		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+    		profileResponse.setAvatar(candidate.getAvatar());
+    	} else if(role.equals(CommonConstant.Role.TRANSLATOR)) {
+    		Translator translator = commonSupport.loadTranslatorByUser(user.getId());
+    		profileResponse.setId(translator.getId());
+    		profileResponse.setName(translator.getName());
+    		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+    		profileResponse.setAvatar(translator.getAvatar());
+    	}
+    	
+    	return profileResponse;
+	}
+	
 	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{
 		try {
 			User user = userRepository.findByIdAndDeletedAt(userId, null);
