@@ -2,7 +2,7 @@ package com.japanwork.payload.response;
 
 import java.util.UUID;
 
-public class OwnerResponse {
+public class ProfileResponse {
 	private UUID id;
 	private String name;
 	private String role;
@@ -40,10 +40,13 @@ public class OwnerResponse {
 		this.avatar = avatar;
 	}
 
-	public OwnerResponse(UUID id, String name, String role, String avatar) {
+	public ProfileResponse(UUID id, String name, String role, String avatar) {
 		this.id = id;
 		this.name = name;
 		this.role = role;
 		this.avatar = avatar;
+	}
+
+	public ProfileResponse() {
 	}
 }
