@@ -1,8 +1,4 @@
 package com.japanwork.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Where;
-
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -19,6 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Where;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Where(clause = "deleted_at IS NULL")
@@ -63,7 +64,16 @@ public class User {
     @OneToOne
     @JoinColumn(name = "country_id")
     private Country country;
-
+    
+    @OneToOne(mappedBy = "user")
+    private Candidate candidate;
+    
+    @OneToOne(mappedBy = "user")
+    private Company company;
+    
+    @OneToOne(mappedBy = "user")
+    private Translator translator;
+    
     @JsonIgnore
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -160,6 +170,30 @@ public class User {
 		this.country = country;
 	}
 
+	public Candidate getCandidate() {
+		return candidate;
+	}
+
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public Translator getTranslator() {
+		return translator;
+	}
+
+	public void setTranslator(Translator translator) {
+		this.translator = translator;
+	}
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -186,7 +220,6 @@ public class User {
 
 	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
 			@NotNull AuthProvider provider, String providerId, String role) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -195,6 +228,28 @@ public class User {
 		this.provider = provider;
 		this.providerId = providerId;
 		this.role = role;
+	}
+	
+	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
+			@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Country country,
+			Candidate candidate, Company company, Translator translator, Timestamp createdAt, Timestamp updatedAt,
+			Timestamp deletedAt) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.isEnabled = isEnabled;
+		this.password = password;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.role = role;
+		this.propertyId = propertyId;
+		this.country = country;
+		this.candidate = candidate;
+		this.company = company;
+		this.translator = translator;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
 	}
 
 //	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
@@ -215,25 +270,23 @@ public class User {
 //	}
 
 	public User() {
-		super();
 	}
 
 	public User(UUID id, String name, @Email String email, Boolean isEnabled, String password,
 		@NotNull AuthProvider provider, String providerId, String role, UUID propertyId, Country country,Timestamp createdAt,
 		Timestamp updatedAt, Timestamp deletedAt) {
-	super();
-	this.id = id;
-	this.name = name;
-	this.email = email;
-	this.isEnabled = isEnabled;
-	this.password = password;
-	this.provider = provider;
-	this.providerId = providerId;
-	this.role = role;
-	this.propertyId = propertyId;
-	this.country = country;
-	this.createdAt = createdAt;
-	this.updatedAt = updatedAt;
-	this.deletedAt = deletedAt;
-}
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.isEnabled = isEnabled;
+		this.password = password;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.role = role;
+		this.propertyId = propertyId;
+		this.country = country;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.deletedAt = deletedAt;
+	}
 }

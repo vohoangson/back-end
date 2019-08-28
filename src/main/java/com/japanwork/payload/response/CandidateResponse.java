@@ -34,6 +34,7 @@ public class CandidateResponse {
     
     private String introduction;
     
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("japanese_level")
     private int japaneseLevel;
     
@@ -55,6 +56,7 @@ public class CandidateResponse {
     @JsonProperty("expected_contract_id")
     private UUID expectedContractId;
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("expected_salary")
     private float expectedSalary;
     

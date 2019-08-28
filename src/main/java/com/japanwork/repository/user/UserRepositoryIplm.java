@@ -3,6 +3,7 @@ package com.japanwork.repository.user;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -179,5 +180,11 @@ public class UserRepositoryIplm implements UserRepository{
 	public User findByIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findByIdAndDeletedAt(id, deletedAt);
+	}
+
+	@Override
+	public Set<User> findByIdInAndDeletedAt(Set<UUID> ids, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findByIdInAndDeletedAt(ids, deletedAt);
 	}	
 }

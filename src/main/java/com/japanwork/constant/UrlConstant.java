@@ -10,6 +10,7 @@ public class UrlConstant {
 	public static final String URL_LOGOUT = "/v1/logout";
 	public static final String URL_REGISTER = "/v1/register";
 	public static final String URL_USER = "/v1/user";
+	public static final String URL_PROFILE = "/v1/user/profile";
 	public static final String URL_USER_CHANGE_PASSWORD = "/v1/user/change_password";
 	public static final String URL_USER_FORGET_PASSWORD = "/v1/forget_password";
 	public static final String URL_USER_RESET_PASSWORD = "/v1/reset_password";

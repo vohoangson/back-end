@@ -3,6 +3,7 @@ package com.japanwork.service;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +25,11 @@ import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ServerError;
 import com.japanwork.model.AuthProvider;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
 import com.japanwork.model.Country;
 import com.japanwork.model.ForgetPassword;
+import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.model.VerificationToken;
 import com.japanwork.payload.request.ChangePasswordRequest;
@@ -33,6 +37,7 @@ import com.japanwork.payload.request.MailForgetPasswordRequest;
 import com.japanwork.payload.request.ResetPasswordRequest;
 import com.japanwork.payload.request.SignUpRequest;
 import com.japanwork.payload.response.ConfirmRegistrationTokenResponse;
+import com.japanwork.payload.response.ProfileResponse;
 import com.japanwork.repository.forget_password.ForgetPasswordRepository;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
@@ -55,7 +60,7 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
     public static final String TOKEN_VALID = "valid";
@@ -103,6 +108,7 @@ public class UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
 	        user.setProviderId(null);
+	        
 	        if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
 	        	user.setCountry(new Country(UUID.fromString("3f9b2132-8f15-4eff-8fa8-58fc32f84677")));
 	        } else {
@@ -151,6 +157,39 @@ public class UserService {
 		return userRepository.findByIdAndDeletedAt(id, null);
 	}
 
+	public ProfileResponse getProfile(Set<UUID> ids) {
+		Set<User> users = userRepository.findByIdInAndDeletedAt(ids, null);
+    	ProfileResponse profileResponse = new ProfileResponse();
+    	
+    	for (User user : users) {
+    		String role = user.getRole();
+    		if(user.getCompany() != null) {
+        		Company company = user.getCompany();
+        		profileResponse.setId(company.getId());
+        		profileResponse.setName(company.getName());
+        		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+        		profileResponse.setAvatar(company.getLogoUrl());
+        	}
+    		
+    		if(user.getCandidate() != null) {
+        		Candidate candidate = user.getCandidate();
+        		profileResponse.setId(candidate.getId());
+        		profileResponse.setName(candidate.getFullName());
+        		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+        		profileResponse.setAvatar(candidate.getAvatar());
+        	}
+    		
+    		if(user.getTranslator() != null) {
+        		Translator translator = user.getTranslator();
+        		profileResponse.setId(translator.getId());
+        		profileResponse.setName(translator.getName());
+        		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+        		profileResponse.setAvatar(translator.getAvatar());
+        	}
+		}
+    	return profileResponse;
+	}
+	
 	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{
 		try {
 			User user = userRepository.findByIdAndDeletedAt(userId, null);

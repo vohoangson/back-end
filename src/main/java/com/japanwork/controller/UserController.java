@@ -1,5 +1,8 @@
 package com.japanwork.controller;
 
+import java.util.Set;
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -8,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.japanwork.constant.CommonConstant;
@@ -27,13 +31,13 @@ public class UserController {
     @Autowired
     private CommonSupport commonSupport;
 
+    @Autowired
+    private UserService userService;
+    
     @GetMapping("/user/me")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return commonSupport.loadUserById(userPrincipal.getId());
     }
-
-    @Autowired
-    private UserService userService;
 
     @PostMapping(value = UrlConstant.URL_REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
@@ -51,6 +55,16 @@ public class UserController {
         );
     }
 
+    @GetMapping(value = UrlConstant.URL_PROFILE)
+    public ResponseDataAPI getProfile(@RequestParam(name = "ids") Set<UUID> ids) {
+    
+    	return new ResponseDataAPI(
+    	        CommonConstant.ResponseDataAPIStatus.SUCCESS,
+    	        userService.getProfile(ids),
+                ""
+        );
+    }
+    
     @PostMapping(value = UrlConstant.URL_USER_CHANGE_PASSWORD)
     public ResponseDataAPI changePassword(@CurrentUser UserPrincipal userPrincipal,
     		@Valid @RequestBody ChangePasswordRequest changePasswordRequest){
