@@ -2,6 +2,7 @@ package com.japanwork.repository.user;
 
 import java.sql.Timestamp;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     public Boolean existsByEmail(String email);
     
     public User findByIdAndDeletedAt(UUID id, Timestamp deletedAt);
+    
+    public Set<User> findByIdInAndDeletedAt(Set<UUID> ids, Timestamp deletedAt);
 
 }

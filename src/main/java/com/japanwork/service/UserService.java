@@ -3,6 +3,7 @@ package com.japanwork.service;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,6 @@ import com.japanwork.repository.forget_password.ForgetPasswordRepository;
 import com.japanwork.repository.token.VerificationTokenRepository;
 import com.japanwork.repository.user.UserRepository;
 import com.japanwork.security.UserPrincipal;
-import com.japanwork.support.CommonSupport;
 
 @Service
 public class UserService {
@@ -60,9 +60,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private CommonSupport commonSupport;
     
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
@@ -111,6 +108,7 @@ public class UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
 	        user.setProviderId(null);
+	        
 	        if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
 	        	user.setCountry(new Country(UUID.fromString("3f9b2132-8f15-4eff-8fa8-58fc32f84677")));
 	        } else {
@@ -159,30 +157,36 @@ public class UserService {
 		return userRepository.findByIdAndDeletedAt(id, null);
 	}
 
-	public ProfileResponse getProfile(User user) {
-		String role = user.getRole();
+	public ProfileResponse getProfile(Set<UUID> ids) {
+		Set<User> users = userRepository.findByIdInAndDeletedAt(ids, null);
     	ProfileResponse profileResponse = new ProfileResponse();
     	
-    	if(role.equals(CommonConstant.Role.COMPANY)) {
-    		Company company = commonSupport.loadCompanyByUser(user.getId());
-    		profileResponse.setId(company.getId());
-    		profileResponse.setName(company.getName());
-    		profileResponse.setRole(role.replaceAll("ROLE_", ""));
-    		profileResponse.setAvatar(company.getLogoUrl());
-    	} else if(role.equals(CommonConstant.Role.CANDIDATE)) {
-    		Candidate candidate = commonSupport.loadCandidateByUser(user.getId());
-    		profileResponse.setId(candidate.getId());
-    		profileResponse.setName(candidate.getFullName());
-    		profileResponse.setRole(role.replaceAll("ROLE_", ""));
-    		profileResponse.setAvatar(candidate.getAvatar());
-    	} else if(role.equals(CommonConstant.Role.TRANSLATOR)) {
-    		Translator translator = commonSupport.loadTranslatorByUser(user.getId());
-    		profileResponse.setId(translator.getId());
-    		profileResponse.setName(translator.getName());
-    		profileResponse.setRole(role.replaceAll("ROLE_", ""));
-    		profileResponse.setAvatar(translator.getAvatar());
-    	}
-    	
+    	for (User user : users) {
+    		String role = user.getRole();
+    		if(user.getCompany() != null) {
+        		Company company = user.getCompany();
+        		profileResponse.setId(company.getId());
+        		profileResponse.setName(company.getName());
+        		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+        		profileResponse.setAvatar(company.getLogoUrl());
+        	}
+    		
+    		if(user.getCandidate() != null) {
+        		Candidate candidate = user.getCandidate();
+        		profileResponse.setId(candidate.getId());
+        		profileResponse.setName(candidate.getFullName());
+        		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+        		profileResponse.setAvatar(candidate.getAvatar());
+        	}
+    		
+    		if(user.getTranslator() != null) {
+        		Translator translator = user.getTranslator();
+        		profileResponse.setId(translator.getId());
+        		profileResponse.setName(translator.getName());
+        		profileResponse.setRole(role.replaceAll("ROLE_", ""));
+        		profileResponse.setAvatar(translator.getAvatar());
+        	}
+		}
     	return profileResponse;
 	}
 	
