@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
 
-import com.japanwork.model.*;
-import com.japanwork.payload.response.CompanyTranslationResponse;
-import com.japanwork.support.CommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,10 +15,17 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
+import com.japanwork.model.Business;
+import com.japanwork.model.City;
+import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.District;
+import com.japanwork.model.Language;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.support.CommonSupport;
 
 @Service
 public class CompanyService {
@@ -34,14 +38,6 @@ public class CompanyService {
 	@Autowired
 	private UserService userService;
 
-    public Page<Company> index(int page, int paging) throws ResourceNotFoundException {
-        try {
-            Page<Company> pages = companyRepository.findAllByDeletedAt(PageRequest.of(page-1, paging), null);
-            return pages;
-        } catch (IllegalArgumentException e) {
-            throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
-        }
-    }
 
     public CompanyResponse show(UUID id, Language language) throws ResourceNotFoundException {
         Company company                       = commonSupport.loadCompanyById(id);
@@ -62,30 +58,6 @@ public class CompanyService {
         return companyResponse;
     }
 
-	public Company create(CompanyRequest companyRequest, UserPrincipal userPrincipal) throws ServerError {
-		try {
-			Company company = new Company();
-			company.setUser(userService.findById(userPrincipal.getId()));
-			company.setName(companyRequest.getName());
-			company.setScale(companyRequest.getScale());
-			company.setBusinesses(Business.listBusiness(companyRequest.getBusinessIds()));
-			company.setCity(new City(companyRequest.getCityId()));
-			company.setDistrict(new District(companyRequest.getDistrictId()));
-			company.setAddress(companyRequest.getAddress());
-			company.setCoverImageUrl(companyRequest.getCoverImage());
-			company.setLogoUrl(companyRequest.getLogo());
-			company.setIntroduction(companyRequest.getIntroduction());
-			company.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
-			company.setCreatedAt(CommonFunction.getCurrentDateTime());
-			company.setUpdatedAt(CommonFunction.getCurrentDateTime());
-
-			Company result = companyRepository.save(company);
-			userService.changePropertyId(userPrincipal.getId(), result.getId());
-			return result;
-		} catch (Exception e) {
-			throw new ServerError(MessageConstant.COMPANY_CREATE_FAIL);
-		}
-	}
 
 	public Company update(CompanyRequest companyRequest, Company company, UserPrincipal userPrincipal)
 			throws ForbiddenException, ServerError {

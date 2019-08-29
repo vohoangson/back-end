@@ -24,13 +24,17 @@ import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
+import com.japanwork.model.City;
 import com.japanwork.model.Company;
+import com.japanwork.model.District;
 import com.japanwork.model.PageInfo;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CompanyService;
+import com.japanwork.service.company.CreateService;
 import com.japanwork.service.company.IndexService;
 import com.japanwork.support.CommonSupport;
 
@@ -45,60 +49,59 @@ public class CompanyController {
     @Autowired
 	private IndexService indexService;
     
+    @Autowired
+	private CreateService createService;
+    
     @GetMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
 	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(name = "language") String languageCode) {
-        CompanyResponse companyResponse = new CompanyResponse();
-
-        Page<Company> pages = indexService.index(page, paging);
-        PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-        List<CompanyResponse> list = new ArrayList<CompanyResponse>();
-
-        if(pages.getContent().size() > 0) {
-			for (Company company : pages.getContent()) {
-				list.add( companyResponse.companyFullSerializer(company));
-			}
-		}
-
-		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				list,
-				pageInfo
-        );
+    	Language language = commonSupport.loadLanguage(languageCode);
+		return indexService.perform(page, paging, language);
 	}
 
-	@GetMapping(UrlConstant.URL_COMPANY_IDS)
+//	@GetMapping(UrlConstant.URL_COMPANY_IDS)
+//	@ResponseBody
+//	public ResponseDataAPI listCompanyByIds(@RequestParam(defaultValue = "1", name = "page") int page,
+//			@RequestParam(defaultValue = "25", name = "paging") int paging,
+//			@RequestParam(name = "ids") Set<UUID> ids) {
+//        CompanyResponse companyResponse = new CompanyResponse();
+//
+//		Page<Company> pages = companyService.companiesByIds(ids, page, paging);
+//		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+//		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
+//
+//		if(pages.getContent().size() > 0) {
+//			for (Company company : pages.getContent()) {
+//				list.add(companyResponse.companyFullSerializer(company));
+//			}
+//		}
+//
+//		return new ResponseDataAPI(
+//				CommonConstant.ResponseDataAPIStatus.SUCCESS,
+//				list,
+//				pageInfo
+//        );
+//	}
+
+    @PostMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
-	public ResponseDataAPI listCompanyByIds(@RequestParam(defaultValue = "1", name = "page") int page,
-			@RequestParam(defaultValue = "25", name = "paging") int paging,
-			@RequestParam(name = "ids") Set<UUID> ids) {
-        CompanyResponse companyResponse = new CompanyResponse();
-
-		Page<Company> pages = companyService.companiesByIds(ids, page, paging);
-		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
-
-		if(pages.getContent().size() > 0) {
-			for (Company company : pages.getContent()) {
-				list.add(companyResponse.companyFullSerializer(company));
-			}
-		}
-
+	public ResponseDataAPI create(@Valid @RequestBody CompanyRequest companyRequest, @CurrentUser UserPrincipal userPrincipal ) {
+    	User user = commonSupport.loadUserById(userPrincipal.getId());
+    	City city = commonSupport.loadCity(companyRequest.getCityId());
+    	District district = commonSupport.loadDistrict(companyRequest.getDistrictId());
+    	
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				list,
-				pageInfo
+				createService.perform(companyRequest, user, city, district),
+				""
         );
 	}
-
+    
 	@GetMapping(UrlConstant.URL_COMPANY)
     @ResponseBody
-    public ResponseDataAPI show(
-            @PathVariable UUID id,
-            @RequestParam UUID language_id
-    ) throws BadRequestException {
+    public ResponseDataAPI show( @PathVariable UUID id, @RequestParam UUID language_id ) {
         Language language = commonSupport.loadLanguageById(language_id);
 
         CompanyResponse companyResponse = companyService.show(id, language);
@@ -108,34 +111,6 @@ public class CompanyController {
                 ""
         );
     }
-
-	@PostMapping(UrlConstant.URL_COMPANIES)
-	@ResponseBody
-	public ResponseDataAPI create(
-	        @Valid @RequestBody CompanyRequest companyRequest,
-			@CurrentUser UserPrincipal userPrincipal
-    ) throws BadRequestException
-    {
-        CompanyResponse companyResponse = new CompanyResponse();
-
-		Company company = companyService.create(companyRequest, userPrincipal);
-		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-                companyResponse.companyFullSerializer(company),
-				""
-        );
-	}
-
-//	@GetMapping(UrlConstant.URL_COMPANY)
-//	@ResponseBody
-//	public ResponseDataAPI show(@PathVariable UUID id){
-//		Company company = commonSupport.loadCompanyById(id);
-//		return new ResponseDataAPI(
-//				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-//				companyService.companyFullSerializer(company),
-//				""
-//        );
-//	}
 
 	@GetMapping(UrlConstant.URL_MY_COMPANY)
 	@ResponseBody
