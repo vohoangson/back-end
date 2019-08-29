@@ -45,13 +45,15 @@ public class CompanyController {
 	@ResponseBody
 	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging) {
-		Page<Company> pages = companyService.index(page, paging);
-		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-		List<CompanyResponse> list = new ArrayList<CompanyResponse>();
+        CompanyResponse companyResponse = new CompanyResponse();
 
-		if(pages.getContent().size() > 0) {
+        Page<Company> pages = companyService.index(page, paging);
+        PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
+        List<CompanyResponse> list = new ArrayList<CompanyResponse>();
+
+        if(pages.getContent().size() > 0) {
 			for (Company company : pages.getContent()) {
-				list.add(companyService.convertCompanyResponse(company));
+				list.add( companyResponse.companyFullSerializer(company));
 			}
 		}
 
@@ -67,6 +69,7 @@ public class CompanyController {
 	public ResponseDataAPI listCompanyByIds(@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(name = "ids") Set<UUID> ids) {
+        CompanyResponse companyResponse = new CompanyResponse();
 
 		Page<Company> pages = companyService.companiesByIds(ids, page, paging);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
@@ -74,7 +77,7 @@ public class CompanyController {
 
 		if(pages.getContent().size() > 0) {
 			for (Company company : pages.getContent()) {
-				list.add(companyService.convertCompanyResponse(company));
+				list.add(companyResponse.companyFullSerializer(company));
 			}
 		}
 
@@ -103,12 +106,17 @@ public class CompanyController {
 
 	@PostMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
-	public ResponseDataAPI create(@Valid @RequestBody CompanyRequest companyRequest,
-			@CurrentUser UserPrincipal userPrincipal) throws BadRequestException{
+	public ResponseDataAPI create(
+	        @Valid @RequestBody CompanyRequest companyRequest,
+			@CurrentUser UserPrincipal userPrincipal
+    ) throws BadRequestException
+    {
+        CompanyResponse companyResponse = new CompanyResponse();
+
 		Company company = companyService.create(companyRequest, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-                companyService.convertCompanyResponse(company),
+                companyResponse.companyFullSerializer(company),
 				""
         );
 	}
@@ -119,7 +127,7 @@ public class CompanyController {
 //		Company company = commonSupport.loadCompanyById(id);
 //		return new ResponseDataAPI(
 //				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-//				companyService.convertCompanyResponse(company),
+//				companyService.companyFullSerializer(company),
 //				""
 //        );
 //	}
@@ -127,23 +135,30 @@ public class CompanyController {
 	@GetMapping(UrlConstant.URL_MY_COMPANY)
 	@ResponseBody
 	public ResponseDataAPI myCompany(@CurrentUser UserPrincipal userPrincipal){
+        CompanyResponse companyResponse = new CompanyResponse();
+
 		Company company =  commonSupport.loadCompanyByUser(userPrincipal.getId());
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				companyService.convertCompanyResponse(company),
+                companyResponse.companyFullSerializer(company),
 				""
         );
 	}
 
 	@PatchMapping(UrlConstant.URL_COMPANY)
 	@ResponseBody
-	public ResponseDataAPI update(@Valid @RequestBody CompanyRequest companyRequest, @PathVariable UUID id,
-			@CurrentUser UserPrincipal userPrincipal){
+	public ResponseDataAPI update(
+	        @Valid @RequestBody CompanyRequest companyRequest,
+            @PathVariable UUID id,
+			@CurrentUser UserPrincipal userPrincipal
+    ){
+        CompanyResponse companyResponse = new CompanyResponse();
+
 		Company company = commonSupport.loadCompanyById(id);
 		company = companyService.update(companyRequest, company, userPrincipal);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				companyService.convertCompanyResponse(company),
+                companyResponse.companyFullSerializer(company),
 				""
         );
 	}
@@ -162,10 +177,12 @@ public class CompanyController {
 	@PatchMapping(UrlConstant.URL_COMPANY_UNDELETE)
 	@ResponseBody
 	public ResponseDataAPI unDel(@PathVariable UUID id) {
+        CompanyResponse companyResponse = new CompanyResponse();
+
 		Company company =  companyService.isDel(id, null);
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				companyService.convertCompanyResponse(company),
+                companyResponse.companyFullSerializer(company),
 				""
         );
 	}

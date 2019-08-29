@@ -44,7 +44,7 @@ public class ConversationService {
 	public ConversationResponse convertConversationResponse(Conversation conversation) {
 		CompanyResponse companyResponse = new CompanyResponse();
 		if(conversation.getCompany() != null) {
-			companyResponse = companyService.convertCompanyResponse(conversation.getCompany());
+			companyResponse = new CompanyResponse().companyFullSerializer(conversation.getCompany());
 		}
 
 		CandidateResponse candidateResponse = new CandidateResponse();
