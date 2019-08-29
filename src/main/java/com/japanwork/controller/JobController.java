@@ -4,12 +4,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ForbiddenException;
-import com.japanwork.model.*;
-import com.japanwork.payload.request.JobFilterRequest;
-import com.japanwork.repository.job.JobRepository;
-import com.japanwork.service.job_service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,29 +17,47 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
+import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.exception.ForbiddenException;
+import com.japanwork.model.Business;
+import com.japanwork.model.City;
+import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.Contract;
+import com.japanwork.model.District;
+import com.japanwork.model.Job;
+import com.japanwork.model.Language;
+import com.japanwork.model.Level;
+import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.JobResponse;
+import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.service.job_service.CreateJobService;
+import com.japanwork.service.job_service.IndexJobByCompanyService;
+import com.japanwork.service.job_service.IndexJobService;
+import com.japanwork.service.job_service.ShowService;
+import com.japanwork.service.job_service.UpdateJobService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
 public class JobController {
     @Autowired(required = false)
-    private IndexService indexService;
+    private IndexJobService indexJobService;
 
     @Autowired(required = false)
     private ShowService showService;
 
     @Autowired(required = false)
-    private CreateService createService;
+    private CreateJobService createJobService;
 
     @Autowired(required = false)
-    private UpdateService updateService;
+    private UpdateJobService updateJobService;
 
     @Autowired(required = false)
-    private IndexByCompanyService indexByCompanyService;
+    private IndexJobByCompanyService indexJobByCompanyService;
 
     @Autowired(required = false)
     private JobRepository jobRepository;
@@ -79,7 +91,7 @@ public class JobController {
 		jobFilterRequest.setMinSalary(minSalary);
 		jobFilterRequest.setPostTime(postTime);
 
-		ResponseDataAPI response = indexService.perform(jobFilterRequest, page, paging, language);
+		ResponseDataAPI response = indexJobService.perform(jobFilterRequest, page, paging, language);
 		return response;
 	}
 
@@ -91,7 +103,9 @@ public class JobController {
             @RequestParam(defaultValue = "1", name = "page") int page,
             @RequestParam(defaultValue = "25", name = "paging") int paging) {
         Language language = commonSupport.loadLanguage(languageCode);
-        ResponseDataAPI response = indexByCompanyService.perform(page, paging, id, language);
+        Company company = commonSupport.loadCompanyById(id);
+        CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
+        ResponseDataAPI response = indexJobByCompanyService.perform(page, paging, company, companyTranslation, language);
 
         return response;
     }
@@ -109,7 +123,7 @@ public class JobController {
         City city         = commonSupport.loadCity(jobRequest.getCityId());
         District district = commonSupport.loadDistrict(jobRequest.getDistrictId());
 
-        Job job = createService.perform(
+        Job job = createJobService.perform(
                 jobRequest,
                 company,
                 business,
@@ -163,7 +177,7 @@ public class JobController {
         City city         = commonSupport.loadCity(jobRequest.getCityId());
         District district = commonSupport.loadDistrict(jobRequest.getDistrictId());
 
-        Job result = updateService.perform(
+        Job result = updateJobService.perform(
                 jobRequest,
                 job,
                 business,

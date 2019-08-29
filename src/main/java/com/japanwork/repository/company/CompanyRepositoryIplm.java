@@ -173,11 +173,6 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	}
 
 	@Override
-	public List<Company> findAllByDeletedAt(Timestamp deletedAt) {
-		return findAllByDeletedAt(deletedAt);
-	}
-
-	@Override
 	public Company findByUserIdAndDeletedAt(UUID id, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findByUserIdAndDeletedAt(id, deletedAt);
@@ -193,11 +188,5 @@ public class CompanyRepositoryIplm implements CompanyRepository{
 	public Company findByUser(User user) {
 		// TODO Auto-generated method stub
 		return findByUser(user);
-	}
-
-	@Override
-	public Page<Company> findAllByIdInAndDeletedAt(Pageable page, Iterable<UUID> ids, Timestamp deletedAt) {
-		// TODO Auto-generated method stub
-		return findAllByIdInAndDeletedAt(page, ids, deletedAt);
 	}
 }

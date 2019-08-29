@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.japanwork.model.Language;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import com.japanwork.model.CompanyTranslation;
 import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.Language;
 
 public class CompanyTranslationRepositoryIpml implements CompanyTranslationRepository{
 
@@ -175,5 +175,11 @@ public class CompanyTranslationRepositoryIpml implements CompanyTranslationRepos
     public CompanyTranslation findByCompanyAndLanguageAndDeletedAt(Company company, Language language, Timestamp deletedAt) {
         return findByCompanyAndLanguageAndDeletedAt(company, language, deletedAt);
     }
+
+	@Override
+	public Page<CompanyTranslation> findAllByLanguageAndDeletedAt(Pageable page, Language language, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByLanguageAndDeletedAt(page,language, deletedAt);
+	}
 
 }
