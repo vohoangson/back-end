@@ -2,6 +2,8 @@ package com.japanwork.model;
 
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -25,10 +27,13 @@ public class Country {
     @Where(clause = "deleted_at IS NULL")
     private Language language;
 
+    @JsonIgnore
     private Timestamp createdAt;
-
+    
+    @JsonIgnore
     private Timestamp updatedAt;
-
+    
+    @JsonIgnore
     private Timestamp deletedAt;
 
     public UUID getId() {

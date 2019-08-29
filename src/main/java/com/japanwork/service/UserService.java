@@ -108,13 +108,7 @@ public class UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 	        user.setRole("ROLE_"+signUpRequest.getRole());
 	        user.setProviderId(null);
-	        
-	        if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-	        	user.setCountry(new Country(UUID.fromString("3f9b2132-8f15-4eff-8fa8-58fc32f84677")));
-	        } else {
-	        	user.setCountry(new Country(UUID.fromString("e3d9ee07-553e-4a5a-826d-f9177d24e60e")));
-	        }
-
+	        user.setCountry(new Country(signUpRequest.getCountryId()));
 	        user.setCreatedAt(CommonFunction.getCurrentDateTime());
 	        user.setUpdatedAt(null);
 	        user.setDeletedAt(null);
