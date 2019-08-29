@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.japanwork.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,15 +21,6 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.model.Business;
-import com.japanwork.model.City;
-import com.japanwork.model.Company;
-import com.japanwork.model.CompanyTranslation;
-import com.japanwork.model.Contract;
-import com.japanwork.model.District;
-import com.japanwork.model.Job;
-import com.japanwork.model.Language;
-import com.japanwork.model.Level;
 import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.JobResponse;
@@ -38,7 +30,6 @@ import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.job_service.CreateJobService;
 import com.japanwork.service.job_service.IndexJobByCompanyService;
 import com.japanwork.service.job_service.IndexJobService;
-import com.japanwork.service.job_service.ShowService;
 import com.japanwork.service.job_service.UpdateJobService;
 import com.japanwork.support.CommonSupport;
 
@@ -46,9 +37,6 @@ import com.japanwork.support.CommonSupport;
 public class JobController {
     @Autowired(required = false)
     private IndexJobService indexJobService;
-
-    @Autowired(required = false)
-    private ShowService showService;
 
     @Autowired(required = false)
     private CreateJobService createJobService;
@@ -146,14 +134,15 @@ public class JobController {
     public ResponseDataAPI show(
             @PathVariable UUID id,
             @RequestParam(name = "language") String languageCode) {
-        Language language = commonSupport.loadLanguage(languageCode);
-        Job job           = commonSupport.loadJobById(id);
+        Job job                       = commonSupport.loadJobById(id);
+        Language language             = commonSupport.loadLanguage(languageCode);
+        JobTranslation jobTranslation = commonSupport.loadJobTranslation(job, language);
 
-        JobResponse jobResponse = showService.perform(job, language);
+        JobResponse jobResponse = new JobResponse();
 
         return new ResponseDataAPI(
                 CommonConstant.ResponseDataAPIStatus.SUCCESS,
-                jobResponse,
+                jobResponse.jobFullSerializer(job, jobTranslation),
                 ""
         );
     }
