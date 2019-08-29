@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.japanwork.model.*;
+import com.japanwork.payload.response.CompanyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,16 +91,11 @@ public class JobController {
             @RequestParam(name = "language") String languageCode,
             @RequestParam(defaultValue = "1", name = "page") int page,
             @RequestParam(defaultValue = "25", name = "paging") int paging) {
-<<<<<<< HEAD
+
         Language language = commonSupport.loadLanguage(languageCode);
         Company company = commonSupport.loadCompanyById(id);
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
         ResponseDataAPI response = indexJobByCompanyService.perform(page, paging, company, companyTranslation, language);
-=======
-
-	    Language language = commonSupport.loadLanguage(languageCode);
-        ResponseDataAPI response = indexByCompanyService.perform(page, paging, id, language);
->>>>>>> Finished apply update job translation
 
         return response;
     }
@@ -140,15 +136,18 @@ public class JobController {
     public ResponseDataAPI show(
             @PathVariable UUID id,
             @RequestParam(name = "language") String languageCode) {
-        Job job                       = commonSupport.loadJobById(id);
-        Language language             = commonSupport.loadLanguage(languageCode);
-        JobTranslation jobTranslation = commonSupport.loadJobTranslation(job, language);
+        Job job                               = commonSupport.loadJobById(id);
+        Company company                       = job.getCompany();
+        Language language                     = commonSupport.loadLanguage(languageCode);
+        JobTranslation jobTranslation         = commonSupport.loadJobTranslation(job, language);
+        CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
 
-        JobResponse jobResponse = new JobResponse();
+        CompanyResponse companyResponse = new CompanyResponse().companyMainSerializer(company, companyTranslation);
+        JobResponse jobResponse         = new JobResponse().jobFullSerializer(job, jobTranslation, companyResponse);
 
         return new ResponseDataAPI(
                 CommonConstant.ResponseDataAPIStatus.SUCCESS,
-                jobResponse.jobFullSerializer(job, jobTranslation),
+                jobResponse,
                 ""
         );
     }
