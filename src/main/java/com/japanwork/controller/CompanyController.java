@@ -31,6 +31,7 @@ import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CompanyService;
+import com.japanwork.service.company.IndexService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
@@ -41,13 +42,17 @@ public class CompanyController {
     @Autowired
     private CommonSupport commonSupport;
 
+    @Autowired
+	private IndexService indexService;
+    
     @GetMapping(UrlConstant.URL_COMPANIES)
 	@ResponseBody
 	public ResponseDataAPI index(@RequestParam(defaultValue = "1", name = "page") int page,
-			@RequestParam(defaultValue = "25", name = "paging") int paging) {
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(name = "language") String languageCode) {
         CompanyResponse companyResponse = new CompanyResponse();
 
-        Page<Company> pages = companyService.index(page, paging);
+        Page<Company> pages = indexService.index(page, paging);
         PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
         List<CompanyResponse> list = new ArrayList<CompanyResponse>();
 

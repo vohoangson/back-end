@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.japanwork.model.Business;
 import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompanyResponse {
@@ -154,25 +155,25 @@ public class CompanyResponse {
     public CompanyResponse() {
     }
 
-    public CompanyResponse companyFullSerializer(Company company) {
+    public CompanyResponse companyFullSerializer(Company company, CompanyTranslation companyTranslation) {
         CompanyResponse companyResponse = new CompanyResponse(
                 company.getId(),
-                company.getName(),
+                companyTranslation.getName(),
                 company.getScale(),
                 Business.listBusinessID(company.getBusinesses()),
                 company.getCity().getId(),
                 company.getDistrict().getId(),
-                company.getAddress(),
+                companyTranslation.getAddress(),
                 company.getLogoUrl(),
                 company.getCoverImageUrl(),
-                company.getIntroduction());
+                companyTranslation.getIntroduction());
         return companyResponse;
     }
 
-    public CompanyResponse companyMainSerializer(Company company) {
+    public CompanyResponse companyMainSerializer(Company company, CompanyTranslation companyTranslation) {
         CompanyResponse companyResponse = new CompanyResponse();
         companyResponse.setId(company.getId());
-        companyResponse.setName(company.getName());
+        companyResponse.setName(companyTranslation.getName());
         companyResponse.setLogo(company.getLogoUrl());
         return companyResponse;
     }

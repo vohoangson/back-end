@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.japanwork.model.*;
-import com.japanwork.payload.response.JobResponse;
-import com.japanwork.repository.job.JobRepository;
-import com.japanwork.repository.job_translation.JobTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +15,22 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.controller.ResponseDataAPI;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.Company;
+import com.japanwork.model.Conversation;
+import com.japanwork.model.Job;
+import com.japanwork.model.JobApplication;
+import com.japanwork.model.JobApplicationStatus;
+import com.japanwork.model.PageInfo;
+import com.japanwork.model.Translator;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelJobApplicationRequest;
 import com.japanwork.payload.request.RejectJobApplicationRequest;
 import com.japanwork.payload.response.JobApplicationResponse;
+import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
 import com.japanwork.repository.job_application_status.JobApplicationStatusRepository;
+import com.japanwork.repository.job_translation.JobTranslationRepository;
 
 @Service
 public class JobApplicationService {

@@ -4,12 +4,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.japanwork.constant.MessageConstant;
-import com.japanwork.exception.ForbiddenException;
-import com.japanwork.model.*;
-import com.japanwork.payload.request.JobFilterRequest;
-import com.japanwork.repository.job.JobRepository;
-import com.japanwork.service.job_service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +17,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
+import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
+import com.japanwork.exception.ForbiddenException;
+import com.japanwork.model.Business;
+import com.japanwork.model.City;
+import com.japanwork.model.Company;
+import com.japanwork.model.Contract;
+import com.japanwork.model.District;
+import com.japanwork.model.Job;
+import com.japanwork.model.Language;
+import com.japanwork.model.Level;
+import com.japanwork.payload.request.JobFilterRequest;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.payload.response.JobResponse;
+import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.service.job_service.CreateService;
+import com.japanwork.service.job_service.IndexByCompanyService;
+import com.japanwork.service.job_service.IndexService;
+import com.japanwork.service.job_service.ShowService;
+import com.japanwork.service.job_service.UpdateService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
