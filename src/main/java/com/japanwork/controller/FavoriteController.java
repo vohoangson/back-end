@@ -75,7 +75,7 @@ public class FavoriteController {
 		List<Job> list = favoriteService.index(userPrincipal);
 		List<JobResponse> listJobResponses = new ArrayList<JobResponse>();
 		for (Job job : list) {
-			listJobResponses.add(new JobResponse().jobMainSerializer(job, null));
+			listJobResponses.add(new JobResponse().jobMainSerializer(job, null,null));
 		}
 		return new ResponseDataAPI(
 		        CommonConstant.ResponseDataAPIStatus.SUCCESS,

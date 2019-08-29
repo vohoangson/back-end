@@ -24,9 +24,6 @@ public class ConversationService {
 	private TranslatorService translatorService;
 
 	@Autowired
-	private CompanyService companyService;
-
-	@Autowired
 	private CandidateService candidateService;
 
 	@Transactional
@@ -41,23 +38,23 @@ public class ConversationService {
 		return result;
 	}
 
-	public ConversationResponse convertConversationResponse(Conversation conversation) {
-		CompanyResponse companyResponse = new CompanyResponse();
-		if(conversation.getCompany() != null) {
-			companyResponse = new CompanyResponse().companyFullSerializer(conversation.getCompany());
-		}
-
-		CandidateResponse candidateResponse = new CandidateResponse();
-
-		if(conversation.getCandidate() != null) {
-			candidateResponse = candidateService.candiateShortResponse(conversation.getCandidate());
-		}
-
-		ConversationResponse conversationResponse = new ConversationResponse(
-				conversation.getId(),
-				companyResponse,
-				candidateResponse,
-				translatorService.translatorShortResponse(conversation.getTranslator()));
-		return conversationResponse;
-	}
+//	public ConversationResponse convertConversationResponse(Conversation conversation) {
+//		CompanyResponse companyResponse = new CompanyResponse();
+//		if(conversation.getCompany() != null) {
+//			companyResponse = new CompanyResponse().companyFullSerializer(conversation.getCompany());
+//		}
+//
+//		CandidateResponse candidateResponse = new CandidateResponse();
+//
+//		if(conversation.getCandidate() != null) {
+//			candidateResponse = candidateService.candiateShortResponse(conversation.getCandidate());
+//		}
+//
+//		ConversationResponse conversationResponse = new ConversationResponse(
+//				conversation.getId(),
+//				companyResponse,
+//				candidateResponse,
+//				translatorService.translatorShortResponse(conversation.getTranslator()));
+//		return conversationResponse;
+//	}
 }

@@ -30,7 +30,6 @@ import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
 import com.japanwork.repository.job_application_status.JobApplicationStatusRepository;
-import com.japanwork.repository.job_translation.JobTranslationRepository;
 
 @Service
 public class JobApplicationService {
@@ -57,9 +56,6 @@ public class JobApplicationService {
 
 	@Autowired
 	private NotificationService notificationService;
-
-	@Autowired
-    private JobTranslationRepository jobTranslationRepository;
 
 	public JobApplicationResponse create(Job job, Candidate candidate) {
 		this.checkCandidateApplyJob( job, candidate);
@@ -408,7 +404,7 @@ public class JobApplicationService {
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
-		ob.setJob(new JobResponse().jobSerializer(jobApplication.getJob()));
+		ob.setJob(new JobResponse().jobMainSerializer(jobApplication.getJob(), null, null));
 		ob.setCandidate(candidateService.candiateShortResponse(jobApplication.getCandidate()));
 		if(jobApplication.getTranslator() != null) {
 			ob.setTranslator(translatorService.translatorShortResponse(jobApplication.getTranslator()));

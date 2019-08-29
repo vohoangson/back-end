@@ -1,5 +1,6 @@
 package com.japanwork.repository.job_translation;
 
+import com.japanwork.model.Company;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobTranslation;
 import com.japanwork.model.Language;
@@ -140,4 +141,11 @@ public class JobTranslationRepositoryImplement implements JobTranslationReposito
     public JobTranslation findByJobAndLanguageAndDeletedAt(Job job, Language language, Timestamp deletedAt) {
         return findByJobAndLanguageAndDeletedAt(job, language, deletedAt);
     }
+
+	@Override
+	public Page<JobTranslation> findAllByJobCompanyAndLanguageAndDeletedAt(Pageable page, Company company,
+			Language language, Timestamp deletedAt) {
+		// TODO Auto-generated method stub
+		return findAllByJobCompanyAndLanguageAndDeletedAt(page, company, language, deletedAt);
+	}
 }

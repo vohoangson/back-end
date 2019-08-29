@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.japanwork.model.Company;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobTranslation;
 
@@ -248,11 +247,10 @@ public class JobResponse {
 	public JobResponse() {
     }
 
-    public JobResponse jobFullSerializer(Job job, JobTranslation jobTranslation) {
-	    CompanyResponse companyResponse = new CompanyResponse();
+    public JobResponse jobFullSerializer(Job job, JobTranslation jobTranslation, CompanyResponse companyResponse) {
         JobResponse jobResponse         = new JobResponse(
                 job.getId(),
-                companyResponse.companyMainSerializer(job.getCompany()),
+                companyResponse,
                 jobTranslation.getName(),
                 job.getBusinesses().getId(),
                 job.getContract().getId(),
@@ -273,22 +271,11 @@ public class JobResponse {
         return jobResponse;
     }
 
-    public JobResponse jobMainSerializer(Job job, JobTranslation jobTranslation) {
-        CompanyResponse companyResponse = new CompanyResponse();
+    public JobResponse jobMainSerializer(Job job, JobTranslation jobTranslation, CompanyResponse companyResponse) {
         JobResponse jobResponse         = new JobResponse();
         jobResponse.setId(job.getId());
-        jobResponse.setCompanyResponse(companyResponse.companyMainSerializer(job.getCompany()));
+        jobResponse.setCompanyResponse(companyResponse);
         jobResponse.setName(jobTranslation.getName());
-        jobResponse.setCreateDate(job.getCreatedAt());
-        return jobResponse;
-    }
-
-    public JobResponse jobSerializer(Job job) {
-        CompanyResponse companyResponse = new CompanyResponse();
-        JobResponse jobResponse         = new JobResponse();
-        jobResponse.setId(job.getId());
-        jobResponse.setCompanyResponse(companyResponse.companyMainSerializer(job.getCompany()));
-//        jobResponse.setName(jobTranslation.getName());
         jobResponse.setCreateDate(job.getCreatedAt());
         return jobResponse;
     }

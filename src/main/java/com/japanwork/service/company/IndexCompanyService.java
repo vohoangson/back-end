@@ -19,7 +19,7 @@ import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
 
 @Service
-public class IndexService {
+public class IndexCompanyService {
 	@Autowired
 	private CompanyTranslationRepository companyTranslationRepository;
 	

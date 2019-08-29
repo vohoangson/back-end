@@ -1,33 +1,38 @@
 package com.japanwork.service.job_service;
 
-import com.japanwork.constant.CommonConstant;
-import com.japanwork.constant.MessageConstant;
-import com.japanwork.controller.ResponseDataAPI;
-import com.japanwork.exception.ResourceNotFoundException;
-import com.japanwork.model.Job;
-import com.japanwork.model.Language;
-import com.japanwork.model.PageInfo;
-import com.japanwork.payload.request.JobFilterRequest;
-import com.japanwork.payload.response.JobResponse;
-import com.japanwork.repository.job_translation.JobTranslationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.japanwork.constant.CommonConstant;
+import com.japanwork.constant.MessageConstant;
+import com.japanwork.controller.ResponseDataAPI;
+import com.japanwork.exception.ResourceNotFoundException;
+import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.JobTranslation;
+import com.japanwork.model.Language;
+import com.japanwork.model.PageInfo;
+import com.japanwork.payload.request.JobFilterRequest;
+import com.japanwork.payload.response.CompanyResponse;
+import com.japanwork.payload.response.JobResponse;
+import com.japanwork.support.CommonSupport;
+
 @Service
-public class IndexService {
+public class IndexJobService {
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    private JobTranslationRepository jobTranslationRepository;
-
+    private CommonSupport commonSupport;
+    
     public ResponseDataAPI perform(
             JobFilterRequest jobFilterRequest,
             int page,
@@ -37,9 +42,15 @@ public class IndexService {
     {
         try {
             StringBuilder sql = new StringBuilder();
-            sql.append("SELECT DISTINCT j ");
-            sql.append("    FROM Job j ");
+            sql.append("SELECT DISTINCT jt ");
+            sql.append("    FROM JobTranslation jt ");
+            sql.append("	INNER JOIN  jt.language la ");
+            sql.append("		ON la.id = '" + language.getId() + "'" );
+            sql.append("	INNER JOIN  jt.job j ");
             sql.append("	INNER JOIN  j.company c ");
+            sql.append("	INNER JOIN  CompanyTranslation ct ");
+            sql.append("		ON  c.id = ct.company.id ");
+            sql.append("		AND ct.language.id = '" + language.getId() + "'");
             sql.append("	INNER JOIN j.businesses b ");
             sql.append("	INNER JOIN j.contract con ");
             sql.append("	INNER JOIN j.level lev ");
@@ -49,11 +60,11 @@ public class IndexService {
             if(jobFilterRequest != null) {
                 if(!jobFilterRequest.getJobName().isEmpty()) {
                     sql.append(" AND ");
-                    sql.append(" j.name LIKE '%" + jobFilterRequest.getJobName() + "%' ");
+                    sql.append(" jt.name LIKE '%" + jobFilterRequest.getJobName() + "%' ");
                 }
                 if(!jobFilterRequest.getCompanyName().isEmpty()) {
                     sql.append(" AND ");
-                    sql.append("c.name LIKE '%" + jobFilterRequest.getCompanyName() + "%' ");
+                    sql.append("ct.name LIKE '%" + jobFilterRequest.getCompanyName() + "%' ");
                 }
                 if(jobFilterRequest.getBusinessIds() != null) {
                     sql.append(" AND ");
@@ -122,18 +133,18 @@ public class IndexService {
                 if(!jobFilterRequest.getPostTime().isEmpty()) {
                     sql.append(" AND ");
                     try {
-                        sql.append(" j.createdAt >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
+                        sql.append(" jt.createdAt >= '" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(jobFilterRequest.getPostTime()) + "'");
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
-                sql.append(" ORDER BY j.createdAt ASC ");
+                sql.append(" ORDER BY jt.createdAt ASC ");
             }
 
-            List<Job> pages = (List<Job>)entityManager.createQuery(sql.toString(), Job.class).setFirstResult((page-1)*paging)
+            List<JobTranslation> pages = (List<JobTranslation>)entityManager.createQuery(sql.toString(), JobTranslation.class).setFirstResult((page-1)*paging)
                     .setMaxResults(paging).getResultList();
 
-            long totalElements = ((List<Job>)entityManager.createQuery(sql.toString(), Job.class).getResultList()).size();
+            long totalElements = ((List<JobTranslation>)entityManager.createQuery(sql.toString(), JobTranslation.class).getResultList()).size();
 
             int totalPage = (int)totalElements / paging;
             if((totalElements % paging) > 0) {
@@ -149,14 +160,13 @@ public class IndexService {
 
             JobResponse jobResponse = new JobResponse();
             if(pages.size() > 0) {
-                for (Job job : pages) {
+                for (JobTranslation jobTranslation : pages) {
+                	Company company = jobTranslation.getJob().getCompany();
+                	CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
                     list.add(jobResponse.jobFullSerializer(
-                            job,
-                            jobTranslationRepository.findByJobAndLanguageAndDeletedAt(
-                                job,
-                                language,
-                                null
-                            )
+                    		jobTranslation.getJob(),
+                    		jobTranslation,
+                            new CompanyResponse().companyMainSerializer(company, companyTranslation)
                     ));
                 }
             }
