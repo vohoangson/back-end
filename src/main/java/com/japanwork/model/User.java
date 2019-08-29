@@ -65,12 +65,15 @@ public class User {
     @JoinColumn(name = "country_id")
     private Country country;
     
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Candidate candidate;
     
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Company company;
     
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private Translator translator;
     

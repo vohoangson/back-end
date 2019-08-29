@@ -15,7 +15,6 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.Company;
-import com.japanwork.model.CompanyTranslation;
 import com.japanwork.model.Language;
 import com.japanwork.payload.request.CompanyTranslationRequest;
 import com.japanwork.service.CompanyTranslationService;
@@ -38,7 +37,7 @@ public class CompanyTranlationController {
         Company company       = commonSupport.loadCompanyById(id);
         Language language     = commonSupport.loadLanguageById(companyTranslationRequest.getLanguageId());
 
-		CompanyTranslation companyTranslation = companyTranslationService.save(
+		companyTranslationService.save(
                 company,
                 language,
                 companyTranslationRequest

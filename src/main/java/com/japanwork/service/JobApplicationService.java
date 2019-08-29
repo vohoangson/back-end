@@ -27,6 +27,7 @@ import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelJobApplicationRequest;
 import com.japanwork.payload.request.RejectJobApplicationRequest;
 import com.japanwork.payload.response.JobApplicationResponse;
+import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
 import com.japanwork.repository.job_application_status.JobApplicationStatusRepository;
 
@@ -37,9 +38,6 @@ public class JobApplicationService {
 
 	@Autowired
 	private JobApplicationStatusRepository jobApplicationStatusRepository;
-
-	@Autowired
-	private JobService jobService;
 
 	@Autowired
 	private CandidateService candidateService;
@@ -118,7 +116,7 @@ public class JobApplicationService {
 		UUID companyUserId = jobApplication.getJob().getCompany().getUser().getId();
 		UUID translatorUserId = jobApplication.getTranslator().getUser().getId();
 		UUID jobApplicationId = jobApplication.getId();
-		
+
 		JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		if(!jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN)
 				&& !jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.ON_GOING)) {
@@ -141,7 +139,7 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.CANCELED,
 				cancelJobApplicationRequest.getReason(),
 				user.getPropertyId());
-		
+
 		if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
 			notificationService.addNotification(
 					candidateUserId,
@@ -266,10 +264,10 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.CANCELED_TRANSLATOR,
 				reason,
 				userCreateId);
-		
+
 		UUID translatorUserId = jobApplication.getTranslator().getUser().getId();
 		UUID jobApplicationId = jobApplication.getId();
-		
+
 		notificationService.addNotification(
 				translatorUserId,
 				null,
@@ -406,7 +404,7 @@ public class JobApplicationService {
 	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
-		ob.setJob(jobService.jobShortResponse(jobApplication.getJob()));
+		ob.setJob(new JobResponse().jobMainSerializer(jobApplication.getJob(), null, null));
 		ob.setCandidate(candidateService.candiateShortResponse(jobApplication.getCandidate()));
 		if(jobApplication.getTranslator() != null) {
 			ob.setTranslator(translatorService.translatorShortResponse(jobApplication.getTranslator()));

@@ -67,7 +67,7 @@ public class CompanyTranslationService {
 //		}
 //	}
 
-	public CompanyResponse convertCompanyResponse(CompanyTranslation companyTranslation) {
+	public CompanyResponse companyFullSerializer(CompanyTranslation companyTranslation) {
 		Company company = companyTranslation.getCompany();
 		CompanyResponse companyResponse = new CompanyResponse(
 				company.getId(),

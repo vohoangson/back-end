@@ -6,65 +6,67 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.Job;
+import com.japanwork.model.JobTranslation;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobResponse {
 	private UUID id;
-	
+
 	@JsonProperty("company")
 	private CompanyResponse companyResponse;
-	
+
 	private String name;
 
 	@JsonProperty("business_id")
 	private UUID businessId;
-	
+
 	@JsonProperty("contract_id")
 	private UUID contractId;
-	
+
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("level_id")
 	private UUID levelId;
-	
+
 	@JsonProperty("japanese_level")
 	private int japaneseLevel;
-	
+
 	@JsonProperty("required_education")
 	private String requiredEducation;
-	
-	
+
+
 	@JsonProperty("required_experience")
 	private String requiredExperience;
-	
+
 	@JsonProperty("required_language")
 	private String requiredLanguage;
-	
+
 	private String desc;
-	
+
 	@JsonProperty("city_id")
 	private UUID cityId;
-	
+
 	@JsonProperty("district_id")
 	private UUID districtId;
-	
+
 	private String address;
-	
+
     @JsonProperty("expiring_date")
     private Date applicationDeadline;
-    
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("min_salary")
 	private float minSalary;
-	
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	@JsonProperty("max_salary")
 	private float maxSalary;
-	
+
 	private String benefits;
-	
+
 	@JsonProperty("create_date")
 	private Timestamp createDate;
-	
+
 	public UUID getId() {
 		return id;
 	}
@@ -216,7 +218,7 @@ public class JobResponse {
 	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
 	}
-	
+
 	public JobResponse(UUID id, CompanyResponse companyResponse, String name, UUID businessId, UUID contractId,
 			UUID levelId, int japaneseLevel, String requiredEducation, String requiredExperience,
 			String requiredLanguage, String desc, UUID cityId, UUID districtId, String address,
@@ -243,5 +245,38 @@ public class JobResponse {
 	}
 
 	public JobResponse() {
-	}
+    }
+
+    public JobResponse jobFullSerializer(Job job, JobTranslation jobTranslation, CompanyResponse companyResponse) {
+        JobResponse jobResponse         = new JobResponse(
+                job.getId(),
+                companyResponse,
+                jobTranslation.getName(),
+                job.getBusinesses().getId(),
+                job.getContract().getId(),
+                job.getLevel().getId(),
+                job.getJapaneseLevelRequirement(),
+                jobTranslation.getRequiredEducation(),
+                jobTranslation.getRequiredExperience(),
+                jobTranslation.getRequiredLanguage(),
+                jobTranslation.getDescription(),
+                job.getCity().getId(),
+                job.getDistrict().getId(),
+                jobTranslation.getAddress(),
+                job.getApplicationDeadline(),
+                job.getMinSalary(),
+                job.getMaxSalary(),
+                job.getBenefits(),
+                job.getCreatedAt());
+        return jobResponse;
+    }
+
+    public JobResponse jobMainSerializer(Job job, JobTranslation jobTranslation, CompanyResponse companyResponse) {
+        JobResponse jobResponse         = new JobResponse();
+        jobResponse.setId(job.getId());
+        jobResponse.setCompanyResponse(companyResponse);
+        jobResponse.setName(jobTranslation.getName());
+        jobResponse.setCreateDate(job.getCreatedAt());
+        return jobResponse;
+    }
 }

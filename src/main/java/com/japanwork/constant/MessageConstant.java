@@ -33,6 +33,18 @@ public class MessageConstant {
 	//User error response information
 	public static final String USER_NOT_FOUND = "user_not_found";
 
+	//Level error response information
+    public static final String LEVEL_NOT_FOUND = "level_not_found";
+
+    //Contract error response information
+    public static final String CONTRACT_NOT_FOUND = "contract_not_found";
+
+    //Business error response information
+    public static final String BUSINESS_NOT_FOUND = "business_not_found";
+
+    //City error response information
+    public static final String CITY_NOT_FOUND = "city_not_found";
+
 	//Page not found
 	public static final String PAGE_NOT_FOUND = "page_not_found";
 

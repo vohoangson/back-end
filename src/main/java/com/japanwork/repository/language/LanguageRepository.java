@@ -12,6 +12,7 @@ import com.japanwork.model.Language;
 
 public interface LanguageRepository extends JpaRepository<Language, UUID>{
     public Language findByIdAndDeletedAt(UUID id, Timestamp deletedAt);
+    public Language findByCodeAndDeletedAt(String code, Timestamp deleledAt);
     public List<Language> findAllByDeletedAt(Timestamp deletedAt);
     @Query("SELECT l.id FROM Language l")
     public Set<UUID> findIdByDeletedAt(Timestamp deletedAt);
