@@ -20,7 +20,6 @@ import com.japanwork.payload.response.JobResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.FavoriteService;
-import com.japanwork.service.JobService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
@@ -28,9 +27,6 @@ public class FavoriteController {
 
 	@Autowired
 	private FavoriteService favoriteService;
-
-	@Autowired
-	private JobService jobService;
 
 	@Autowired
 	private CommonSupport commonSupport;
@@ -79,7 +75,7 @@ public class FavoriteController {
 		List<Job> list = favoriteService.index(userPrincipal);
 		List<JobResponse> listJobResponses = new ArrayList<JobResponse>();
 		for (Job job : list) {
-			listJobResponses.add(jobService.jobFullResponse(job));
+			listJobResponses.add(new JobResponse().jobMainSerializer(job, null));
 		}
 		return new ResponseDataAPI(
 		        CommonConstant.ResponseDataAPIStatus.SUCCESS,

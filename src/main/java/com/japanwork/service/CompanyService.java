@@ -47,19 +47,11 @@ public class CompanyService {
         Company company                       = commonSupport.loadCompanyById(id);
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
 
-//        CompanyTranslationResponse companyTranslationResponse = new CompanyTranslationResponse(
-//                companyTranslation.getId(),
-//                companyTranslation.getName(),
-//                companyTranslation.getIntroduction(),
-//                companyTranslation.getAddress()
-//        );
-
         CompanyResponse companyResponse = new CompanyResponse();
         companyResponse.setId(id);
         companyResponse.setName(companyTranslation.getName());
         companyResponse.setIntroduction(companyTranslation.getIntroduction());
         companyResponse.setAddress(companyTranslation.getAddress());
-//        companyResponse.setCompanyTranslationResponse(companyTranslationResponse);
         companyResponse.setScale(company.getScale());
         companyResponse.setBusinessIds(Business.listBusinessID(company.getBusinesses()));
         companyResponse.setCityId(company.getCity().getId());
@@ -146,28 +138,5 @@ public class CompanyService {
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
 		}
-	}
-
-	public CompanyResponse convertCompanyResponse(Company company) {
-		CompanyResponse companyResponse = new CompanyResponse(
-				company.getId(),
-				company.getName(),
-				company.getScale(),
-				Business.listBusinessID(company.getBusinesses()),
-				company.getCity().getId(),
-				company.getDistrict().getId(),
-				company.getAddress(),
-				company.getLogoUrl(),
-				company.getCoverImageUrl(),
-				company.getIntroduction());
-		return companyResponse;
-	}
-	
-	public CompanyResponse companyShortResponse(Company company) {
-		CompanyResponse companyResponse = new CompanyResponse();
-		companyResponse.setId(company.getId());
-		companyResponse.setName(company.getName());
-		companyResponse.setLogo(company.getLogoUrl());
-		return companyResponse;
 	}
 }

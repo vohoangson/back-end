@@ -1,24 +1,30 @@
 package com.japanwork.model;
 
+import org.hibernate.annotations.Where;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="job_translation")
+@Table(
+        name="job_translation",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"job_id", "language_id"})}
+)
 public class JobTranslation {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 
 	@ManyToOne
+    @JoinColumn(name = "job_id")
+    @Where(clause = "deleted_at IS NULL")
     private Job job;
 
-	@ManyToOne
-    private Translator translator;
-
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "language_id")
+    @Where(clause = "deleted_at IS NULL")
     private Language language;
 
     @Column(name = "work_place_address")
@@ -61,20 +67,12 @@ public class JobTranslation {
         return job;
     }
 
-    public Translator getTranslator() {
-        return translator;
-    }
-
     public Language getLanguage() {
         return language;
     }
 
     public void setJob(Job job) {
         this.job = job;
-    }
-
-    public void setTranslator(Translator translator) {
-        this.translator = translator;
     }
 
     public void setLanguage(Language language) {
@@ -177,13 +175,12 @@ public class JobTranslation {
 		this.deletedAt = deletedAt;
 	}
 
-    public JobTranslation(UUID id, Job job, Translator translator, Language language, String address, String name,
+    public JobTranslation(UUID id, Job job, Language language, String address, String name,
                           String description, String requiredEducation, String requiredExperience, String benefit,
                           String requiredLanguage, int japaneseLevelRequirement, int status, Timestamp createdAt,
                           Timestamp updatedAt, Timestamp deletedAt) {
         this.id = id;
         this.job = job;
-        this.translator = translator;
         this.language = language;
         this.address = address;
         this.name = name;
