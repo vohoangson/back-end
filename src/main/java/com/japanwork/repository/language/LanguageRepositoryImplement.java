@@ -150,7 +150,7 @@ public class LanguageRepositoryImplement implements LanguageRepository {
 	}
 
     @Override
-    public Language findByCode(String code) {
-        return findByCode(code);
+    public Language findByCodeAndDeletedAt(String code, Timestamp deletedAt) {
+        return findByCodeAndDeletedAt(code, deletedAt);
     }
 }
