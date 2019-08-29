@@ -90,10 +90,16 @@ public class JobController {
             @RequestParam(name = "language") String languageCode,
             @RequestParam(defaultValue = "1", name = "page") int page,
             @RequestParam(defaultValue = "25", name = "paging") int paging) {
+<<<<<<< HEAD
         Language language = commonSupport.loadLanguage(languageCode);
         Company company = commonSupport.loadCompanyById(id);
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
         ResponseDataAPI response = indexJobByCompanyService.perform(page, paging, company, companyTranslation, language);
+=======
+
+	    Language language = commonSupport.loadLanguage(languageCode);
+        ResponseDataAPI response = indexByCompanyService.perform(page, paging, id, language);
+>>>>>>> Finished apply update job translation
 
         return response;
     }

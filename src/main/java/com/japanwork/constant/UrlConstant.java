@@ -64,7 +64,8 @@ public class UrlConstant {
 	public static final String URL_JOB_UNDELETE = "/v1/jobs/{id}/undelete";
 
 	//Job Translation
-    public static final String URL_JOB_TRANSLATION = "/v1/job/{id}/job_translations";
+    public static final String URL_JOB_TRANSLATION = "/v1/jobs/{id}/job_translations/{language}";
+    public static final String URL_JOB_TRANSLATIONS = "/v1/jobs/{id}/job_translations";
 
 	//Job Application
     public static final String URL_JOB_APPLICATIONS_CANDIDATE_JOIN = "/v1/jobs/{id}/apply";
