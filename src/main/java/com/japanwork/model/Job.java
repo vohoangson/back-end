@@ -4,16 +4,10 @@ import org.hibernate.annotations.Where;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="job")
@@ -26,6 +20,10 @@ public class Job {
 
 	@Column(name="name", nullable = false, length = 128)
     private String name;
+
+	@OneToMany(mappedBy = "job", orphanRemoval = true)
+    @Where(clause = "deleted_at IS NULL")
+    private Set<JobTranslation> jobTranslations;
 
 	@ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
@@ -115,7 +113,15 @@ public class Job {
 		this.name = name;
 	}
 
-	public Company getCompany() {
+    public Set<JobTranslation> getJobTranslations() {
+        return jobTranslations;
+    }
+
+    public void setJobTranslations(Set<JobTranslation> jobTranslations) {
+        this.jobTranslations = jobTranslations;
+    }
+
+    public Company getCompany() {
 		return company;
 	}
 
@@ -275,36 +281,33 @@ public class Job {
 		this.deletedAt = deletedAt;
 	}
 
-	public Job(UUID id, String name, Company company, Business businesses, Contract contract, Level level, City city,
-			District district, String address, String desc, String requiredEducation, String requiredExperience,
-			String requiredLanguage, String benefits, int japaneseLevelRequirement, Date applicationDeadline,
-			float minSalary, float maxSalary, String status, Timestamp createdAt, Timestamp updatedAt,
-			Timestamp deletedAt) {
-		this.id = id;
-		this.name = name;
-		this.company = company;
-		this.businesses = businesses;
-		this.contract = contract;
-		this.level = level;
-		this.city = city;
-		this.district = district;
-		this.address = address;
-		this.desc = desc;
-		this.requiredEducation = requiredEducation;
-		this.requiredExperience = requiredExperience;
-		this.requiredLanguage = requiredLanguage;
-		this.benefits = benefits;
-		this.japaneseLevelRequirement = japaneseLevelRequirement;
-		this.applicationDeadline = applicationDeadline;
-		this.minSalary = minSalary;
-		this.maxSalary = maxSalary;
-		this.status = status;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.deletedAt = deletedAt;
-	}
+    public Job(UUID id, String name, Set<JobTranslation> jobTranslations, Company company, Business businesses, Contract contract, Level level, City city, District district, String address, String desc, String requiredEducation, String requiredExperience, String requiredLanguage, String benefits, int japaneseLevelRequirement, Date applicationDeadline, float minSalary, float maxSalary, String status, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
+        this.id = id;
+        this.name = name;
+        this.jobTranslations = jobTranslations;
+        this.company = company;
+        this.businesses = businesses;
+        this.contract = contract;
+        this.level = level;
+        this.city = city;
+        this.district = district;
+        this.address = address;
+        this.desc = desc;
+        this.requiredEducation = requiredEducation;
+        this.requiredExperience = requiredExperience;
+        this.requiredLanguage = requiredLanguage;
+        this.benefits = benefits;
+        this.japaneseLevelRequirement = japaneseLevelRequirement;
+        this.applicationDeadline = applicationDeadline;
+        this.minSalary = minSalary;
+        this.maxSalary = maxSalary;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
 
-	public Job(UUID id) {
+    public Job(UUID id) {
 	    this.id = id;
     }
 
