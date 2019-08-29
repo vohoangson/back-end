@@ -148,4 +148,9 @@ public class LanguageRepositoryImplement implements LanguageRepository {
 		// TODO Auto-generated method stub
 		return findIdByDeletedAt(deletedAt);
 	}
+
+    @Override
+    public Language findByCode(String code) {
+        return findByCode(code);
+    }
 }

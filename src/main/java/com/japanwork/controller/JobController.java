@@ -57,7 +57,7 @@ public class JobController {
 	@GetMapping(UrlConstant.URL_JOBS)
 	@ResponseBody
 	public ResponseDataAPI index(
-            @RequestParam UUID language_id,
+            @RequestParam(name = "language") String language_code,
 	        @RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "job_name") String jobName,
@@ -69,7 +69,7 @@ public class JobController {
 			@RequestParam(defaultValue = "0", name = "min_salary") int minSalary,
 			@RequestParam(defaultValue = "", name = "post_time") String postTime
     ) {
-	    Language language = commonSupport.loadLanguageById(language_id);
+	    Language language = commonSupport.loadLanguage(language_code);
 
 	    JobFilterRequest jobFilterRequest = new JobFilterRequest();
 		jobFilterRequest.setJobName(jobName);
@@ -89,11 +89,11 @@ public class JobController {
     @ResponseBody
     public ResponseDataAPI indexByCompany(
             @PathVariable UUID id,
-            @RequestParam UUID language_id,
+            @RequestParam(name = "language") String language_code,
             @RequestParam(defaultValue = "1", name = "page") int page,
             @RequestParam(defaultValue = "25", name = "paging") int paging
     ) {
-        Language language = commonSupport.loadLanguageById(language_id);
+        Language language = commonSupport.loadLanguage(language_code);
 
         ResponseDataAPI response = indexByCompanyService.perform(page, paging, id, language);
 
@@ -103,9 +103,11 @@ public class JobController {
     @PostMapping(UrlConstant.URL_JOBS)
     @ResponseBody
     public ResponseDataAPI create(
+            @RequestParam(name = "language") String language_code,
             @Valid @RequestBody JobRequest jobRequest,
             @CurrentUser UserPrincipal userPrincipal
     ) {
+	    Language language = commonSupport.loadLanguage(language_code);
         Company company   = commonSupport.loadCompanyByUser(userPrincipal.getId());
         Business business = commonSupport.loadBusiness(jobRequest.getBusinessId());
         Contract contract = commonSupport.loadContract(jobRequest.getContractId());
@@ -120,7 +122,8 @@ public class JobController {
                 contract,
                 level,
                 city,
-                district
+                district,
+                language
         );
 
         return new ResponseDataAPI(
@@ -134,10 +137,10 @@ public class JobController {
     @ResponseBody
     public ResponseDataAPI show(
             @PathVariable UUID id,
-            @RequestParam UUID language_id
+            @RequestParam(name = "language") String language_code
     ){
-        Language language       = commonSupport.loadLanguageById(language_id);
-        Job job                 = commonSupport.loadJobById(id);
+        Language language = commonSupport.loadLanguage(language_code);
+        Job job           = commonSupport.loadJobById(id);
 
         JobResponse jobResponse = showService.perform(job, language);
 

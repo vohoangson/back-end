@@ -18,7 +18,7 @@ public class JobTranslation {
 	private UUID id;
 
 	@ManyToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
     private Job job;
 

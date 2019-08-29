@@ -121,6 +121,14 @@ public class CommonSupport {
         return language;
     }
 
+    public Language loadLanguage(String code) throws ResourceNotFoundException {
+        Language language = languageRepository.findByCode(code);
+        if(language == null) {
+            throw new ResourceNotFoundException(MessageConstant.LANGUAGE_NOT_FOUND);
+        }
+        return language;
+    }
+
     public Job loadJobById(UUID id) throws ResourceNotFoundException {
         Job job = jobRepository.findByIdAndDeletedAt(id, null);
         if(job == null) {
