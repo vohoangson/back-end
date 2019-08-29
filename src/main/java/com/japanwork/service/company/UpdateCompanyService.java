@@ -10,6 +10,7 @@ import com.japanwork.model.City;
 import com.japanwork.model.Company;
 import com.japanwork.model.CompanyTranslation;
 import com.japanwork.model.District;
+import com.japanwork.model.Language;
 import com.japanwork.payload.request.CompanyRequest;
 import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.repository.company.CompanyRepository;
@@ -23,12 +24,12 @@ public class UpdateCompanyService {
 	@Autowired
 	private CompanyTranslationRepository companyTranslationRepository;
 	
-	public CompanyResponse perform(CompanyRequest companyRequest, Company company ) {
+	public CompanyResponse perform(CompanyRequest companyRequest, Company company, City city, District district) {
 		company.setName(companyRequest.getName());
 		company.setScale(companyRequest.getScale());
 		company.setBusinesses(Business.listBusiness(companyRequest.getBusinessIds()));
-		company.setCity(new City(companyRequest.getCityId()));
-		company.setDistrict(new District(companyRequest.getDistrictId()));
+		company.setCity(city);
+		company.setDistrict(district);
 		company.setAddress(companyRequest.getAddress());
 		company.setCoverImageUrl(companyRequest.getCoverImage());
 		company.setLogoUrl(companyRequest.getLogo());
@@ -43,7 +44,8 @@ public class UpdateCompanyService {
 	}
 	
 	public CompanyTranslation updateCompanyTranslation(Company company) {
-		CompanyTranslation companyTranslation = new CompanyTranslation();
+		Language language = company.getUser().getCountry().getLanguage();
+		CompanyTranslation companyTranslation = companyTranslationRepository.findByCompanyAndLanguageAndDeletedAt(company, language, null);
         companyTranslation.setName(company.getName());
         companyTranslation.setAddress(company.getAddress());
         companyTranslation.setIntroduction(company.getIntroduction());

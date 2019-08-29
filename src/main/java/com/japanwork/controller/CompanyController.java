@@ -90,13 +90,16 @@ public class CompanyController {
             @PathVariable UUID id,
 			@CurrentUser UserPrincipal userPrincipal) {
 		Company company = commonSupport.loadCompanyById(id);
+		City city = commonSupport.loadCity(companyRequest.getCityId());
+    	District district = commonSupport.loadDistrict(companyRequest.getDistrictId());
+    	
 		if(!company.getUser().getId().equals(userPrincipal.getId())) {
 			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 		}
 		
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				updateCompanyService.perform(companyRequest, company),
+				updateCompanyService.perform(companyRequest, company, city, district),
 				""
         );
 	}
