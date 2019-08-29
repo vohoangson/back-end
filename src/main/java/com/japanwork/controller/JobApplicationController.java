@@ -1,5 +1,6 @@
 package com.japanwork.controller;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -130,7 +131,11 @@ public class JobApplicationController {
 	@ResponseBody
 	public ResponseDataAPI indexByTranslator(@CurrentUser UserPrincipal userPrincipal,
 			@RequestParam(defaultValue = "1", name = "page") int page,
-			@RequestParam(defaultValue = "25", name = "paging") int paging) {
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(defaultValue = "", name = "name_job") String name,
+			@RequestParam(defaultValue = "", name = "request_types") Set<String> requestTypes,
+			@RequestParam(defaultValue = "", name = "language_ids") Set<UUID> languageIds,
+			@RequestParam(defaultValue = "", name = "post_date") String postDate) {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		return jobApplicationService.indexByTranslator(user, page, paging);
 	}
