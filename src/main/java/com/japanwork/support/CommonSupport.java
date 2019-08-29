@@ -122,7 +122,7 @@ public class CommonSupport {
     }
 
     public Language loadLanguage(String code) throws ResourceNotFoundException {
-        Language language = languageRepository.findByCode(code);
+        Language language = languageRepository.findByCodeAndDeletedAt(code, null);
         if(language == null) {
             throw new ResourceNotFoundException(MessageConstant.LANGUAGE_NOT_FOUND);
         }

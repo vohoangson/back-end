@@ -6,14 +6,26 @@ import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.*;
 import com.japanwork.payload.request.JobRequest;
 import com.japanwork.repository.job.JobRepository;
+import com.japanwork.repository.job_translation.JobTranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UpdateService {
     @Autowired
     private JobRepository jobRepository;
 
+    @Autowired
+    private JobTranslationRepository jobTranslationRepository;
+
+    @Transactional(
+            isolation   = Isolation.READ_COMMITTED,
+            propagation = Propagation.REQUIRED,
+            rollbackFor = Exception.class
+    )
     public Job perform(
             JobRequest jobRequest,
             Job job,
@@ -21,7 +33,8 @@ public class UpdateService {
             Contract contract,
             Level level,
             City city,
-            District district
+            District district,
+            Language language
     ) throws ForbiddenException
     {
         job.setName(jobRequest.getName());
@@ -42,8 +55,24 @@ public class UpdateService {
         job.setMaxSalary(jobRequest.getMaxSalary());
         job.setStatus(CommonConstant.StatusTranslate.UNTRANSLATED);
         job.setUpdatedAt(CommonFunction.getCurrentDateTime());
-
         Job result = jobRepository.save(job);
+
+        JobTranslation jobTranslation = jobTranslationRepository.findByJobAndLanguageAndDeletedAt(
+                result,
+                language,
+                null
+        );
+        jobTranslation.setLanguage(language);
+        jobTranslation.setName(jobRequest.getName());
+        jobTranslation.setAddress(jobRequest.getAddress());
+        jobTranslation.setDescription(jobRequest.getDesc());
+        jobTranslation.setRequiredEducation(jobRequest.getRequiredEducation());
+        jobTranslation.setRequiredExperience(jobRequest.getRequiredExperience());
+        jobTranslation.setRequiredLanguage(jobRequest.getRequiredLanguage());
+        jobTranslation.setBenefit(jobRequest.getBenefits());
+        jobTranslation.setJapaneseLevelRequirement(jobRequest.getJapaneseLevel());
+        JobTranslation jobTranslationResult = jobTranslationRepository.save(jobTranslation);
+
         return result;
     }
 }
