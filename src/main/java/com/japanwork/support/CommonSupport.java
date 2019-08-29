@@ -2,6 +2,14 @@ package com.japanwork.support;
 
 import java.util.UUID;
 
+import com.japanwork.model.*;
+import com.japanwork.repository.business_type.BusinessTypeRepository;
+import com.japanwork.repository.city.CityRepository;
+import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
+import com.japanwork.repository.contract.ContractRepository;
+import com.japanwork.repository.district.DistrictRepository;
+import com.japanwork.repository.job_translation.JobTranslationRepository;
+import com.japanwork.repository.level.LevelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,19 +35,13 @@ import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.repository.academy.AcademyRepository;
-import com.japanwork.repository.business_type.BusinessTypeRepository;
 import com.japanwork.repository.candidate.CandidateRepository;
-import com.japanwork.repository.city.CityRepository;
 import com.japanwork.repository.company.CompanyRepository;
-import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
-import com.japanwork.repository.contract.ContractRepository;
 import com.japanwork.repository.conversation.ConversationRepository;
-import com.japanwork.repository.district.DistrictRepository;
 import com.japanwork.repository.experience.ExperienceRepository;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.repository.job_application.JobApplicationRepository;
 import com.japanwork.repository.language.LanguageRepository;
-import com.japanwork.repository.level.LevelRepository;
 import com.japanwork.repository.request_translation.RequestTranslationRepository;
 import com.japanwork.repository.translator.TranslatorRepository;
 import com.japanwork.repository.user.UserRepository;
@@ -57,6 +59,9 @@ public class CommonSupport {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private JobTranslationRepository jobTranslationRepository;
 
     @Autowired
     private TranslatorRepository translatorRepository;
@@ -150,6 +155,18 @@ public class CommonSupport {
             throw new ResourceNotFoundException(MessageConstant.JOB_NOT_FOUND);
         }
         return job;
+    }
+
+    public JobTranslation loadJobTranslation(Job job, Language language) throws ResourceNotFoundException {
+        JobTranslation jobTranslation = jobTranslationRepository.findByJobAndLanguageAndDeletedAt(
+                job,
+                language,
+                null
+        );
+        if(jobTranslation == null) {
+            throw new ResourceNotFoundException(MessageConstant.JOB_TRANSLATION_NOT_FOUND);
+        }
+        return jobTranslation;
     }
 
     public Translator loadTranslatorById(UUID id) throws ResourceNotFoundException {

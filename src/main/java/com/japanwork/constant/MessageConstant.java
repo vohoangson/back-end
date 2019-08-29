@@ -15,6 +15,9 @@ public class MessageConstant {
     //Job error response information
     public static final String JOB_NOT_FOUND = "job_not_found";
 
+    //Job Translation error response information
+    public static final String JOB_TRANSLATION_NOT_FOUND = "job_translation_not_found";
+
     //Translator error response information
     public static final String TRANSLATOR_NOT_FOUND = "translator_not_found";
 
