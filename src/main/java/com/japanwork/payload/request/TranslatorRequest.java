@@ -36,7 +36,6 @@ public class TranslatorRequest {
 	private String address;
 	
 	@NotBlank
-	@Size(max = 2000)
 	private String introduction;
 	
 	@NotBlank

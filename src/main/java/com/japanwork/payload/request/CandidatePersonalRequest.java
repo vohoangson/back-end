@@ -42,7 +42,6 @@ public class CandidatePersonalRequest {
     private String avatar;
     
 	@NotBlank
-	@Size(max = 2000)
     private String introduction;
     
     @JsonProperty

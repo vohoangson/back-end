@@ -58,7 +58,7 @@ public class Job {
     @Column(name="work_place_address")
     private String address;
 
-    @Column(name="description", length = 2000)
+    @Column(name="description")
     private String desc;
 
     @Column(name="required_education")

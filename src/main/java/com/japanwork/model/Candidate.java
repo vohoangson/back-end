@@ -60,7 +60,7 @@ public class Candidate {
     @Column(name="avatar_url")
     private String avatar;
 
-    @Column(name="introduction", length = 2000)
+    @Column(name="introduction")
     private String introduction;
 
     @Column(name="japanese_level")

@@ -40,7 +40,6 @@ public class CompanyRequest {
 	private String coverImage;
 	
 	@NotBlank
-	@Size(max = 2000)
 	private String introduction;
 
 	public String getName() {

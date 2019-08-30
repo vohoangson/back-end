@@ -39,7 +39,6 @@ public class JobRequest {
 	private String requiredLanguage;
 	
 	@NotBlank
-	@Size(max = 1000)
 	private String desc;
 	
 	@NotNull
@@ -64,7 +63,6 @@ public class JobRequest {
 	private float maxSalary;
 	
 	@NotBlank
-	@Size(max = 2000)
 	private String benefits;
 
 	public String getName() {

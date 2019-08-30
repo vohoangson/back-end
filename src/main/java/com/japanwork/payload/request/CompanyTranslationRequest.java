@@ -17,7 +17,6 @@ public class CompanyTranslationRequest {
     @Size(max = 256)
     private String address;
 
-    @Size(max = 1000)
     private String introduction;
 
     public UUID getLanguageId() {

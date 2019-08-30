@@ -28,7 +28,6 @@ public class CandidateTranslationRequest {
     private String residentalAddress;
 
     @NotBlank
-    @Size(max = 1000)
     private String introduction;
 
     @JsonProperty("expected_working_address")

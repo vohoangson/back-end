@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,7 +17,6 @@ public class CandidateExpectedRequest {
     private UUID expectedWorkingDistrictId;
     
 	@NotBlank
-	@Size(max=128)
     @JsonProperty("expected_working_address")
     private String expectedWorkingAddress;
     
