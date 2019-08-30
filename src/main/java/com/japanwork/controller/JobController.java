@@ -135,10 +135,16 @@ public class JobController {
     @ResponseBody
     public ResponseDataAPI show(
             @PathVariable UUID id,
-            @RequestParam(name = "language") String languageCode) {
+            @RequestParam(name = "language", defaultValue = "") String languageCode) {
         Job job                               = commonSupport.loadJobById(id);
         Company company                       = job.getCompany();
-        Language language                     = commonSupport.loadLanguage(languageCode);
+        Language language = null;
+        if(languageCode.isEmpty()) {
+        	language = company.getUser().getCountry().getLanguage();
+        } else {
+        	language = commonSupport.loadLanguage(languageCode);
+        }
+                             
         JobTranslation jobTranslation         = commonSupport.loadJobTranslation(job, language);
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
 
