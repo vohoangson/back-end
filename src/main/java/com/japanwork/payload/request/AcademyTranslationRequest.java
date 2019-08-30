@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class AcademyTranslationRequest {
     @NotNull
-    @JsonProperty("academy_id")
+    @JsonProperty("id")
     private UUID academyId;
 
     @NotBlank
