@@ -17,19 +17,24 @@ import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
 import com.japanwork.model.Conversation;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobApplication;
 import com.japanwork.model.JobApplicationStatus;
+import com.japanwork.model.JobTranslation;
+import com.japanwork.model.Language;
 import com.japanwork.model.PageInfo;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelJobApplicationRequest;
 import com.japanwork.payload.request.RejectJobApplicationRequest;
+import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.payload.response.JobApplicationResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job_application.JobApplicationRepository;
 import com.japanwork.repository.job_application_status.JobApplicationStatusRepository;
+import com.japanwork.support.CommonSupport;
 
 @Service
 public class JobApplicationService {
@@ -56,9 +61,12 @@ public class JobApplicationService {
 
 	@Autowired
 	private NotificationService notificationService;
+	
+	@Autowired
+	private CommonSupport commonSupport;
 
-	public JobApplicationResponse create(Job job, Candidate candidate) {
-		this.checkCandidateApplyJob( job, candidate);
+	public JobApplicationResponse create(Job job, Candidate candidate, Language language) {
+		this.checkCandidateApplyJob(job, candidate);
 
 		JobApplication jobApplication = new JobApplication();
 		jobApplication.setJob(job);
@@ -79,11 +87,11 @@ public class JobApplicationService {
 				result.getJob().getCompany().getUser().getId(),
 				CommonConstant.NotificationContent.CANDIDATE_JOINED,
 				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
-		return this.convertApplicationResponse(jobApplication, status);
+		return this.convertApplicationResponse(jobApplication, status, language);
 	}
 
 	public JobApplicationResponse rejectCandidate(RejectJobApplicationRequest rejectJobApplicationRequest,
-			JobApplication jobApplication) {
+			JobApplication jobApplication, Language language) {
 		JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		if(!jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE)) {
 			throw new BadRequestException(MessageConstant.JOB_APPLIACTION_REJECT_FAIL);
@@ -107,11 +115,11 @@ public class JobApplicationService {
 
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		JobApplication result = jobApplicationRepository.save(jobApplication);
-		return this.convertApplicationResponse(result, status);
+		return this.convertApplicationResponse(result, status, language);
 	}
 
 	public JobApplicationResponse cancelJobApplication(CancelJobApplicationRequest cancelJobApplicationRequest,
-			JobApplication jobApplication, User user) {
+			JobApplication jobApplication, User user, Language language) {
 		UUID candidateUserId = jobApplication.getCandidate().getUser().getId();
 		UUID companyUserId = jobApplication.getJob().getCompany().getUser().getId();
 		UUID translatorUserId = jobApplication.getTranslator().getUser().getId();
@@ -186,10 +194,10 @@ public class JobApplicationService {
 
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		JobApplication result = jobApplicationRepository.save(jobApplication);
-		return this.convertApplicationResponse(result, status);
+		return this.convertApplicationResponse(result, status, language);
 	}
 
-	public JobApplicationResponse acceptApplyCandidate(JobApplication jobApplication) {
+	public JobApplicationResponse acceptApplyCandidate(JobApplication jobApplication, Language language) {
 		JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		if(!jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.WAITING_FOR_COMPANY_APPROVE_CANDIDATE)) {
 			throw new BadRequestException(MessageConstant.JOB_APPLIACTION_ACCEPT_APPLY_FAIL);
@@ -210,7 +218,7 @@ public class JobApplicationService {
 
 		jobApplication.setUpdatedAt(CommonFunction.getCurrentDateTime());
 		JobApplication result = jobApplicationRepository.save(jobApplication);
-		return this.convertApplicationResponse(result, status);
+		return this.convertApplicationResponse(result, status, language);
 	}
 
 	public void translatorJoinJobApplication(JobApplication jobApplication, Translator translator) {
@@ -294,7 +302,7 @@ public class JobApplicationService {
 				CommonConstant.StatusApplyJob.WAITING_FOR_TRANSLATOR_JOIN);
 	}
 
-	public JobApplicationResponse approveCandidate(JobApplication jobApplication) {
+	public JobApplicationResponse approveCandidate(JobApplication jobApplication, Language language) {
 		JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
 		if(!jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.ON_GOING)) {
 			throw new BadRequestException(MessageConstant.JOB_APPLIACTION_APPROVE_CANDIDATE_FAIL);
@@ -325,7 +333,7 @@ public class JobApplicationService {
 				jobApplication.getTranslator().getUser().getId(),
 				CommonConstant.NotificationContent.COMPANY_ACCEPTED_CANDIDATE,
 				CommonConstant.NotificationType.STATUS_JOB_APPLICATION);
-		return this.convertApplicationResponse(result, status);
+		return this.convertApplicationResponse(result, status, language);
 	}
 
 	public void checkCandidateApplyJob(Job job, Candidate candidate) throws ForbiddenException, BadRequestException{
@@ -341,7 +349,7 @@ public class JobApplicationService {
 		}
 	}
 
-	public ResponseDataAPI indexByCompany(User user, int page, int paging) {
+	public ResponseDataAPI indexByCompany(User user, int page, int paging, Language language) {
 		Page<JobApplication> pages = jobApplicationRepository.findAllByJobCompanyIdAndDeletedAt(PageRequest.of(page-1, paging), user.getPropertyId(),null);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
@@ -349,7 +357,7 @@ public class JobApplicationService {
 		if(pages.getContent().size() > 0) {
 			for (JobApplication jobApplication : pages.getContent()) {
 				JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
-				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
+				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus, language));
 			}
 		}
 
@@ -360,7 +368,7 @@ public class JobApplicationService {
         );
 	}
 
-	public ResponseDataAPI indexByCandidate(User user, int page, int paging) {
+	public ResponseDataAPI indexByCandidate(User user, int page, int paging, Language language) {
 		Page<JobApplication> pages = jobApplicationRepository.findAllByCandidateIdAndDeletedAt(PageRequest.of(page-1, paging), user.getPropertyId(),null);
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
@@ -368,7 +376,7 @@ public class JobApplicationService {
 		if(pages.getContent().size() > 0) {
 			for (JobApplication jobApplication : pages.getContent()) {
 				JobApplicationStatus jobApplicationStatus = jobApplication.getJobApplicationStatus().stream().findFirst().get();
-				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
+				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus, language));
 			}
 		}
 
@@ -379,7 +387,7 @@ public class JobApplicationService {
         );
 	}
 
-	public ResponseDataAPI indexByTranslator(User user, int page, int paging) {
+	public ResponseDataAPI indexByTranslator(User user, int page, int paging, Language language) {
 		Page<JobApplicationStatus> pages = jobApplicationStatusRepository.findByTranslator(PageRequest.of(page-1, paging), user.getPropertyId());
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<JobApplicationResponse> list = new ArrayList<JobApplicationResponse>();
@@ -390,7 +398,7 @@ public class JobApplicationService {
 				if(jobApplicationStatus.getStatus().equals(CommonConstant.StatusApplyJob.CANCELED_TRANSLATOR)) {
 					jobApplication.setTranslator(jobApplicationStatus.getTranslator());
 				}
-				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus));
+				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus, language));
 			}
 		}
 
@@ -401,10 +409,16 @@ public class JobApplicationService {
         );
 	}
 
-	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, JobApplicationStatus status) {
+	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, 
+			JobApplicationStatus status, Language language) {
+		Job job = jobApplication.getJob();
+		JobTranslation jobTranslation = commonSupport.loadJobTranslation(job, language);
+		CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(job.getCompany(), language);
+		CompanyResponse companyResponse = new CompanyResponse().companyMainSerializer(job.getCompany(), companyTranslation);
+		
 		JobApplicationResponse ob = new JobApplicationResponse();
 		ob.setId(jobApplication.getId());
-		ob.setJob(new JobResponse().jobMainSerializer(jobApplication.getJob(), null, null));
+		ob.setJob(new JobResponse().jobMainSerializer(job, jobTranslation, companyResponse));
 		ob.setCandidate(candidateService.candiateShortResponse(jobApplication.getCandidate()));
 		if(jobApplication.getTranslator() != null) {
 			ob.setTranslator(translatorService.translatorShortResponse(jobApplication.getTranslator()));
