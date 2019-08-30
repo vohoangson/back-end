@@ -52,7 +52,7 @@ public class Translator {
     @Column(name="address", nullable = false)
     private String address;
 
-    @Column(name="introduction", nullable = false, length = 2000)
+    @Column(name="introduction", nullable = false)
     private String introduction;
 
     @Column(name="avatar_url")

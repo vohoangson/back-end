@@ -70,7 +70,7 @@ public class Company {
     @Column(name="cover_image_url")
     private String coverImageUrl;
 
-    @Column(name="introduction", length = 2000)
+    @Column(name="introduction")
     private String introduction;
 
     @Column(name="status")

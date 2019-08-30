@@ -33,19 +33,19 @@ public class JobTranslation {
     @Column(name = "name", nullable = false, length = 128)
     private String name;
 
-    @Column(name = "description", length = 2000)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "required_education", length = 2000)
+    @Column(name = "required_education")
     private String requiredEducation;
 
-    @Column(name = "required_experience", nullable = false, length = 2000)
+    @Column(name = "required_experience", nullable = false)
     private String requiredExperience;
 
-    @Column(name = "benefit", length = 2000)
+    @Column(name = "benefit")
     private String benefit;
 
-    @Column(name = "required_language", nullable = false, length = 1000)
+    @Column(name = "required_language", nullable = false)
     private String requiredLanguage;
 
     private int japaneseLevelRequirement;

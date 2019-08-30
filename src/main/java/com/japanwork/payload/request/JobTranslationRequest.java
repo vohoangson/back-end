@@ -16,7 +16,6 @@ public class JobTranslationRequest {
     private String address;
 
     @NotBlank
-    @Size(max = 2000)
     private String description;
 
     @JsonProperty("required_education")
@@ -24,15 +23,14 @@ public class JobTranslationRequest {
 
     @NotBlank
     @JsonProperty("required_experience")
-    @Size(max = 255)
+    @Size(max = 1000)
     private String requiredExperience;
 
     @NotBlank
     @JsonProperty("required_language")
-    @Size(max = 128)
+    @Size(max = 1000)
     private String requiredLanguage;
 
-    @Size(max = 1000)
     private String benefit;
 
     @JsonProperty("japanese_level_requirement")

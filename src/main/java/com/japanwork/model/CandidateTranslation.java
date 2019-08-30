@@ -44,7 +44,7 @@ public class CandidateTranslation {
     @Column(name = "residental_address")
     private String residentalAddres;
 
-    @Column(name = "introduction", length = 1000)
+    @Column(name = "introduction")
     private String introduction;
 
     @Column(name = "expected_working_address")
