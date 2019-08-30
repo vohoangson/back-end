@@ -41,7 +41,7 @@ import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
 import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
-import com.japanwork.payload.response.ProfileResponse;
+import com.japanwork.payload.response.OwnerResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
 import com.japanwork.repository.request_status.RequestStatusRepository;
 import com.japanwork.repository.request_translation.RequestTranslationRepository;
@@ -85,7 +85,7 @@ public class RequestTranslationService {
 			Candidate candidate) throws ServerError, BadRequestException{
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
-			ProfileResponse profileResponse = new ProfileResponse(
+			OwnerResponse ownerResponse = new OwnerResponse(
 					candidate.getId(), 
 					candidate.getFullName(), 
 					candidate.getUser().getRole().replaceAll("ROLE_", ""), 
@@ -102,7 +102,7 @@ public class RequestTranslationService {
 							resultRequest,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(profileResponse, resultRequest, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, resultRequest, requestTranslationStatus));
 				}
 			}
 
@@ -120,7 +120,7 @@ public class RequestTranslationService {
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
-			ProfileResponse profileResponse = new ProfileResponse(
+			OwnerResponse ownerResponse = new OwnerResponse(
 					company.getId(), 
 					company.getName(), 
 					company.getUser().getRole().replaceAll("ROLE_", ""), 
@@ -138,7 +138,7 @@ public class RequestTranslationService {
 							requestTranslation,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(profileResponse, requestTranslation, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, requestTranslation, requestTranslationStatus));
 				}
 			}
 
@@ -156,7 +156,7 @@ public class RequestTranslationService {
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
-			ProfileResponse profileResponse = new ProfileResponse(
+			OwnerResponse ownerResponse = new OwnerResponse(
 					company.getId(), 
 					company.getName(), 
 					company.getUser().getRole().replaceAll("ROLE_", ""), 
@@ -176,7 +176,7 @@ public class RequestTranslationService {
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
 
-					list.add(this.convertRequestTranslationResponse(profileResponse, requestTranslation, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, requestTranslation, requestTranslationStatus));
 				}
 			}
 
@@ -194,7 +194,7 @@ public class RequestTranslationService {
 		try {
 			List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
-			ProfileResponse profileResponse = new ProfileResponse(
+			OwnerResponse ownerResponse = new OwnerResponse(
 					company.getId(), 
 					company.getName(), 
 					company.getUser().getRole().replaceAll("ROLE_", ""), 
@@ -213,7 +213,7 @@ public class RequestTranslationService {
 							requestTranslation,
 							CommonFunction.getCurrentDateTime(),
 							CommonConstant.RequestTranslationStatus.WAITING_FOR_HELPER);
-					list.add(this.convertRequestTranslationResponse(profileResponse, requestTranslation, requestTranslationStatus));
+					list.add(this.convertRequestTranslationResponse(ownerResponse, requestTranslation, requestTranslationStatus));
 				}
 			}
 
@@ -536,7 +536,7 @@ public class RequestTranslationService {
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
 		Company company = commonSupport.loadCompanyByUser(user.getId());
-		ProfileResponse profileResponse = new ProfileResponse(
+		OwnerResponse ownerResponse = new OwnerResponse(
 				company.getId(), 
 				company.getName(), 
 				company.getUser().getRole().replaceAll("ROLE_", ""), 
@@ -545,7 +545,7 @@ public class RequestTranslationService {
 		if(pages.getContent().size() > 0) {
 			for (RequestTranslation requestTranslation : pages.getContent()) {
 				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-				list.add(convertRequestTranslationResponse(profileResponse, requestTranslation, status));
+				list.add(convertRequestTranslationResponse(ownerResponse, requestTranslation, status));
 			}
 		}
 
@@ -582,7 +582,7 @@ public class RequestTranslationService {
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
 		Candidate candidate = commonSupport.loadCandidateByUser(user.getId());
-		ProfileResponse profileResponse = new ProfileResponse(
+		OwnerResponse ownerResponse = new OwnerResponse(
 				candidate.getId(), 
 				candidate.getFullName(), 
 				candidate.getUser().getRole().replaceAll("ROLE_", ""), 
@@ -590,7 +590,7 @@ public class RequestTranslationService {
 		if(pages.getContent().size() > 0) {
 			for (RequestTranslation requestTranslation : pages.getContent()) {
 				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-				list.add(convertRequestTranslationResponse(profileResponse, requestTranslation, status));
+				list.add(convertRequestTranslationResponse(ownerResponse, requestTranslation, status));
 			}
 		}
 
@@ -743,7 +743,7 @@ public class RequestTranslationService {
 		return false;
 	}
 
-	public RequestTranslationResponse convertRequestTranslationResponse(ProfileResponse owner, RequestTranslation requestTranslation,
+	public RequestTranslationResponse convertRequestTranslationResponse(OwnerResponse owner, RequestTranslation requestTranslation,
 			RequestStatus requestTranslationStatus) {
 		RequestTranslationResponse requestTranslationResponse = new RequestTranslationResponse();
 		requestTranslationResponse.setId(requestTranslation.getId());
@@ -802,23 +802,23 @@ public class RequestTranslationService {
 		}
 	}
 
-	public ProfileResponse owner(RequestTranslation requestTranslation) {
+	public OwnerResponse owner(RequestTranslation requestTranslation) {
 		if(requestTranslation.getObjectableType().equals(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE)) {
 			Candidate candidate = commonSupport.loadCandidateById(requestTranslation.getOwnerId());
-			ProfileResponse profileResponse = new ProfileResponse(
+			OwnerResponse ownerResponse = new OwnerResponse(
 					candidate.getId(), 
 					candidate.getFullName(), 
 					candidate.getUser().getRole().replaceAll("ROLE_", ""), 
 					candidate.getAvatar());
-			return profileResponse;
+			return ownerResponse;
 		} else {
 			Company company = commonSupport.loadCompanyById(requestTranslation.getOwnerId());
-			ProfileResponse profileResponse = new ProfileResponse(
+			OwnerResponse ownerResponse = new OwnerResponse(
 					company.getId(), 
 					company.getName(), 
 					company.getUser().getRole().replaceAll("ROLE_", ""), 
 					company.getLogoUrl());
-			return profileResponse;
+			return ownerResponse;
 		}
 	}
 	
