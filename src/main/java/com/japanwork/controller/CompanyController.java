@@ -72,9 +72,14 @@ public class CompanyController {
     
 	@GetMapping(UrlConstant.URL_COMPANY)
     @ResponseBody
-    public ResponseDataAPI show(@PathVariable UUID id, @RequestParam(name = "language") String languageCode) {
-        Language language = commonSupport.loadLanguage(languageCode);
+    public ResponseDataAPI show(@PathVariable UUID id, @RequestParam(name = "language", defaultValue = "") String languageCode) {
         Company company = commonSupport.loadCompanyById(id);
+        Language language = null;
+        if(languageCode.isEmpty()) {
+        	language = company.getUser().getCountry().getLanguage();
+        } else {
+        	language = commonSupport.loadLanguage(languageCode);
+        }
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
         return new ResponseDataAPI(
                 CommonConstant.ResponseDataAPIStatus.SUCCESS,
