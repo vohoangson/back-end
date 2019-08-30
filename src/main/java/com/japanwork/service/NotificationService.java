@@ -80,7 +80,7 @@ public class NotificationService {
 
 	public int countNotificationUnread(User user) throws ResourceNotFoundException{
 		try {
-			int num = notificationRepository.countByReceiverIdAndIsReadAndDeletedAt(user.getPropertyId(), false, null);
+			int num = notificationRepository.countByReceiverIdAndIsReadAndDeletedAt(user.getId(), false, null);
 			return num;
 		} catch (IllegalArgumentException e) {
 			throw new ResourceNotFoundException(MessageConstant.PAGE_NOT_FOUND);
