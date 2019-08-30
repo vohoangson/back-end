@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class ExperienceTranslationRequest {
     @NotNull
-    @JsonProperty("experience_id")
+    @JsonProperty("id")
     private UUID experienceId;
 
     @NotBlank
