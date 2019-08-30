@@ -40,11 +40,11 @@ public class JobTranslationController {
             @CurrentUser UserPrincipal userPrincipal) throws BadRequestException {
 
         Job job           = commonSupport.loadJobById(id );
-        Language language = commonSupport.loadLanguage(jobTranslationRequest.getLanguage());
+        Language language = commonSupport.loadLanguageById(jobTranslationRequest.getLanguageId());
 
-        if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
-            throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-        }
+//        if(!(job.getCompany()).getUser().getId().equals(userPrincipal.getId())) {
+//            throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+//        }
 
         JobTranslation jobTranslation = createJobTranslationService.perform(
                 job,
