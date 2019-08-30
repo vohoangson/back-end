@@ -1,7 +1,9 @@
 package com.japanwork.service;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -151,15 +153,16 @@ public class UserService {
 		return userRepository.findByIdAndDeletedAt(id, null);
 	}
 
-	public ProfileResponse getProfile(Set<UUID> ids) {
+	public List<ProfileResponse> getProfile(Set<UUID> ids) {
 		Set<User> users = userRepository.findByIdInAndDeletedAt(ids, null);
-    	ProfileResponse profileResponse = new ProfileResponse();
-    	
+    	List<ProfileResponse> listProfile = new ArrayList<ProfileResponse>();
     	for (User user : users) {
+    		ProfileResponse profileResponse = new ProfileResponse();
+    		profileResponse.setUserId(user.getId());
     		String role = user.getRole();
     		if(user.getCompany() != null) {
         		Company company = user.getCompany();
-        		profileResponse.setId(company.getId());
+        		profileResponse.setPropertyId(company.getId());
         		profileResponse.setName(company.getName());
         		profileResponse.setRole(role.replaceAll("ROLE_", ""));
         		profileResponse.setAvatar(company.getLogoUrl());
@@ -167,7 +170,7 @@ public class UserService {
     		
     		if(user.getCandidate() != null) {
         		Candidate candidate = user.getCandidate();
-        		profileResponse.setId(candidate.getId());
+        		profileResponse.setPropertyId(candidate.getId());
         		profileResponse.setName(candidate.getFullName());
         		profileResponse.setRole(role.replaceAll("ROLE_", ""));
         		profileResponse.setAvatar(candidate.getAvatar());
@@ -175,13 +178,14 @@ public class UserService {
     		
     		if(user.getTranslator() != null) {
         		Translator translator = user.getTranslator();
-        		profileResponse.setId(translator.getId());
+        		profileResponse.setPropertyId(translator.getId());
         		profileResponse.setName(translator.getName());
         		profileResponse.setRole(role.replaceAll("ROLE_", ""));
         		profileResponse.setAvatar(translator.getAvatar());
         	}
+    		listProfile.add(profileResponse);
 		}
-    	return profileResponse;
+    	return listProfile;
 	}
 	
 	public void changePropertyId(UUID userId, UUID propertyId) throws ServerError{

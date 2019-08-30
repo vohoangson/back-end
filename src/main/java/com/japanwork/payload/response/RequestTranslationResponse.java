@@ -10,7 +10,7 @@ public class RequestTranslationResponse {
 	
     private String name;
     
-    private ProfileResponse owner;
+    private OwnerResponse owner;
 
 	@JsonProperty("objectable_id")
     private UUID objectableId;
@@ -50,11 +50,11 @@ public class RequestTranslationResponse {
 		this.name = name;
 	}
 
-	public ProfileResponse getOwner() {
+	public OwnerResponse getOwner() {
 		return owner;
 	}
 
-	public void setOwner(ProfileResponse owner) {
+	public void setOwner(OwnerResponse owner) {
 		this.owner = owner;
 	}
 
@@ -122,7 +122,7 @@ public class RequestTranslationResponse {
 		this.desc = desc;
 	}
 
-	public RequestTranslationResponse(UUID id, String name, ProfileResponse owner, UUID objectableId,
+	public RequestTranslationResponse(UUID id, String name, OwnerResponse owner, UUID objectableId,
 			TranslatorResponse translatorResponse, RequestTranslationStatusResponse status, String requestType,
 			UUID conversationId, UUID languageId, Timestamp createdAt, String desc) {
 		this.id = id;
