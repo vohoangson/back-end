@@ -48,6 +48,12 @@ public class MessageConstant {
     //City error response information
     public static final String CITY_NOT_FOUND = "city_not_found";
 
+    //District error response information
+    public static final String DISTRICT_NOT_FOUND = "district_not_found";
+
+    //Language certificate type error response information
+    public static final String LANGUAGE_CERTIFICATE_NOT_FOUND = "language_certificate_type_not_found";
+
 	//Page not found
 	public static final String PAGE_NOT_FOUND = "page_not_found";
 

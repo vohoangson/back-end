@@ -6,64 +6,71 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.CandidateTranslation;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CandidateResponse {
 	private UUID id;
-	
+
 	@JsonProperty("full_name")
 	private String fullName;
-	
+
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
-	
+
 	private String gender;
-	
+
 	private String marital;
-	
+
 	@JsonProperty("residental_city_id")
     private UUID residentalCityId;
 
-	@JsonProperty("residental_district_id")  
+	@JsonProperty("residental_district_id")
     private UUID residentalDistrictId;
-    
+
 	@JsonProperty("residental_address")
     private String residentalAddres;
-    
+
     private String avatar;
-    
+
     private String introduction;
-    
+
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("japanese_level")
     private int japaneseLevel;
-    
+
     @JsonProperty("expected_working_city_id")
     private UUID expectedWorkingCityId;
 
-    @JsonProperty("expected_working_district_id") 
+    @JsonProperty("expected_working_district_id")
     private UUID expectedWorkingDistrictId;
-    
+
     @JsonProperty("expected_working_address")
     private String expectedWorkingAddress;
-    
+
     @JsonProperty("expected_business_id")
     private UUID expectedBusinessId;
-    
+
     @JsonProperty("expected_level_id")
     private UUID expectedLevelId;
-    
+
     @JsonProperty("expected_contract_id")
     private UUID expectedContractId;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonProperty("expected_salary")
     private float expectedSalary;
-    
-	private Set<AcademyResponse> academies;
 
-	private Set<ExperienceResponse> experiences;
-    
+    @JsonProperty("academies")
+	private Set<AcademyResponse> academyResponses;
+
+    @JsonProperty("experiences")
+	private Set<ExperienceResponse> experienceResponses;
+
+    private Set<AcademyResponse> academies;
+    private Set<ExperienceResponse> experiences;
+
     @JsonProperty("language_certificates")
 	private Set<LanguageCertificateResponse> languageCertificates;
 
@@ -211,23 +218,39 @@ public class CandidateResponse {
 		this.expectedSalary = expectedSalary;
 	}
 
-	public Set<AcademyResponse> getAcademies() {
-		return academies;
-	}
+    public Set<AcademyResponse> getAcademyResponses() {
+        return academyResponses;
+    }
 
-	public void setAcademies(Set<AcademyResponse> academies) {
-		this.academies = academies;
-	}
+    public void setAcademyResponses(Set<AcademyResponse> academyResponses) {
+        this.academyResponses = academyResponses;
+    }
 
-	public Set<ExperienceResponse> getExperiences() {
-		return experiences;
-	}
+    public Set<ExperienceResponse> getExperienceResponses() {
+        return experienceResponses;
+    }
 
-	public void setExperiences(Set<ExperienceResponse> experiences) {
-		this.experiences = experiences;
-	}
+    public void setExperienceResponses(Set<ExperienceResponse> experienceResponses) {
+        this.experienceResponses = experienceResponses;
+    }
 
-	public Set<LanguageCertificateResponse> getLanguageCertificates() {
+    public Set<AcademyResponse> getAcademies() {
+        return academies;
+    }
+
+    public void setAcademies(Set<AcademyResponse> academies) {
+        this.academies = academies;
+    }
+
+    public Set<ExperienceResponse> getExperiences() {
+        return experiences;
+    }
+
+    public void setExperiences(Set<ExperienceResponse> experiences) {
+        this.experiences = experiences;
+    }
+
+    public Set<LanguageCertificateResponse> getLanguageCertificates() {
 		return languageCertificates;
 	}
 
@@ -235,36 +258,51 @@ public class CandidateResponse {
 		this.languageCertificates = languageCertificates;
 	}
 
-	public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital,
-			UUID residentalCityId, UUID residentalDistrictId, String residentalAddres, String avatar,
-			String introduction, int japaneseLevel, UUID expectedWorkingCityId, UUID expectedWorkingDistrictId,
-			String expectedWorkingAddress, UUID expectedBusinessId, UUID expectedLevelId, UUID expectedContractId,
-			float expectedSalary, Set<AcademyResponse> academies, Set<ExperienceResponse> experiences,
-			Set<LanguageCertificateResponse> languageCertificates) {
-		this.id = id;
-		this.fullName = fullName;
-		this.dateOfBirth = dateOfBirth;
-		this.gender = gender;
-		this.marital = marital;
-		this.residentalCityId = residentalCityId;
-		this.residentalDistrictId = residentalDistrictId;
-		this.residentalAddres = residentalAddres;
-		this.avatar = avatar;
-		this.introduction = introduction;
-		this.japaneseLevel = japaneseLevel;
-		this.expectedWorkingCityId = expectedWorkingCityId;
-		this.expectedWorkingDistrictId = expectedWorkingDistrictId;
-		this.expectedWorkingAddress = expectedWorkingAddress;
-		this.expectedBusinessId = expectedBusinessId;
-		this.expectedLevelId = expectedLevelId;
-		this.expectedContractId = expectedContractId;
-		this.expectedSalary = expectedSalary;
-		this.academies = academies;
-		this.experiences = experiences;
-		this.languageCertificates = languageCertificates;
-	}
+    public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital, UUID residentalCityId, UUID residentalDistrictId, String residentalAddres, String avatar, String introduction, int japaneseLevel, UUID expectedWorkingCityId, UUID expectedWorkingDistrictId, String expectedWorkingAddress, UUID expectedBusinessId, UUID expectedLevelId, UUID expectedContractId, float expectedSalary, Set<AcademyResponse> academyResponses, Set<ExperienceResponse> experienceResponses, Set<LanguageCertificateResponse> languageCertificates) {
+        this.id = id;
+        this.fullName = fullName;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.marital = marital;
+        this.residentalCityId = residentalCityId;
+        this.residentalDistrictId = residentalDistrictId;
+        this.residentalAddres = residentalAddres;
+        this.avatar = avatar;
+        this.introduction = introduction;
+        this.japaneseLevel = japaneseLevel;
+        this.expectedWorkingCityId = expectedWorkingCityId;
+        this.expectedWorkingDistrictId = expectedWorkingDistrictId;
+        this.expectedWorkingAddress = expectedWorkingAddress;
+        this.expectedBusinessId = expectedBusinessId;
+        this.expectedLevelId = expectedLevelId;
+        this.expectedContractId = expectedContractId;
+        this.expectedSalary = expectedSalary;
+        this.academyResponses = academyResponses;
+        this.experienceResponses = experienceResponses;
+        this.languageCertificates = languageCertificates;
+    }
 
-	public CandidateResponse() {
+    public CandidateResponse() {
 
 	}
+
+	public CandidateResponse candidateFullSerializer(
+	        Candidate candidate,
+            CandidateTranslation candidateTranslation) {
+        CandidateResponse candidateResponse = new CandidateResponse();
+        candidateResponse.setId(candidate.getId());
+        candidateResponse.setFullName(candidateTranslation.getFullName());
+        candidateResponse.setDateOfBirth(candidate.getDateOfBirth());
+        candidateResponse.setGender(candidate.getGender());
+        candidateResponse.setMarital(candidate.getMarital());
+        candidateResponse.setResidentalCityId(candidate.getResidentalCity().getId());
+        candidateResponse.setResidentalDistrictId(candidate.getResidentalDistrict().getId());
+        candidateResponse.setResidentalAddres(candidateTranslation.getResidentalAddres());
+        candidateResponse.setAvatar(candidate.getAvatar());
+        candidateResponse.setIntroduction(candidateTranslation.getIntroduction());
+        candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
+        candidateResponse.setExpectedSalary(candidate.getExpectedSalary());
+
+        return candidateResponse;
+    }
 }

@@ -9,6 +9,7 @@ import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
 import com.japanwork.repository.contract.ContractRepository;
 import com.japanwork.repository.district.DistrictRepository;
 import com.japanwork.repository.job_translation.JobTranslationRepository;
+import com.japanwork.repository.language_certificate_type.LanguageCertificateTypeRepository;
 import com.japanwork.repository.level.LevelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -101,6 +102,9 @@ public class CommonSupport {
 
     @Autowired
     private DistrictRepository districtRepository;
+
+    @Autowired
+    private LanguageCertificateTypeRepository languageCertificateTypeRepository;
 
     public Company loadCompanyById(UUID id) throws ResourceNotFoundException {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
@@ -309,8 +313,17 @@ public class CommonSupport {
         District district = districtRepository.findByIdAndDeletedAt(id, null);
 
         if(district == null) {
-            throw new ResourceNotFoundException(MessageConstant.CITY_NOT_FOUND);
+            throw new ResourceNotFoundException(MessageConstant.DISTRICT_NOT_FOUND);
         }
         return district;
+    }
+
+    public LanguageCertificateType loadLanguageCertificateType(UUID id) throws ResourceNotFoundException {
+        LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndDeletedAt(id, null);
+
+        if(languageCertificateType == null) {
+            throw new ResourceNotFoundException(MessageConstant.LANGUAGE_CERTIFICATE_NOT_FOUND);
+        }
+        return languageCertificateType;
     }
 }
