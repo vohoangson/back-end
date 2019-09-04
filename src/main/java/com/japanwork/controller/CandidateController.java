@@ -129,7 +129,7 @@ public class CandidateController {
 
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidate.getId(),
+				"",
 				""
         );
 	}
@@ -165,7 +165,7 @@ public class CandidateController {
 
         return new ResponseDataAPI(
                 CommonConstant.ResponseDataAPIStatus.SUCCESS,
-                candidate.getId(),
+                "",
                 ""
         );
     }
@@ -187,7 +187,7 @@ public class CandidateController {
 
 		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				candidate.getId(),
+				"",
 				""
         );
 	}
