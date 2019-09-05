@@ -360,12 +360,11 @@ public class JobApplicationService {
 				list.add(this.convertApplicationResponse(jobApplication, jobApplicationStatus, language));
 			}
 		}
-		ResponseDataAPI abc= new ResponseDataAPI(
+		return new ResponseDataAPI(
 				CommonConstant.ResponseDataAPIStatus.SUCCESS,
 				list,
 				pageInfo
         );
-		return abc;
 	}
 
 	public ResponseDataAPI indexByCandidate(User user, int page, int paging, Language language) {
