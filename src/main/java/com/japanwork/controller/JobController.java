@@ -1,11 +1,14 @@
 package com.japanwork.controller;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.japanwork.model.*;
-import com.japanwork.payload.response.CompanyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +25,20 @@ import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.ForbiddenException;
-import com.japanwork.payload.request.JobFilterRequest;
+import com.japanwork.model.Business;
+import com.japanwork.model.City;
+import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.Contract;
+import com.japanwork.model.District;
+import com.japanwork.model.Job;
+import com.japanwork.model.JobTranslation;
+import com.japanwork.model.Language;
+import com.japanwork.model.Level;
+import com.japanwork.model.QJob;
+import com.japanwork.model.QJobTranslation;
 import com.japanwork.payload.request.JobRequest;
+import com.japanwork.payload.response.CompanyResponse;
 import com.japanwork.payload.response.JobResponse;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.security.CurrentUser;
@@ -33,6 +48,7 @@ import com.japanwork.service.job_service.IndexJobByCompanyService;
 import com.japanwork.service.job_service.IndexJobService;
 import com.japanwork.service.job_service.UpdateJobService;
 import com.japanwork.support.CommonSupport;
+import com.querydsl.core.BooleanBuilder;
 
 @Controller
 public class JobController {
@@ -62,25 +78,55 @@ public class JobController {
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "job_name") String jobName,
 			@RequestParam(defaultValue = "", name = "company_name") String companyName,
-			@RequestParam(defaultValue = "", name = "business_ids") String businessIds,
-			@RequestParam(defaultValue = "", name = "contract_ids") String contractIds,
-			@RequestParam(defaultValue = "", name = "level_ids") String levelIds,
-			@RequestParam(defaultValue = "", name = "city_ids") String cityIds,
+			@RequestParam(defaultValue = "", name = "business_ids") Set<UUID> businessIds,
+			@RequestParam(defaultValue = "", name = "contract_ids") Set<UUID> contractIds,
+			@RequestParam(defaultValue = "", name = "level_ids") Set<UUID> levelIds,
+			@RequestParam(defaultValue = "", name = "city_ids") Set<UUID> cityIds,
 			@RequestParam(defaultValue = "0", name = "min_salary") int minSalary,
-			@RequestParam(defaultValue = "", name = "post_time") String postTime) {
-	    Language language = commonSupport.loadLanguage(languageCode);
-
-	    JobFilterRequest jobFilterRequest = new JobFilterRequest();
-		jobFilterRequest.setJobName(jobName);
-		jobFilterRequest.setCompanyName(companyName);
-		jobFilterRequest.setBusinessIds(CommonFunction.listParam(businessIds));
-		jobFilterRequest.setCityIds(CommonFunction.listParam(cityIds));
-		jobFilterRequest.setContractIds(CommonFunction.listParam(contractIds));
-		jobFilterRequest.setLevelIds(CommonFunction.listParam(levelIds));
-		jobFilterRequest.setMinSalary(minSalary);
-		jobFilterRequest.setPostTime(postTime);
-
-		ResponseDataAPI response = indexJobService.perform(jobFilterRequest, page, paging, language);
+			@RequestParam(defaultValue = "", name = "post_time") String postTime) throws ParseException {
+	    
+		Language language = commonSupport.loadLanguage(languageCode);
+	    
+	    BooleanBuilder booleanBuilder = new BooleanBuilder();
+		
+	    QJob qjob = QJobTranslation.jobTranslation.job;
+		if(!jobName.isEmpty()) {
+			booleanBuilder.and(qjob.name.likeIgnoreCase("%"+jobName+"%"));
+		}
+		
+		if(!companyName.isEmpty()) {
+			booleanBuilder.and(qjob.company.name.likeIgnoreCase("%"+companyName+"%"));
+		}
+		
+		if(businessIds != null) {
+			booleanBuilder.and(qjob.businesses.id.in(businessIds));
+		}
+		
+		if(contractIds != null) {
+			booleanBuilder.and(qjob.contract.id.in(contractIds));
+		}
+		
+		if(levelIds != null) {
+			booleanBuilder.and(qjob.level.id.in(levelIds));
+		}
+		
+		if(cityIds != null) {
+			booleanBuilder.and(qjob.city.id.in(cityIds));
+		}
+		
+		if(minSalary > 0) {
+			booleanBuilder.and(qjob.maxSalary.goe(minSalary));
+		}
+		
+		if(!postTime.isEmpty()) {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postTime);
+			Timestamp timestamp = new Timestamp(date.getTime());
+			booleanBuilder.and(QJobTranslation.jobTranslation.createdAt.goe(timestamp));
+		}
+		
+		booleanBuilder.and(QJobTranslation.jobTranslation.language.id.eq(language.getId()));
+		
+		ResponseDataAPI response = indexJobService.perform(booleanBuilder.getValue(), page, paging, language);
 		return response;
 	}
 

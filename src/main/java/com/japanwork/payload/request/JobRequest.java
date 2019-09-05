@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JobRequest {	
 	@NotBlank
-	@Size(max = 128)
 	private String name;
 	
 	@NotNull
