@@ -1,11 +1,10 @@
 package com.japanwork.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JobTranslationRequest {
     @JsonProperty("language_id")
@@ -31,10 +30,6 @@ public class JobTranslationRequest {
     private String requiredLanguage;
 
     private String benefit;
-
-    @JsonProperty("japanese_level_requirement")
-    private int japaneseLevelRequirement;
-    
 
     public UUID getLanguageId() {
 		return languageId;
@@ -98,13 +93,5 @@ public class JobTranslationRequest {
 
     public void setBenefit(String benefit) {
         this.benefit = benefit;
-    }
-
-    public int getJapaneseLevelRequirement() {
-        return japaneseLevelRequirement;
-    }
-
-    public void setJapaneseLevelRequirement(int japaneseLevelRequirement) {
-        this.japaneseLevelRequirement = japaneseLevelRequirement;
     }
 }

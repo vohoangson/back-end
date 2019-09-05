@@ -22,7 +22,6 @@ public class UpdateJobTranslationService {
         jobTranslation.setRequiredEducation(jobTranslationRequest.getRequiredEducation());
         jobTranslation.setRequiredExperience(jobTranslationRequest.getRequiredExperience());
         jobTranslation.setRequiredLanguage(jobTranslationRequest.getRequiredLanguage());
-        jobTranslation.setJapaneseLevelRequirement(jobTranslationRequest.getJapaneseLevelRequirement());
         jobTranslation.setBenefit(jobTranslationRequest.getBenefit());
         jobTranslation.setCreatedAt(CommonFunction.getCurrentDateTime());
         jobTranslation.setUpdatedAt(CommonFunction.getCurrentDateTime());
