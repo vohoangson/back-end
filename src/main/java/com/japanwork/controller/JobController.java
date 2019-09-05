@@ -98,19 +98,19 @@ public class JobController {
 			booleanBuilder.and(qjob.company.name.likeIgnoreCase("%"+companyName+"%"));
 		}
 		
-		if(businessIds != null) {
+		if(businessIds.size() > 0) {
 			booleanBuilder.and(qjob.businesses.id.in(businessIds));
 		}
 		
-		if(contractIds != null) {
+		if(contractIds.size() > 0) {
 			booleanBuilder.and(qjob.contract.id.in(contractIds));
 		}
 		
-		if(levelIds != null) {
+		if(levelIds.size() > 0) {
 			booleanBuilder.and(qjob.level.id.in(levelIds));
 		}
 		
-		if(cityIds != null) {
+		if(cityIds.size() > 0) {
 			booleanBuilder.and(qjob.city.id.in(cityIds));
 		}
 		
