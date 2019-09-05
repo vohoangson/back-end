@@ -78,7 +78,6 @@ public class UpdateJobService {
         jobTranslation.setRequiredExperience(jobRequest.getRequiredExperience());
         jobTranslation.setRequiredLanguage(jobRequest.getRequiredLanguage());
         jobTranslation.setBenefit(jobRequest.getBenefits());
-        jobTranslation.setJapaneseLevelRequirement(jobRequest.getJapaneseLevel());
         JobTranslation jobTranslationResult = jobTranslationRepository.save(jobTranslation);
 
         return result;

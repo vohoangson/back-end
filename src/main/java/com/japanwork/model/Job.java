@@ -1,13 +1,21 @@
 package com.japanwork.model;
 
-import org.hibernate.annotations.Where;
-
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="job")
@@ -18,7 +26,7 @@ public class Job {
     @Column(name="id")
 	private UUID id;
 
-	@Column(name="name", nullable = false, length = 128)
+	@Column(name="name", nullable = false)
     private String name;
 
 	@OneToMany(mappedBy = "job", orphanRemoval = true)

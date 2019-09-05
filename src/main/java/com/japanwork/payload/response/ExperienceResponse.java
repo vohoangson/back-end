@@ -3,24 +3,28 @@ package com.japanwork.payload.response;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.Experience;
+import com.japanwork.model.ExperienceTranslation;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperienceResponse {
 	private UUID id;
-	
+
 	private String organizaion;
-	
+
 	private String desc;
-	
+
 	@JsonProperty("level_id")
 	private UUID levelId;
-	
+
     @JsonProperty("business_id")
 	private UUID businessId;
-	
+
 	@JsonProperty("start_date")
 	private Date startDate;
-	
+
 	@JsonProperty("end_date")
 	private Date endDate;
 
@@ -93,4 +97,16 @@ public class ExperienceResponse {
 
 	public ExperienceResponse() {
 	}
+
+	public ExperienceResponse experienceFullSerializer(Experience experience, ExperienceTranslation experienceTranslation) {
+	    ExperienceResponse experienceResponse = new ExperienceResponse();
+	    experienceResponse.setOrganizaion(experienceTranslation.getOrganization());
+	    experienceResponse.setDesc(experienceTranslation.getDescription());
+	    experienceResponse.setLevelId(experience.getLevel().getId());
+	    experienceResponse.setBusinessId(experience.getBusiness().getId());
+	    experienceResponse.setStartDate(experience.getStartDate());
+	    experienceResponse.setEndDate(experience.getEndDate());
+
+	    return experienceResponse;
+    }
 }

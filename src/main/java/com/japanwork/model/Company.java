@@ -220,7 +220,6 @@ public class Company {
 	public Company(UUID id, User user, String name, Set<Business> businesses, int scale, City city, District district,
 			String address, String logoUrl, String coverImageUrl, String introduction, String status,
 			Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
-		super();
 		this.id = id;
 		this.user = user;
 		this.name = name;

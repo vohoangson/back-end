@@ -3,25 +3,29 @@ package com.japanwork.payload.response;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.japanwork.model.Academy;
+import com.japanwork.model.AcademyTranslation;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AcademyResponse {
-	private UUID id; 
-	
+	private UUID id;
+
 	@JsonProperty("academy_center_name")
 	private String academyCenterName;
-	
+
 	@JsonProperty("major_name")
 	private String majorName;
-	
+
 	private float grade;
-	
+
 	@JsonProperty("grade_system")
 	private int gradeSystem;
-	
+
 	@JsonProperty("start_date")
 	private Date startDate;
-	
+
 	@JsonProperty("end_date")
 	private Date endDate;
 
@@ -94,4 +98,16 @@ public class AcademyResponse {
 
 	public AcademyResponse() {
 	}
+
+	public AcademyResponse academyFullSerializer(Academy academy, AcademyTranslation academyTranslation) {
+	    AcademyResponse academyResponse = new AcademyResponse();
+        academyResponse.setAcademyCenterName(academyTranslation.getAcademyCenterName());
+        academyResponse.setMajorName(academyTranslation.getMajorName());
+        academyResponse.setGrade(academy.getGrade());
+        academyResponse.setGradeSystem(academy.getGradeSystem());
+        academyResponse.setStartDate(academy.getStartDate());
+        academyResponse.setEndDate(academy.getEndDate());
+
+	    return academyResponse;
+    }
 }

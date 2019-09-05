@@ -4,6 +4,9 @@ import com.japanwork.model.Company;
 import com.japanwork.model.Job;
 import com.japanwork.model.JobTranslation;
 import com.japanwork.model.Language;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -147,5 +150,53 @@ public class JobTranslationRepositoryImplement implements JobTranslationReposito
 			Language language, Timestamp deletedAt) {
 		// TODO Auto-generated method stub
 		return findAllByJobCompanyAndLanguageAndDeletedAt(page, company, language, deletedAt);
+	}
+
+	@Override
+	public Optional<JobTranslation> findOne(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<JobTranslation> findAll(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<JobTranslation> findAll(Predicate predicate, Sort sort) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<JobTranslation> findAll(Predicate predicate, OrderSpecifier<?>... orders) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<JobTranslation> findAll(OrderSpecifier<?>... orders) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<JobTranslation> findAll(Predicate predicate, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean exists(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -1,6 +1,7 @@
 package com.japanwork.model;
 
 import org.hibernate.annotations.Where;
+import com.querydsl.core.annotations.QueryEntity;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import javax.persistence.*;
 
 @Entity
+@QueryEntity
 @Table(
         name="job_translation",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"job_id", "language_id"})}
@@ -48,9 +50,9 @@ public class JobTranslation {
     @Column(name = "required_language", nullable = false)
     private String requiredLanguage;
 
-    private int japaneseLevelRequirement;
+    @Column(name = "status")
     private int status;
-
+    
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private Timestamp deletedAt;
@@ -111,10 +113,6 @@ public class JobTranslation {
         return requiredLanguage;
     }
 
-    public int getJapaneseLevelRequirement() {
-        return japaneseLevelRequirement;
-    }
-
     public void setAddress(String address) {
         this.address = address;
     }
@@ -129,10 +127,6 @@ public class JobTranslation {
 
     public void setRequiredLanguage(String requiredLanguage) {
         this.requiredLanguage = requiredLanguage;
-    }
-
-    public void setJapaneseLevelRequirement(int japaneseLevelRequirement) {
-        this.japaneseLevelRequirement = japaneseLevelRequirement;
     }
 
     public String getBenefit() {
@@ -177,8 +171,7 @@ public class JobTranslation {
 
     public JobTranslation(UUID id, Job job, Language language, String address, String name,
                           String description, String requiredEducation, String requiredExperience, String benefit,
-                          String requiredLanguage, int japaneseLevelRequirement, int status, Timestamp createdAt,
-                          Timestamp updatedAt, Timestamp deletedAt) {
+                          String requiredLanguage, int status, Timestamp createdAt, Timestamp updatedAt, Timestamp deletedAt) {
         this.id = id;
         this.job = job;
         this.language = language;
@@ -189,7 +182,6 @@ public class JobTranslation {
         this.requiredExperience = requiredExperience;
         this.benefit = benefit;
         this.requiredLanguage = requiredLanguage;
-        this.japaneseLevelRequirement = japaneseLevelRequirement;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
