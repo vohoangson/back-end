@@ -7,11 +7,6 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.japanwork.model.*;
-import com.japanwork.service.candidate.CreateCandidateService;
-import com.japanwork.service.candidate.UpdateCandidateService;
-import com.japanwork.service.candidate.UpdateCareerService;
-import com.japanwork.service.candidate.UpdateExpectedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -28,8 +23,15 @@ import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
-import com.japanwork.exception.BadRequestException;
 import com.japanwork.exception.ForbiddenException;
+import com.japanwork.model.Business;
+import com.japanwork.model.Candidate;
+import com.japanwork.model.City;
+import com.japanwork.model.Contract;
+import com.japanwork.model.District;
+import com.japanwork.model.Level;
+import com.japanwork.model.PageInfo;
+import com.japanwork.model.User;
 import com.japanwork.payload.request.CandidateExpectedRequest;
 import com.japanwork.payload.request.CandidateExperienceRequest;
 import com.japanwork.payload.request.CandidatePersonalRequest;
@@ -37,6 +39,10 @@ import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.CandidateService;
+import com.japanwork.service.candidate.CreateCandidateService;
+import com.japanwork.service.candidate.UpdateCandidateService;
+import com.japanwork.service.candidate.UpdateCareerService;
+import com.japanwork.service.candidate.UpdateExpectedService;
 import com.japanwork.support.CommonSupport;
 
 @Controller
