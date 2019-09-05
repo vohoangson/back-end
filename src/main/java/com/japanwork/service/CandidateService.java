@@ -132,8 +132,8 @@ public class CandidateService {
 
         candidateResponse.setExpectedSalary(candidate.getExpectedSalary());
 
-        candidateResponse.setAcademies(academyService.listAcademyResponse(candidate.getAcademies()));
-        candidateResponse.setExperiences(experienceService.listExperienceResponse(candidate.getExperiences()));
+        candidateResponse.setAcademyResponses(academyService.listAcademyResponse(candidate.getAcademies()));
+        candidateResponse.setExperienceResponses(experienceService.listExperienceResponse(candidate.getExperiences()));
         candidateResponse.setLanguageCertificates(languageCertificateService.listLanguageCertificateResponse(candidate.getLanguageCertificates()));
 
         return candidateResponse;

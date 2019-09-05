@@ -68,9 +68,6 @@ public class CandidateResponse {
     @JsonProperty("experiences")
 	private Set<ExperienceResponse> experienceResponses;
 
-    private Set<AcademyResponse> academies;
-    private Set<ExperienceResponse> experiences;
-
     @JsonProperty("language_certificates")
 	private Set<LanguageCertificateResponse> languageCertificates;
 
@@ -232,22 +229,6 @@ public class CandidateResponse {
 
     public void setExperienceResponses(Set<ExperienceResponse> experienceResponses) {
         this.experienceResponses = experienceResponses;
-    }
-
-    public Set<AcademyResponse> getAcademies() {
-        return academies;
-    }
-
-    public void setAcademies(Set<AcademyResponse> academies) {
-        this.academies = academies;
-    }
-
-    public Set<ExperienceResponse> getExperiences() {
-        return experiences;
-    }
-
-    public void setExperiences(Set<ExperienceResponse> experiences) {
-        this.experiences = experiences;
     }
 
     public Set<LanguageCertificateResponse> getLanguageCertificates() {
