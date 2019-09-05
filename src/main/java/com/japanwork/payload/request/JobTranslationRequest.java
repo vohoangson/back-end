@@ -12,7 +12,6 @@ public class JobTranslationRequest {
     private UUID languageId;
 
     @NotBlank
-    @Size(max = 128)
     private String name;
 
     private String address;
@@ -25,12 +24,10 @@ public class JobTranslationRequest {
 
     @NotBlank
     @JsonProperty("required_experience")
-    @Size(max = 1000)
     private String requiredExperience;
 
     @NotBlank
     @JsonProperty("required_language")
-    @Size(max = 1000)
     private String requiredLanguage;
 
     private String benefit;

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.Company;
 import com.japanwork.model.Job;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 
 @Repository
 @Transactional

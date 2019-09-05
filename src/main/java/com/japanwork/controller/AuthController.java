@@ -77,7 +77,7 @@ public class AuthController {
     public RedirectView confirmRegistration(@RequestParam("token") final String token) throws ResourceNotFoundException{
     	final String result = userService.validateVerificationToken(token);
     	if (result.equals("valid")) {
-            return new RedirectView("http://jwork.club/login");
+            return new RedirectView("http://jwork.club");
         } else if(result.equals("expired")) {
             throw new ResourceNotFoundException(MessageConstant.CONFIRM_REGISTER_EXPIRED);
         } else {

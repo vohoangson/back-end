@@ -2,12 +2,15 @@ package com.japanwork.model;
 
 import org.hibernate.annotations.Where;
 
+import com.querydsl.core.annotations.QueryEntity;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.*;
 
 @Entity
+@QueryEntity
 @Table(
         name="job_translation",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"job_id", "language_id"})}
