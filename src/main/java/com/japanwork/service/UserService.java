@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.japanwork.common.CommonFunction;
 import com.japanwork.constant.CommonConstant;
-import com.japanwork.constant.EmailConstants;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.controller.ResponseDataAPI;
@@ -118,9 +116,12 @@ public class UserService {
 
 	        final VerificationToken newToken = this.generateNewVerificationToken(user);
 
+	        String url = request.getRequestURL().toString().replace(request.getRequestURI(), 
+            		request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
 	        String content = "To confirm your account, please click here : "
-	                +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
-	        this.sendEmail(user.getEmail(), "Complete Registration!", content);
+	        		+ "<a href='"+url+"'>confirm</a>"; 
+	        
+	        emailSenderService.sendEmail(user.getEmail(), "Complete Registration Japan Work!", content);
 
 
 	        URI location = ServletUriComponentsBuilder
@@ -137,9 +138,11 @@ public class UserService {
 	public ConfirmRegistrationTokenResponse resendRegistrationToken(String existingToken, HttpServletRequest request) {
 		final VerificationToken newToken = this.generateNewVerificationToken(existingToken);
         final User user = this.getUser(newToken.getToken());
+        String url = request.getRequestURL().toString().replace(request.getRequestURI(), 
+        		request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
         String content = "To confirm your account, please click here : "
-                +request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath())+UrlConstant.URL_CONFIRM_ACCOUNT+"?token="+newToken.getToken();
-        this.sendEmail(user.getEmail(), "Complete Registration!", content);
+        		+ "<a href='"+url+"'>confirm</a>";
+        emailSenderService.sendEmail(user.getEmail(), "Complete Registration Japan Work!", content);
 
         ConfirmRegistrationTokenResponse api = new ConfirmRegistrationTokenResponse("Please confirm your email!","");
         return api;
@@ -239,7 +242,7 @@ public class UserService {
 
 				ForgetPassword result = forgetPasswordRepository.save(forgetPassword);
 				if(result != null) {
-					this.sendEmail(user.getEmail(), "Reset the password!", "Confirmation code is: " + code);
+					emailSenderService.sendEmail(user.getEmail(), "Reset the password!", "Confirmation code is: " + code);
 				}
 
 				return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
@@ -280,15 +283,6 @@ public class UserService {
 	private User findUserByEmail(String email) {
 		return userRepository.findByEmail(email).get();
 	}
-
-	private void sendEmail(String to, String subject, String content) {
-    	SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(to);
-        mailMessage.setSubject(subject);
-        mailMessage.setFrom(EmailConstants.MY_EMAIL);
-        mailMessage.setText(content);
-        emailSenderService.sendEmail(mailMessage);
-    }
 
 	private VerificationToken generateNewVerificationToken(User user) {
         VerificationToken vToken = new VerificationToken(UUID.randomUUID().toString(), user);

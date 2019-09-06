@@ -25,6 +25,7 @@ import com.japanwork.payload.request.MarkReadNotificationRequest;
 import com.japanwork.payload.response.NotificationResponse;
 import com.japanwork.repository.notification.NotificationRepository;
 import com.japanwork.security.UserPrincipal;
+import com.japanwork.support.CommonSupport;
 
 @Service
 public class NotificationService {
@@ -34,12 +35,18 @@ public class NotificationService {
 	@Autowired
 	private NotificationRepository notificationRepository;
 
+	@Autowired
+    private EmailSenderService emailSenderService;
+	
+	@Autowired
+	private CommonSupport commonSupport;
+	
 	public void addNotification(UUID senderId, UUID conversationId, UUID objectableId, UUID receiverId, String content,
-			String type) throws ForbiddenException{
+			String objectableType) throws ForbiddenException{
 		Notification notification = new Notification();
 		notification.setSenderId(senderId);
 		notification.setObjectableId(objectableId);
-		notification.setNotificationType(type);
+		notification.setNotificationType(objectableType);
 		notification.setContent(content);
         notification.setReceiverId(receiverId);
         notification.setCreatedAt(CommonFunction.getCurrentDateTime());
@@ -50,7 +57,9 @@ public class NotificationService {
 													this.convertNotificationResponse(result, conversationId),
 													""
         );
+		
 		rabbitTemplate.convertAndSend("notifications/"+receiverId, ""+receiverId, responseDataAPI);
+		this.sendMail(objectableId, objectableType, senderId, receiverId, content);
 	}
 	
 	public ResponseDataAPI index(User user, int page, int paging)
@@ -96,6 +105,62 @@ public class NotificationService {
 	public void updateAllRead(User user) {
 		notificationRepository.updateIsReadByReceiverIdAndDeletedAt(true, user.getPropertyId());
 	}
+	
+	public void sendMail(UUID objectableId, String objectableType, UUID senderId, UUID receiverId,String content) {
+		User sender = commonSupport.loadUserById(senderId);
+		User receiver = commonSupport.loadUserById(receiverId);
+		String contentEmail = "";
+		String subject = "";
+		String name = "";
+		String profile ="";
+		String language = "?language="+sender.getCountry().getLanguage().getCode();
+		
+		if(objectableType.equals(CommonConstant.NotificationType.STATUS_REQUEST) || objectableType.equals(CommonConstant.NotificationType.MESSAGE_REQUEST)){
+			if(objectableType.equals(CommonConstant.NotificationType.STATUS_REQUEST)){
+				subject += "[" + content + "]" + " job application: " + objectableId.toString().substring(0, 5);
+				contentEmail +=  "[" + content + "]" + " job application: " ;
+				contentEmail += "<a href='http://jwork.club/request/"+objectableId+"'>" + objectableId.toString().substring(0, 5)+"</a>";
+			} else {
+				if(sender.getCompany() != null) {
+					name += sender.getCompany().getName();
+					profile += "/companies/"+sender.getCompany().getId() + language;  
+				} else if(sender.getCandidate() != null) {
+					name += sender.getCandidate().getFullName();
+					profile += "/candidates/"+sender.getCandidate().getId() + language;
+				} else {
+					name += sender.getTranslator().getName();
+					profile += "/translators/"+sender.getTranslator().getId() + language;
+				}
+				
+				subject += name + " has send a message in request " + objectableId.toString().substring(0, 5);
+				contentEmail += "<a href='http://jwork.club"+profile+"'>" + name + "</a> has send a message in request "
+							+ "<a href='http://jwork.club/request/"+objectableId+"'>" + objectableId.toString().substring(0, 5)+"</a>";
+			}
+		} else {
+			if(objectableType.equals(CommonConstant.NotificationType.STATUS_JOB_APPLICATION)) {
+				contentEmail +=  "[" + content + "]" + " job application: " ;
+				contentEmail += "<a href='http://jwork.club/job-applications/"+objectableId+"'>" + objectableId.toString().substring(0, 5)+"</a>";
+			} else {
+				if(sender.getCompany() != null) {
+					name += sender.getCompany().getName();
+					profile += "/companies/"+sender.getCompany().getId() + language;  
+				} else if(sender.getCandidate() != null) {
+					name += sender.getCandidate().getFullName();
+					profile += "/candidates/"+sender.getCandidate().getId() + language;
+				} else {
+					name += sender.getTranslator().getName();
+					profile += "/translators/"+sender.getTranslator().getId() + language;
+				}
+				
+				subject += name + " has send a message in job application " + objectableId.toString().substring(0, 5);
+				contentEmail += "<a href='http://jwork.club"+profile+"'>" + name + "</a> has send a message in job application "
+							+ "<a href='http://jwork.club/job-applications/"+objectableId+"'>" + objectableId.toString().substring(0, 5)+"</a>";
+			}
+		}
+		
+		emailSenderService.sendEmail(receiver.getEmail(), subject, contentEmail);
+	}
+	
 	public NotificationResponse convertNotificationResponse(Notification notification, UUID conversationId) {
 		NotificationResponse notificationResponse = new NotificationResponse();
 		notificationResponse.setId(notification.getId());
