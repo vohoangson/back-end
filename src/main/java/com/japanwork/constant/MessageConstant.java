@@ -23,6 +23,9 @@ public class MessageConstant {
 
     //Candidate error response information
     public static final String CANDIDATE_NOT_FOUND = "candidate_not_found";
+    
+    //Candidate translation error response information
+    public static final String CANDIDATE_TRANSLATION_NOT_FOUND = "candidate_translation_not_found";
 
 	//Conversation error response information
 	public static final String CONVERSATION_NOT_FOUND = "conversation_not_found";

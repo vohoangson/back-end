@@ -2,6 +2,8 @@ package com.japanwork.model;
 
 import org.hibernate.annotations.Where;
 
+import com.querydsl.core.annotations.QueryEntity;
+
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
@@ -9,6 +11,7 @@ import java.util.UUID;
 import javax.persistence.*;
 
 @Entity
+@QueryEntity
 @Table(
         name="request_translation",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"objectable_id", "language_id"})}

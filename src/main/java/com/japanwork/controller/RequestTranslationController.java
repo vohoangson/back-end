@@ -1,5 +1,9 @@
 package com.japanwork.controller;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -21,20 +25,26 @@ import com.japanwork.constant.MessageConstant;
 import com.japanwork.constant.UrlConstant;
 import com.japanwork.exception.BadRequestException;
 import com.japanwork.model.Candidate;
+import com.japanwork.model.CandidateTranslation;
 import com.japanwork.model.Company;
+import com.japanwork.model.CompanyTranslation;
+import com.japanwork.model.Language;
+import com.japanwork.model.QRequestStatus;
+import com.japanwork.model.QRequestTranslation;
 import com.japanwork.model.RequestStatus;
 import com.japanwork.model.RequestTranslation;
 import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
-import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
+import com.japanwork.payload.response.OwnerResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
 import com.japanwork.security.CurrentUser;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.service.RequestTranslationService;
 import com.japanwork.support.CommonSupport;
+import com.querydsl.core.BooleanBuilder;
 
 @Controller
 public class RequestTranslationController {
@@ -183,9 +193,107 @@ public class RequestTranslationController {
         );
 	}
 
+	@GetMapping(UrlConstant.URL_COMPANY_REQUEST)
+	@ResponseBody
+	public ResponseDataAPI indexByCompany(
+			@RequestParam(name = "language") String languageCode,
+			@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(defaultValue = "", name = "name") String name,
+			@RequestParam(defaultValue = "", name = "request_types") Set<String> requestTypes,
+			@RequestParam(defaultValue = "", name = "language_ids") Set<UUID> languageIds,
+			@RequestParam(defaultValue = "", name = "post_date") String postDate,
+			@CurrentUser UserPrincipal userPrincipal) throws ParseException{
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		Language language = commonSupport.loadLanguage(languageCode);
+		Company company = commonSupport.loadCompanyById(user.getPropertyId());
+		CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
+		
+		OwnerResponse ownerResponse = new OwnerResponse(
+				company.getId(), 
+				companyTranslation.getName(), 
+				company.getUser().getRole().replaceAll("ROLE_", ""), 
+				company.getLogoUrl());
+		
+		BooleanBuilder booleanBuilder = new BooleanBuilder();
+		
+		QRequestTranslation qRequestTranslation = QRequestTranslation.requestTranslation;
+		
+		if(!name.isEmpty()) {
+			booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
+		}
+		
+		if(languageIds.size() > 0) {
+			booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
+		}
+		
+		if(!postDate.isEmpty()) {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
+			Timestamp timestamp = new Timestamp(date.getTime());
+			booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
+		}				
+		
+		booleanBuilder.and(qRequestTranslation.ownerId.eq(user.getPropertyId()));
+	
+		if(requestTypes.size() > 0) {
+			booleanBuilder.and(qRequestTranslation.objectableType.in(requestTypes));
+		} else {
+			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE);
+			booleanBuilder.and(qRequestTranslation.objectableType.notIn(requestTypes));
+		}
+		
+		return requestTranslationService.index(booleanBuilder.getValue(), page, paging, ownerResponse);
+	}
+	
+	@GetMapping(UrlConstant.URL_CANDIDATES_REQUESTS)
+	@ResponseBody
+	public ResponseDataAPI indexByCandidate(
+			@RequestParam(name = "language") String languageCode,
+			@RequestParam(defaultValue = "1", name = "page") int page,
+			@RequestParam(defaultValue = "25", name = "paging") int paging,
+			@RequestParam(defaultValue = "", name = "name") String name,
+			@RequestParam(defaultValue = "", name = "language_ids") Set<UUID> languageIds,
+			@RequestParam(defaultValue = "", name = "post_date") String postDate,
+			@CurrentUser UserPrincipal userPrincipal) throws ParseException{
+		User user = commonSupport.loadUserById(userPrincipal.getId());
+		Language language = commonSupport.loadLanguage(languageCode);
+		Candidate candidate = commonSupport.loadCandidateById(user.getPropertyId());
+		CandidateTranslation candidateTranslation = commonSupport.loadCandiateTranslation(candidate, language);
+		
+		OwnerResponse ownerResponse = new OwnerResponse(
+				candidate.getId(), 
+				candidateTranslation.getFullName(), 
+				candidate.getUser().getRole().replaceAll("ROLE_", ""), 
+				candidate.getAvatar());
+		
+		BooleanBuilder booleanBuilder = new BooleanBuilder();
+		QRequestTranslation qRequestTranslation = QRequestTranslation.requestTranslation;
+		
+		if(!name.isEmpty()) {
+			booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
+		}
+		
+		if(languageIds.size() > 0) {
+			booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
+		}
+		
+		if(!postDate.isEmpty()) {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
+			Timestamp timestamp = new Timestamp(date.getTime());
+			booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
+		}				
+		
+		booleanBuilder.and(qRequestTranslation.ownerId.eq(user.getPropertyId()));
+		booleanBuilder.and(qRequestTranslation.objectableType.eq(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE));
+		
+		return requestTranslationService.index(booleanBuilder.getValue(), page, paging, ownerResponse);
+
+	}
+
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATIONS)
 	@ResponseBody
-	public ResponseDataAPI requestTranslations(
+	public ResponseDataAPI indexByTranslator(
+			@RequestParam(name = "language") String languageCode,
 			@RequestParam(defaultValue = "1", name = "page") int page,
 			@RequestParam(defaultValue = "25", name = "paging") int paging,
 			@RequestParam(defaultValue = "", name = "name") String name,
@@ -193,29 +301,59 @@ public class RequestTranslationController {
 			@RequestParam(defaultValue = "", name = "language_ids") Set<UUID> languageIds,
 			@RequestParam(defaultValue = "", name = "post_date") String postDate,
 			@RequestParam(defaultValue = "false", name = "your_request") Boolean yourRequest,
-			@CurrentUser UserPrincipal userPrincipal){
-
-		RequestTranslationFilterRequest filterRequest = new RequestTranslationFilterRequest();
-		filterRequest.setName(name);
-		filterRequest.setRequestTypes(requestTypes);
-		filterRequest.setLanguageIds(languageIds);
-		filterRequest.setPostDate(postDate);
-		filterRequest.setYourRequest(yourRequest);
+			@CurrentUser UserPrincipal userPrincipal) throws ParseException{
 		User user = commonSupport.loadUserById(userPrincipal.getId());
-		if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-			return requestTranslationService.requestTranslationsByCompany(user, filterRequest, page, paging);
-		} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			if(yourRequest) {
-				return requestTranslationService.requestTranslationsByTranslator(user, filterRequest, page, paging);
-			} else {
-				return requestTranslationService.newRequestTranslations(user, filterRequest, page, paging);
+		Language language = commonSupport.loadLanguage(languageCode);
+		
+		BooleanBuilder booleanBuilder = new BooleanBuilder();
+		if(yourRequest) {
+			QRequestTranslation qRequestTranslation = QRequestStatus.requestStatus.requestTranslation;
+			
+			if(!name.isEmpty()) {
+				booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
 			}
+			
+			if(languageIds.size() > 0) {
+				booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
+			}
+			
+			if(!postDate.isEmpty()) {
+				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
+				Timestamp timestamp = new Timestamp(date.getTime());
+				booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
+			}				
+			
+			if(requestTypes.size() > 0) {
+				booleanBuilder.and(qRequestTranslation.objectableType.in(requestTypes));
+			}
+			
+			booleanBuilder.and(QRequestStatus.requestStatus.translator.id.eq(user.getPropertyId()));
+			return requestTranslationService.indexByTranslator(booleanBuilder.getValue(), page, paging, language);
 		} else {
-			return requestTranslationService.requestTranslationsByCandidate(user, filterRequest, page, paging);
+			QRequestTranslation qRequestTranslation = QRequestTranslation.requestTranslation;
+			
+			if(!name.isEmpty()) {
+				booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
+			}
+			
+			if(languageIds.size() > 0) {
+				booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
+			}
+			
+			if(!postDate.isEmpty()) {
+				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
+				Timestamp timestamp = new Timestamp(date.getTime());
+				booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
+			}			
+			
+			if(requestTypes.size() > 0) {
+				booleanBuilder.and(qRequestTranslation.objectableType.in(requestTypes));
+			}
+			booleanBuilder.and(qRequestTranslation.translator.id.isNull());
+			return requestTranslationService.newRequestTranslations(booleanBuilder.getValue(), page, paging, language);
 		}
-
 	}
-
+	
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATION)
 	@ResponseBody
 	public ResponseDataAPI show(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){

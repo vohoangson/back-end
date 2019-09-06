@@ -1,10 +1,8 @@
 package com.japanwork.repository.request_translation;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Example;
@@ -16,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.Language;
 import com.japanwork.model.RequestTranslation;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 
 @Repository
 @Transactional
@@ -195,23 +195,50 @@ public class RequestTranslationRepositoryIplm implements RequestTranslationRepos
 	}
 
 	@Override
-	public Page<RequestTranslation> findAllByCompany(Pageable page, String name, Set<String> objectableTypes,
-			Set<UUID> languageIds, Date postTime, UUID ownerId) {
+	public Optional<RequestTranslation> findOne(Predicate predicate) {
 		// TODO Auto-generated method stub
-		return findAllByCompany( page, name, objectableTypes, languageIds, postTime, ownerId);
+		return null;
 	}
 
 	@Override
-	public Page<RequestTranslation> findAllByCandidate(Pageable page, String name, Set<UUID> languageIds, Date postTime,
-			UUID ownerId) {
+	public Iterable<RequestTranslation> findAll(Predicate predicate) {
 		// TODO Auto-generated method stub
-		return findAllByCandidate( page, name, languageIds, postTime, ownerId) ;
+		return null;
 	}
 
 	@Override
-	public Page<RequestTranslation> findNewRequestByTranslator(Pageable pageable, String name,
-			Set<String> objectableTypes, Set<UUID> languageIds, Date postTime, UUID transaltorId) {
+	public Iterable<RequestTranslation> findAll(Predicate predicate, Sort sort) {
 		// TODO Auto-generated method stub
-		return findNewRequestByTranslator( pageable, name, objectableTypes, languageIds, postTime, transaltorId);
+		return null;
+	}
+
+	@Override
+	public Iterable<RequestTranslation> findAll(Predicate predicate, OrderSpecifier<?>... orders) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<RequestTranslation> findAll(OrderSpecifier<?>... orders) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<RequestTranslation> findAll(Predicate predicate, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean exists(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

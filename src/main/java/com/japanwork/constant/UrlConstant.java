@@ -53,7 +53,7 @@ public class UrlConstant {
 	public static final String URL_MY_COMPANY = "/v1/companies/my_company";
 	public static final String URL_COMPANY_JOB = "/v1/companies/{id}/jobs";
 	public static final String URL_COMPANY_JOB_APPLICATION = "/v1/companies/{id}/job_applications";
-	public static final String URL_COMPANY_REQUEST = "/v1/companies/{id}/requests";
+	public static final String URL_COMPANY_REQUEST = "/v1/companies/requests";
 
 	//Company Translation
     public static final String URL_COMPANY_TRANSLATION = "/v1/companies/{id}/company_translations";
@@ -112,7 +112,7 @@ public class UrlConstant {
 	public static final String URL_CANDIDATES_JOB_FAVORITE = "/v1/candidates/jobs/{id}/favorite";
 	public static final String URL_CANDIDATES_JOB_FAVORITES = "/v1/candidates/jobs/favorite";
 	public static final String URL_CANDIDATES_JOB_APPLICATIONS = "/v1/candidates/{id}/job_applications";
-	public static final String URL_CANDIDATES_REQUESTS = "/v1/candidates/{id}/requests";
+	public static final String URL_CANDIDATES_REQUESTS = "/v1/candidates/requests";
 
 	//Candidate personal
 	public static final String URL_CANDIDATE_PERSONALS = "/v1/candidates/personal";
@@ -137,5 +137,5 @@ public class UrlConstant {
 	public static final String URL_MY_TRANSLATOR = "/v1/translators/my_translator";
 	public static final String URL_TRANSLATORS_UNDEL = "/v1/translators/{id}/undelete";
 	public static final String URL_TRANSLATORS_JOB_APPLICATIONS = "/v1/translators/{id}/job_applications";
-	public static final String URL_TRANSLATORS_REQUESTS = "/v1/translators/{id}/requests";
+	public static final String URL_TRANSLATORS_REQUESTS = "/v1/translators/requests";
 }

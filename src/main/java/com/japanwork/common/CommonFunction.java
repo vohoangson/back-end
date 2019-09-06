@@ -24,17 +24,6 @@ public class CommonFunction {
             return null;
         }
     }
-	public static List<String> listParam(String param){
-		if(!param.equals("")) {
-			List<String> listParam = new ArrayList<String>();
-			String[] list = param.split(",");
-			for (String string : list) {
-				listParam.add(string);
-			}
-			return listParam;
-		}
-		return null;
-	}
 
 	public static String generateCode(int lenght) {
 	    List<CharacterRule> rules = Arrays.asList(new CharacterRule(EnglishCharacterData.UpperCase, 1),

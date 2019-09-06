@@ -37,6 +37,7 @@ import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.repository.academy.AcademyRepository;
 import com.japanwork.repository.candidate.CandidateRepository;
+import com.japanwork.repository.candidate_translation.CandidateTranslationRepository;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.repository.conversation.ConversationRepository;
 import com.japanwork.repository.experience.ExperienceRepository;
@@ -69,6 +70,9 @@ public class CommonSupport {
 
     @Autowired
     private CandidateRepository candidateRepository;
+    
+    @Autowired
+    private CandidateTranslationRepository candidateTranslationRepository;
 
     @Autowired
     private ConversationRepository conversationRepository;
@@ -206,6 +210,21 @@ public class CommonSupport {
 		return candidate;
 	}
 
+    public CandidateTranslation loadCandiateTranslation(
+            Candidate candidate,
+            Language language
+    ) throws ResourceNotFoundException {
+    	CandidateTranslation candidateTranslation = candidateTranslationRepository.findByCandidateAndLanguageAndDeletedAt(
+    			candidate,
+                language,
+                null
+        );
+        if(candidateTranslation == null) {
+            throw new ResourceNotFoundException(MessageConstant.CANDIDATE_TRANSLATION_NOT_FOUND);
+        }
+        return candidateTranslation;
+    }
+    
     public Conversation loadConversationById(UUID id) throws ResourceNotFoundException {
     	Conversation conversation = conversationRepository.findByIdAndDeletedAt(id, null);
         if(conversation == null) {
