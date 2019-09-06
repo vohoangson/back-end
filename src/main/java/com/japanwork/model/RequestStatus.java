@@ -2,6 +2,8 @@ package com.japanwork.model;
 
 import org.hibernate.annotations.Where;
 
+import com.querydsl.core.annotations.QueryEntity;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
+@QueryEntity
 @Table(name="request_status")
 public class RequestStatus {
 

@@ -1,9 +1,7 @@
 package com.japanwork.repository.request_status;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Example;
@@ -14,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.japanwork.model.RequestStatus;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 
 @Repository
 @Transactional
@@ -170,9 +170,50 @@ public class RequestStatusRepositoryIplm implements RequestStatusRepository{
 	}
 
 	@Override
-	public Page<RequestStatus> findAllByTranslator(Pageable pageable, String name, Set<String> objectableTypes,
-			Set<UUID> languageIds, Date postTime, UUID transaltorId) {
+	public Optional<RequestStatus> findOne(Predicate predicate) {
 		// TODO Auto-generated method stub
-		return findAllByTranslator( pageable, name, objectableTypes, languageIds, postTime, transaltorId);
+		return null;
+	}
+
+	@Override
+	public Iterable<RequestStatus> findAll(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<RequestStatus> findAll(Predicate predicate, Sort sort) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<RequestStatus> findAll(Predicate predicate, OrderSpecifier<?>... orders) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<RequestStatus> findAll(OrderSpecifier<?>... orders) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<RequestStatus> findAll(Predicate predicate, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean exists(Predicate predicate) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

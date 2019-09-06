@@ -1,11 +1,7 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -39,7 +35,6 @@ import com.japanwork.model.Translator;
 import com.japanwork.model.User;
 import com.japanwork.payload.request.CancelRequestTranslationRequest;
 import com.japanwork.payload.request.RejectRequestTranslationRequest;
-import com.japanwork.payload.request.RequestTranslationFilterRequest;
 import com.japanwork.payload.request.RequestTranslationRequest;
 import com.japanwork.payload.response.OwnerResponse;
 import com.japanwork.payload.response.RequestTranslationResponse;
@@ -47,6 +42,7 @@ import com.japanwork.repository.request_status.RequestStatusRepository;
 import com.japanwork.repository.request_translation.RequestTranslationRepository;
 import com.japanwork.security.UserPrincipal;
 import com.japanwork.support.CommonSupport;
+import com.querydsl.core.types.Predicate;
 
 @Service
 public class RequestTranslationService {
@@ -70,9 +66,6 @@ public class RequestTranslationService {
 
 	@Autowired
 	private NotificationService notificationService;
-
-	@Autowired
-	private LanguageService languageService;
 
 	@Autowired
     private CommonSupport commonSupport;
@@ -502,45 +495,11 @@ public class RequestTranslationService {
 		}
 	}
 
-	public ResponseDataAPI requestTranslationsByCompany(User user,
-			RequestTranslationFilterRequest filterRequest, int page, int paging) throws IllegalArgumentException{
-		Date date = null;
-		if(!filterRequest.getPostDate().isEmpty()) {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if(filterRequest.getLanguageIds().size() == 0) {
-			filterRequest.setLanguageIds(languageService.languageIds());
-		}
-
-		if(filterRequest.getRequestTypes().size() == 0) {
-			Set<String> requestTypes = new HashSet<String>();
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION);
-			filterRequest.setRequestTypes(requestTypes);
-		}
-		Page<RequestTranslation> pages = requestTranslationRepository.findAllByCompany(PageRequest.of(page-1, paging),
-				filterRequest.getName(), filterRequest.getRequestTypes(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+	public ResponseDataAPI index(Predicate predicate, int page, int paging, OwnerResponse ownerResponse) 
+			throws IllegalArgumentException{
+		Page<RequestTranslation> pages = requestTranslationRepository.findAll(predicate, PageRequest.of(page-1, paging));
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
-
-		Company company = commonSupport.loadCompanyByUser(user.getId());
-		OwnerResponse ownerResponse = new OwnerResponse(
-				company.getId(), 
-				company.getName(), 
-				company.getUser().getRole().replaceAll("ROLE_", ""), 
-				company.getLogoUrl());
 		
 		if(pages.getContent().size() > 0) {
 			for (RequestTranslation requestTranslation : pages.getContent()) {
@@ -556,82 +515,8 @@ public class RequestTranslationService {
         );
 	}
 
-	public ResponseDataAPI requestTranslationsByCandidate(User user, RequestTranslationFilterRequest filterRequest,
-			int page, int paging) throws IllegalArgumentException{
-		Date date = null;
-		if(!filterRequest.getPostDate().isEmpty()) {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if(filterRequest.getLanguageIds().size() == 0) {
-			filterRequest.setLanguageIds(languageService.languageIds());
-		}
-		Page<RequestTranslation> pages = requestTranslationRepository.findAllByCandidate(PageRequest.of(page-1, paging),
-				filterRequest.getName(), filterRequest.getLanguageIds(), date, user.getPropertyId());
-		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
-		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
-
-		Candidate candidate = commonSupport.loadCandidateByUser(user.getId());
-		OwnerResponse ownerResponse = new OwnerResponse(
-				candidate.getId(), 
-				candidate.getFullName(), 
-				candidate.getUser().getRole().replaceAll("ROLE_", ""), 
-				candidate.getAvatar());
-		if(pages.getContent().size() > 0) {
-			for (RequestTranslation requestTranslation : pages.getContent()) {
-				RequestStatus status = requestTranslation.getRequestStatus().stream().findFirst().get();
-				list.add(convertRequestTranslationResponse(ownerResponse, requestTranslation, status));
-			}
-		}
-
-		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				list,
-				pageInfo
-        );
-	}
-
-	public ResponseDataAPI requestTranslationsByTranslator(User user, RequestTranslationFilterRequest filterRequest,
-			int page, int paging) throws IllegalArgumentException{
-		Date date = null;
-		if(!filterRequest.getPostDate().isEmpty()) {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if(filterRequest.getLanguageIds().size() == 0) {
-			filterRequest.setLanguageIds(languageService.languageIds());
-		}
-
-		if(filterRequest.getRequestTypes().size() == 0) {
-			Set<String> requestTypes = new HashSet<String>();
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE);
-			filterRequest.setRequestTypes(requestTypes);
-		}
-		Page<RequestStatus> pages = requestStatusRepository.findAllByTranslator(PageRequest.of(page-1, paging),
-				filterRequest.getName(), filterRequest.getRequestTypes(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+	public ResponseDataAPI indexByTranslator(Predicate predicate, int page, int paging, Language language) throws IllegalArgumentException{
+		Page<RequestStatus> pages = requestStatusRepository.findAll(predicate, PageRequest.of(page-1, paging));
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 
@@ -648,37 +533,9 @@ public class RequestTranslationService {
         );
 	}
 
-	public ResponseDataAPI newRequestTranslations(User user, RequestTranslationFilterRequest filterRequest, int page, int paging)
+	public ResponseDataAPI newRequestTranslations(Predicate predicate, int page, int paging, Language language)
 			throws IllegalArgumentException{
-		Date date = null;
-		if(!filterRequest.getPostDate().isEmpty()) {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(filterRequest.getPostDate());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("0000-00-00 00:00:00");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if(filterRequest.getLanguageIds().size() == 0) {
-			filterRequest.setLanguageIds(languageService.languageIds());
-		}
-
-		if(filterRequest.getRequestTypes().size() == 0) {
-			Set<String> requestTypes = new HashSet<String>();
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_COMPANY);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_JOB_APPLICATION);
-			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE);
-			filterRequest.setRequestTypes(requestTypes);
-		}
-		Page<RequestTranslation> pages = requestTranslationRepository.findNewRequestByTranslator(PageRequest.of(page-1, paging),
-				filterRequest.getName(), filterRequest.getRequestTypes(), filterRequest.getLanguageIds(), date, user.getPropertyId());
+		Page<RequestTranslation> pages = requestTranslationRepository.findAll(predicate, PageRequest.of(page-1, paging));
 		PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
 		List<RequestTranslationResponse> list = new ArrayList<RequestTranslationResponse>();
 

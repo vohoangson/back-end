@@ -134,7 +134,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 		UrlConstant.URL_CONTRACT,
                 		UrlConstant.URL_LANGUAGUE_TYPE,
                 		UrlConstant.URL_USER,
-                		UrlConstant.URL_REQUEST_TRANSLATIONS,
                 		UrlConstant.URL_REQUEST_TRANSLATION)
                     	.permitAll()
                 	.antMatchers(HttpMethod.PATCH,
