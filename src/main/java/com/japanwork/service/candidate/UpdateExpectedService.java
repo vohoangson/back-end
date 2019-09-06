@@ -16,15 +16,16 @@ public class UpdateExpectedService {
     public Candidate perform(
             CandidateExpectedRequest candidateExpectedRequest,
             Candidate candidate,
+            Country country,
             City city,
             District district,
             Business business,
             Level level,
             Contract contract) {
 
+    	candidate.setExpectedWorkingCountry(country);
         candidate.setExpectedWorkingCity(city);
         candidate.setExpectedWorkingDistrict(district);
-        candidate.setExpectedWorkingAddress(candidateExpectedRequest.getExpectedWorkingAddress());
         candidate.setExpectedBusiness(business);
         candidate.setExpectedLevel(level);
         candidate.setExpectedContract(contract);

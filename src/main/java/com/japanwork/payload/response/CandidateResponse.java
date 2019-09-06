@@ -40,15 +40,15 @@ public class CandidateResponse {
     @JsonProperty("japanese_level")
     private int japaneseLevel;
 
+    @JsonProperty("expected_working_country_id")
+    private UUID expectedWorkingCountryId;
+    
     @JsonProperty("expected_working_city_id")
     private UUID expectedWorkingCityId;
 
     @JsonProperty("expected_working_district_id")
     private UUID expectedWorkingDistrictId;
-
-    @JsonProperty("expected_working_address")
-    private String expectedWorkingAddress;
-
+    
     @JsonProperty("expected_business_id")
     private UUID expectedBusinessId;
 
@@ -159,6 +159,14 @@ public class CandidateResponse {
 		this.japaneseLevel = japaneseLevel;
 	}
 
+	public UUID getExpectedWorkingCountryId() {
+		return expectedWorkingCountryId;
+	}
+
+	public void setExpectedWorkingCountryId(UUID expectedWorkingCountryId) {
+		this.expectedWorkingCountryId = expectedWorkingCountryId;
+	}
+
 	public UUID getExpectedWorkingCityId() {
 		return expectedWorkingCityId;
 	}
@@ -173,14 +181,6 @@ public class CandidateResponse {
 
 	public void setExpectedWorkingDistrictId(UUID expectedWorkingDistrictId) {
 		this.expectedWorkingDistrictId = expectedWorkingDistrictId;
-	}
-
-	public String getExpectedWorkingAddress() {
-		return expectedWorkingAddress;
-	}
-
-	public void setExpectedWorkingAddress(String expectedWorkingAddress) {
-		this.expectedWorkingAddress = expectedWorkingAddress;
 	}
 
 	public UUID getExpectedBusinessId() {
@@ -239,7 +239,12 @@ public class CandidateResponse {
 		this.languageCertificates = languageCertificates;
 	}
 
-    public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital, UUID residentalCityId, UUID residentalDistrictId, String residentalAddres, String avatar, String introduction, int japaneseLevel, UUID expectedWorkingCityId, UUID expectedWorkingDistrictId, String expectedWorkingAddress, UUID expectedBusinessId, UUID expectedLevelId, UUID expectedContractId, float expectedSalary, Set<AcademyResponse> academyResponses, Set<ExperienceResponse> experienceResponses, Set<LanguageCertificateResponse> languageCertificates) {
+    public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital, UUID residentalCityId,
+    		UUID residentalDistrictId, String residentalAddres, String avatar, String introduction, int japaneseLevel, 
+    		UUID expectedWorkingCityId, UUID expectedWorkingDistrictId, UUID expectedWorkingCountryId, 
+    		UUID expectedBusinessId, UUID expectedLevelId, UUID expectedContractId, float expectedSalary, 
+    		Set<AcademyResponse> academyResponses, Set<ExperienceResponse> experienceResponses, 
+    		Set<LanguageCertificateResponse> languageCertificates) {
         this.id = id;
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
@@ -253,7 +258,7 @@ public class CandidateResponse {
         this.japaneseLevel = japaneseLevel;
         this.expectedWorkingCityId = expectedWorkingCityId;
         this.expectedWorkingDistrictId = expectedWorkingDistrictId;
-        this.expectedWorkingAddress = expectedWorkingAddress;
+        this.expectedWorkingCountryId = expectedWorkingCountryId;
         this.expectedBusinessId = expectedBusinessId;
         this.expectedLevelId = expectedLevelId;
         this.expectedContractId = expectedContractId;

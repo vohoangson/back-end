@@ -40,6 +40,7 @@ import com.japanwork.repository.candidate.CandidateRepository;
 import com.japanwork.repository.candidate_translation.CandidateTranslationRepository;
 import com.japanwork.repository.company.CompanyRepository;
 import com.japanwork.repository.conversation.ConversationRepository;
+import com.japanwork.repository.country.CountryRepository;
 import com.japanwork.repository.experience.ExperienceRepository;
 import com.japanwork.repository.job.JobRepository;
 import com.japanwork.repository.job_application.JobApplicationRepository;
@@ -110,6 +111,9 @@ public class CommonSupport {
     @Autowired
     private LanguageCertificateTypeRepository languageCertificateTypeRepository;
 
+    @Autowired
+    private CountryRepository countryRepository;
+    
     public Company loadCompanyById(UUID id) throws ResourceNotFoundException {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
         if(company == null) {
@@ -319,6 +323,15 @@ public class CommonSupport {
         return business;
     }
 
+    public Country loadCountry(UUID id) throws ResourceNotFoundException {
+    	Country country = countryRepository.findById(id).get();
+
+        if(country == null) {
+            throw new ResourceNotFoundException(MessageConstant.COUNTRY_NOT_FOUND);
+        }
+        return country;
+    }
+    
     public City loadCity(UUID id) throws ResourceNotFoundException {
         City city = cityRepository.findByIdAndDeletedAt(id, null);
 

@@ -28,6 +28,7 @@ import com.japanwork.model.Business;
 import com.japanwork.model.Candidate;
 import com.japanwork.model.City;
 import com.japanwork.model.Contract;
+import com.japanwork.model.Country;
 import com.japanwork.model.District;
 import com.japanwork.model.Level;
 import com.japanwork.model.PageInfo;
@@ -153,6 +154,7 @@ public class CandidateController {
             throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
         }
 
+        Country country   = commonSupport.loadCountry(candidateExpectedRequest.getExpectedWorkingCountryId());
         City city         = commonSupport.loadCity(candidateExpectedRequest.getExpectedWorkingCityId());
         District district = commonSupport.loadDistrict(candidateExpectedRequest.getExpectedWorkingDistrictId());
         Business business = commonSupport.loadBusiness(candidateExpectedRequest.getExpectedBusinessId());
@@ -162,6 +164,7 @@ public class CandidateController {
         candidate = updateExpectedService.perform(
                 candidateExpectedRequest,
                 candidate,
+                country,
                 city,
                 district,
                 business,

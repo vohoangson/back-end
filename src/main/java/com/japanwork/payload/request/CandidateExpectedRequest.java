@@ -2,23 +2,22 @@ package com.japanwork.payload.request;
 
 import java.util.UUID;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CandidateExpectedRequest {	
 	@NotNull
+    @JsonProperty("expected_working_country_id")  
+    private UUID expectedWorkingCountryId;
+	
+	@NotNull
 	@JsonProperty("expected_working_city_id")
     private UUID expectedWorkingCityId;
-
+	
 	@NotNull
-    @JsonProperty("expected_working_district_id")  
+	@JsonProperty("expected_working_district_id")
     private UUID expectedWorkingDistrictId;
-    
-	@NotBlank
-    @JsonProperty("expected_working_address")
-    private String expectedWorkingAddress;
     
     @NotNull
     @JsonProperty("expected_business_id")
@@ -36,6 +35,14 @@ public class CandidateExpectedRequest {
     @JsonProperty("expected_salary")
     private float expectedSalary;
 
+	public UUID getExpectedWorkingCountryId() {
+		return expectedWorkingCountryId;
+	}
+
+	public void setExpectedWorkingCountryId(UUID expectedWorkingCountryId) {
+		this.expectedWorkingCountryId = expectedWorkingCountryId;
+	}
+
 	public UUID getExpectedWorkingCityId() {
 		return expectedWorkingCityId;
 	}
@@ -50,14 +57,6 @@ public class CandidateExpectedRequest {
 
 	public void setExpectedWorkingDistrictId(UUID expectedWorkingDistrictId) {
 		this.expectedWorkingDistrictId = expectedWorkingDistrictId;
-	}
-
-	public String getExpectedWorkingAddress() {
-		return expectedWorkingAddress;
-	}
-
-	public void setExpectedWorkingAddress(String expectedWorkingAddress) {
-		this.expectedWorkingAddress = expectedWorkingAddress;
 	}
 
 	public UUID getExpectedBusinessId() {

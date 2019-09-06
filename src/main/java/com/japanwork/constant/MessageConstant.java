@@ -47,6 +47,9 @@ public class MessageConstant {
 
     //Business error response information
     public static final String BUSINESS_NOT_FOUND = "business_not_found";
+    
+    //Country error response information
+    public static final String COUNTRY_NOT_FOUND = "country_not_found";
 
     //City error response information
     public static final String CITY_NOT_FOUND = "city_not_found";

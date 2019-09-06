@@ -1,9 +1,6 @@
 package com.japanwork.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,41 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.japanwork.common.CommonFunction;
-import com.japanwork.constant.CommonConstant;
 import com.japanwork.constant.MessageConstant;
 import com.japanwork.exception.ResourceNotFoundException;
 import com.japanwork.exception.ServerError;
-import com.japanwork.model.Academy;
-import com.japanwork.model.Business;
 import com.japanwork.model.Candidate;
-import com.japanwork.model.City;
-import com.japanwork.model.Contract;
-import com.japanwork.model.District;
-import com.japanwork.model.Experience;
-import com.japanwork.model.LanguageCertificate;
-import com.japanwork.model.LanguageCertificateType;
-import com.japanwork.model.Level;
-import com.japanwork.payload.request.AcademyRequest;
-import com.japanwork.payload.request.CandidateExpectedRequest;
-import com.japanwork.payload.request.CandidateExperienceRequest;
-import com.japanwork.payload.request.CandidatePersonalRequest;
-import com.japanwork.payload.request.ExperienceRequest;
-import com.japanwork.payload.request.LanguageCertificateRequest;
 import com.japanwork.payload.response.CandidateResponse;
 import com.japanwork.repository.candidate.CandidateRepository;
-import com.japanwork.security.UserPrincipal;
 
 @Service
 public class CandidateService {
     @Autowired
     private CandidateRepository candidateRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private AcademyService academyService;
@@ -108,6 +82,10 @@ public class CandidateService {
         candidateResponse.setIntroduction(candidate.getIntroduction());
         candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
 
+        if(candidate.getExpectedWorkingCountry() != null) {
+            candidateResponse.setExpectedWorkingCountryId(candidate.getExpectedWorkingCountry().getId());
+        }
+        
         if(candidate.getExpectedWorkingCity() != null) {
             candidateResponse.setExpectedWorkingCityId(candidate.getExpectedWorkingCity().getId());
         }
@@ -115,8 +93,6 @@ public class CandidateService {
         if(candidate.getExpectedWorkingDistrict() != null) {
             candidateResponse.setExpectedWorkingDistrictId(candidate.getExpectedWorkingDistrict().getId());
         }
-
-        candidateResponse.setExpectedWorkingAddress(candidate.getExpectedWorkingAddress());
 
         if(candidate.getExpectedBusiness() != null) {
             candidateResponse.setExpectedBusinessId(candidate.getExpectedBusiness().getId());
