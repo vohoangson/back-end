@@ -65,7 +65,12 @@ public class Candidate {
 
     @Column(name="japanese_level")
     private int japaneseLevel;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "expected_working_country_id")
+	@Where(clause = "deleted_at IS NULL")
+    private Country expectedWorkingCountry;
+    
     @ManyToOne
     @JoinColumn(name = "expected_working_city_id")
 	@Where(clause = "deleted_at IS NULL")
@@ -75,9 +80,6 @@ public class Candidate {
     @JoinColumn(name = "expected_working_district_id")
     @Where(clause = "deleted_at IS NULL")
     private District expectedWorkingDistrict;
-    
-    @Column(name="expected_working_address")
-    private String expectedWorkingAddress;
     
     @ManyToOne
     @JoinColumn(name="expected_business_type_id")
@@ -219,6 +221,15 @@ public class Candidate {
 	public void setJapaneseLevel(int japaneseLevel) {
 		this.japaneseLevel = japaneseLevel;
 	}
+	
+	public Country getExpectedWorkingCountry() {
+		return expectedWorkingCountry;
+	}
+
+	public void setExpectedWorkingCountry(Country expectedWorkingCountry) {
+		this.expectedWorkingCountry = expectedWorkingCountry;
+	}
+
 	public City getExpectedWorkingCity() {
 		return expectedWorkingCity;
 	}
@@ -233,14 +244,6 @@ public class Candidate {
 
 	public void setExpectedWorkingDistrict(District expectedWorkingDistrict) {
 		this.expectedWorkingDistrict = expectedWorkingDistrict;
-	}
-
-	public String getExpectedWorkingAddress() {
-		return expectedWorkingAddress;
-	}
-
-	public void setExpectedWorkingAddress(String expectedWorkingAddress) {
-		this.expectedWorkingAddress = expectedWorkingAddress;
 	}
 
 	public Business getExpectedBusiness() {
@@ -345,7 +348,7 @@ public class Candidate {
 	public Candidate(UUID id, User user, String fullName, Date dateOfBirth, String gender, String marital,
 			City residentalCity, District residentalDistrict, String residentalAddres, String avatar,
 			String introduction, int japaneseLevel, City expectedWorkingCity, District expectedWorkingDistrict,
-			String expectedWorkingAddress, Business expectedBusiness, Level expectedLevel, Contract expectedContract,
+			Country expectedWorkingCountry, Business expectedBusiness, Level expectedLevel, Contract expectedContract,
 			float expectedSalary, Set<Academy> academies, Set<Experience> experiences,
 			Set<LanguageCertificate> languageCertificates, String status, int statusInfo, Timestamp createdAt,
 			Timestamp updatedAt, Timestamp deletedAt) {
@@ -363,7 +366,7 @@ public class Candidate {
 		this.japaneseLevel = japaneseLevel;
 		this.expectedWorkingCity = expectedWorkingCity;
 		this.expectedWorkingDistrict = expectedWorkingDistrict;
-		this.expectedWorkingAddress = expectedWorkingAddress;
+		this.expectedWorkingCountry = expectedWorkingCountry;
 		this.expectedBusiness = expectedBusiness;
 		this.expectedLevel = expectedLevel;
 		this.expectedContract = expectedContract;
