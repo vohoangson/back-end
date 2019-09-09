@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
@@ -37,7 +38,7 @@ public class IndexJobService {
     ) throws ResourceNotFoundException
     {
     	
-    	Page<JobTranslation> pages = jobTranslationRepository.findAll(predicate, PageRequest.of(page-1, paging));
+    	Page<JobTranslation> pages = jobTranslationRepository.findAll(predicate, PageRequest.of(page-1, paging, Sort.by("createdAt").descending()));
     	PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
     	
     	List<JobResponse> list = new ArrayList<JobResponse>();

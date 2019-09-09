@@ -45,9 +45,9 @@ public class FileHandlerService {
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
+            this.checkSizeFile(file);
             
             String mimeType = Files.probeContentType(file.toPath());
-            
             if(mimeType.startsWith("image", 0)) {
             	String fileName = generateFileName(multipartFile);
                 fileUrl = endpointUrl + "/" + this.awsS3AudioBucket + "/" + fileName;
@@ -56,7 +56,6 @@ public class FileHandlerService {
             	file.delete();
             	throw new BadRequestException(MessageConstant.FILE_NOT_FORMATED);
             }
-            file.delete();
         } catch(BadRequestException ex) {
         	throw ex;
         } catch (Exception e) {
@@ -71,10 +70,11 @@ public class FileHandlerService {
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
+            this.checkSizeFile(file);
             
-            String mimeType = Files.probeContentType(file.toPath());
-            
-            if(mimeType.equals("application/pdf") || mimeType.equals("application/msword") || mimeType.startsWith("image", 0)) {
+            String mimeType = Files.probeContentType(file.toPath()); 
+            if(mimeType.equals("application/pdf") || mimeType.equals("application/msword") 
+            		|| mimeType.startsWith("image", 0) || mimeType.equals("text/plain")) {
             	String fileName = generateFileName(multipartFile);
                 fileUrl = endpointUrl + "/" + this.awsS3AudioBucket + "/" + fileName;
                 uploadFileTos3bucket(fileName, file);
@@ -82,7 +82,6 @@ public class FileHandlerService {
             	file.delete();
             	throw new BadRequestException(MessageConstant.FILE_NOT_FORMATED);
             }
-            file.delete();
         } catch(BadRequestException ex) {
         	throw ex;
         } catch (Exception e) {
@@ -90,6 +89,22 @@ public class FileHandlerService {
         }
         
         return fileUrl;
+    }
+    
+    private void checkSizeFile(File file) {
+    	long size;
+		try {
+			size = Files.size(file.toPath());
+			if(size > 5242880) {
+	        	file.delete();
+	        	throw new BadRequestException(MessageConstant.MAXIMUM_UPLOAD_SIZE_EXCEEDED);
+	        }
+		} catch(BadRequestException ex) {
+        	throw ex;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -113,5 +128,4 @@ public class FileHandlerService {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
         amazonS3.deleteObject(new DeleteObjectRequest(this.awsS3AudioBucket, fileName));
     }
-
 }

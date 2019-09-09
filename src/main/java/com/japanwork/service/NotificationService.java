@@ -59,7 +59,7 @@ public class NotificationService {
         );
 		
 		rabbitTemplate.convertAndSend("notifications/"+receiverId, ""+receiverId, responseDataAPI);
-		this.sendMail(objectableId, objectableType, senderId, receiverId, content);
+//		this.sendMail(objectableId, objectableType, senderId, receiverId, content);
 	}
 	
 	public ResponseDataAPI index(User user, int page, int paging)
