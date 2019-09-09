@@ -267,7 +267,7 @@ public class CandidateResponse {
         candidateResponse.setIntroduction(candidate.getIntroduction());
         candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
         candidateResponse.setExpectedSalary(candidate.getExpectedSalary());
-        candidateResponse.setExpectedWorkingAddress(candidate.getExpectedWorkingAddress());
+//        candidateResponse.setExpectedWorkingAddress(candidate.getExpectedWorkingAddress());
 
         if(candidate.getExpectedWorkingCity() != null) {
             candidateResponse.setExpectedWorkingCityId(candidate.getExpectedWorkingCity().getId());
@@ -289,8 +289,8 @@ public class CandidateResponse {
             candidateResponse.setExpectedContractId(candidate.getExpectedContract().getId());
         }
 
-        candidateResponse.setAcademies(academyResponses);
-        candidateResponse.setExperiences(experienceResponses);
+        candidateResponse.setAcademyResponses(academyResponses);
+        candidateResponse.setExperienceResponses(experienceResponses);
         candidateResponse.setLanguageCertificates(languageCertificateResponses);
 
         return candidateResponse;

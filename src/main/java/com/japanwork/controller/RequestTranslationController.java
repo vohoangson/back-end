@@ -208,43 +208,43 @@ public class RequestTranslationController {
 		Language language = commonSupport.loadLanguage(languageCode);
 		Company company = commonSupport.loadCompanyById(user.getPropertyId());
 		CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
-		
+
 		OwnerResponse ownerResponse = new OwnerResponse(
-				company.getId(), 
-				companyTranslation.getName(), 
-				company.getUser().getRole().replaceAll("ROLE_", ""), 
+				company.getId(),
+				companyTranslation.getName(),
+				company.getUser().getRole().replaceAll("ROLE_", ""),
 				company.getLogoUrl());
-		
+
 		BooleanBuilder booleanBuilder = new BooleanBuilder();
-		
+
 		QRequestTranslation qRequestTranslation = QRequestTranslation.requestTranslation;
-		
+
 		if(!name.isEmpty()) {
 			booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
 		}
-		
+
 		if(languageIds.size() > 0) {
 			booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
 		}
-		
+
 		if(!postDate.isEmpty()) {
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
 			Timestamp timestamp = new Timestamp(date.getTime());
 			booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
-		}				
-		
+		}
+
 		booleanBuilder.and(qRequestTranslation.ownerId.eq(user.getPropertyId()));
-	
+
 		if(requestTypes.size() > 0) {
 			booleanBuilder.and(qRequestTranslation.objectableType.in(requestTypes));
 		} else {
 			requestTypes.add(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE);
 			booleanBuilder.and(qRequestTranslation.objectableType.notIn(requestTypes));
 		}
-		
+
 		return requestTranslationService.index(booleanBuilder.getValue(), page, paging, ownerResponse);
 	}
-	
+
 	@GetMapping(UrlConstant.URL_CANDIDATES_REQUESTS)
 	@ResponseBody
 	public ResponseDataAPI indexByCandidate(
@@ -258,34 +258,34 @@ public class RequestTranslationController {
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		Language language = commonSupport.loadLanguage(languageCode);
 		Candidate candidate = commonSupport.loadCandidateById(user.getPropertyId());
-		CandidateTranslation candidateTranslation = commonSupport.loadCandiateTranslation(candidate, language);
-		
+		CandidateTranslation candidateTranslation = commonSupport.loadCandidateTranslation(candidate, language);
+
 		OwnerResponse ownerResponse = new OwnerResponse(
-				candidate.getId(), 
-				candidateTranslation.getFullName(), 
-				candidate.getUser().getRole().replaceAll("ROLE_", ""), 
+				candidate.getId(),
+				candidateTranslation.getFullName(),
+				candidate.getUser().getRole().replaceAll("ROLE_", ""),
 				candidate.getAvatar());
-		
+
 		BooleanBuilder booleanBuilder = new BooleanBuilder();
 		QRequestTranslation qRequestTranslation = QRequestTranslation.requestTranslation;
-		
+
 		if(!name.isEmpty()) {
 			booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
 		}
-		
+
 		if(languageIds.size() > 0) {
 			booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
 		}
-		
+
 		if(!postDate.isEmpty()) {
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
 			Timestamp timestamp = new Timestamp(date.getTime());
 			booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
-		}				
-		
+		}
+
 		booleanBuilder.and(qRequestTranslation.ownerId.eq(user.getPropertyId()));
 		booleanBuilder.and(qRequestTranslation.objectableType.eq(CommonConstant.RequestTranslationType.REQUEST_TRANSLATION_CANDIDATE));
-		
+
 		return requestTranslationService.index(booleanBuilder.getValue(), page, paging, ownerResponse);
 
 	}
@@ -304,48 +304,48 @@ public class RequestTranslationController {
 			@CurrentUser UserPrincipal userPrincipal) throws ParseException{
 		User user = commonSupport.loadUserById(userPrincipal.getId());
 		Language language = commonSupport.loadLanguage(languageCode);
-		
+
 		BooleanBuilder booleanBuilder = new BooleanBuilder();
 		if(yourRequest) {
 			QRequestTranslation qRequestTranslation = QRequestStatus.requestStatus.requestTranslation;
-			
+
 			if(!name.isEmpty()) {
 				booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
 			}
-			
+
 			if(languageIds.size() > 0) {
 				booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
 			}
-			
+
 			if(!postDate.isEmpty()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
 				Timestamp timestamp = new Timestamp(date.getTime());
 				booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
-			}				
-			
+			}
+
 			if(requestTypes.size() > 0) {
 				booleanBuilder.and(qRequestTranslation.objectableType.in(requestTypes));
 			}
-			
+
 			booleanBuilder.and(QRequestStatus.requestStatus.translator.id.eq(user.getPropertyId()));
 			return requestTranslationService.indexByTranslator(booleanBuilder.getValue(), page, paging, language);
 		} else {
 			QRequestTranslation qRequestTranslation = QRequestTranslation.requestTranslation;
-			
+
 			if(!name.isEmpty()) {
 				booleanBuilder.and(qRequestTranslation.name.likeIgnoreCase("%"+name+"%"));
 			}
-			
+
 			if(languageIds.size() > 0) {
 				booleanBuilder.and(qRequestTranslation.language.id.in(languageIds));
 			}
-			
+
 			if(!postDate.isEmpty()) {
 				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postDate);
 				Timestamp timestamp = new Timestamp(date.getTime());
 				booleanBuilder.and(qRequestTranslation.createdAt.goe(timestamp));
-			}			
-			
+			}
+
 			if(requestTypes.size() > 0) {
 				booleanBuilder.and(qRequestTranslation.objectableType.in(requestTypes));
 			}
@@ -353,7 +353,7 @@ public class RequestTranslationController {
 			return requestTranslationService.newRequestTranslations(booleanBuilder.getValue(), page, paging, language);
 		}
 	}
-	
+
 	@GetMapping(UrlConstant.URL_REQUEST_TRANSLATION)
 	@ResponseBody
 	public ResponseDataAPI show(@PathVariable UUID id, @CurrentUser UserPrincipal userPrincipal){
