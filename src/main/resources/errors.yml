@@ -207,5 +207,8 @@ reset_password_incorrect_code:
   message: Incorrect code reset password!
 #upload file
 file_not_formated:
-  code:
+  code: ULF0101
   message: The file is not properly formatted!
+maximum_upload_size_exceeded:
+  code: ULF0102
+  message: The field file exceeds its maximum permitted size of 1048576 bytes!

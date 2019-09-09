@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.japanwork.constant.CommonConstant;
@@ -27,7 +28,7 @@ public class IndexCompanyService {
         try {
             CompanyResponse companyResponse = new CompanyResponse();
 
-            Page<CompanyTranslation> pages = companyTranslationRepository.findAllByLanguageAndDeletedAt(PageRequest.of(page-1, paging), language, null);
+            Page<CompanyTranslation> pages = companyTranslationRepository.findAllByLanguageAndDeletedAt(PageRequest.of(page-1, paging, Sort.by("createdAt").descending()), language, null);
             PageInfo pageInfo = new PageInfo(page, pages.getTotalPages(), pages.getTotalElements());
             List<CompanyResponse> list = new ArrayList<CompanyResponse>();
 

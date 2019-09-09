@@ -153,4 +153,5 @@ public class MessageConstant {
 
 	//Upload file
 	public static final String FILE_NOT_FORMATED = "file_not_formated";
+	public static final String MAXIMUM_UPLOAD_SIZE_EXCEEDED = "maximum_upload_size_exceeded";
 }
