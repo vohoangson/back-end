@@ -42,13 +42,13 @@ public class CandidateResponse {
 
     @JsonProperty("expected_working_country_id")
     private UUID expectedWorkingCountryId;
-    
+
     @JsonProperty("expected_working_city_id")
     private UUID expectedWorkingCityId;
 
     @JsonProperty("expected_working_district_id")
     private UUID expectedWorkingDistrictId;
-    
+
     @JsonProperty("expected_business_id")
     private UUID expectedBusinessId;
 
@@ -239,55 +239,59 @@ public class CandidateResponse {
 		this.languageCertificates = languageCertificates;
 	}
 
-    public CandidateResponse(UUID id, String fullName, Date dateOfBirth, String gender, String marital, UUID residentalCityId,
-    		UUID residentalDistrictId, String residentalAddres, String avatar, String introduction, int japaneseLevel, 
-    		UUID expectedWorkingCityId, UUID expectedWorkingDistrictId, UUID expectedWorkingCountryId, 
-    		UUID expectedBusinessId, UUID expectedLevelId, UUID expectedContractId, float expectedSalary, 
-    		Set<AcademyResponse> academyResponses, Set<ExperienceResponse> experienceResponses, 
-    		Set<LanguageCertificateResponse> languageCertificates) {
-        this.id = id;
-        this.fullName = fullName;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.marital = marital;
-        this.residentalCityId = residentalCityId;
-        this.residentalDistrictId = residentalDistrictId;
-        this.residentalAddres = residentalAddres;
-        this.avatar = avatar;
-        this.introduction = introduction;
-        this.japaneseLevel = japaneseLevel;
-        this.expectedWorkingCityId = expectedWorkingCityId;
-        this.expectedWorkingDistrictId = expectedWorkingDistrictId;
-        this.expectedWorkingCountryId = expectedWorkingCountryId;
-        this.expectedBusinessId = expectedBusinessId;
-        this.expectedLevelId = expectedLevelId;
-        this.expectedContractId = expectedContractId;
-        this.expectedSalary = expectedSalary;
-        this.academyResponses = academyResponses;
-        this.experienceResponses = experienceResponses;
-        this.languageCertificates = languageCertificates;
+	public CandidateResponse candidateMainSerializer(Candidate candidate) {
+        CandidateResponse candidateResponse = new CandidateResponse();
+
+        candidateResponse.setId(candidate.getId());
+        candidateResponse.setFullName(candidate.getFullName());
+        candidateResponse.setAvatar(candidate.getAvatar());
+
+        return candidateResponse;
     }
 
-    public CandidateResponse() {
-
-	}
-
-	public CandidateResponse candidateFullSerializer(
-	        Candidate candidate,
-            CandidateTranslation candidateTranslation) {
+    public CandidateResponse candidateFullSerialzer(Candidate candidate,
+                                                    Set<AcademyResponse> academyResponses,
+                                                    Set<ExperienceResponse> experienceResponses,
+                                                    Set<LanguageCertificateResponse> languageCertificateResponses) {
         CandidateResponse candidateResponse = new CandidateResponse();
+
         candidateResponse.setId(candidate.getId());
-        candidateResponse.setFullName(candidateTranslation.getFullName());
+        candidateResponse.setFullName(candidate.getFullName());
         candidateResponse.setDateOfBirth(candidate.getDateOfBirth());
         candidateResponse.setGender(candidate.getGender());
         candidateResponse.setMarital(candidate.getMarital());
         candidateResponse.setResidentalCityId(candidate.getResidentalCity().getId());
         candidateResponse.setResidentalDistrictId(candidate.getResidentalDistrict().getId());
-        candidateResponse.setResidentalAddres(candidateTranslation.getResidentalAddres());
+        candidateResponse.setResidentalAddres(candidate.getResidentalAddres());
         candidateResponse.setAvatar(candidate.getAvatar());
-        candidateResponse.setIntroduction(candidateTranslation.getIntroduction());
+        candidateResponse.setIntroduction(candidate.getIntroduction());
         candidateResponse.setJapaneseLevel(candidate.getJapaneseLevel());
         candidateResponse.setExpectedSalary(candidate.getExpectedSalary());
+        candidateResponse.setExpectedWorkingAddress(candidate.getExpectedWorkingAddress());
+
+        if(candidate.getExpectedWorkingCity() != null) {
+            candidateResponse.setExpectedWorkingCityId(candidate.getExpectedWorkingCity().getId());
+        }
+
+        if(candidate.getExpectedWorkingDistrict() != null) {
+            candidateResponse.setExpectedWorkingDistrictId(candidate.getExpectedWorkingDistrict().getId());
+        }
+
+        if(candidate.getExpectedBusiness() != null) {
+            candidateResponse.setExpectedBusinessId(candidate.getExpectedBusiness().getId());
+        }
+
+        if(candidate.getExpectedLevel() != null) {
+            candidateResponse.setExpectedLevelId(candidate.getExpectedLevel().getId());
+        }
+
+        if(candidate.getExpectedContract() != null) {
+            candidateResponse.setExpectedContractId(candidate.getExpectedContract().getId());
+        }
+
+        candidateResponse.setAcademies(academyResponses);
+        candidateResponse.setExperiences(experienceResponses);
+        candidateResponse.setLanguageCertificates(languageCertificateResponses);
 
         return candidateResponse;
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.japanwork.payload.response.CandidateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,9 +46,6 @@ public class JobApplicationService {
 	private JobApplicationStatusRepository jobApplicationStatusRepository;
 
 	@Autowired
-	private CandidateService candidateService;
-
-	@Autowired
 	private TranslatorService translatorService;
 
 	@Autowired
@@ -61,7 +59,7 @@ public class JobApplicationService {
 
 	@Autowired
 	private NotificationService notificationService;
-	
+
 	@Autowired
 	private CommonSupport commonSupport;
 
@@ -408,17 +406,18 @@ public class JobApplicationService {
         );
 	}
 
-	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication, 
+	public JobApplicationResponse convertApplicationResponse(JobApplication jobApplication,
 			JobApplicationStatus status, Language language) {
 		Job job = jobApplication.getJob();
 		JobTranslation jobTranslation = commonSupport.loadJobTranslation(job, language);
 		CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(job.getCompany(), language);
 		CompanyResponse companyResponse = new CompanyResponse().companyMainSerializer(job.getCompany(), companyTranslation);
-		
+
 		JobApplicationResponse ob = new JobApplicationResponse();
+		CandidateResponse candidateResponse = new CandidateResponse();
 		ob.setId(jobApplication.getId());
-		ob.setJob(new JobResponse().jobMainSerializer(job, jobTranslation, companyResponse));
-		ob.setCandidate(candidateService.candiateShortResponse(jobApplication.getCandidate()));
+		ob.setJob(new JobResponse().jobMainSerializer(jobApplication.getJob(), null, null));
+		ob.setCandidate(candidateResponse.candidateMainSerializer(jobApplication.getCandidate()));
 		if(jobApplication.getTranslator() != null) {
 			ob.setTranslator(translatorService.translatorShortResponse(jobApplication.getTranslator()));
 		}

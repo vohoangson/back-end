@@ -10,9 +10,5 @@ import com.japanwork.model.CandidateTranslation;
 import com.japanwork.model.Language;
 
 public interface CandidateTranslationRepository extends JpaRepository<CandidateTranslation, UUID> {
-    public CandidateTranslation findByCandidateAndLanguageAndDeletedAt(
-            Candidate candidate,
-            Language language,
-            Timestamp deletedAt
-    );
+    public CandidateTranslation findByCandidateAndLanguage(Candidate candidate, Language language);
 }

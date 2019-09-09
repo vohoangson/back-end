@@ -23,9 +23,6 @@ public class ConversationService {
 	@Autowired
 	private TranslatorService translatorService;
 
-	@Autowired
-	private CandidateService candidateService;
-
 	@Transactional
 	public Conversation create(Translator translator, Company company, Candidate candidate) {
 		Conversation conversation = new Conversation();

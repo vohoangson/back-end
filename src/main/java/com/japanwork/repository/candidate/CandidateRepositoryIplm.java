@@ -46,7 +46,7 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -58,13 +58,13 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	@Override
 	public void deleteInBatch(Iterable<Candidate> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -118,25 +118,25 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 	@Override
 	public void deleteById(UUID id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(Candidate entity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends Candidate> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -198,5 +198,5 @@ public class CandidateRepositoryIplm implements CandidateRepository{
 		// TODO Auto-generated method stub
 		return findAllByIdInAndDeletedAt(page, ids, deletedAt);
 	}
-	
+
 }
