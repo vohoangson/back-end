@@ -138,7 +138,7 @@ public class CandidateTranslationRepositoryImplement implements CandidateTransla
     }
 
     @Override
-    public CandidateTranslation findByCandidateAndLanguageAndDeletedAt(Candidate candidate, Language language, Timestamp deletedAt) {
-        return findByCandidateAndLanguageAndDeletedAt(candidate, language, deletedAt);
+    public CandidateTranslation findByCandidateAndLanguage(Candidate candidate, Language language) {
+        return findByCandidateAndLanguage(candidate, language);
     }
 }

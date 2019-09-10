@@ -16,32 +16,13 @@ import com.japanwork.repository.experience.ExperienceRepository;
 public class ExperienceService {
 	@Autowired
 	private ExperienceRepository experienceRepository;
-	
+
 	public List<Experience> saveAll(List<Experience> experiences) {
-		List<Experience> result = experienceRepository.saveAll(experiences);		
+		List<Experience> result = experienceRepository.saveAll(experiences);
 		return result;
 	}
-	
-	public Set<ExperienceResponse> listExperienceResponse(Set<Experience> experiences){
-		Set<ExperienceResponse> list = new HashSet<ExperienceResponse>();
-		if(experiences != null) {
-			for (Experience experience : experiences) {
-				ExperienceResponse experienceResponse = new ExperienceResponse();
-				experienceResponse.setId(experience.getId());
-				experienceResponse.setOrganizaion(experience.getOrganizaion());
-				experienceResponse.setDesc(experience.getDesc());
-				experienceResponse.setLevelId(experience.getLevel().getId());
-				experienceResponse.setBusinessId(experience.getBusiness().getId());
-				experienceResponse.setStartDate(experience.getStartDate());
-				experienceResponse.setEndDate(experience.getEndDate());
-				
-				list.add(experienceResponse);
-			}
-		}
-		return list;
-	}
-	
-	public void del(UUID id) {		
+
+	public void del(UUID id) {
 		List<Experience> listExperience = experienceRepository.findByCandidateId(id);
 		if(listExperience.size() > 0) {
 			experienceRepository.deleteAll(listExperience);

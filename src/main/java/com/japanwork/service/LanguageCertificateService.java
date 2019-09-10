@@ -16,30 +16,13 @@ import com.japanwork.repository.language_certificate.LanguageCertificateReposito
 public class LanguageCertificateService {
 	@Autowired
 	private LanguageCertificateRepository languageCertificateRepository;
-	
+
 	public List<LanguageCertificate> saveAll(List<LanguageCertificate> languageCertificates) {
-		List<LanguageCertificate> result = languageCertificateRepository.saveAll(languageCertificates);		
+		List<LanguageCertificate> result = languageCertificateRepository.saveAll(languageCertificates);
 		return result;
 	}
-	
-	public Set<LanguageCertificateResponse> listLanguageCertificateResponse(Set<LanguageCertificate> languageCertificates){
-		Set<LanguageCertificateResponse> list = new HashSet<LanguageCertificateResponse>();
-		if(languageCertificates != null) {
-			for (LanguageCertificate languageCertificate : languageCertificates) {
-				LanguageCertificateResponse languageCertificateResponse = new LanguageCertificateResponse();
-				
-				languageCertificateResponse.setId(languageCertificate.getId());
-				languageCertificateResponse.setScore(languageCertificate.getScore());
-				languageCertificateResponse.setLanguageCertificateTypeId(languageCertificate.getLanguageCertificateType().getId());
-				languageCertificateResponse.setTakenDate(languageCertificate.getTakenDate());
-				
-				list.add(languageCertificateResponse);
-			}
-		}
-		return list;
-	}
-	
-	public void del(UUID id) {		
+
+	public void del(UUID id) {
 		List<LanguageCertificate> listLanguageCertificate = languageCertificateRepository.findByCandidateId(id);
 		if(listLanguageCertificate.size() > 0) {
 			languageCertificateRepository.deleteAll(listLanguageCertificate);

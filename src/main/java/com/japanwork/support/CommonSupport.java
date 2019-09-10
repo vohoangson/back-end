@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.japanwork.model.*;
 import com.japanwork.repository.business_type.BusinessTypeRepository;
+import com.japanwork.repository.candidate_translation.CandidateTranslationRepository;
 import com.japanwork.repository.city.CityRepository;
 import com.japanwork.repository.company_tranlation.CompanyTranslationRepository;
 import com.japanwork.repository.contract.ContractRepository;
@@ -71,7 +72,7 @@ public class CommonSupport {
 
     @Autowired
     private CandidateRepository candidateRepository;
-    
+
     @Autowired
     private CandidateTranslationRepository candidateTranslationRepository;
 
@@ -113,9 +114,17 @@ public class CommonSupport {
 
     @Autowired
     private CountryRepository countryRepository;
-    
+
     public Company loadCompanyById(UUID id) throws ResourceNotFoundException {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
+        if(company == null) {
+            throw new ResourceNotFoundException(MessageConstant.COMPANY_NOT_FOUND);
+        }
+        return company;
+    }
+
+    public Company loadCompanyByUser(UUID userId) throws ResourceNotFoundException {
+        Company company = companyRepository.findByUserIdAndDeletedAt(userId, null);
         if(company == null) {
             throw new ResourceNotFoundException(MessageConstant.COMPANY_NOT_FOUND);
         }
@@ -135,14 +144,6 @@ public class CommonSupport {
             throw new ResourceNotFoundException(MessageConstant.COMPANY_TRANSLATION_NOT_FOUND);
         }
         return companyTranslation;
-    }
-
-    public Company loadCompanyByUser(UUID userId) throws ResourceNotFoundException {
-        Company company = companyRepository.findByUserIdAndDeletedAt(userId, null);
-        if(company == null) {
-            throw new ResourceNotFoundException(MessageConstant.COMPANY_NOT_FOUND);
-        }
-        return company;
     }
 
     public Language loadLanguageById(UUID id) throws ResourceNotFoundException {
@@ -191,7 +192,7 @@ public class CommonSupport {
 
     public Translator loadTranslatorByUser(UUID userId) throws ResourceNotFoundException {
         Translator translator = translatorRepository.findByUserIdAndDeletedAt(userId, null);
-        if(translator == null) {
+        if (translator == null) {
             throw new ResourceNotFoundException(MessageConstant.TRANSLATOR_NOT_FOUND);
         }
         return translator;
@@ -199,7 +200,7 @@ public class CommonSupport {
 
     public Candidate loadCandidateById(UUID id) throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.findByIdAndDeletedAt(id, null);
-        if(candidate == null) {
+        if (candidate == null) {
             throw new ResourceNotFoundException(MessageConstant.CANDIDATE_NOT_FOUND);
         }
         return candidate;
@@ -207,28 +208,21 @@ public class CommonSupport {
 
     public Candidate loadCandidateByUser(UUID userId) throws ResourceNotFoundException{
 		Candidate candidate = candidateRepository.findByUserIdAndDeletedAt(userId, null);
-		if(candidate == null) {
+		if (candidate == null) {
 			throw new ResourceNotFoundException(MessageConstant.CANDIDATE_NOT_FOUND);
 		}
-
 		return candidate;
 	}
 
-    public CandidateTranslation loadCandiateTranslation(
-            Candidate candidate,
-            Language language
-    ) throws ResourceNotFoundException {
-    	CandidateTranslation candidateTranslation = candidateTranslationRepository.findByCandidateAndLanguageAndDeletedAt(
-    			candidate,
-                language,
-                null
-        );
-        if(candidateTranslation == null) {
+	public CandidateTranslation loadCandidateTranslation(Candidate candidate, Language language)
+        throws ResourceNotFoundException {
+        CandidateTranslation candidateTranslation = candidateTranslationRepository.findByCandidateAndLanguage(candidate, language);
+        if (candidateTranslation == null) {
             throw new ResourceNotFoundException(MessageConstant.CANDIDATE_TRANSLATION_NOT_FOUND);
         }
         return candidateTranslation;
     }
-    
+
     public Conversation loadConversationById(UUID id) throws ResourceNotFoundException {
     	Conversation conversation = conversationRepository.findByIdAndDeletedAt(id, null);
         if(conversation == null) {
@@ -331,7 +325,7 @@ public class CommonSupport {
         }
         return country;
     }
-    
+
     public City loadCity(UUID id) throws ResourceNotFoundException {
         City city = cityRepository.findByIdAndDeletedAt(id, null);
 
