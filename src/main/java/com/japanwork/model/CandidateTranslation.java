@@ -1,26 +1,16 @@
 package com.japanwork.model;
 
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(
-        name="candidate_translation",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"candidate_id", "language_id"})}
-)
+@Table(name="candidate_translation",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"candidate_id", "language_id"})})
 @Where(clause = "deleted_at IS NULL")
 public class CandidateTranslation {
     @Id
@@ -47,8 +37,13 @@ public class CandidateTranslation {
     @Column(name = "introduction")
     private String introduction;
 
-    @Column(name = "expected_working_address")
-    private String expectedWorkingAddress;
+    @OneToMany(orphanRemoval = true, mappedBy="candidateTranslation")
+    @Where(clause = "deleted_at IS NULL")
+    private Set<AcademyTranslation> academyTranslations;
+
+    @OneToMany(orphanRemoval = true, mappedBy="candidateTranslation")
+    @Where(clause = "deleted_at IS NULL")
+    private Set<ExperienceTranslation> experienceTranslations;
 
     @Column(name="created_at")
     private Timestamp createdAt;
@@ -81,10 +76,6 @@ public class CandidateTranslation {
 
     public String getIntroduction() {
         return introduction;
-    }
-
-    public String getExpectedWorkingAddress() {
-        return expectedWorkingAddress;
     }
 
     public Timestamp getCreatedAt() {
@@ -123,8 +114,20 @@ public class CandidateTranslation {
         this.introduction = introduction;
     }
 
-    public void setExpectedWorkingAddress(String expectedWorkingAddress) {
-        this.expectedWorkingAddress = expectedWorkingAddress;
+    public Set<AcademyTranslation> getAcademyTranslations() {
+        return academyTranslations;
+    }
+
+    public void setAcademyTranslations(Set<AcademyTranslation> academyTranslations) {
+        this.academyTranslations = academyTranslations;
+    }
+
+    public Set<ExperienceTranslation> getExperienceTranslations() {
+        return experienceTranslations;
+    }
+
+    public void setExperienceTranslations(Set<ExperienceTranslation> experienceTranslations) {
+        this.experienceTranslations = experienceTranslations;
     }
 
     public void setCreatedAt(Timestamp createdAt) {
@@ -140,13 +143,12 @@ public class CandidateTranslation {
     }
 
     public CandidateTranslation(Candidate candidate, Language language, String fullName, String residentalAddres, String introduction,
-                                String expectedWorkingAddress, Timestamp createdAt, Timestamp updatedAt) {
+                                Timestamp createdAt, Timestamp updatedAt) {
         this.candidate = candidate;
         this.language = language;
         this.fullName = fullName;
         this.residentalAddres = residentalAddres;
         this.introduction = introduction;
-        this.expectedWorkingAddress = expectedWorkingAddress;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

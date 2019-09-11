@@ -45,7 +45,6 @@ public class CandidateTranslationService {
         candidateTranslation.setFullName(candidateTranslationRequest.getFullName());
         candidateTranslation.setResidentalAddres(candidateTranslationRequest.getResidentalAddress());
         candidateTranslation.setIntroduction(candidateTranslationRequest.getIntroduction());
-        candidateTranslation.setExpectedWorkingAddress(candidateTranslationRequest.getExpectedWorkingAddress());
         candidateTranslation.setUpdatedAt(timestamp);
         candidateTranslation.setCreatedAt(timestamp);
         CandidateTranslation result = candidateTranslationRepository.save(candidateTranslation);

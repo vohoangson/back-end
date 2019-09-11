@@ -78,17 +78,18 @@ public class CandidateController {
             @Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
             @CurrentUser UserPrincipal userPrincipal) {
         User user         = commonSupport.loadUserById(userPrincipal.getId());
+        Language language = user.getCountry().getLanguage();
         City city         = commonSupport.loadCity(candidatePersonalRequest.getResidentalCityId());
         District district = commonSupport.loadDistrict(candidatePersonalRequest.getResidentalDistrictId());
 
-        Candidate candidate = createCandidateService.perform(candidatePersonalRequest, user, city, district);
+        Candidate candidate = createCandidateService.perform(candidatePersonalRequest, user, city, district, language);
 
         return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, candidate.getId(), "");
     }
 
-	@PatchMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
-	@ResponseBody
-	public ResponseDataAPI updatePersonal(
+    @PatchMapping(UrlConstant.URL_CANDIDATE_PERSONAL)
+    @ResponseBody
+    public ResponseDataAPI updatePersonal(
             @PathVariable UUID id,
             @Valid @RequestBody CandidatePersonalRequest candidatePersonalRequest,
             @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException {
@@ -96,20 +97,17 @@ public class CandidateController {
         Candidate candidate = commonSupport.loadCandidateById(id);
 
         if(!checkPermission(userPrincipal, candidate)) {
-			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-		}
+            throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+        }
 
+        Language language = commonSupport.loadLanguage(candidatePersonalRequest.getLanguage());
         City city         = commonSupport.loadCity(candidatePersonalRequest.getResidentalCityId());
         District district = commonSupport.loadDistrict(candidatePersonalRequest.getResidentalDistrictId());
 
-		candidate = updateCandidateService.perform(candidatePersonalRequest, candidate, city, district);
+        candidate = updateCandidateService.perform(candidatePersonalRequest, candidate, city, district, language);
 
-		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				"",
-				""
-        );
-	}
+        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
+    }
 
     @PatchMapping(UrlConstant.URL_CANDIDATE_EXPECTED)
     @ResponseBody
@@ -142,16 +140,12 @@ public class CandidateController {
                 contract
         );
 
-        return new ResponseDataAPI(
-                CommonConstant.ResponseDataAPIStatus.SUCCESS,
-                "",
-                ""
-        );
+        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
     }
 
-	@PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE)
-	@ResponseBody
-	public ResponseDataAPI updateCareer(
+    @PatchMapping(UrlConstant.URL_CANDIDATE_EXPERIENCE)
+    @ResponseBody
+    public ResponseDataAPI updateCareer(
             @PathVariable UUID id,
             @Valid @RequestBody CandidateExperienceRequest candidateExperienceRequest,
             @CurrentUser UserPrincipal userPrincipal) throws ForbiddenException {
@@ -159,17 +153,13 @@ public class CandidateController {
         Candidate candidate = commonSupport.loadCandidateById(id);
 
         if(!checkPermission(userPrincipal, candidate)) {
-			throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
-		}
+            throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
+        }
 
         candidate = updateCareerService.perform(candidateExperienceRequest, candidate);
 
-		return new ResponseDataAPI(
-				CommonConstant.ResponseDataAPIStatus.SUCCESS,
-				"",
-				""
-        );
-	}
+        return new ResponseDataAPI(CommonConstant.ResponseDataAPIStatus.SUCCESS, "", "");
+    }
 
     @GetMapping(UrlConstant.URL_CANDIDATE)
     @ResponseBody
@@ -199,5 +189,5 @@ public class CandidateController {
             return false;
         }
         return true;
-	}
+    }
 }

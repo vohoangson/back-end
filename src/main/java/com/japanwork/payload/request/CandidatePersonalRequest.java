@@ -9,22 +9,26 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CandidatePersonalRequest {	
+public class CandidatePersonalRequest {
+    @Size(max = 4)
+    @JsonProperty("language")
+    private String language;
+
 	@NotBlank
 	@Size(max = 128)
 	@JsonProperty("full_name")
 	private String fullName;
-	
+
 	@NotNull
 	@JsonProperty("date_of_birth")
 	private Date dateOfBirth;
-	
+
 	@NotBlank
 	private String gender;
-	
+
 	@NotBlank
 	private String marital;
-	
+
 	@NotNull
 	@JsonProperty("residental_city_id")
     private UUID residentalCityId;
@@ -32,7 +36,7 @@ public class CandidatePersonalRequest {
 	@NotNull
 	@JsonProperty("residental_district_id")
     private UUID residentalDistrictId;
-    
+
 	@NotBlank
 	@JsonProperty("residental_address")
     private String residentalAddress;
@@ -40,14 +44,22 @@ public class CandidatePersonalRequest {
 	@NotBlank
 	@Size(max = 1000)
     private String avatar;
-    
+
 	@NotBlank
     private String introduction;
-    
+
     @JsonProperty
     private int japaneseLevel;
 
-	public String getFullName() {
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getFullName() {
 		return fullName;
 	}
 
@@ -125,5 +137,5 @@ public class CandidatePersonalRequest {
 
 	public void setJapaneseLevel(int japaneseLevel) {
 		this.japaneseLevel = japaneseLevel;
-	}    
+	}
 }

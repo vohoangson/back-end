@@ -84,48 +84,48 @@ public class JobController {
 			@RequestParam(defaultValue = "", name = "city_ids") Set<UUID> cityIds,
 			@RequestParam(defaultValue = "0", name = "min_salary") int minSalary,
 			@RequestParam(defaultValue = "", name = "post_time") String postTime) throws ParseException {
-	    
+
 		Language language = commonSupport.loadLanguage(languageCode);
-	    
+
 	    BooleanBuilder booleanBuilder = new BooleanBuilder();
-		
+
 	    QJob qjob = QJobTranslation.jobTranslation.job;
 		if(!jobName.isEmpty()) {
 			booleanBuilder.and(qjob.name.likeIgnoreCase("%"+jobName+"%"));
 		}
-		
+
 		if(!companyName.isEmpty()) {
 			booleanBuilder.and(qjob.company.name.likeIgnoreCase("%"+companyName+"%"));
 		}
-		
+
 		if(businessIds.size() > 0) {
 			booleanBuilder.and(qjob.businesses.id.in(businessIds));
 		}
-		
+
 		if(contractIds.size() > 0) {
 			booleanBuilder.and(qjob.contract.id.in(contractIds));
 		}
-		
+
 		if(levelIds.size() > 0) {
 			booleanBuilder.and(qjob.level.id.in(levelIds));
 		}
-		
+
 		if(cityIds.size() > 0) {
 			booleanBuilder.and(qjob.city.id.in(cityIds));
 		}
-		
+
 		if(minSalary > 0) {
 			booleanBuilder.and(qjob.maxSalary.goe(minSalary));
 		}
-		
+
 		if(!postTime.isEmpty()) {
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(postTime);
 			Timestamp timestamp = new Timestamp(date.getTime());
 			booleanBuilder.and(QJobTranslation.jobTranslation.createdAt.goe(timestamp));
 		}
-		
+
 		booleanBuilder.and(QJobTranslation.jobTranslation.language.id.eq(language.getId()));
-		
+
 		ResponseDataAPI response = indexJobService.perform(booleanBuilder.getValue(), page, paging, language);
 		return response;
 	}
@@ -148,9 +148,7 @@ public class JobController {
 
     @PostMapping(UrlConstant.URL_JOBS)
     @ResponseBody
-    public ResponseDataAPI create(
-            @Valid @RequestBody JobRequest jobRequest,
-            @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseDataAPI create(@Valid @RequestBody JobRequest jobRequest, @CurrentUser UserPrincipal userPrincipal) {
         Language language = commonSupport.loadUserById(userPrincipal.getId()).getCountry().getLanguage();
         Company company   = commonSupport.loadCompanyByUser(userPrincipal.getId());
         Business business = commonSupport.loadBusiness(jobRequest.getBusinessId());
@@ -190,7 +188,7 @@ public class JobController {
         } else {
         	language = commonSupport.loadLanguage(languageCode);
         }
-                             
+
         JobTranslation jobTranslation         = commonSupport.loadJobTranslation(job, language);
         CompanyTranslation companyTranslation = commonSupport.loadCompanyTranslation(company, language);
 

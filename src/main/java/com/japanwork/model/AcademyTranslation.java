@@ -23,6 +23,7 @@ public class AcademyTranslation {
     private Academy academy;
 
     @ManyToOne
+    @JoinColumn(name="candidate_translation_id", nullable = false)
     @Where(clause = "deleted_at IS NULL")
     private CandidateTranslation candidateTranslation;
 

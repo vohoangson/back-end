@@ -35,7 +35,7 @@ public class UpdateCareerService {
     public Candidate perform(CandidateExperienceRequest candidateExperienceRequest, Candidate candidate) {
         this.deleteExperiencer(candidate.getId());
 
-        if(!candidateExperienceRequest.getAcademies().isEmpty()) {
+        if (!candidateExperienceRequest.getAcademies().isEmpty()) {
             List<Academy> listAcademy = new ArrayList<>();
             for (AcademyRequest academyRequest : candidateExperienceRequest.getAcademies()) {
                 Academy academy = new Academy();
@@ -57,7 +57,7 @@ public class UpdateCareerService {
             candidate.setAcademies(result);
         }
 
-        if(!candidateExperienceRequest.getExperiences().isEmpty()) {
+        if (!candidateExperienceRequest.getExperiences().isEmpty()) {
             List<Experience> listExperience = new ArrayList<>();
             for (ExperienceRequest experienceRequest : candidateExperienceRequest.getExperiences()) {
                 Level level = commonSupport.loadLevel(experienceRequest.getLevelId());
@@ -82,7 +82,7 @@ public class UpdateCareerService {
             candidate.setExperiences(result);
         }
 
-        if(!candidateExperienceRequest.getLanguageCertificates().isEmpty()) {
+        if (!candidateExperienceRequest.getLanguageCertificates().isEmpty()) {
             List<LanguageCertificate> listLanguageCertificate = new ArrayList<>();
             for (LanguageCertificateRequest languageCertificateRequest : candidateExperienceRequest.getLanguageCertificates()) {
                 LanguageCertificateType languageCertificateType = commonSupport.loadLanguageCertificateType(languageCertificateRequest.getLanguageCertificateTypeId());

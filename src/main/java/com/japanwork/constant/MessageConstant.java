@@ -23,11 +23,8 @@ public class MessageConstant {
 
     //Candidate error response information
     public static final String CANDIDATE_NOT_FOUND = "candidate_not_found";
-    
-    //Candidate translation error response information
-    public static final String CANDIDATE_TRANSLATION_NOT_FOUND = "candidate_translation_not_found";
 
-    //Candidate Translation error response information
+    //Candidate translation error response information
     public static final String CANDIDATE_TRANSLATION_NOT_FOUND = "candidate_translation_not_found";
 
 	//Conversation error response information
@@ -50,7 +47,7 @@ public class MessageConstant {
 
     //Business error response information
     public static final String BUSINESS_NOT_FOUND = "business_not_found";
-    
+
     //Country error response information
     public static final String COUNTRY_NOT_FOUND = "country_not_found";
 

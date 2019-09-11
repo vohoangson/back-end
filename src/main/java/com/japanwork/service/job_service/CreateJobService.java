@@ -29,11 +29,9 @@ public class CreateJobService {
     @Autowired
     private JobTranslationRepository jobTranslationRepository;
 
-    @Transactional(
-            isolation   = Isolation.READ_COMMITTED,
+    @Transactional(isolation = Isolation.READ_COMMITTED,
             propagation = Propagation.REQUIRED,
-            rollbackFor = Exception.class
-    )
+            rollbackFor = Exception.class)
     public Job perform(
             JobRequest jobRequest,
             Company company,

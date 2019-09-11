@@ -117,7 +117,7 @@ public class CommonSupport {
 
     public Company loadCompanyById(UUID id) throws ResourceNotFoundException {
         Company company = companyRepository.findByIdAndDeletedAt(id, null);
-        if(company == null) {
+        if (company == null) {
             throw new ResourceNotFoundException(MessageConstant.COMPANY_NOT_FOUND);
         }
         return company;
@@ -125,7 +125,7 @@ public class CommonSupport {
 
     public Company loadCompanyByUser(UUID userId) throws ResourceNotFoundException {
         Company company = companyRepository.findByUserIdAndDeletedAt(userId, null);
-        if(company == null) {
+        if (company == null) {
             throw new ResourceNotFoundException(MessageConstant.COMPANY_NOT_FOUND);
         }
         return company;
@@ -140,7 +140,7 @@ public class CommonSupport {
                 language,
                 null
         );
-        if(companyTranslation == null) {
+        if (companyTranslation == null) {
             throw new ResourceNotFoundException(MessageConstant.COMPANY_TRANSLATION_NOT_FOUND);
         }
         return companyTranslation;
@@ -148,7 +148,7 @@ public class CommonSupport {
 
     public Language loadLanguageById(UUID id) throws ResourceNotFoundException {
         Language language = languageRepository.findByIdAndDeletedAt(id, null);
-        if(language == null) {
+        if (language == null) {
             throw new ResourceNotFoundException(MessageConstant.LANGUAGE_NOT_FOUND);
         }
         return language;
@@ -164,7 +164,7 @@ public class CommonSupport {
 
     public Job loadJobById(UUID id) throws ResourceNotFoundException {
         Job job = jobRepository.findByIdAndDeletedAt(id, null);
-        if(job == null) {
+        if (job == null) {
             throw new ResourceNotFoundException(MessageConstant.JOB_NOT_FOUND);
         }
         return job;
@@ -176,7 +176,7 @@ public class CommonSupport {
                 language,
                 null
         );
-        if(jobTranslation == null) {
+        if (jobTranslation == null) {
             throw new ResourceNotFoundException(MessageConstant.JOB_TRANSLATION_NOT_FOUND);
         }
         return jobTranslation;
@@ -184,7 +184,7 @@ public class CommonSupport {
 
     public Translator loadTranslatorById(UUID id) throws ResourceNotFoundException {
         Translator translator = translatorRepository.findByIdAndDeletedAt(id, null);
-        if(translator == null) {
+        if (translator == null) {
             throw new ResourceNotFoundException(MessageConstant.TRANSLATOR_NOT_FOUND);
         }
         return translator;
@@ -225,7 +225,7 @@ public class CommonSupport {
 
     public Conversation loadConversationById(UUID id) throws ResourceNotFoundException {
     	Conversation conversation = conversationRepository.findByIdAndDeletedAt(id, null);
-        if(conversation == null) {
+        if (conversation == null) {
             throw new ResourceNotFoundException(MessageConstant.CONVERSATION_NOT_FOUND);
         }
         return conversation;
@@ -234,22 +234,22 @@ public class CommonSupport {
     public JobApplication loadJobApplicationById(UUID id, UUID userId)
     		throws ResourceNotFoundException, ForbiddenException {
     	JobApplication jobApplication = jobApplicationRepository.findByIdAndDeletedAt(id, null);
-        if(jobApplication == null) {
+        if (jobApplication == null) {
             throw new ResourceNotFoundException(
                     MessageConstant.JOB_APPLICATION_NOT_FOUND
             );
         }
         User user = userRepository.findByIdAndDeletedAt(userId, null);
-        if(user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
-			if(!user.getPropertyId().equals(jobApplication.getCandidate().getId())) {
+        if (user.getRole().equals(CommonConstant.Role.CANDIDATE)) {
+			if (!user.getPropertyId().equals(jobApplication.getCandidate().getId())) {
 				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
-		} else if(user.getRole().equals(CommonConstant.Role.COMPANY)) {
-			if(!user.getPropertyId().equals(jobApplication.getJob().getCompany().getId())) {
+		} else if (user.getRole().equals(CommonConstant.Role.COMPANY)) {
+			if (!user.getPropertyId().equals(jobApplication.getJob().getCompany().getId())) {
 				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
-		} else if(user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
-			if(jobApplication.getTranslator() == null || !user.getPropertyId().equals(jobApplication.getTranslator().getId())) {
+		} else if (user.getRole().equals(CommonConstant.Role.TRANSLATOR)) {
+			if (jobApplication.getTranslator() == null || !user.getPropertyId().equals(jobApplication.getTranslator().getId())) {
 				throw new ForbiddenException(MessageConstant.FORBIDDEN_ERROR);
 			}
 		}
@@ -258,7 +258,7 @@ public class CommonSupport {
 
     public RequestTranslation loadRequestTransationById(UUID id) throws ResourceNotFoundException {
     	RequestTranslation requestTranslation = requestTranslationRepository.findByIdAndDeletedAt(id, null);
-        if(requestTranslation == null) {
+        if (requestTranslation == null) {
             throw new ResourceNotFoundException(MessageConstant.REQUEST_TRANSLATION_NOT_FOUND);
         }
         return requestTranslation;
@@ -266,7 +266,7 @@ public class CommonSupport {
 
     public User loadUserById(UUID id) throws ResourceNotFoundException {
     	User user = userRepository.findByIdAndDeletedAt(id, null);
-        if(user == null) {
+        if (user == null) {
             throw new ResourceNotFoundException(MessageConstant.USER_NOT_FOUND);
         }
         return user;
@@ -275,7 +275,7 @@ public class CommonSupport {
     public Academy loadAcademy(UUID id) throws ResourceNotFoundException {
         Academy academy = academyRepository.findByIdAndDeletedAt(id, null);
 
-        if(academy== null) {
+        if (academy== null) {
             throw new ResourceNotFoundException(MessageConstant.ACADEMY_NOT_FOUND);
         }
         return academy;
@@ -284,7 +284,7 @@ public class CommonSupport {
     public Experience loadExperience(UUID id) throws ResourceNotFoundException {
         Experience experience = experienceRepository.findByIdAndDeletedAt(id, null);
 
-        if(experience== null) {
+        if (experience== null) {
             throw new ResourceNotFoundException(MessageConstant.EXPERIENCE_NOT_FOUND);
         }
         return experience;
@@ -293,7 +293,7 @@ public class CommonSupport {
     public Level loadLevel(UUID id) throws ResourceNotFoundException {
         Level level = levelRepository.findByIdAndDeletedAt(id, null);
 
-        if(level == null) {
+        if (level == null) {
             throw new ResourceNotFoundException(MessageConstant.LEVEL_NOT_FOUND);
         }
         return level;
@@ -302,7 +302,7 @@ public class CommonSupport {
     public Contract loadContract(UUID id) throws ResourceNotFoundException {
         Contract contract = contractRepository.findByIdAndDeletedAt(id, null);
 
-        if(contract == null) {
+        if (contract == null) {
             throw new ResourceNotFoundException(MessageConstant.CONTRACT_NOT_FOUND);
         }
         return contract;
@@ -311,7 +311,7 @@ public class CommonSupport {
     public Business loadBusiness(UUID id) throws ResourceNotFoundException {
         Business business = businessTypeRepository.findByIdAndDeletedAt(id, null);
 
-        if(business == null) {
+        if (business == null) {
             throw new ResourceNotFoundException(MessageConstant.BUSINESS_NOT_FOUND);
         }
         return business;
@@ -320,7 +320,7 @@ public class CommonSupport {
     public Country loadCountry(UUID id) throws ResourceNotFoundException {
     	Country country = countryRepository.findById(id).get();
 
-        if(country == null) {
+        if (country == null) {
             throw new ResourceNotFoundException(MessageConstant.COUNTRY_NOT_FOUND);
         }
         return country;
@@ -329,7 +329,7 @@ public class CommonSupport {
     public City loadCity(UUID id) throws ResourceNotFoundException {
         City city = cityRepository.findByIdAndDeletedAt(id, null);
 
-        if(city == null) {
+        if (city == null) {
             throw new ResourceNotFoundException(MessageConstant.CITY_NOT_FOUND);
         }
         return city;
@@ -338,7 +338,7 @@ public class CommonSupport {
     public District loadDistrict(UUID id) throws ResourceNotFoundException {
         District district = districtRepository.findByIdAndDeletedAt(id, null);
 
-        if(district == null) {
+        if (district == null) {
             throw new ResourceNotFoundException(MessageConstant.DISTRICT_NOT_FOUND);
         }
         return district;
@@ -347,7 +347,7 @@ public class CommonSupport {
     public LanguageCertificateType loadLanguageCertificateType(UUID id) throws ResourceNotFoundException {
         LanguageCertificateType languageCertificateType = languageCertificateTypeRepository.findByIdAndDeletedAt(id, null);
 
-        if(languageCertificateType == null) {
+        if (languageCertificateType == null) {
             throw new ResourceNotFoundException(MessageConstant.LANGUAGE_CERTIFICATE_NOT_FOUND);
         }
         return languageCertificateType;
